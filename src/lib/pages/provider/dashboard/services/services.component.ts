@@ -6,6 +6,7 @@ import {ResourceService} from '../../../../services/resource.service';
 import {Paging} from '../../../../domain/paging';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {URLParameter} from '../../../../domain/url-parameter';
+import {environment} from '../../../../../environments/environment';
 
 declare var UIkit: any;
 
@@ -16,6 +17,8 @@ declare var UIkit: any;
 })
 
 export class ServicesComponent implements OnInit {
+
+  serviceORresource = environment.serviceORresource;
 
   formPrepare = {
     from: '0'
@@ -108,7 +111,7 @@ export class ServicesComponent implements OnInit {
   }
 
   getServices() {
-    this.providerService.getServicesOfProvider(this.providerId, '0', '50', 'ASC', 'name')
+    this.providerService.getServicesOfProvider(this.providerId, this.dataForm.get('from').value, this.itemsPerPage + '', 'ASC', 'name')
       .subscribe(res => {
           this.providerServices = res;
           this.total = res['total'];
@@ -155,7 +158,7 @@ export class ServicesComponent implements OnInit {
       }
     }
 
-    this.router.navigate([`/dashboard/` + this.providerId + `/activeServices`], {queryParams: map});
+    this.router.navigate([`/dashboard/` + this.providerId + `/resources`], {queryParams: map});
   }
 
   paginationInit() {
@@ -182,7 +185,7 @@ export class ServicesComponent implements OnInit {
   }
 
   nextPage() {
-    if (this.currentPage < this.pageTotal - 1) {
+    if (this.currentPage < this.pageTotal) {
       this.currentPage++;
       this.dataForm.get('from').setValue(+this.dataForm.get('from').value + +this.itemsPerPage);
       this.handleChange();

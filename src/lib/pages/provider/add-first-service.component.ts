@@ -5,6 +5,7 @@ import {ServiceFormComponent} from '../provider-resources/service-form.component
 import {AuthenticationService} from '../../services/authentication.service';
 import {ResourceService} from '../../services/resource.service';
 import {Service} from '../../domain/eic-model';
+import {ServiceProviderService} from '../../services/service-provider.service';
 
 @Component({
   selector: 'app-add-first-service',
@@ -17,19 +18,19 @@ export class AddFirstServiceComponent extends ServiceFormComponent implements On
 
   constructor(protected injector: Injector,
               protected authenticationService: AuthenticationService,
-              private route: ActivatedRoute,
+              protected serviceProviderService: ServiceProviderService,
+              protected route: ActivatedRoute,
               private datePipe: DatePipe) {
-    super(injector, authenticationService);
+    super(injector, authenticationService, serviceProviderService, route);
     this.editMode = false;
   }
 
   ngOnInit() {
     super.ngOnInit();
     this.firstServiceForm = true;
-    this.providerId = this.route.snapshot.paramMap.get('providerId');
+    // this.providerId = this.route.snapshot.paramMap.get('providerId');
+    // this.serviceForm.get('resourceOrganisation').setValue(this.providerId);
     this.serviceId = this.route.snapshot.paramMap.get('resourceId');
-    // console.log(this.serviceId);
-    this.serviceForm.get('resourceOrganisation').setValue(this.providerId);
     if (this.serviceId) {
       this.editMode = true;
       this.resourceService.getRichService(this.serviceId).subscribe(
@@ -52,7 +53,7 @@ export class AddFirstServiceComponent extends ServiceFormComponent implements On
   }
 
   onSuccess(service) {
-    this.successMessage = 'Service uploaded successfully!';
+    this.successMessage = 'Resource uploaded successfully!';
   }
 
   onSubmit(service: Service, tempSave: boolean) {

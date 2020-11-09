@@ -18,6 +18,7 @@ declare var UIkit: any;
 })
 export class ServiceProvidersListComponent implements OnInit {
   url = environment.API_ENDPOINT;
+  serviceORresource = environment.serviceORresource;
 
   formPrepare = {
     query: '',
@@ -52,8 +53,8 @@ export class ServiceProvidersListComponent implements OnInit {
   adminActionsMap = statusChangeMap;
 
   public statuses: Array<string> = [
-    'approved', 'pending initial approval', 'pending service template submission',
-    'pending service template approval', 'rejected service template', 'rejected'
+    'approved', 'pending initial approval', 'pending template submission',
+    'pending template approval', 'rejected template', 'rejected'
   ];
 
   constructor(private resourceService: ResourceService,
@@ -210,8 +211,8 @@ export class ServiceProvidersListComponent implements OnInit {
       () => {
         this.providers.forEach(
           p => {
-            if ((p.status === 'pending service template approval') ||
-              (p.status === 'rejected service template')) {
+            if ((p.status === 'pending template approval') ||
+              (p.status === 'rejected template')) {
               this.serviceProviderService.getPendingServicesOfProvider(p.id).subscribe(
                 res => {
                   if (res && (res.length > 0)) {
@@ -261,6 +262,32 @@ export class ServiceProvidersListComponent implements OnInit {
         );
     }
 
+  }
+
+  showDeletionModal(provider: ProviderBundle) {
+    this.selectedProvider = provider;
+    if (this.selectedProvider) {
+      UIkit.modal('#deletionModal').show();
+    }
+  }
+
+  deleteProvider(providerId) {
+    this.serviceProviderService.deleteServiceProvider(providerId)
+      .subscribe(
+        res => {
+          UIkit.modal('#deletionModal').hide();
+          location.reload();
+          // this.getProviders();
+        },
+        err => {
+          UIkit.modal('#deletionModal').hide();
+          this.loadingMessage = '';
+          console.log(err);
+        },
+        () => {
+          this.loadingMessage = '';
+        }
+      );
   }
 
   showActionModal(provider: ProviderBundle, newStatus: string, pushedApprove: boolean) {

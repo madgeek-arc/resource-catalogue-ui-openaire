@@ -4,7 +4,7 @@
     <div class="services-provider-container">
       <div *ngIf="providerBundle" class="uk-flex">
         <div>
-          <img src="{{ providerBundle.provider.logo ? providerBundle.provider.logo : '../../../lib/images/broken_image-black-48dp.svg' }}" style="max-width: 200px">
+          <img src="{{ providerBundle.provider.logo ? providerBundle.provider.logo : 'src/lib/assets/images/broken_image-black-48dp.svg' }}" style="max-width: 200px">
         </div>
         <div class="uk-margin-medium-left">
           <h3 class="uk-margin-remove">{{providerBundle.provider.name}}</h3>
@@ -19,7 +19,7 @@
       </div>
 
       <div *ngIf="providerServices && providerServices.results.length === 0">
-        <p>No pending services found</p>
+        <p>No pending {{serviceORresource | lowercase}}s found</p>
       </div>
 
       <div *ngIf="providerServices && providerServices.results.length > 0">
@@ -27,7 +27,7 @@
         <div class="uk-flex uk-flex-middle uk-flex-between">
 
           <div class="resultsInfo">
-            <span class="number">{{total}}</span> PENDING SERVICES, PAGE <span class="number">{{currentPage}}</span> OF <span class="number">{{pageTotal}}</span>
+            <span class="number">{{total}}</span> DRAFT {{serviceORresource | uppercase}}S, PAGE <span class="number">{{currentPage}}</span> OF <span class="number">{{pageTotal}}</span>
           </div>
 
           <ul class="uk-pagination" uk-margin>
@@ -48,7 +48,7 @@
             <div class="uk-card-body">
               <div class="uk-grid uk-flex-middle">
                 <div class="uk-width-1-6">
-                  <img src="{{providerService.service.logo ? providerService.service.logo : '../../../../../lib/images/broken_image-black-48dp.svg'}}">
+                  <img src="{{providerService.service.logo ? providerService.service.logo : 'src/lib/assets/images/broken_image-black-48dp.svg'}}">
                 </div>
                 <div class="uk-width-2-3">
                   <h4 class="uk-margin-remove">{{providerService.service.name}}</h4>
@@ -57,10 +57,10 @@
                 <div class="uk-width-1-6">
                   <div class="action-buttons">
                     <button class="uk-button uk-button-action uk-display-block" (click)="navigate(providerService.service.id)">
-                      <i class="fa fa-pencil fa-lg"></i> Edit service
+                      <i class="fa fa-pencil fa-lg"></i> Edit {{serviceORresource | lowercase}}
                     </button>
                     <button class="uk-button uk-button-action uk-display-block uk-margin-small-top" (click)="setSelectedService(providerService)">
-                      <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Delete service
+                      <i class="fa fa-trash fa-lg" aria-hidden="true"></i> Delete {{serviceORresource | lowercase}}
                     </button>
                   </div>
                 </div>
@@ -76,7 +76,7 @@
             <!--<div class="uk-panel uk-scrollspy-inview uk-animation-slide-top-medium">-->
             <!--<div class="uk-child-width-expand uk-flex-middle uk-grid uk-grid-stack uk-padding-small" uk-grid="">-->
             <!--<div class="uk-width-1-6@m uk-first-column">-->
-            <!--<img src="{{providerService.service.logo ? providerService.service.logo : '../../../../../lib/images/broken_image-black-48dp.svg'}}">-->
+            <!--<img src="{{providerService.service.logo ? providerService.service.logo : 'src/lib/assets/images/broken_image-black-48dp.svg'}}">-->
             <!--</div>-->
             <!--<div class="uk-width-2-3@m uk-padding-remove">-->
             <!--<h3 class="uk-margin uk-h5 uk-margin-small-bottom">-->
@@ -124,7 +124,7 @@
 
 <div id="actionModal" uk-modal>
   <div class="uk-modal-dialog uk-modal-body">
-    <h6 *ngIf="selectedService">Are you sure you want to delete the service {{selectedService.service.name}}</h6>
+    <h6 *ngIf="selectedService">Are you sure you want to delete the {{serviceORresource | lowercase}} {{selectedService.service.name}}</h6>
     <button class="uk-button uk-button-primary uk-modal-close" type="button" (click)="deleteService(selectedService.id)">Delete</button>
     <button class="uk-button uk-button-primary uk-modal-close" type="button">Cancel</button>
   </div>

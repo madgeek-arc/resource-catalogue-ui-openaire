@@ -17,13 +17,13 @@
           <li [routerLinkActive]="['current_section']" #services="routerLinkActive">
             <a [routerLink]="['/dashboard/' + providerId + '/resources']">
               <img src="{{services.isActive ? 'lib/assets/images/new-icons/services-active.svg' : 'lib/assets/images/new-icons/services.svg'}}" class="uk-margin-small-right">
-              Services
+              {{serviceORresource}}s
             </a>
           </li>
           <li [routerLinkActive]="['current_section']" #draftServices="routerLinkActive">
             <a [routerLink]="['/dashboard/' + providerId + '/draft-resources']">
               <img src="{{draftServices.isActive ? 'lib/assets/images/new-icons/draft-services-active.svg' : 'lib/assets/images/new-icons/draft-services.svg'}}" class="uk-margin-small-right">
-              Draft services
+              Draft {{serviceORresource | lowercase}}s
             </a>
           </li>
           <li [routerLinkActive]="['current_section']" #messages="routerLinkActive">
@@ -44,13 +44,22 @@
           <li>
             <a [routerLink]="['/provider/' + providerId + '/resource/add/']">
               <img src="lib/assets/images/new-icons/add-service.svg" class="uk-margin-small-right">
-              Add new service
+              Add new {{serviceORresource | lowercase}}
             </a>
           </li>
           <li>
             <a [routerLink]="['/provider/update/' + providerId]">
-              <img src="lib/assets/images/new-icons/update-provider.svg" class="uk-margin-small-right">
-              Update Provider
+              <img src="lib/assets/images/new-icons/update-provider.svg" class="uk-margin-small-right">Update Provider
+            </a>
+          </li>
+          <li>
+            <a (click)="showRequestDeletionModal()">
+              <img src="lib/assets/images/new-icons/trashcan.svg" class="uk-margin-small-right">  Delete Provider
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/developers']">
+              <img src="lib/assets/images/new-icons/update-provider.svg" class="uk-margin-small-right">Use API
             </a>
           </li>
 
@@ -67,3 +76,15 @@
 </div>
 
 
+<div id="requestDeletionModal" uk-modal>
+  <div class="uk-modal-dialog uk-modal-header uk-h4">Request Provider Deletion</div>
+  <div class="uk-modal-dialog uk-modal-body">
+    <div class="uk-margin-medium-bottom">
+      <p>If you proceed, a notification email will be sent to the portal admin(s).</p>
+    </div>
+    <div class="uk-text-right">
+      <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+      <button class="uk-button uk-button-primary" type="button" (click)="requestProviderDeletion(this.providerId)">Proceed</button>
+    </div>
+  </div>
+</div>

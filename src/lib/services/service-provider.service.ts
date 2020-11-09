@@ -49,6 +49,14 @@ export class ServiceProviderService {
     return this.http.patch(this.base + `/provider/verifyProvider/${id}?active=${active}&status=${status}`, {}, this.options);
   }
 
+  requestProviderDeletion(id: string) {
+    return this.http.get(this.base + `/provider/requestProviderDeletion?providerId=${id}`, this.options);
+  }
+
+  deleteServiceProvider(id: string) {
+    return this.http.delete(this.base + `/provider/${id}`, this.options);
+  }
+
   getMyPendingProviders() {
     return this.http.get<ProviderBundle[]>(this.base + '/pendingProvider/getMyPendingProviders', this.options);
   }
@@ -91,7 +99,7 @@ export class ServiceProviderService {
   }
 
   temporarySaveProvider(provider: Provider, providerExists: boolean) {
-    console.log(providerExists);
+    console.log('providerExists ', providerExists);
     if (providerExists) {
       return this.http.put<Provider>(this.base + '/pendingProvider/provider', provider, this.options);
     }
@@ -100,6 +108,25 @@ export class ServiceProviderService {
 
   getProviderRequests(id: string) {
     return this.http.get<ProviderRequest[]>(this.base + `/request/allProviderRequests?providerId=${id}`);
+  }
+
+  hasAdminAcceptedTerms(id: string, pendingProvider: boolean) {
+    if (pendingProvider) {
+      return this.http.get<boolean>(this.base + `/pendingProvider/hasAdminAcceptedTerms?providerId=${id}`);
+    }
+    return this.http.get<boolean>(this.base + `/provider/hasAdminAcceptedTerms?providerId=${id}`);
+  }
+
+  adminAcceptedTerms(id: string, pendingProvider: boolean) {
+    if (pendingProvider) {
+      return this.http.put(this.base + `/pendingProvider/adminAcceptedTerms?providerId=${id}`, this.options);
+    }
+    return this.http.put(this.base + `/provider/adminAcceptedTerms?providerId=${id}`, this.options);
+  }
+
+  validateUrl(url: string) {
+    console.log(`knocking on: ${this.base}/provider/validateUrl?urlForValidation=${url}`);
+    return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
   }
 
 }
