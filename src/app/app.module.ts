@@ -11,8 +11,10 @@ import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.s
 import {NavigationService} from '../lib/services/navigation.service';
 import {ResourceService} from '../lib/services/resource.service';
 import {CanActivateViaPubGuard} from '../lib/services/can-activate-pub-guard.service';
-import {FooterComponent} from '../lib/shared/footer/footer.component';
 import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
+import {FooterComponent} from '../lib/shared/footer/footer.component';
+import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
+import {AireFooterComponent} from './shared/footer/footer.component';
 import {BreadcrumbsComponent} from '../lib/shared/breadcrumbs/breadcrumbs.component';
 import {FeedbackComponent} from '../lib/shared/feedback/feedback.component';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
@@ -35,20 +37,26 @@ import {ComparisonService} from '../lib/services/comparison.service';
 import {UserModule} from '../lib/pages/user/user.module';
 import {StarRatingModule} from 'angular-star-rating';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
+import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
+import {SearchAireComponent} from './pages/search/search.aire.component';
 import {StatsComponent} from '../lib/pages/stats/stats.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
 import {ServiceFormComponent} from '../lib/pages/provider-resources/service-form.component';
 import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
+import {ServiceUploadExtendedComponent} from './pages/eInfraServices/service-upload-extended.component';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
+import {ServiceEditExtendedComponent} from './pages/eInfraServices/service-edit-extended.component';
 import {MeasurementsComponent} from '../lib/pages/indicators/measurements.component';
 import {IndicatorFromComponent} from '../lib/pages/indicators/indicator-from.component';
 import {AuthenticationInterceptor} from '../lib/services/authentication-interceptor';
 import {CookieLawModule} from '../lib/shared/reusablecomponents/cookie-law/cookie-law.module';
 import {EmailService} from '../lib/services/email.service';
 import {TreeviewModule} from 'ngx-treeview';
+import {HomeAireComponent} from './pages/home/home.aire.component';
+import {AccordionSectionAireComponent} from './pages/eInfraServices/accordion-section-aire.component';
 
 
 declare var require: any;
@@ -73,13 +81,18 @@ export function highchartsFactory() {
     BrowseCategoriesComponent,
     CompareServicesComponent,
     HomeComponent,
+    HomeAireComponent,
     SearchComponent,
+    SearchAireComponent,
     StatsComponent,
     ServiceLandingPageComponent,
+    ServiceLandingPageExtendedComponent,
     // PERSISTENT
     TopMenuComponent,
+    AireTopMenuComponent,
     // BreadcrumbsComponent,
     FooterComponent,
+    AireFooterComponent,
     FeedbackComponent,
     // USER
     // DashboardComponent,
@@ -97,9 +110,13 @@ export function highchartsFactory() {
     MeasurementsComponent,
     IndicatorFromComponent,
     // FORMS
-    // ServiceEditComponent,
+    ServiceEditComponent,
+    ServiceEditExtendedComponent,
     // ServiceFormComponent,
     // ServiceUploadComponent,
+    ServiceUploadExtendedComponent,
+    // OA Catalogue ?
+    AccordionSectionAireComponent
   ],
   imports: [
     CommonModule,
@@ -142,8 +159,8 @@ export function highchartsFactory() {
     DatePipe
   ],
   exports: [
-    FooterComponent,
-    TopMenuComponent,
+    AireFooterComponent,
+    AireTopMenuComponent,
     BreadcrumbsComponent,
     FeedbackComponent
   ],

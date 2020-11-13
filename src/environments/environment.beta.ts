@@ -4,7 +4,7 @@ export const environment = {
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
   API_TOKEN_ENDPOINT: '',
-  projectName: 'OpenAire catalogue',
+  projectName: 'OpenAIRE Catalogue',
   projectMail: 'example@oac.eu',
   serviceORresource: 'Service',
   hasUserConsent: false,

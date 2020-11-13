@@ -5,65 +5,38 @@ import {CompareServicesComponent} from '../lib/pages/compare/compare-services.co
 import {HomeComponent} from '../lib/pages/home/home.component';
 import {CommonModule} from '@angular/common';
 import {SearchComponent} from '../lib/pages/search/search.component';
+import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.service';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
+import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {ForbiddenPageComponent} from '../lib/shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page.component';
 // import {ProviderModule} from './pages/provider/provider.module';
+import {ServiceUploadExtendedComponent} from './pages/eInfraServices/service-upload-extended.component';
+import {ServiceEditExtendedComponent} from './pages/eInfraServices/service-edit-extended.component';
+import {environment} from '../environments/environment';
 
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/search',
     pathMatch: 'full'
   },
-  {
-    path: 'home',
-    component: HomeComponent,
-    data: {
-      breadcrumb: 'Home'
-    }
-  },
+  // {
+  //   path: 'home',
+  //   component: HomeComponent,
+  //   data: {
+  //     breadcrumb: 'Home'
+  //   }
+  // },
   {
     path: 'search',
-    component: SearchComponent,
+    component: SearchAireComponent,
     data: {
       breadcrumb: 'Search'
     }
   },
-  // {
-  //   path: 'statistics',
-  //   component: StatsComponent,
-  //   data: {
-  //     breadcrumb: 'Statistics'
-  //   }
-  // },
-  {
-    path: 'compare',
-    component: CompareServicesComponent,
-    data: {
-      breadcrumb: 'Compare'
-    }
-  },
-  {
-    path: 'browseCategories',
-    component: BrowseCategoriesComponent,
-    data: {
-      breadcrumb: 'Browse'
-    }
-  },
 
-
-  {
-    path: 'provider',
-    loadChildren: '../lib/pages/provider/provider.module#ProviderModule',
-    canActivate: [CanActivateViaAuthGuard]
-  },
-  {
-    path: 'dashboard',
-    loadChildren: '../lib/pages/provider/dashboard/provider-dashboard.module#ProviderDashboardModule',
-    canActivate: [CanActivateViaAuthGuard]
-  },
   {
     path: 'resource-dashboard',
     loadChildren: '../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module#ResourceDashboardModule',
@@ -72,7 +45,7 @@ const appRoutes: Routes = [
 
   {
     path: 'service/:id',
-    component: ServiceLandingPageComponent,
+    component: ServiceLandingPageExtendedComponent,
     data: {
       breadcrumb: 'Service'
     }
@@ -84,21 +57,22 @@ const appRoutes: Routes = [
       breadcrumb: 'Service'
     }
   },
-
-  // {
-  //   path: 'measurements/service/:id',
-  //   component: MeasurementsComponent,
-  //   data: {
-  //     breadcrumb: 'Service Measurements'
-  //   }
-  // },
-  // {
-  //   path: 'newIndicator',
-  //   component: IndicatorFromComponent,
-  //   data: {
-  //     breadcrumb: 'New Indicator'
-  //   }
-  // },
+  {
+    path: 'provider/openaire/resource/add',
+    component: ServiceUploadExtendedComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'Add ' + environment.serviceORresource
+    }
+  },
+  {
+    path: 'provider/openaire/resource/update/:resourceId',
+    component: ServiceEditExtendedComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'Edit ' + environment.serviceORresource
+    }
+  },
   {
     path: 'assets/files/:fileName',
     children: [ ]
