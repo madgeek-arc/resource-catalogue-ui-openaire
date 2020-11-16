@@ -12,9 +12,9 @@ import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/
 import {ForbiddenPageComponent} from '../lib/shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page.component';
 // import {ProviderModule} from './pages/provider/provider.module';
-import {ServiceUploadExtendedComponent} from './pages/eInfraServices/service-upload-extended.component';
-import {ServiceEditExtendedComponent} from './pages/eInfraServices/service-edit-extended.component';
 import {environment} from '../environments/environment';
+import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
+import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
 
 const appRoutes: Routes = [
   {
@@ -31,7 +31,7 @@ const appRoutes: Routes = [
   // },
   {
     path: 'search',
-    component: SearchAireComponent,
+    component: SearchComponent,
     data: {
       breadcrumb: 'Search'
     }
@@ -59,7 +59,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'provider/openaire/resource/add',
-    component: ServiceUploadExtendedComponent,
+    component: ServiceUploadComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'Add ' + environment.serviceORresource
@@ -67,7 +67,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'provider/openaire/resource/update/:resourceId',
-    component: ServiceEditExtendedComponent,
+    component: ServiceEditComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'Edit ' + environment.serviceORresource

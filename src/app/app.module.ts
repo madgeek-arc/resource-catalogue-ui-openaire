@@ -45,10 +45,8 @@ import {StatsComponent} from '../lib/pages/stats/stats.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
 import {ServiceFormComponent} from '../lib/pages/provider-resources/service-form.component';
 import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
-import {ServiceUploadExtendedComponent} from './pages/eInfraServices/service-upload-extended.component';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
-import {ServiceEditExtendedComponent} from './pages/eInfraServices/service-edit-extended.component';
 import {MeasurementsComponent} from '../lib/pages/indicators/measurements.component';
 import {IndicatorFromComponent} from '../lib/pages/indicators/indicator-from.component';
 import {AuthenticationInterceptor} from '../lib/services/authentication-interceptor';
@@ -56,7 +54,6 @@ import {CookieLawModule} from '../lib/shared/reusablecomponents/cookie-law/cooki
 import {EmailService} from '../lib/services/email.service';
 import {TreeviewModule} from 'ngx-treeview';
 import {HomeAireComponent} from './pages/home/home.aire.component';
-import {AccordionSectionAireComponent} from './pages/eInfraServices/accordion-section-aire.component';
 
 
 declare var require: any;
@@ -111,12 +108,10 @@ export function highchartsFactory() {
     IndicatorFromComponent,
     // FORMS
     ServiceEditComponent,
-    ServiceEditExtendedComponent,
+    // ServiceEditExtendedComponent,
     // ServiceFormComponent,
-    // ServiceUploadComponent,
-    ServiceUploadExtendedComponent,
-    // OA Catalogue ?
-    AccordionSectionAireComponent
+    ServiceUploadComponent,
+    // ServiceUploadExtendedComponent,
   ],
   imports: [
     CommonModule,
