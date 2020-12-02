@@ -54,6 +54,7 @@ import {CookieLawModule} from '../lib/shared/reusablecomponents/cookie-law/cooki
 import {EmailService} from '../lib/services/email.service';
 import {TreeviewModule} from 'ngx-treeview';
 import {HomeAireComponent} from './pages/home/home.aire.component';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 
 declare var require: any;
@@ -131,6 +132,7 @@ export function highchartsFactory() {
     AngularFontAwesomeModule,
     CookieLawModule,
     AppRoutingModule,
+    NgSelectModule
   ],
   providers: [
     {
