@@ -61,7 +61,7 @@
 
         <div class="uk-margin-right">
           <div class="uk-inline uk-margin-right">
-            <label class="" for="orderBy">Status </label>
+            <label class="" for="status">Status </label>
             <div class="uk-inline">
               <select class="uk-input uk-select" id="status" (change)="handleChangeAndResetPage()" formControlName="active">
                 <option value="true" selected>Active</option>
@@ -109,6 +109,10 @@
           <div *ngFor="let providerService of providerServices.results" class="uk-card uk-card-small uk-card-default uk-margin-bottom service-card">
 
             <div class="uk-card-body">
+
+              <div *ngIf="providerService.active" class="approved">
+                <div class="uk-card-badge uk-label">Active</div>
+              </div>
 
               <div *ngIf="!providerService.active" class="rejected">
                 <div class="uk-card-badge uk-label">Inactive</div>
