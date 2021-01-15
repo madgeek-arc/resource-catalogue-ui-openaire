@@ -6,7 +6,7 @@ export const environment = {
   API_TOKEN_ENDPOINT: '',
   projectName: 'OpenAIRE Catalogue',
   projectMail: 'example@oac.eu',
-  serviceORresource: 'Service',
+  serviceORresource: 'Resource',
   hasUserConsent: false,
   privacyPolicyURL: '',
   marketplaceBaseURL: ''

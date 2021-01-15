@@ -45,7 +45,8 @@ const appRoutes: Routes = [
 
   {
     path: 'service/:id',
-    component: ServiceLandingPageExtendedComponent,
+    // component: ServiceLandingPageExtendedComponent,
+    component: ServiceLandingPageComponent,
     data: {
       breadcrumb: 'Service'
     }

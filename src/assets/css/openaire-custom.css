@@ -1,12 +1,23 @@
 :root {
+  --primary-color: #004494;
+  --link-color: #2D72D6;
+  --link-hover-color: #3665ab;
+  --breadcrumb-active-color: #26C0E2;
+  --button-primary-hover-background-color: #1E95B0;
+  --button-secondary-color: #fff;
+  --button-secondary-background-color: #26C0E2;
+  --button-secondary-hover-background-color: #1E95B0;
+}
+
+:root {
   --primary-color: #222080;
   --link-color: #2D72D6;
   --link-hover-color: #3665ab;
-  --breadcrumb-active-color: #33843C;
+  --breadcrumb-active-color: #4687E6;
   --button-primary-hover-background-color: #9FCC52;
-  --button-secondary-color: #33843C;
-  --button-secondary-background-color: #fff;
-  --button-secondary-hover-background-color: #9FCC52;
+  --button-secondary-color: #fff;
+  --button-secondary-background-color: #3086ED;
+  --button-secondary-hover-background-color: #0053ba;
 }
 
 .uk-section-secondary {
