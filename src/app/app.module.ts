@@ -55,6 +55,7 @@ import {EmailService} from '../lib/services/email.service';
 import {TreeviewModule} from 'ngx-treeview';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
+import {ProviderModule} from '../lib/pages/provider/provider.module';
 
 
 declare var require: any;
@@ -108,10 +109,10 @@ export function highchartsFactory() {
     MeasurementsComponent,
     IndicatorFromComponent,
     // FORMS
-    ServiceEditComponent,
+    // ServiceEditComponent,
     // ServiceEditExtendedComponent,
     // ServiceFormComponent,
-    ServiceUploadComponent,
+    // ServiceUploadComponent,
     // ServiceUploadExtendedComponent,
   ],
   imports: [
@@ -125,7 +126,7 @@ export function highchartsFactory() {
     // StarRatingModule.forRoot(),
     SupportModule,
     UserModule,
-    // ProviderModule,
+    ProviderModule,
     // ProviderDashboardModule,
     // CKEditorModule,
     ChartModule,
