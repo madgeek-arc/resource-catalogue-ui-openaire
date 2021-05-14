@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
   beta: false,
+  MATOMO_HOST: 'https://analytics.openaire.eu',
+  MATOMO_SITE: 147,
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
   API_TOKEN_ENDPOINT: '',

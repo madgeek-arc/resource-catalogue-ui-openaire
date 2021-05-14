@@ -56,6 +56,9 @@ import {TreeviewModule} from 'ngx-treeview';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from '../lib/pages/provider/provider.module';
+import {MarkdownModule} from 'ngx-markdown';
+import {LMarkdownEditorModule} from 'ngx-markdown-editor';
+import {MatomoModule} from 'ngx-matomo';
 
 
 declare var require: any;
@@ -133,7 +136,11 @@ export function highchartsFactory() {
     AngularFontAwesomeModule,
     CookieLawModule,
     AppRoutingModule,
-    NgSelectModule
+    NgSelectModule,
+    MatomoModule,
+    LMarkdownEditorModule,
+    MarkdownModule.forRoot(),
+    AppRoutingModule,
   ],
   providers: [
     {
