@@ -35,13 +35,13 @@ import {DashboardComponent} from '../lib/pages/provider/dashboard/dashboard.comp
 import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
 import {UserModule} from '../lib/pages/user/user.module';
-import {StarRatingModule} from 'angular-star-rating';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
 import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
 import {SearchAireComponent} from './pages/search/search.aire.component';
-import {StatsComponent} from '../lib/pages/stats/stats.component';
+import {ProvidersStatsComponent} from '../lib/pages/stats/providers-stats.component';
+import {ResourcesStatsComponent} from '../lib/pages/stats/resources-stats.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
 import {ServiceFormComponent} from '../lib/pages/provider-resources/service-form.component';
 import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
@@ -59,6 +59,7 @@ import {MarkdownModule} from 'ngx-markdown';
 import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MatomoModule} from 'ngx-matomo';
 import {ServiceFormModule} from '../lib/pages/provider-resources/service-form.module';
+import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
 
 
 declare var require: any;
@@ -86,7 +87,8 @@ export function highchartsFactory() {
     HomeAireComponent,
     SearchComponent,
     SearchAireComponent,
-    StatsComponent,
+    ProvidersStatsComponent,
+    ResourcesStatsComponent,
     ServiceLandingPageComponent,
     ServiceLandingPageExtendedComponent,
     // PERSISTENT
@@ -117,6 +119,7 @@ export function highchartsFactory() {
     // ServiceFormComponent,
     // ServiceUploadComponent,
     // ServiceUploadExtendedComponent,
+    VocabularyRequestsComponent
   ],
   imports: [
     CommonModule,
