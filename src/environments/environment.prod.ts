@@ -11,5 +11,6 @@ export const environment = {
   serviceORresource: 'Resource',
   hasUserConsent: false,
   privacyPolicyURL: '',
-  marketplaceBaseURL: ''
+  marketplaceBaseURL: '',
+  showHelpContent: false
 };

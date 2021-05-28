@@ -14,6 +14,7 @@ export const environment = {
   projectMail: 'example@oac.eu',
   serviceORresource: 'Resource',
   hasUserConsent: true,
+  showHelpContent: false,
   privacyPolicyURL: '',
   marketplaceBaseURL: ''
 };

@@ -15,6 +15,7 @@ import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page
 import {environment} from '../environments/environment';
 import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
 import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
+import {DynamicFormTestComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-test.component';
 
 const appRoutes: Routes = [
   {
@@ -34,6 +35,14 @@ const appRoutes: Routes = [
     component: SearchComponent,
     data: {
       breadcrumb: 'Search'
+    }
+  },
+
+  {
+    path: 'form',
+    component: DynamicFormTestComponent,
+    data: {
+      breadcrumb: 'forms'
     }
   },
 
