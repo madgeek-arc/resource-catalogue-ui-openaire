@@ -4,7 +4,6 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Dependent, Field, Fields} from '../../../domain/dynamic-form-model';
 import {Provider, Vocabulary} from '../../../domain/eic-model';
 import {Paging} from '../../../domain/paging';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-form',

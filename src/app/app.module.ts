@@ -17,7 +17,6 @@ import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {BreadcrumbsComponent} from '../lib/shared/breadcrumbs/breadcrumbs.component';
 import {FeedbackComponent} from '../lib/shared/feedback/feedback.component';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {ServiceProviderFormComponent} from '../lib/pages/provider/service-provider-form.component';
 import {MyServiceProvidersComponent} from '../lib/pages/provider/my-service-providers.component';
 import {AddFirstServiceComponent} from '../lib/pages/provider/add-first-service.component';
@@ -57,7 +56,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from '../lib/pages/provider/provider.module';
 import {MarkdownModule} from 'ngx-markdown';
 import {LMarkdownEditorModule} from 'ngx-markdown-editor';
-import {MatomoModule} from 'ngx-matomo';
+import {MatomoModule} from 'ngx-matomo-v9';
 import {ServiceFormModule} from '../lib/pages/provider-resources/service-form.module';
 import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
 
@@ -136,7 +135,6 @@ export function highchartsFactory() {
     ServiceFormModule,
     // ProviderDashboardModule,
     ChartModule,
-    AngularFontAwesomeModule,
     CookieLawModule,
     AppRoutingModule,
     NgSelectModule,
