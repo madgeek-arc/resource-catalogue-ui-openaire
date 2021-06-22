@@ -3,11 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { DynamicFormFieldsComponent } from './dynamic-service-form/dynamic-form-fields.component';
-import { DynamicFormTestComponent } from './dynamic-service-form/dynamic-form-test.component';
 import { DynamicFormComponent } from './dynamic-service-form/dynamic-form.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ReusableComponentsModule } from '../../shared/reusablecomponents/reusable-components.module';
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
+import { DynamicFormEditComponent } from './dynamic-service-form/dynamic-form-edit.component';
 
 @NgModule({
   imports: [
@@ -19,8 +19,8 @@ import { LMarkdownEditorModule } from 'ngx-markdown-editor';
   ],
   declarations: [
     DynamicFormComponent,
-    DynamicFormTestComponent,
     DynamicFormFieldsComponent,
+    DynamicFormEditComponent
   ],
 })
 export class ServiceFormModule {

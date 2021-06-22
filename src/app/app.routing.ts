@@ -15,7 +15,8 @@ import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page
 import {environment} from '../environments/environment';
 import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
 import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
-import {DynamicFormTestComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-test.component';
+import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
+import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
 
 const appRoutes: Routes = [
   {
@@ -40,9 +41,17 @@ const appRoutes: Routes = [
 
   {
     path: 'form',
-    component: DynamicFormTestComponent,
+    component: DynamicFormComponent,
     data: {
       breadcrumb: 'forms'
+    }
+  },
+
+  {
+    path: 'edit/:id',
+    component: DynamicFormEditComponent,
+    data: {
+      breadcrumb: 'edit'
     }
   },
 

@@ -34,12 +34,9 @@ export const urlAsyncValidator = (service: ServiceProviderService, time: number 
         })
       );
     }
-    console.log(control);
-    // console.log(timer(time).pipe(
     return timer(time).pipe(
       switchMap(() => service.validateUrl(control.value)),
       map(res => {
-        console.log(res);
         return res ? null : {invalidAsync: true};
       })
     );
@@ -64,4 +61,3 @@ export function validateArray(array: Array<string>, pattern: RegExp) {
     }
     return ret;
 }
-``

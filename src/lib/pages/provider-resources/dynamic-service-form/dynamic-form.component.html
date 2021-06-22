@@ -1,4 +1,4 @@
-<div class="uk-section-default uk-section uk-section-xsmall uk-padding-remove-bottom" style="min-height: 325px">
+<div *ngIf="ready" class="uk-section-default uk-section uk-section-xsmall uk-padding-remove-bottom" style="min-height: 325px">
   <div class="uk-container uk-container-expand">
     <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
       <div class="uk-width-1-1@m uk-first-column">
@@ -9,7 +9,7 @@
               {{editMode ? "Update" : "Add New"}} {{serviceORresource}}
             </div>
             <div class="providerName uk-margin-small-top">
-              <strong>{{serviceName != '' ? serviceName : serviceORresource + ' Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
+              <strong>{{form?.get('service')?.get('name')?.value != '' ? form?.get('service')?.get('name')?.value : serviceORresource + ' Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
             </div>
           </div>
           <div class="">
@@ -97,7 +97,6 @@
                         <i class="fa fa-file-pdf-o uk-margin-small-right"></i><span style="color: #292929">Download as PDF/Excel</span>
                       </a>
                     </div>
-
                   </div>
 
                   <div *ngIf="errorMessage" data-uk-alert="" class="uk-alert uk-alert-danger">
@@ -113,19 +112,21 @@
                       <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs"
                           uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
                         <li *ngFor="let tab of fields; let i=index" [ngClass]="{'uk-active': i === 0}">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[i]}"
-                             href="#">
+                          <a class="remove-text-decoration uk-flex uk-flex-between"
+                             [ngClass]="{'form-error': bitset.tabs.get(tab.group.id).valid}" href="#">
                             <span>{{i+1 + '. ' + tab.group.name + (tab.required.topLevel > 0 ? ' *' : '')}}</span>
-                            <span *ngIf="requiredOnTab[i] !== 0" class="circle-number">
-                              <i *ngIf="remainingOnTab[i] === 0" aria-hidden="true" class="fa fa-check"></i>
-                              {{remainingOnTab[i] != 0 ? remainingOnTab[i] + '*' : ''}}
+                            <span *ngIf=" bitset.tabs.get(tab.group.id).requiredOnTab !== 0" class="circle-number">
+                              <i *ngIf="bitset.tabs.get(tab.group.id).remainingOnTab === 0" aria-hidden="true" class="fa fa-check"></i>
+                              {{bitset.tabs.get(tab.group.id).remainingOnTab != 0 ? bitset.tabs.get(tab.group.id).remainingOnTab + '*' : ''}}
                             </span>
                           </a>
                         </li>
                       </ul>
+<!--                      <pre>{{bitset.tabs | json}}</pre>-->
 
                       <div class="requiredFields uk-text-right">*Required fields</div>
-                      <div class="stepsCompleted uk-margin-top uk-text-center">{{completedTabs}} of {{requiredTabs}}
+                      <div class="stepsCompleted uk-margin-top uk-text-center">
+                        {{bitset.completedTabs}} of {{bitset.requiredTabs}}
                       </div>
                       <div class="uk-margin-small-top">
                         <progress id="js-progressbar" class="uk-progress uk-margin-remove-bottom"
@@ -144,9 +145,19 @@
                           <ul id="top-navigation-tabs" class="uk-switcher uk-margin-top uk-margin-bottom">
                             <li *ngFor="let group of fields">
                               <div *ngFor="let fieldsData of group.fields" class="">
-                                <app-form [fieldData]="fieldsData" [form]="form" [vocabularies]="vocabularies"
-                                          [editMode]="editMode" [providersPage]="providersPage" [resources]="resources">
-                                </app-form>
+                                <app-field *ngIf="group.group.id !== 'extras'; else elseBlock" [editMode]="editMode"
+                                           [fieldData]="fieldsData" [form]="form.get('service')"
+                                           [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
+                                           (handleBitSets)="handleBitSet($event)"
+                                           (handleBitSetsOfComposite)="handleBitSetOfComposite($event)">
+                                </app-field>
+                                <ng-template #elseBlock>
+                                  <app-field [fieldData]="fieldsData" [form]="form.get('extras')" [editMode]="editMode"
+                                             [vocabularies]="vocabularies" [subVocabularies]="subVocabularies"
+                                             (handleBitSets)="handleBitSet($event)"
+                                             (handleBitSetsOfComposite)="handleBitSetOfComposite($event)">
+                                  </app-field>
+                                </ng-template>
                               </div>
                             </li>
                           </ul>

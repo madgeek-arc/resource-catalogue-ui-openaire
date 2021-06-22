@@ -1,10 +1,11 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {FacetValue} from '../../domain/facet';
 import {Vocabulary} from '../../domain/eic-model';
+import {UiVocabulary} from '../../domain/dynamic-form-model';
 
-@Pipe({name: 'premiumsort'})
+@Pipe({name: 'premiumSort'})
 export class PremiumSortPipe implements PipeTransform {
-  transform(arr: Vocabulary[], weights: string[]): any {
+  transform(arr: UiVocabulary[], weights: string[]): any {
     const ret = (arr || []).sort((a, b): number => {
       let val = 0;
       const weightA = weights.indexOf(a.name);

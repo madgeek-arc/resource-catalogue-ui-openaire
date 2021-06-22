@@ -1,4 +1,4 @@
-import {Vocabulary} from './eic-model';
+import BitSet from 'bitset/bitset';
 
 export class Group {
   id: string;
@@ -26,7 +26,7 @@ export class Form {
   suggestion: string;
   placeholder: string;
   mandatory: boolean;
-  immutable: string;
+  immutable: boolean;
   order: number;
   visible: boolean;
 }
@@ -58,4 +58,30 @@ export class FormModel {
   group: Group;
   fields: Fields[];
   required: Required;
+}
+
+export class UiVocabulary {
+  id: string;
+  name: string;
+}
+
+export class Tab {
+  valid: boolean;
+  order: number;
+  requiredOnTab: number;
+  remainingOnTab: number;
+  bitSet: BitSet;
+}
+
+export class Tabs {
+  tabs: Map<string, Tab>;
+  requiredTabs: number;
+  completedTabs: number;
+  completedTabsBitSet: BitSet;
+  requiredTotal: number;
+}
+
+export class HandleBitSet {
+  field: Fields;
+  position: number;
 }

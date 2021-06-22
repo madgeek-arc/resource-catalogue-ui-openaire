@@ -1,36 +1,35 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {Dependent, Field, Fields} from '../../../domain/dynamic-form-model';
-import {Provider, Vocabulary} from '../../../domain/eic-model';
-import {Paging} from '../../../domain/paging';
+import {Dependent, Fields, HandleBitSet, UiVocabulary} from '../../../domain/dynamic-form-model';
+import {Vocabulary} from '../../../domain/eic-model';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-form',
+  selector: 'app-field',
   templateUrl: './dynamic-form-fields.component.html'
 })
 export class DynamicFormFieldsComponent implements OnInit {
   @Input() fieldData: Fields;
   @Input() form: FormGroup;
-
-  @Input() vocabularies: Map<string, Vocabulary[]>;
-  @Input() providersPage: Paging<Provider>;
-  @Input() resources: any;
+  @Input() vocabularies: Map<string, UiVocabulary[]>;
+  @Input() subVocabularies: UiVocabulary[];
   @Input() editMode: any;
 
-  requiredResources: any;
-  relatedResources: any;
+  @Output() handleBitSets = new EventEmitter<Fields>();
+  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+
+  projectName = environment.projectName;
+  isPortalAdmin = false;
   hasChanges = false;
+  // bitSetData = new BitSetData();
 
 
-  constructor() { }
+  constructor(private authenticationService: AuthenticationService,) { }
 
   ngOnInit() {
-    this.requiredResources = this.relatedResources = this.resources;
-  }
-
-  get isValid() {
-    return this.form.controls[this.fieldData.field.name].valid;
+    this.isPortalAdmin = this.authenticationService.isAdmin();
   }
 
   /** Handle Arrays --> **/
@@ -58,11 +57,14 @@ export class DynamicFormFieldsComponent implements OnInit {
     this.fieldAsFormArray(field).push(new FormGroup(group));
   }
 
-  onCompositeChange(field: string, index: number, affects: Dependent[]) {
-    if (affects !== null ) {
-      affects.forEach( f => {
-        this.fieldAsFormArray(field).controls[index].get(f.name).reset();
-        this.fieldAsFormArray(field).controls[index].get(f.name).enable();
+  // onCompositeChange(field: string, affects: Dependent[], index?: number) {
+  onCompositeChange(fieldData: Fields, j?: number, i?: number) {
+    // fieldData.subFieldGroups[j].field.parent, fieldData.subFieldGroups[j].field.form.affects
+    if (fieldData.subFieldGroups[j].field.form.affects !== null ) {
+      fieldData.subFieldGroups[j].field.form.affects.forEach( f => {
+        this.fieldAsFormArray(fieldData.subFieldGroups[j].field.parent).controls[i].get(f.name).reset();
+        this.fieldAsFormArray(fieldData.subFieldGroups[j].field.parent).controls[i].get(f.name).enable();
+        // this.updateBitSetOfGroup(fieldData, i, f.name, f.id.toString());
       });
     }
   }
@@ -84,40 +86,58 @@ export class DynamicFormFieldsComponent implements OnInit {
       && (edit || this.fieldAsFormArray(name).get([position]).dirty));
   }
 
-  checkEveryArrayFieldValidity(name: string, edit: boolean, groupName?: string): boolean {
-    for (let i = 0; i < this.fieldAsFormArray(name).length; i++) {
-      if (groupName) {
-        if (!this.fieldAsFormArray(name).get([i]).get(groupName).valid
-          && (edit || this.fieldAsFormArray(name).get([i]).get(groupName).dirty)) {
-          return true;
-        }
-      } else if (!this.fieldAsFormArray(name).get([i]).valid
-        && (edit || this.fieldAsFormArray(name).get([i]).dirty)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   /** <-- check form fields and tabs validity **/
 
-  /** Vocabulary sorting--> **/
-  sortVocabulariesByName(vocabularies: Vocabulary[]): Vocabulary[] {
-    return vocabularies.sort((vocabulary1, vocabulary2) => {
-      if (vocabulary1.name > vocabulary2.name) {
-        return 1;
-      }
-      if (vocabulary1.name < vocabulary2.name) {
-        return -1;
-      }
-      return 0;
-    });
+  /** Return Vocabulary items for composite fields--> **/
+
+  getCompositeVocabularyItems(fieldData: Fields, j: number, i?: number) {
+    if (fieldData.subFieldGroups[j].field.form.dependsOn !== null) {
+      return this.subVocabularies[this.fieldAsFormArray(fieldData.subFieldGroups[j].field.parent).controls[i].get(fieldData.subFieldGroups[j].field.form.dependsOn.name).value];
+    } else {
+      return this.vocabularies[fieldData.subFieldGroups[j].field.form.vocabulary];
+    }
   }
 
-  getSortedChildrenCategories(childrenCategory: Vocabulary[], parentId: string) {
-    return this.sortVocabulariesByName(childrenCategory.filter(entry => entry.parentId === parentId));
+  /** <--Return Vocabulary items for composite fields **/
+
+  updateBitSet(fieldData: Fields) {
+    console.log(fieldData);
+    if (fieldData.field.form.mandatory) {
+      this.handleBitSets.emit(fieldData);
+    }
   }
-  /** <--Vocabulary sorting **/
+
+  updateBitSetOfComposite(fieldData: Fields, position: number) {
+    // console.log(fieldData);
+    if (fieldData.field.form.mandatory) {
+    // if (fieldData.field.form.mandatory) {
+      let tmp = new HandleBitSet();
+      tmp.field = fieldData;
+      tmp.position = position;
+      this.handleBitSetsOfComposite.emit(tmp);
+    }
+  }
+
+  updateBitSetOfGroup(fieldData: Fields, arrPosition?: any, subFieldName?: string, subFieldId?: string) {
+    if (fieldData.field.form.mandatory) {
+      // this.bitSetData.tabId = fieldData.field.form.group;
+      // this.bitSetData.bitIndex = fieldData.field.form.order;
+      // this.bitSetData.fieldId = parseInt(fieldData.field.id);
+      // this.bitSetData.formControlName = fieldData.field.name;
+      // this.bitSetData.formName = fieldData.field.parent;
+      // this.bitSetData.formSubFieldId = parseInt(subFieldId);
+      // this.bitSetData.formSubFieldName = subFieldName;
+      // if (isNaN(arrPosition)) {
+      //   this.bitSetData.formSubFieldName = arrPosition;
+      // } else {
+      //   this.bitSetData.arrayPosition = arrPosition;
+      // }
+      // console.log('subFieldName')
+      // console.log(subFieldName)
+      // this.bitSetData.fieldType = fieldData.field.type;
+      // this.handleBitSets.emit(this.bitSetData);
+    }
+  }
 
   unsavedChangesPrompt() {
     this.hasChanges = true;
