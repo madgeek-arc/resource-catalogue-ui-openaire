@@ -109,13 +109,13 @@ export class DynamicFormComponent implements OnInit {
     let pos = data.position;
 
     if (field.field.multiplicity) {
-      console.log('is composite and multi');
+      // console.log('is composite and multi');
       let formArray = this.form.get(field.field.accessPath) as FormArray;
       let flag = false;
       for (let i = 0; i < formArray.length; i++) {
         if (formArray.controls[i].valid) {
-          console.log('found valid array field')
-          console.log(formArray.controls[i])
+          // console.log('found valid array field')
+          // console.log(formArray.controls[i])
           flag = true;
           field.subFieldGroups.forEach(f => {
             if (f.field.form.mandatory)
@@ -126,7 +126,7 @@ export class DynamicFormComponent implements OnInit {
         }
       }
       if (!flag) {
-        console.log('didnt found valid array field')
+        // console.log('didnt found valid array field')
         let found = new Array(field.subFieldGroups.length);
         for (let j = 0; j < field.subFieldGroups.length; j++) {
           for (let i = 0; i < formArray.length; i++) {
@@ -147,8 +147,8 @@ export class DynamicFormComponent implements OnInit {
         }
         this.increaseRemainingFieldsPerTab(field.field.form.group, field.field.form.order);
       }
-    } else {
-      console.log('is composite has no multi');
+    } else if (field.subFieldGroups[pos].field.form.mandatory) {
+      // console.log('is composite has no multi');
       if (this.form.get(field.subFieldGroups[pos].field.accessPath).valid) {
         this.loaderBitSet.set(parseInt(field.subFieldGroups[pos].field.id), 1);
         if (this.form.get(field.field.accessPath).valid) {
@@ -169,13 +169,13 @@ export class DynamicFormComponent implements OnInit {
   }
 
   handleBitSet(data: Fields) {
-    console.log('handle Bitset');
+    // console.log('handle Bitset');
     if (data.field.multiplicity) {
-      console.log('handle Bitset of group');
+      // console.log('handle Bitset of group');
       this.handleBitSetOfGroup(data);
       return;
     }
-    console.log('else clause');
+    // console.log('else clause');
     if (this.form.get(data.field.accessPath).valid) {
       this.decreaseRemainingFieldsPerTab(data.field.form.group, data.field.form.order);
       this.loaderBitSet.set(parseInt(data.field.id), 1);

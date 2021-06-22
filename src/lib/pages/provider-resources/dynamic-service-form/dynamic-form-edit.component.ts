@@ -4,7 +4,8 @@ import {DynamicFormComponent} from './dynamic-form.component';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Fields, FormModel} from '../../../domain/dynamic-form-model';
+import {Fields, FormModel, HandleBitSet} from '../../../domain/dynamic-form-model';
+import get = Reflect.get;
 
 @Component({
   selector: 'app-dynamic-form-edit',
@@ -31,6 +32,7 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
         res => {
           this.prepareForm(res);
           this.form.patchValue(res)
+          this.validateForm();
         }, error => console.log('error'),
       );
     });
@@ -41,10 +43,12 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
       for (let formElementKey in form[key]) {
         if(form[key].hasOwnProperty(formElementKey)) {
           if(Array.isArray(form[key][formElementKey])) {
+            // console.log(form[key][formElementKey]);
+            // console.log(formElementKey);
             let formFieldData = this.getModelData(this.fields, formElementKey);
             let i = 1;
             if (formFieldData.field.type === 'composite') { // In order for the fields to be enabled
-              this.popComposite(key, formElementKey)  // remove is first
+              this.popComposite(key, formElementKey)  // remove it first
               i = 0;  // increase the loops
             }
             for (i; i < form[key][formElementKey].length; i++) {
@@ -55,6 +59,36 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
               }
             }
           }
+        }
+      }
+    }
+  }
+
+  validateForm() {
+    for (let control in this.form.controls) {
+      // console.log(control);
+      let tmp = this.form.controls[control] as FormGroup;
+      for (let key in tmp.controls) {
+        let formFieldData = this.getModelData(this.fields, key);
+        if (formFieldData.field.form.mandatory){
+          console.log(key);
+          if (formFieldData.field.type === 'composite') {
+            // console.log('composite: ' + key);
+            for (let i = 0; i < formFieldData.subFieldGroups.length; i++) {
+              if (formFieldData.subFieldGroups[i].field.form.mandatory) {
+                let data = new HandleBitSet();
+                data.field = formFieldData;
+                data.position = i;
+                this.handleBitSetOfComposite(data);
+              }
+            }
+          } else {
+            this.handleBitSet(formFieldData);
+          }
+        }
+
+        if (Array.isArray(tmp.controls[key].value)) {
+
         }
       }
     }

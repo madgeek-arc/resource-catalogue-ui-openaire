@@ -101,16 +101,14 @@ export class DynamicFormFieldsComponent implements OnInit {
   /** <--Return Vocabulary items for composite fields **/
 
   updateBitSet(fieldData: Fields) {
-    console.log(fieldData);
     if (fieldData.field.form.mandatory) {
       this.handleBitSets.emit(fieldData);
     }
   }
 
   updateBitSetOfComposite(fieldData: Fields, position: number) {
-    // console.log(fieldData);
     if (fieldData.field.form.mandatory) {
-    // if (fieldData.field.form.mandatory) {
+      console.log(fieldData)
       let tmp = new HandleBitSet();
       tmp.field = fieldData;
       tmp.position = position;
