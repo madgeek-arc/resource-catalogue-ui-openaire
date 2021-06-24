@@ -8,6 +8,7 @@ import {environment} from '../../../../environments/environment';
 import BitSet from 'bitset/bitset';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 import {zip} from 'rxjs/internal/observable/zip';
+import {NavigationService} from '../../../services/navigation.service';
 
 declare var UIkit: any;
 
@@ -42,7 +43,8 @@ export class DynamicFormComponent implements OnInit {
   premiumSort = new PremiumSortPipe();
 
   constructor(protected formControlService: FormControlService,
-              protected fb: FormBuilder) {
+              protected fb: FormBuilder,
+              protected router: NavigationService) {
   }
 
   ngOnInit() {
@@ -96,7 +98,30 @@ export class DynamicFormComponent implements OnInit {
   }
 
 
-  onSubmit(service: Service, tempSave: boolean, pendingService?: boolean) {
+  onSubmit(tempSave: boolean, pendingService?: boolean) {
+    console.log('super submit');
+    // console.log(this.form.valid);
+    // console.log(this.form);
+    if (this.form.valid) {
+      window.scrollTo(0, 0);
+      console.log(this.form.getRawValue());
+      this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
+        res => {
+          if (this.projectName === 'OpenAIRE Catalogue') {
+            return this.router.service(res['service'].id);  // redirect to service-landing-page
+          } else {
+            // return this.router.resourceDashboard(this.providerId, res.id);
+          }
+        },
+        error => {
+          // this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error.error.error);
+          console.log(error);
+        },
+        () => {
+
+        }
+      );
+    }
   }
 
   /** Bitsets-->**/
@@ -209,7 +234,7 @@ export class DynamicFormComponent implements OnInit {
 
   updateLoaderPercentage() {
     // console.log(this.loaderBitSet.toString(2));
-    console.log('cardinality: ', this.loaderBitSet.cardinality());
+    // console.log('cardinality: ', this.loaderBitSet.cardinality());
     this.loaderPercentage = Math.round((this.loaderBitSet.cardinality() / this.bitset.requiredTotal) * 100);
     // console.log(this.loaderPercentage, '%');
   }

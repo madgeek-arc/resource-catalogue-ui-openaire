@@ -6,6 +6,8 @@ import {Subscription} from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Fields, FormModel, HandleBitSet} from '../../../domain/dynamic-form-model';
 import get = Reflect.get;
+import {NavigationService} from '../../../services/navigation.service';
+import {ResourceService} from '../../../services/resource.service';
 
 @Component({
   selector: 'app-dynamic-form-edit',
@@ -19,17 +21,20 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
 
   constructor(public route: ActivatedRoute,
               protected formControlService: FormControlService,
-              protected fb: FormBuilder) {
-    super(formControlService, fb);
+              protected fb: FormBuilder,
+              protected router: NavigationService) {
+    super(formControlService, fb, router);
   }
 
   ngOnInit() {
-    super.ngOnInit();
     this.editMode = true;
+    super.ngOnInit();
     this.sub = this.route.params.subscribe(params => {
       this.serviceID = params['id'];
       this.formControlService.getDynamicService(this.serviceID).subscribe(
         res => {
+          ResourceService.removeNulls(res['service']);
+          ResourceService.removeNulls(res['extras']);
           this.prepareForm(res);
           this.form.patchValue(res)
           this.validateForm();
@@ -37,6 +42,11 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
       );
     });
   }
+
+  // onSubmit(tempSave: boolean, pendingService?: boolean) {
+  //   console.log('boom')
+  //   super.onSubmit(tempSave, pendingService);
+  // }
 
   prepareForm(form: Object) {
     for (let key in form) {
@@ -71,7 +81,7 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
       for (let key in tmp.controls) {
         let formFieldData = this.getModelData(this.fields, key);
         if (formFieldData.field.form.mandatory){
-          console.log(key);
+          // console.log(key);
           if (formFieldData.field.type === 'composite') {
             // console.log('composite: ' + key);
             for (let i = 0; i < formFieldData.subFieldGroups.length; i++) {

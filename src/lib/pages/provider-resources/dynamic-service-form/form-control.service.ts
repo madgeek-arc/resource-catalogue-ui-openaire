@@ -5,7 +5,7 @@ import {FormModel, UiVocabulary} from '../../../domain/dynamic-form-model';
 import {urlAsyncValidator, URLValidator} from '../../../shared/validators/generic.validator';
 import {ServiceProviderService} from '../../../services/service-provider.service';
 import {environment} from '../../../../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {RichService} from '../../../domain/eic-model';
 
@@ -17,6 +17,13 @@ export class FormControlService {
 
   base = environment.API_ENDPOINT;
   private options = {withCredentials: true};
+  private httpOption = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Accept': 'application/json;charset=UTF-8'
+    }),
+    withCredentials: true
+  };
 
   getFormModel() {
     return this.http.get<FormModel[]>(this.base + '/ui/form/model');
@@ -28,6 +35,10 @@ export class FormControlService {
 
   getDynamicService(id: string) {
     return this.http.get(this.base + `/infraService/dynamic/${id}/`, this.options);
+  }
+
+  postDynamicService(service, edit:boolean) {
+    return this.http[edit ? 'put' : 'post'](this.base + '/infraService/dynamic', service, this.options);
   }
 
   toFormGroup(form: FormModel[], checkImmutable: boolean) {

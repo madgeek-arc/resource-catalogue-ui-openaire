@@ -19,10 +19,10 @@
             </button>
             <button class="uk-button uk-button-primary uk-margin-left"
                     *ngIf="(!editMode || pendingService) && (projectName == 'EOSC' || projectName == 'CatRIS')"
-                    (click)="this.onSubmit(this.service, true)"> Save as draft
+                    (click)="this.onSubmit(true)"> Save as draft
             </button>
-            <button *ngIf="loaderPercentage==100" class="uk-button uk-button-secondary uk-margin-left"
-                    (click)="onSubmit(form.value, false)" type="submit"> Submit
+            <button *ngIf="loaderPercentage === 100" class="uk-button uk-button-secondary uk-margin-left"
+                    (click)="onSubmit(false)" type="submit"> Submit
             </button>
           </div>
         </div>
