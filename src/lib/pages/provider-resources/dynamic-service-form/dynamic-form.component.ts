@@ -60,39 +60,7 @@ export class DynamicFormComponent implements OnInit {
         this.errorMessage = 'Something went bad while getting the data for page initialization. ' + JSON.stringify(error.error.error);
       },
       () => {
-        let tmpForm: any = {};
-        tmpForm['service'] = this.formControlService.toFormGroup(this.fields, true);
-        tmpForm['extras'] = this.formControlService.toFormGroup(this.fields, false);
-        // this.form.get('service').push(new FormGroup(this.formControlService.toFormGroup(chang es.fields.currentValue))) ;
-        this.form = this.fb.group(tmpForm);
-        // this.form = this.formControlService.toFormGroup(changes.fields.currentValue);
-        let requiredTabs = 0, requiredTotal = 0;
-        let obj = new Map();
-        this.fields.forEach(group => {
-          let tab = new Tab();
-          tab.requiredOnTab = tab.remainingOnTab = group.required.topLevel;
-          tab.valid = false;
-          tab.order = group.group.order;
-          tab.bitSet = new BitSet;
-          // obj[group.group.id] = tab;
-          obj.set(group.group.id, tab);
-          if (group.required.topLevel > 0) {
-            requiredTabs++;
-          }
-          requiredTotal += group.required.total;
-        });
-        this.bitset.tabs = obj;
-        this.bitset.completedTabs = 0;
-        this.bitset.completedTabsBitSet = new BitSet;
-        this.bitset.requiredTabs = requiredTabs;
-        this.bitset.requiredTotal = requiredTotal;
-
-        /** Initialize and sort vocabulary arrays **/
-        let voc: Vocabulary[] = this.vocabularies['Subcategory'].concat(this.vocabularies['Scientific subdomain']);
-        this.subVocabularies = this.groupByKey(voc, 'parentId');
-        for (const [key, value] of Object.entries(this.vocabularies)) {
-          this.premiumSort.transform(this.vocabularies[key], ['English', 'Europe', 'Worldwide']);
-        }
+        this.initializations();
         this.ready = true;
       });
   }
@@ -114,13 +82,50 @@ export class DynamicFormComponent implements OnInit {
           }
         },
         error => {
-          // this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error.error.error);
+          this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error.error.error);
           console.log(error);
         },
         () => {
 
         }
       );
+    }
+  }
+
+  initializations() {
+    /** Create form **/
+    let tmpForm: any = {};
+    tmpForm['service'] = this.formControlService.toFormGroup(this.fields, true);
+    tmpForm['extras'] = this.formControlService.toFormGroup(this.fields, false);
+    this.form = this.fb.group(tmpForm);
+
+    /** Initialize tab bitsets **/
+    let requiredTabs = 0, requiredTotal = 0;
+    let obj = new Map();
+    this.fields.forEach(group => {
+      let tab = new Tab();
+      tab.requiredOnTab = tab.remainingOnTab = group.required.topLevel;
+      tab.valid = false;
+      tab.order = group.group.order;
+      tab.bitSet = new BitSet;
+      // obj[group.group.id] = tab;
+      obj.set(group.group.id, tab);
+      if (group.required.topLevel > 0) {
+        requiredTabs++;
+      }
+      requiredTotal += group.required.total;
+    });
+    this.bitset.tabs = obj;
+    this.bitset.completedTabs = 0;
+    this.bitset.completedTabsBitSet = new BitSet;
+    this.bitset.requiredTabs = requiredTabs;
+    this.bitset.requiredTotal = requiredTotal;
+
+    /** Initialize and sort vocabulary arrays **/
+    let voc: Vocabulary[] = this.vocabularies['Subcategory'].concat(this.vocabularies['Scientific subdomain']);
+    this.subVocabularies = this.groupByKey(voc, 'parentId');
+    for (const [key, value] of Object.entries(this.vocabularies)) {
+      this.premiumSort.transform(this.vocabularies[key], ['English', 'Europe', 'Worldwide']);
     }
   }
 

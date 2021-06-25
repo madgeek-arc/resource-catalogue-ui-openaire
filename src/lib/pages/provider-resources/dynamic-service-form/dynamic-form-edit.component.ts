@@ -1,13 +1,13 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControlService} from './form-control.service';
 import {DynamicFormComponent} from './dynamic-form.component';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Fields, FormModel, HandleBitSet} from '../../../domain/dynamic-form-model';
-import get = Reflect.get;
 import {NavigationService} from '../../../services/navigation.service';
 import {ResourceService} from '../../../services/resource.service';
+import {zip} from 'rxjs/internal/observable/zip';
 
 @Component({
   selector: 'app-dynamic-form-edit',
@@ -24,29 +24,40 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
               protected fb: FormBuilder,
               protected router: NavigationService) {
     super(formControlService, fb, router);
+    // super.ngOnInit();
   }
 
   ngOnInit() {
     this.editMode = true;
-    super.ngOnInit();
-    this.sub = this.route.params.subscribe(params => {
-      this.serviceID = params['id'];
-      this.formControlService.getDynamicService(this.serviceID).subscribe(
-        res => {
-          ResourceService.removeNulls(res['service']);
-          ResourceService.removeNulls(res['extras']);
-          this.prepareForm(res);
-          this.form.patchValue(res)
-          this.validateForm();
-        }, error => console.log('error'),
-      );
-    });
+    // super.ngOnInit();
+    this.ready = false;
+    zip(
+      this.formControlService.getUiVocabularies(),
+      this.formControlService.getFormModel()
+    ).subscribe(res => {
+        this.vocabularies = res[0];
+        this.fields = res[1];
+      },
+      error => {
+        this.errorMessage = 'Something went bad while getting the data for page initialization. ' + JSON.stringify(error.error.error);
+      },
+      () => {
+        this.initializations();
+        this.sub = this.route.params.subscribe(params => {
+          this.serviceID = params['id'];
+          this.formControlService.getDynamicService(this.serviceID).subscribe(
+            res => {
+              ResourceService.removeNulls(res['service']);
+              ResourceService.removeNulls(res['extras']);
+              this.prepareForm(res);
+              this.form.patchValue(res)
+              this.validateForm();
+            }, error => console.log(error),
+          );
+        });
+        this.ready = true;
+      });
   }
-
-  // onSubmit(tempSave: boolean, pendingService?: boolean) {
-  //   console.log('boom')
-  //   super.onSubmit(tempSave, pendingService);
-  // }
 
   prepareForm(form: Object) {
     for (let key in form) {
