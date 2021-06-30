@@ -108,7 +108,6 @@ export class DynamicFormFieldsComponent implements OnInit {
 
   updateBitSetOfComposite(fieldData: Fields, position: number) {
     if (fieldData.field.form.mandatory) {
-      console.log(fieldData)
       let tmp = new HandleBitSet();
       tmp.field = fieldData;
       tmp.position = position;

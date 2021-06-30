@@ -7,7 +7,8 @@
       <div class="uk-form-description uk-margin-top uk-width-9-10">{{fieldData.field.form.description}}</div>
       <div class="uk-form-controls uk-margin-medium-top">
 
-        <div *ngIf="fieldData.field.type === 'string' || fieldData.field.type === 'url'">
+        <div *ngIf="fieldData.field.type === 'string' || fieldData.field.type === 'url' ||
+         fieldData.field.type === 'email' || fieldData.field.type === 'phone'">
 
           <div *ngIf="fieldData.field.multiplicity; else noMultiplicity" [formArrayName]="fieldData.field.name">
             <div *ngFor="let input of fieldAsFormArray(fieldData.field.name).controls; let i=index" class="uk-margin-bottom">
@@ -130,7 +131,7 @@
                         <i><small>{{fieldData.subFieldGroups[j].field.form.suggestion}}</small></i>
                       </div>
                     </div>
-                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string'">
+                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string' || fieldData.subFieldGroups[j].field.type === 'email' || fieldData.subFieldGroups[j].field.type === 'phone'">
                       <input [id]="fieldData.subFieldGroups[j].field.name" class="uk-input uk-width-9-10"
                              [formControlName]="fieldData.subFieldGroups[j].field.name"
                              (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()"
@@ -179,7 +180,7 @@
                     </div>
                   </div>
 
-                  <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string'">
+                  <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string' || fieldData.subFieldGroups[j].field.type === 'email' || fieldData.subFieldGroups[j].field.type === 'phone'">
                     <input [id]="fieldData.subFieldGroups[j].field.name" class="uk-input uk-width-9-10"
                            [formControlName]="fieldData.subFieldGroups[j].field.name"
                            (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()"

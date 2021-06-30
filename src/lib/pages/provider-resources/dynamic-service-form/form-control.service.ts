@@ -57,9 +57,19 @@ export class FormControlService {
                 : new FormArray([]);
               const subGroup: any = {};
               formField.subFieldGroups.forEach(subField => {
-                subGroup[subField.field.name] = subField.field.form.mandatory ?
-                  new FormControl('', Validators.required)
-                  : new FormControl('');
+                if (subField.field.type === 'email') {
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormControl('', Validators.compose([Validators.required, Validators.email]))
+                    : new FormControl('', Validators.email);
+                } else if (subField.field.type === 'phone') {
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormControl('', Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
+                    : new FormControl('', Validators.pattern('[+]?\\d+$'));
+                } else {
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormControl('', Validators.required)
+                    : new FormControl('');
+                }
                 if (subField.field.form.dependsOn !== null) {
                   subGroup[subField.field.name].disable();
                 }
@@ -78,14 +88,32 @@ export class FormControlService {
             } else if (formField.field.type === 'composite') {
               const subGroup: any = {};
               formField.subFieldGroups.forEach(subField => {
-                subGroup[subField.field.name] = subField.field.form.mandatory ?
-                  new FormControl('', Validators.required)
-                  : new FormControl('');
+                if (subField.field.type === 'email') {
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormControl('', Validators.compose([Validators.required, Validators.email]))
+                    : new FormControl('', Validators.email);
+                } else if (subField.field.type === 'phone') {
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormControl('', Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
+                    : new FormControl('', Validators.pattern('[+]?\\d+$'));
+                } else {
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormControl('', Validators.required)
+                    : new FormControl('');
+                }
                 if (subField.field.form.dependsOn !== null) {
                   subGroup[subField.field.name].disable();
                 }
               });
               group[formField.field.name] = new FormGroup(subGroup);
+            } else if (formField.field.type === 'email') {
+              group[formField.field.name] = formField.field.form.mandatory ?
+                new FormControl('', Validators.compose([Validators.required, Validators.email]))
+                : new FormControl('', Validators.email);
+            } else if (formField.field.type === 'phone') {
+              group[formField.field.name] = formField.field.form.mandatory ?
+                new FormControl('', Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
+                : new FormControl('', Validators.pattern('[+]?\\d+$'));
             } else {
               group[formField.field.name] = formField.field.form.mandatory ? new FormControl('', Validators.required)
                 : new FormControl('');
