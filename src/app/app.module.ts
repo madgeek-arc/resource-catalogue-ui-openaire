@@ -26,7 +26,6 @@ import {ReusableComponentsModule} from '../lib/shared/reusablecomponents/reusabl
 import {ServiceProviderService} from '../lib/services/service-provider.service';
 import {ServiceProvidersListComponent} from '../lib/pages/admin/service-providers-list.component';
 import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
-import {ChartModule} from 'angular2-highcharts';
 import {SupportModule} from '../lib/pages/support/support.module';
 import {ServiceStatsComponent} from '../lib/pages/provider/dashboard/resource-dashboard/service-stats.component';
 import {MyFavouritesComponent} from '../lib/pages/user/favourites/my-favourites.component';
@@ -59,22 +58,11 @@ import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MatomoModule} from 'ngx-matomo-v9';
 import {ServiceFormModule} from '../lib/pages/provider-resources/service-form.module';
 import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
+import {HighchartsChartModule} from 'highcharts-angular';
+import {FormControlService} from '../lib/pages/provider-resources/dynamic-service-form/form-control.service';
 
 
 declare var require: any;
-
-export function highchartsFactory() {
-  const hc = require('highcharts');
-  require('highcharts/modules/heatmap')(hc);
-  require('highcharts/modules/map')(hc);
-  require('../lib/assets/js/europe.js')(hc);
-  require('../lib/assets/js/world.js')(hc);
-  require('highcharts/modules/drilldown')(hc);
-  require('highcharts/modules/exporting')(hc);
-  require('highcharts/modules/offline-exporting')(hc);
-  require('highcharts/modules/export-data')(hc);
-  return hc;
-}
 
 @NgModule({
   declarations: [
@@ -134,7 +122,7 @@ export function highchartsFactory() {
     ProviderModule,
     ServiceFormModule,
     // ProviderDashboardModule,
-    ChartModule,
+    HighchartsChartModule,
     CookieLawModule,
     AppRoutingModule,
     NgSelectModule,
@@ -158,10 +146,7 @@ export function highchartsFactory() {
     UserService,
     ServiceProviderService,
     EmailService,
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
+    FormControlService,
     DatePipe
   ],
   exports: [

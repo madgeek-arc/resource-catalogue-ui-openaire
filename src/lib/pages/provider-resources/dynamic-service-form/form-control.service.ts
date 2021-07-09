@@ -26,6 +26,7 @@ export class FormControlService {
   };
 
   getFormModel() {
+    console.log('boom');
     return this.http.get<FormModel[]>(this.base + '/ui/form/model');
   }
 

@@ -196,9 +196,12 @@
             <h2 class="section-heading uk-h2">{{serviceORresource}} coverage</h2>
             <div class="uk-grid">
               <div class="uk-width-3-5 ">
-                <div style="width:100%; border: 1px solid #dedede" *ngIf="serviceMapOptions">
-                  <chart type="Map" [options]="serviceMapOptions"></chart>
-                </div>
+                <highcharts-chart *ngIf="serviceMapOptions"
+                                  [Highcharts]="Highcharts"
+                                  [constructorType]="chartConstructor"
+                                  [options]="serviceMapOptions"
+                                  style="width: 100%; height: auto; display: block;">
+                </highcharts-chart>
               </div>
               <div class="uk-width-2-5">
 
@@ -251,6 +254,9 @@
               </div>
             </div>
           </div>
+
+          <pre>{{model | json}}</pre>
+          <pre>{{form.getRawValue() | json}}</pre>
 
         </div>
         <div class="uk-width-1-4">
