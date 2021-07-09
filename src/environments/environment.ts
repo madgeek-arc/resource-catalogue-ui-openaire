@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   beta: false,
-  MATOMO_HOST: '',
+  MATOMO_URL: 'https://analytics.openaire.eu/',
   MATOMO_SITE: -1,
   FAQ_ENDPOINT: 'https://dl105.madgik.di.uoa.gr/faq/api',
   API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file

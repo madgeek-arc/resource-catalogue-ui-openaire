@@ -4,7 +4,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReusableComponentsModule} from '../../shared/reusablecomponents/reusable-components.module';
 import {SharedModule} from '../../shared/shared.module';
 import {UserRouting} from './user.routing';
-import {ChartModule} from 'angular2-highcharts';
 import {MyFavouritesComponent} from './favourites/my-favourites.component';
 import {RecommendationsComponent} from './recommendations/recommendations.component';
 
@@ -16,7 +15,6 @@ import {RecommendationsComponent} from './recommendations/recommendations.compon
     ReactiveFormsModule,
     UserRouting,
     ReusableComponentsModule,
-    ChartModule,
 
   ],
   declarations: [

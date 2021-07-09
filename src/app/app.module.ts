@@ -25,7 +25,6 @@ import {UpdateServiceProviderComponent} from '../lib/pages/provider/update-servi
 import {ReusableComponentsModule} from '../lib/shared/reusablecomponents/reusable-components.module';
 import {ServiceProviderService} from '../lib/services/service-provider.service';
 import {ServiceProvidersListComponent} from '../lib/pages/admin/service-providers-list.component';
-import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
 import {SupportModule} from '../lib/pages/support/support.module';
 import {ServiceStatsComponent} from '../lib/pages/provider/dashboard/resource-dashboard/service-stats.component';
 import {MyFavouritesComponent} from '../lib/pages/user/favourites/my-favourites.component';
@@ -55,11 +54,12 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from '../lib/pages/provider/provider.module';
 import {MarkdownModule} from 'ngx-markdown';
 import {LMarkdownEditorModule} from 'ngx-markdown-editor';
-import {MatomoModule} from 'ngx-matomo-v9';
+import {MatomoModule} from 'ngx-matomo';
 import {ServiceFormModule} from '../lib/pages/provider-resources/service-form.module';
 import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
 import {HighchartsChartModule} from 'highcharts-angular';
 import {FormControlService} from '../lib/pages/provider-resources/dynamic-service-form/form-control.service';
+import {environment} from '../environments/environment';
 
 
 declare var require: any;
@@ -126,7 +126,18 @@ declare var require: any;
     CookieLawModule,
     AppRoutingModule,
     NgSelectModule,
-    MatomoModule,
+    MatomoModule.forRoot({
+      scriptUrl: environment.MATOMO_URL + 'matomo.js',
+      trackers: [
+        {
+          trackerUrl: environment.MATOMO_URL + 'matomo.php',
+          siteId: environment.MATOMO_SITE
+        }
+      ],
+      routeTracking: {
+        enable: true
+      }
+    }),
     LMarkdownEditorModule,
     MarkdownModule.forRoot(),
     AppRoutingModule,

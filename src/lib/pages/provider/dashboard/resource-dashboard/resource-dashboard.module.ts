@@ -1,7 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ChartModule} from 'angular2-highcharts';
 import {SharedModule} from '../../../../shared/shared.module';
 import {ReusableComponentsModule} from '../../../../shared/reusablecomponents/reusable-components.module';
 import {ServiceStatsComponent} from './service-stats.component';
@@ -18,7 +17,6 @@ import {ResourceDashboardComponent} from './resource-dashboard.component';
     ReactiveFormsModule,
     ResourceDashboardRouting,
     ReusableComponentsModule,
-    ChartModule,
   ],
   declarations: [
     ResourceDashboardComponent,

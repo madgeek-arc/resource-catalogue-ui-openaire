@@ -16,7 +16,6 @@ import {BreadcrumbsComponent} from './breadcrumbs/breadcrumbs.component';
 import {RouterModule} from '@angular/router';
 import {PendingServicesComponent} from '../pages/provider/dashboard/pendingservices/pending-services.component';
 import {PreviewResourceComponent} from '../pages/previewresource/preview-resource.component';
-import {ChartModule} from 'angular2-highcharts';
 
 @NgModule({
   imports: [
@@ -24,7 +23,6 @@ import {ChartModule} from 'angular2-highcharts';
     ReactiveFormsModule,
     // StarRatingModule.forRoot(), // FIXME: not supported on this angular version
     RouterModule,
-    ChartModule
   ],
   declarations: [
     JoinPipe,
