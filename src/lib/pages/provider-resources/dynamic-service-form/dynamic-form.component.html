@@ -111,7 +111,7 @@
                       <div class="tabsTitle uk-margin-bottom">{{serviceORresource}} Profile Information Blocks</div>
                       <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs"
                           uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
-                        <li *ngFor="let tab of fields; let i=index" [ngClass]="{'uk-active': i === 0}">
+                        <li *ngFor="let tab of fields; let i=index" [ngClass]="{'uk-active': i === tabIndex}" (click)="setTabIndex(i)">
                           <a class="remove-text-decoration uk-flex uk-flex-between"
                              [ngClass]="{'form-error': bitset.tabs.get(tab.group.id).valid}" href="#">
                             <span>{{i+1 + '. ' + tab.group.name + (tab.required.topLevel > 0 ? ' *' : '')}}</span>
@@ -124,6 +124,15 @@
                       </ul>
 
                       <div class="requiredFields uk-text-right">*Required fields</div>
+                      <div class="uk-margin-small-top" style="margin-left: 19%">
+                        <button class="uk-button uk-margin-small-right" [ngClass]="tabIndex === 0 ? 'uk-button-default' : 'uk-button-primary'" (click)="goToTab(tabIndex-1)" style="width: 130px">
+                          <i class="fa fa-angle-left"></i> Previous
+                        </button>
+                        <button class="uk-button" [ngClass]="tabIndex === bitset.tabs.size - 1  ? 'uk-button-default' : 'uk-button-primary'" style="width: 130px" (click)="goToTab(tabIndex+1)">
+                          Next <i class="fa fa-angle-right"></i>
+                        </button>
+                      </div>
+
                       <div class="stepsCompleted uk-margin-top uk-text-center">
                         {{bitset.completedTabs}} of {{bitset.requiredTabs}}
                       </div>

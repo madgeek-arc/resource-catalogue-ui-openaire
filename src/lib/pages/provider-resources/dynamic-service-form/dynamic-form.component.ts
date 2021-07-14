@@ -9,6 +9,7 @@ import BitSet from 'bitset/bitset';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 import {zip} from 'rxjs/internal/observable/zip';
 import {NavigationService} from '../../../services/navigation.service';
+import {element} from 'protractor';
 
 declare var UIkit: any;
 
@@ -39,6 +40,7 @@ export class DynamicFormComponent implements OnInit {
 
   loaderBitSet = new BitSet;
   loaderPercentage = 0;
+  tabIndex= 0;
 
   premiumSort = new PremiumSortPipe();
 
@@ -257,6 +259,19 @@ export class DynamicFormComponent implements OnInit {
   }
 
   /** <--Bitsets**/
+
+  setTabIndex(i: number) {
+    this.tabIndex = i;
+    console.log(this.tabIndex);
+  }
+
+  goToTab(i: number) {
+    if (i === -1 || i === this.bitset.tabs.size) {
+      return;
+    }
+    this.tabIndex = i;
+    UIkit.switcher('#top-navigation-tabs').show(i);
+  }
 
   openPreviewModal() {
     UIkit.modal('#modal-preview').show();
