@@ -115,27 +115,6 @@ export class DynamicFormFieldsComponent implements OnInit {
     }
   }
 
-  updateBitSetOfGroup(fieldData: Fields, arrPosition?: any, subFieldName?: string, subFieldId?: string) {
-    if (fieldData.field.form.mandatory) {
-      // this.bitSetData.tabId = fieldData.field.form.group;
-      // this.bitSetData.bitIndex = fieldData.field.form.order;
-      // this.bitSetData.fieldId = parseInt(fieldData.field.id);
-      // this.bitSetData.formControlName = fieldData.field.name;
-      // this.bitSetData.formName = fieldData.field.parent;
-      // this.bitSetData.formSubFieldId = parseInt(subFieldId);
-      // this.bitSetData.formSubFieldName = subFieldName;
-      // if (isNaN(arrPosition)) {
-      //   this.bitSetData.formSubFieldName = arrPosition;
-      // } else {
-      //   this.bitSetData.arrayPosition = arrPosition;
-      // }
-      // console.log('subFieldName')
-      // console.log(subFieldName)
-      // this.bitSetData.fieldType = fieldData.field.type;
-      // this.handleBitSets.emit(this.bitSetData);
-    }
-  }
-
   unsavedChangesPrompt() {
     this.hasChanges = true;
   }

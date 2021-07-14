@@ -16,7 +16,7 @@
                      class="uk-input uk-width-9-10 uk-animation-slide-top-small"
                      [placeholder]="fieldData.field.form.placeholder ? fieldData.field.form.placeholder : ''"
                      [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.field.name, i, this.editMode)}"
-                     (input)="updateBitSetOfGroup(fieldData, i); unsavedChangesPrompt()">
+                     (input)="updateBitSet(fieldData); unsavedChangesPrompt()">
               <div *ngIf="projectName === 'OpenAIRE Catalogue' && fieldData.field.type === 'url' && this.editMode
                         && this.isPortalAdmin && fieldAsFormArray(fieldData.field.name).controls[i].value" class="uk-icon">
                 &nbsp;&nbsp;<a href="{{this.form.get(fieldData.field.name).value}}" target="_blank">

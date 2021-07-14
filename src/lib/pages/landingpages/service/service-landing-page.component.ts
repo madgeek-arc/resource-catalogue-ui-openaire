@@ -16,9 +16,10 @@ import {MatomoTracker} from 'ngx-matomo';
 import * as Highcharts from 'highcharts';
 import MapModule from 'highcharts/modules/map';
 import {FormControlService} from '../../provider-resources/dynamic-service-form/form-control.service';
-import {Fields, FormModel, Tab} from '../../../domain/dynamic-form-model';
+import {Fields, FormModel, Tab, UiVocabulary} from '../../../domain/dynamic-form-model';
 import {DynamicFormEditComponent} from '../../provider-resources/dynamic-service-form/dynamic-form-edit.component';
 import BitSet from 'bitset';
+import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 MapModule(Highcharts);
 
 declare var UIkit: any;
@@ -45,8 +46,11 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   public EU: string[];
   public WW: string[];
   public serviceId;
+  vocabularies: Map<string, UiVocabulary[]>;
   model: FormModel[] = null;
   form: FormGroup = this.fb.group({service: this.fb.group({}), extras: this.fb.group({})}, Validators.required);
+  loading = false;
+  premiumSort = new PremiumSortPipe();
 
   private sub: Subscription;
   weights: string[] = ['EU', 'WW'];
@@ -75,24 +79,30 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.canEditService = false;
+    this.loading = true;
 
     if (this.authenticationService.isLoggedIn()) {
       this.sub = this.route.params.subscribe(params => {
         zip(
           this.resourceService.getEU(),
           this.resourceService.getWW(),
-          // this.resourceService.getSelectedServices([params["id"]]),
           this.resourceService.getRichService(params['id'], params['version']),
+          this.formService.getFormModel(),
+          this.formService.getDynamicService(params['id']),
+          this.formService.getUiVocabularies(),
           this.providerService.getMyServiceProviders(),
-          this.formService.getFormModel()
-          // this.resourceService.recordEvent(params["id"], "INTERNAL"),
         ).subscribe(suc => {
             this.EU = <string[]>suc[0];
             this.WW = <string[]>suc[1];
             this.richService = <RichService>suc[2];
-            this.myProviders = suc[3];
-            this.model = <FormModel[]>suc[4];
-            this.serviceId = params['id'];
+            this.model = <FormModel[]>suc[3];
+            this.vocabularies = <Map<string, UiVocabulary[]>>suc[5];
+            this.initializations();
+            ResourceService.removeNulls(suc[4]['service']);
+            ResourceService.removeNulls(suc[4]['extras']);
+            this.prepareForm(suc[4]);
+            this.form.patchValue(suc[4]);
+            this.myProviders = <ProviderBundle[]>suc[6];
             this.getLocations();
             this.router.breadcrumbs = this.richService.service.name;
             this.setCountriesForService(this.richService.service.geographicalAvailabilities);
@@ -104,16 +114,16 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
             }
 
-            const serviceIDs = (this.richService.service.requiredResources || []).concat(this.richService.service.relatedResources || [])
-              .filter((e, i, a) => a.indexOf(e) === i && e !== '');
-            if (serviceIDs.length > 0) {
-              this.resourceService.getSelectedServices(serviceIDs).subscribe(
-                services => this.services = services,
-                err => {
-                  console.log(err.error);
-                  this.errorMessage = err.error;
-                });
-            }
+            // const serviceIDs = (this.richService.service.requiredResources || []).concat(this.richService.service.relatedResources || [])
+            //   .filter((e, i, a) => a.indexOf(e) === i && e !== '');
+            // if (serviceIDs.length > 0) {
+            //   this.resourceService.getSelectedServices(serviceIDs).subscribe(
+            //     services => this.services = services,
+            //     err => {
+            //       console.log(err.error);
+            //       this.errorMessage = err.error;
+            //     });
+            // }
           },
           err => {
             if (err.status === 404) {
@@ -122,6 +132,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
             this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
           },
           () => {
+            this.loading= false;
             this.context = this.richService.service.description;
             this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
           });
@@ -133,13 +144,14 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           this.resourceService.getWW(),
           this.resourceService.getRichService(params['id']),
           this.formService.getFormModel(),
-          this.formService.getDynamicService(params['id'])
-          // this.resourceService.recordEvent(params["id"], "INTERNAL"),
+          this.formService.getDynamicService(params['id']),
+          this.formService.getUiVocabularies(),
         ).subscribe(suc => {
             this.EU = <string[]>suc[0];
             this.WW = <string[]>suc[1];
             this.richService = <RichService>suc[2];
             this.model = <FormModel[]>suc[3];
+            this.vocabularies = suc[5];
             this.initializations();
             ResourceService.removeNulls(suc[4]['service']);
             ResourceService.removeNulls(suc[4]['extras']);
@@ -148,21 +160,22 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
             this.router.breadcrumbs = this.richService.service.name;
             this.setCountriesForService(this.richService.service.geographicalAvailabilities);
 
-            const serviceIDs = (this.richService.service.requiredResources || []).concat(this.richService.service.relatedResources || [])
-              .filter((e, i, a) => a.indexOf(e) === i && e !== '');
-            if (serviceIDs.length > 0) {
-              this.resourceService.getSelectedServices(serviceIDs)
-                .subscribe(services => this.services = services,
-                  err => {
-                    console.log(err.error);
-                    this.errorMessage = err.error;
-                  });
-            }
+            // const serviceIDs = (this.richService.service.requiredResources || []).concat(this.richService.service.relatedResources || [])
+            //   .filter((e, i, a) => a.indexOf(e) === i && e !== '');
+            // if (serviceIDs.length > 0) {
+            //   this.resourceService.getSelectedServices(serviceIDs)
+            //     .subscribe(services => this.services = services,
+            //       err => {
+            //         console.log(err.error);
+            //         this.errorMessage = err.error;
+            //       });
+            // }
           },
           err => {
             this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
           },
           () => {
+            this.loading= false;
             this.context = this.richService.service.description;
           });
       });
@@ -278,12 +291,12 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     tmpForm['extras'] = this.formService.toFormGroup(this.model, false);
     this.form = this.fb.group(tmpForm);
 
-    // /** Initialize and sort vocabulary arrays **/
+    /** Initialize and sort vocabulary arrays **/
     // let voc: Vocabulary[] = this.vocabularies['Subcategory'].concat(this.vocabularies['Scientific subdomain']);
     // this.subVocabularies = this.groupByKey(voc, 'parentId');
-    // for (const [key, value] of Object.entries(this.vocabularies)) {
-    //   this.premiumSort.transform(this.vocabularies[key], ['English', 'Europe', 'Worldwide']);
-    // }
+    for (const [key, value] of Object.entries(this.vocabularies)) {
+      this.premiumSort.transform(this.vocabularies[key], ['English', 'Europe', 'Worldwide']);
+    }
   }
 
   prepareForm(form: Object) {
@@ -338,6 +351,47 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         if(model[i].fields[j].field.name === name) {
           return model[i].fields[j];
         }
+      }
+    }
+  }
+
+  groupByKey(array, key) {
+    return array.reduce((hash, obj) => {
+      if (obj[key] === undefined) {
+        return hash;
+      }
+      return Object.assign(hash, {[obj[key]]: (hash[obj[key]] || []).concat(obj)});
+    }, {});
+  }
+
+  getServiceArray(field: string) {
+    return this.form.get('service.' + field) as FormArray;
+  }
+
+  getServiceField(field: string) {
+    return this.form.get('service.' + field) as FormControl;
+  }
+
+  getVocabularyName(field: string, name: string): string {
+    let vocType;
+    for (let i = 0; i < this.model.length; i++) {
+      for (let j = 0; j < this.model[i].fields.length; j++) {
+        if (this.model[i].fields[j].field.name === field && this.model[i].fields[j].field.type === 'vocabulary') {
+          vocType = this.model[i].fields[j].field.form.vocabulary;
+          for (let k = 0; k < this.vocabularies[vocType].length; k++) {
+            if (this.vocabularies[vocType][k].id === name) {
+              return (this.vocabularies[vocType][k].name);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  getCompositeVocName(field: string, id: string): string {
+    for (let k = 0; k < this.vocabularies[field].length; k++) {
+      if (this.vocabularies[field][k].id === id) {
+        return (this.vocabularies[field][k].name);
       }
     }
   }
