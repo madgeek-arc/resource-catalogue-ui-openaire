@@ -262,7 +262,7 @@ export class DynamicFormComponent implements OnInit {
 
   setTabIndex(i: number) {
     this.tabIndex = i;
-    console.log(this.tabIndex);
+    UIkit.switcher('#top-navigation-tabs').show(i);
   }
 
   goToTab(i: number) {
