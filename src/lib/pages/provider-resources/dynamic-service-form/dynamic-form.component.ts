@@ -124,7 +124,7 @@ export class DynamicFormComponent implements OnInit {
     this.bitset.requiredTotal = requiredTotal;
 
     /** Initialize and sort vocabulary arrays **/
-    let voc: Vocabulary[] = this.vocabularies['Subcategory'].concat(this.vocabularies['Scientific subdomain']);
+    let voc: Vocabulary[] = this.vocabularies['Subcategory'].concat(this.vocabularies['Scientific subdomain'].concat(this.vocabularies['Subusers']));
     this.subVocabularies = this.groupByKey(voc, 'parentId');
     for (const [key, value] of Object.entries(this.vocabularies)) {
       this.premiumSort.transform(this.vocabularies[key], ['English', 'Europe', 'Worldwide']);
