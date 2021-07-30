@@ -112,8 +112,8 @@
                       <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs"
                           uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
                         <li *ngFor="let tab of fields; let i=index" [ngClass]="{'uk-active': i === tabIndex}" (click)="setTabIndex(i)">
-                          <a href="#" class="remove-text-decoration uk-flex uk-flex-between"
-                             [ngClass]="{'form-error': bitset.tabs.get(tab.group.id).valid}">
+                          <a class="remove-text-decoration uk-flex uk-flex-between"
+                             [ngClass]="{'form-error': bitset.tabs.get(tab.group.id).valid}" href="#">
                             <span>{{i+1 + '. ' + tab.group.name + (tab.required.topLevel > 0 ? ' *' : '')}}</span>
                             <span *ngIf=" bitset.tabs.get(tab.group.id).requiredOnTab !== 0" class="circle-number">
                               <i *ngIf="bitset.tabs.get(tab.group.id).remainingOnTab === 0" aria-hidden="true" class="fa fa-check"></i>
@@ -172,7 +172,7 @@
                         </div>
 
                       </form>
-                      <pre>{{form.getRawValue() | json}}</pre>
+<!--                      <pre>{{form.getRawValue() | json}}</pre>-->
                     </div>
                   </div>
                 </div>
