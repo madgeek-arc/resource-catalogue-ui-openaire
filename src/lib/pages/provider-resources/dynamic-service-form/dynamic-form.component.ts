@@ -260,9 +260,10 @@ export class DynamicFormComponent implements OnInit {
 
   /** <--Bitsets**/
 
+  /** tab prev next buttons **/
   setTabIndex(i: number) {
     this.tabIndex = i;
-    console.log(this.tabIndex);
+    UIkit.switcher('#top-navigation-tabs').show(i);
   }
 
   goToTab(i: number) {
@@ -277,6 +278,7 @@ export class DynamicFormComponent implements OnInit {
     UIkit.modal('#modal-preview').show();
   }
 
+  /** Other stuff **/
   groupByKey(array, key) {
     return array.reduce((hash, obj) => {
       if (obj[key] === undefined) {

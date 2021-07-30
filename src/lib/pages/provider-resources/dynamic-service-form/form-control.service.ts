@@ -46,6 +46,7 @@ export class FormControlService {
     form.forEach(groups => {
       groups.fields.sort((a, b) => a.field.form.order - b.field.form.order)
       groups.fields.forEach(formField => {
+        // console.log(formField.field.name);
         if (formField.field.form.immutable === checkImmutable) {
           if (formField.field.multiplicity) {
             if (formField.field.type === 'url') {
