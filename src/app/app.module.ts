@@ -32,7 +32,7 @@ import {DashboardComponent} from '../lib/pages/provider/dashboard/dashboard.comp
 import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
 import {UserModule} from '../lib/pages/user/user.module';
-import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
+import {ServiceLandingPageComponent} from 'src/app/pages/landingpages/service/service-landing-page.component';
 import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';

@@ -7,7 +7,7 @@ import {CommonModule} from '@angular/common';
 import {SearchComponent} from '../lib/pages/search/search.component';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.service';
-import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
+import {ServiceLandingPageComponent} from 'src/app/pages/landingpages/service/service-landing-page.component';
 import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {ForbiddenPageComponent} from '../lib/shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page.component';
