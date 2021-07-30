@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Service} from 'src/lib/domain/eic-model';
+import {Service, Vocabulary} from 'src/lib/domain/eic-model';
 import {SearchQuery} from 'src/lib/domain/search-query';
 import {NavigationService} from 'src/lib/services/navigation.service';
+import {ResourceService} from '../../../lib/services/resource.service';
 
 @Component({
   selector: 'app-home',
@@ -28,13 +29,30 @@ export class HomeAireComponent implements OnInit {
     {value: 'Data storage', icon: 'database_security.svg', hover: 'database_security_hover.svg'}
   ];
   private services: Service[];
+  public portfolios: Vocabulary[] = null;
+  public users: Vocabulary[] = null;
 
-  constructor(public fb: FormBuilder, public router: NavigationService) {
+  constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService) {
     this.searchForm = fb.group({'query': ['']});
   }
 
   ngOnInit() {
     // fetch categories, check size, skip unpopulated ones here
+
+    this.resourceService.getNewVocabulariesByType('PORTFOLIOS').subscribe(
+      suc => {
+        this.portfolios = suc;
+        console.log(this.portfolios);
+      }
+    );
+
+    this.resourceService.getNewVocabulariesByType('USERS').subscribe(
+      suc => {
+        this.users = suc;
+        console.log(this.users);
+      }
+    );
+
   }
 
   onSubmit(searchValue: SearchQuery) {

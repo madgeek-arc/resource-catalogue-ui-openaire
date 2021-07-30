@@ -131,11 +131,19 @@
                         <i><small>{{fieldData.subFieldGroups[j].field.form.suggestion}}</small></i>
                       </div>
                     </div>
-                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string' || fieldData.subFieldGroups[j].field.type === 'email' || fieldData.subFieldGroups[j].field.type === 'phone'">
+                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string' || fieldData.subFieldGroups[j].field.type === 'email'
+                                || fieldData.subFieldGroups[j].field.type === 'phone' || fieldData.subFieldGroups[j].field.type === 'url'">
                       <input [id]="fieldData.subFieldGroups[j].field.name" class="uk-input uk-width-9-10"
                              [formControlName]="fieldData.subFieldGroups[j].field.name"
                              (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()"
                              [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.subFieldGroups[j].field.parent, i, this.editMode, fieldData.subFieldGroups[j].field.name)}">
+                    </div>
+                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'largeText'">
+                      <textarea [id]="fieldData.subFieldGroups[j].field.name" class="uk-textarea uk-width-9-10"
+                                [formControlName]="fieldData.subFieldGroups[j].field.name"
+                                (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()"
+                                [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.subFieldGroups[j].field.parent, i, this.editMode, fieldData.subFieldGroups[j].field.name)}">
+                      </textarea>
                     </div>
                   </div>
                 </div>
@@ -223,6 +231,24 @@
                    (input)="updateBitSet(fieldData); unsavedChangesPrompt()" [type]="fieldData.field.type"
                    [ngClass]="{'uk-form-danger': checkFormValidity(fieldData.field.name, this.editMode) }">
             <div><i><small>{{fieldData.field.form.suggestion}}</small></i></div>
+          </ng-template>
+        </div>
+
+        <div *ngIf="fieldData.field.type === 'boolean'">
+          <div *ngIf="fieldData.field.multiplicity; else noMultiplicity;" [formArrayName]="fieldData.field.name">
+            <!--To add multiplicity if needed-->
+          </div>
+          <ng-template #noMultiplicity>
+            <label>
+              <input class="uk-radio" type="radio" [formControlName]="fieldData.field.name" [value]="true"
+                     (input)="updateBitSet(fieldData); unsavedChangesPrompt()" [name]="fieldData.field.name"
+                     [ngClass]="{'uk-form-danger': checkFormValidity(fieldData.field.name, this.editMode) }"/>&nbsp;Yes&nbsp;
+            </label>
+            <label>
+              <input class="uk-radio" type="radio"  [formControlName]="fieldData.field.name" [value]="false"
+                     (input)="updateBitSet(fieldData); unsavedChangesPrompt()" [name]="fieldData.field.name"
+                     [ngClass]="{'uk-form-danger': checkFormValidity(fieldData.field.name, this.editMode) }"/>&nbsp;No&nbsp;
+            </label>
           </ng-template>
         </div>
 

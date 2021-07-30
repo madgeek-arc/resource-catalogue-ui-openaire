@@ -17,20 +17,21 @@ import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-up
 import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
 import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
 import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
+import {HomeAireComponent} from './pages/home/home.aire.component';
 
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/search',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
-  // {
-  //   path: 'home',
-  //   component: HomeComponent,
-  //   data: {
-  //     breadcrumb: 'Home'
-  //   }
-  // },
+  {
+    path: 'home',
+    component: HomeAireComponent,
+    data: {
+      breadcrumb: 'Home'
+    }
+  },
   {
     path: 'search',
     component: SearchComponent,
