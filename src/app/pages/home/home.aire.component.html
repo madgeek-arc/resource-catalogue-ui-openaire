@@ -1,35 +1,234 @@
-<div class="image-front-topbar uk-section-default" tm-header-transparent="light"
-     uk-scrollspy="{&quot;target&quot;:&quot;[uk-scrollspy-class]&quot;,&quot;cls&quot;:&quot;uk-animation-fade&quot;,&quot;delay&quot;:false}">
-  <div
-    style="background-image: url('https://dl119.madgik.di.uoa.gr/templates/yootheme/cache/handsinair_3-f4940f92.png'); background-color: rgb(255, 255, 255); box-sizing: border-box; min-height: calc(100vh - 229.5px);"
-    class="uk-background-norepeat uk-background-cover uk-background-fixed uk-section uk-padding-remove-bottom uk-flex uk-flex-middle"
-    uk-height-viewport="offset-top: true;offset-bottom: 20">
-    <!--<div class="uk-position-cover" style="background-color: rgba(31, 55, 97, 0.53);"></div>-->
-    <div class="uk-width-1-1">
-      <div class="uk-position-relative">
-        <div class="uk-container uk-margin-large">
-          <div class="search_box_bg uk-grid-large uk-flex-middle uk-grid uk-grid-stack" uk-grid="">
-            <div class="uk-width-1-1@m uk-first-column">
-              <h2
-                class="uk-margin-large uk-margin-remove-top uk-text-center uk-h2 uk-scrollspy-inview uk-animation-fade"
-                uk-scrollspy-class="" style="">
-                Your Gateway for European E-Infrastructures</h2>
-              <div>
-                <div class="search_box_bg" style="text-align:center">
-                  <form [formGroup]="searchForm" (ngSubmit)="this.onSubmit(searchForm.value)">
-                    <input aria-describedby="sizing-addon2"
-                           class="uk-input uk-width-1-2 ng-pristine ng-valid ng-touched uk-comment uk-comment-meta"
-                           name="keyword" placeholder="Search our service catalogue..." type="text"
-                           formControlName="query">
-                    <button class=" uk-button uk-button-default" type="submit">Search</button>
-                  </form>
+<!--HERO SECTION-->
+<div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
 
-                </div>
+  <div class="uk-container uk-container-xlarge">
+    <div class="uk-grid uk-child-width-1-2">
+
+      <div>
+        <h1>Excepteur sint occaecat cupidatat.</h1>
+        <p class="big-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
+      </div>
+
+      <div>
+        <div style="background-color: #F0F9FF; width: auto; height:473px" class="uk-margin-left">
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!--USER GROUPS SECTION-->
+<div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+  <div class="uk-container uk-container-xlarge">
+
+    <h1>Users</h1>
+
+    <div class="uk-position-relative" uk-slideshow="ratio: 12:4">
+
+      <ul class="uk-slideshow-items">
+        <li class="uk-flex-middle">
+
+          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
+
+            <div class="slider-image uk-flex uk-flex-right">
+              <div class="uk-card uk-card-default">
+                <div style="background-color: #F0F9FF; width: 294px; height:325px" class=""></div>
               </div>
             </div>
+
+            <div class="slider-text uk-flex uk-flex-middle">
+              <div class="slider-bold-background-header">{{users[0].name}}</div>
+
+              <div class="">
+                <div class="slider-header">{{users[0].name}}</div>
+                <div class="slider-description uk-margin-top">{{users[0].description}}</div>
+                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+              </div>
+            </div>
+
+
           </div>
-        </div>
+
+          <!--<img src="images/photo.jpg" alt="" uk-cover>-->
+        </li>
+        <li class="uk-flex-middle">
+
+          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
+
+            <div class="slider-image uk-flex uk-flex-right">
+              <div class="uk-card uk-card-default">
+                <div style="background-color: #F0F9FF; width: 294px; height:325px" class=""></div>
+              </div>
+            </div>
+
+            <div class="slider-text uk-flex uk-flex-middle">
+              <div class="slider-bold-background-header">{{users[1].name}}</div>
+
+              <div class="">
+                <div class="slider-header">{{users[1].name}}</div>
+                <div class="slider-description uk-margin-top">{{users[1].description}}</div>
+                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!--<img src="images/dark.jpg" alt="" uk-cover>-->
+        </li>
+        <li class="uk-flex-middle">
+
+          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
+
+            <div class="slider-image uk-flex uk-flex-right">
+              <div class="uk-card uk-card-default">
+                <div style="background-color: #F0F9FF; width: 294px; height:325px" class=""></div>
+              </div>
+            </div>
+
+            <div class="slider-text uk-flex uk-flex-middle">
+              <div class="slider-bold-background-header">{{users[2].name}}</div>
+
+              <div class="">
+                <div class="slider-header">{{users[2].name}}</div>
+                <div class="slider-description uk-margin-top">{{users[2].description}}</div>
+                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!--<img src="images/size1.jpg" alt="" uk-cover>-->
+        </li>
+        <li class="uk-flex-middle">
+
+          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
+
+            <div class="slider-image uk-flex uk-flex-right">
+              <div class="uk-card uk-card-default">
+                <div style="background-color: #F0F9FF; width: 294px; height:325px" class=""></div>
+              </div>
+            </div>
+
+            <div class="slider-text uk-flex uk-flex-middle">
+              <div class="slider-bold-background-header">{{users[3].name}}</div>
+
+              <div class="">
+                <div class="slider-header">{{users[3].name}}</div>
+                <div class="slider-description uk-margin-top">{{users[3].description}}</div>
+                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!--<img src="images/size1.jpg" alt="" uk-cover>-->
+        </li>
+      </ul>
+
+      <div class="uk-position-bottom-center uk-position-small">
+        <ul class="uk-dotnav">
+          <li uk-slideshow-item="0"><a href="#">Item 1</a></li>
+          <li uk-slideshow-item="1"><a href="#">Item 2</a></li>
+          <li uk-slideshow-item="2"><a href="#">Item 3</a></li>
+          <li uk-slideshow-item="3"><a href="#">Item 3</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!--PORTFOLIO SECTIONS-->
+<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+  <div class="uk-section">
+    <div class="uk-container uk-margin-medium-left uk-margin-large-top">
+      <div class="h1-subHeader">Subheader with small heading</div>
+      <h1>{{portfolios[0].name}}</h1>
+      <p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>
+      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    </div>
+  </div>
+
+  <div class="">
+    <img src="{{portfolios[0].extras.image}}">
+  </div>
+
+</div>
+
+<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+  <div class="">
+    <img src="{{portfolios[1].extras.image}}">
+  </div>
+
+  <div class="uk-section">
+    <div class="uk-container uk-margin-medium-right uk-margin-large-top">
+      <div class="h1-subHeader">Subheader with small heading</div>
+      <h1>{{portfolios[1].name}}</h1>
+      <p class="big-text uk-margin-medium-top">{{portfolios[1].description}}</p>
+      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+  <div class="uk-section">
+    <div class="uk-container uk-margin-medium-left uk-margin-large-top">
+      <div class="h1-subHeader">Subheader with small heading</div>
+      <h1>{{portfolios[2].name}}</h1>
+      <p class="big-text uk-margin-medium-top">{{portfolios[2].description}}</p>
+      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    </div>
+  </div>
+
+  <div class="">
+    <img src="{{portfolios[2].extras.image}}">
+  </div>
+
+</div>
+
+<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+  <div class="">
+    <img src="{{portfolios[3].extras.image}}">
+  </div>
+
+  <div class="uk-section">
+    <div class="uk-container uk-margin-medium-right uk-margin-large-top">
+      <div class="h1-subHeader">Subheader with small heading</div>
+      <h1>{{portfolios[3].name}}</h1>
+      <p class="big-text uk-margin-medium-top">{{portfolios[3].description}}</p>
+      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    </div>
+  </div>
+
+</div>
+
+<!--EOSC SECTION-->
+<div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+  <div class="uk-container uk-container-xlarge">
+
+    <div class="uk-grid uk-child-width-1-2">
+      <div>
+        <img src="../../../assets/images/eosc.png">
+      </div>
+      <div class="uk-margin-medium-top">
+        <div class="h2-subHeader-blue">Path to EOSC</div>
+        <h2 class="uk-margin-top">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</h2>
+        <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">External link <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
       </div>
     </div>
+
   </div>
 </div>

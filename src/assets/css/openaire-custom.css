@@ -1,15 +1,31 @@
-:root {
-  --primary-color: #004494;
-  --link-color: #2D72D6;
-  --link-hover-color: #3665ab;
-  --breadcrumb-active-color: #26C0E2;
-  --button-primary-hover-background-color: #1E95B0;
-  --button-secondary-color: #fff;
-  --button-secondary-background-color: #26C0E2;
-  --button-secondary-hover-background-color: #1E95B0;
-}
+@import url("https://use.typekit.net/dwa4ieu.css");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap');
+
+/*:root {*/
+  /*--primary-color: #004494;*/
+  /*--link-color: #2D72D6;*/
+  /*--link-hover-color: #3665ab;*/
+  /*--breadcrumb-active-color: #26C0E2;*/
+  /*--button-primary-hover-background-color: #1E95B0;*/
+  /*--button-secondary-color: #fff;*/
+  /*--button-secondary-background-color: #26C0E2;*/
+  /*--button-secondary-hover-background-color: #1E95B0;*/
+/*}*/
 
 :root {
+  --main-font-family: 'Aileron';
+  --secondary-font-family: 'Bitter';
+  --footer-font-family: 'Roboto';
+  --black: #1A1A1A;
+  --grey: #6E6E6E;
+  --catalogue-light-purple: #AD20E7;
+  --catalogue-dark-purple: #1D193C;
+  --light-grey: #F9F9F9;
+  --dark-grey: #2B2B2B;
+  --eosc-blue: #3A75AB;
+  --openaire-light-blue: #3086ED;
+
   --primary-color: #222080;
   --link-color: #2D72D6;
   --link-hover-color: #3665ab;
@@ -20,11 +36,227 @@
   --button-secondary-hover-background-color: #0053ba;
 }
 
+body {
+  font-family: var(--main-font-family), sans-serif !important;
+  color: var(--black) !important;
+  background-color: var(--light-grey) !important;
+  opacity: 1;
+}
+
+.uk-container-xlarge {
+  max-width: 1500px;
+}
+
+.uk-section-default {
+  background-color: var(--light-grey) !important;
+}
+
 .uk-section-secondary {
-  background-color: #fafafa;
-  color: #424242 !important;
+  background-color: var(--catalogue-dark-purple);
+  color: var(--light-grey);
+  /*background-color: #fafafa;*/
+  /*color: #424242 !important;*/
 }
 
 .uk-section-primary {
-  background-color: #222080;
+  /*background-color: #222080;*/
+  background-color: #fff;
+}
+
+
+/* ========================================================================
+   Margins
+ ========================================================================== */
+
+.uk-margin-xlarge-top {
+  margin-top: 100px !important;
+}
+
+.uk-margin-xlarge-bottom {
+  margin-bottom: 100px !important;
+}
+
+/* ========================================================================
+   Color and Typography
+ ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--black);
+  text-align: left;
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+h1 {
+  font: normal normal bold 64px/80px var(--main-font-family) !important;
+}
+
+h2 {
+  font: normal normal 600 54px/64px var(--main-font-family) !important;
+}
+
+h3 {
+  font: normal normal 600 45px/52px var(--main-font-family) !important;
+}
+
+h4 {
+  font: normal normal 600 36px/45px var(--main-font-family) !important;
+}
+
+h5 {
+  font: normal normal bold 27px/36px var(--main-font-family) !important;
+}
+
+h6 {
+  font: normal normal 600 22px/29px var(--main-font-family) !important;
+}
+
+.h1-subHeader {
+  color: var(--catalogue-light-purple);
+  text-align: left;
+  font: normal normal normal 22px/29px var(--main-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+.h2-subHeader-blue {
+  color: var(--eosc-blue);
+  text-align: left;
+  font: normal normal 600 22px/29px Aileron;
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+p.big-text {
+  color: var(--black);
+  text-align: left;
+  font: normal normal normal 22px/29px var(--main-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+p.regular-text {
+  color: var(--black);
+  text-align: left;
+  font: normal normal normal 16px/24px var(--main-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+/* ========================================================================
+   Links
+ ========================================================================== */
+
+/* ========================================================================
+   Buttons
+ ========================================================================== */
+
+.uk-button-primary {
+  background: transparent linear-gradient(254deg, var(--openaire-light-blue) 0%, var(--catalogue-light-purple) 100%) 0 0 no-repeat padding-box;
+  border-radius: 60px;
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+/* ========================================================================
+   Menus
+ ========================================================================== */
+
+.default-menu-item {
+  font: normal normal normal 14px/22px var(--main-font-family) !important;
+  text-transform: capitalize !important;
+  color: var(--black) !important;
+  text-align: left !important;
+  letter-spacing: 0.14px !important;
+  opacity: 1 !important;
+}
+
+/* ========================================================================
+   Cards
+ ========================================================================== */
+
+.uk-card-dafault {
+  background: var(--light-grey) 0 0 no-repeat padding-box;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+/* ========================================================================
+   Sliders
+ ========================================================================== */
+
+.uk-slideshow-items > .uk-active {
+  display: flex;
+}
+
+.uk-dotnav > * > * {
+  width: 16px;
+  height: 16px;
+  background-color: var(--catalogue-light-purple) !important;
+  opacity: 0.4;
+  border: none !important;
+}
+
+.uk-dotnav > .uk-active > * {
+  background-color: var(--catalogue-light-purple) !important;
+  opacity: 1;
+}
+
+.slider-image {
+
+}
+
+.slider-text {
+  position: relative;
+  left: -70px;
+}
+
+.slider-bold-background-header {
+  text-align: left;
+  font: normal normal bold 229px/286px Bitter;
+  letter-spacing: 0px;
+  color: #211F7E;
+  opacity: 0.03;
+  position: absolute;
+  top: -80px;
+  left: -10px;
+  white-space: nowrap;
+  overflow: clip;
+  z-index: -10;
+}
+
+.slider-header {
+  color: var(--black);
+  text-align: left;
+  font: normal normal normal 45px/56px var(--secondary-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+.slider-description {
+  color: var(--grey);
+  text-align: left;
+  font: normal normal normal 16px/24px var(--main-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+
+/* ========================================================================
+   Component: Footer
+ ========================================================================== */
+
+.footerSection {
+  text-align: left;
+  font: normal normal 300 12px/20px var(--footer-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+.footerLink {
+  font: normal normal normal 16px/21px var(--footer-font-family);
+}
+
+.newsletter-link {
+  font: normal normal 600 19px/26px Open Sans;
 }
