@@ -125,11 +125,11 @@
 
                       <div class="requiredFields uk-text-right">*Required fields</div>
                       <div class="uk-margin-small-top" style="margin-left: 19%">
-                        <button class="uk-button uk-margin-small-right" [ngClass]="tabIndex === 0 ? 'uk-button-default' : 'uk-button-primary'" (click)="goToTab(tabIndex-1)" style="width: 130px">
-                          <i class="fa fa-angle-left"></i> Previous
+                        <button class="uk-button uk-margin-small-right" [ngClass]="tabIndex === 0 ? 'uk-button-default' : 'uk-button-primary'" (click)="goToTab(tabIndex-1)" style="width: 140px">
+                          <i class="fa fa-angle-left"></i> PREVIOUS
                         </button>
-                        <button class="uk-button" [ngClass]="tabIndex === bitset.tabs.size - 1  ? 'uk-button-default' : 'uk-button-primary'" style="width: 130px" (click)="goToTab(tabIndex+1)">
-                          Next <i class="fa fa-angle-right"></i>
+                        <button class="uk-button" [ngClass]="tabIndex === bitset.tabs.size - 1  ? 'uk-button-default' : 'uk-button-primary'" (click)="goToTab(tabIndex+1)" style="width: 140px">
+                          NEXT <i class="fa fa-angle-right"></i>
                         </button>
                       </div>
 

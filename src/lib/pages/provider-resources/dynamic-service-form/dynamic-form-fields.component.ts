@@ -5,6 +5,8 @@ import {Dependent, Fields, HandleBitSet, UiVocabulary} from '../../../domain/dyn
 import {Vocabulary} from '../../../domain/eic-model';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {environment} from '../../../../environments/environment';
+import {urlAsyncValidator, URLValidator} from '../../../shared/validators/generic.validator';
+import {ServiceProviderService} from '../../../services/service-provider.service';
 
 @Component({
   selector: 'app-field',
@@ -26,7 +28,7 @@ export class DynamicFormFieldsComponent implements OnInit {
   // bitSetData = new BitSetData();
 
 
-  constructor(private authenticationService: AuthenticationService,) { }
+  constructor(private authenticationService: AuthenticationService, private serviceProviderService: ServiceProviderService) { }
 
   ngOnInit() {
     this.isPortalAdmin = this.authenticationService.isAdmin();
@@ -37,8 +39,16 @@ export class DynamicFormFieldsComponent implements OnInit {
     return this.form.get(field) as FormArray;
   }
 
-  push(field: string, required: boolean) {
-    this.fieldAsFormArray(field).push(required ? new FormControl('', Validators.required) : new FormControl(''));
+  push(field: string, required: boolean, type: string) {
+    switch (type) {
+      case 'url':
+        this.fieldAsFormArray(field).push(required ? new FormControl('', Validators.compose([Validators.required, URLValidator]), urlAsyncValidator(this.serviceProviderService))
+          : new FormControl('', URLValidator, urlAsyncValidator(this.serviceProviderService)));
+        break;
+      default:
+        this.fieldAsFormArray(field).push(required ? new FormControl('', Validators.required) : new FormControl(''));
+    }
+
   }
 
   remove(field: string, i: number) {

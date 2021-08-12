@@ -31,7 +31,7 @@
             <div class="uk-width-9-10"><i><small>{{fieldData.field.form.suggestion}}</small></i></div>
 
             <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-              <a class="add-new-element" (click)="push(fieldData.field.name, fieldData.field.form.mandatory)">
+              <a class="add-new-element" (click)="push(fieldData.field.name, fieldData.field.form.mandatory, fieldData.field.type)">
                 <i class="fa fa-plus" aria-hidden="true"></i>Add {{fieldData.field.label}}
               </a>
             </div>
@@ -71,7 +71,7 @@
             </div>
             <div><i><small>{{fieldData.field.form.suggestion}}</small></i></div>
             <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-              <a class="add-new-element" (click)="push(fieldData.field.name, fieldData.field.form.mandatory)">
+              <a class="add-new-element" (click)="push(fieldData.field.name, fieldData.field.form.mandatory, fieldData.field.type)">
                 <i class="fa fa-plus" aria-hidden="true"></i>Add {{fieldData.field.label}}
               </a>
             </div>
