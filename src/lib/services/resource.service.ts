@@ -111,6 +111,12 @@ export class ResourceService {
     return this.http.get<VocabularyTree>(this.base + `/vocabulary/vocabularyTree/${type}`);
   }
 
+  getServicesByVocabularyTypeAndId(type: string, id: string) {
+    let params = new HttpParams();
+    params = params.append('value', id);
+    return this.http.get<Map<string, Object[]>>(this.base + `/infraService/dynamic/by/extra/${type}`, {params});
+  }
+
   getSubcategoriesIdsFromSuperCategory(parent: string, type: string) {
     let params = new HttpParams();
     params = params.append('parent', parent);
