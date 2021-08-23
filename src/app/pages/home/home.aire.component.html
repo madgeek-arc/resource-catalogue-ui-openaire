@@ -22,7 +22,7 @@
 </div>
 
 <!--USER GROUPS SECTION-->
-<div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+<div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
 
   <div class="uk-container uk-container-xlarge">
 
@@ -147,73 +147,76 @@
 </div>
 
 <!--PORTFOLIO SECTIONS-->
-<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+<ng-container *ngIf="portfolios">
+  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
 
-  <div class="uk-section">
-    <div class="uk-container uk-margin-medium-left uk-margin-large-top">
-      <div class="h1-subHeader">Subheader with small heading</div>
-      <h1>{{portfolios[0].name}}</h1>
-      <p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>
-      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    <div class="uk-section">
+      <div class="uk-container uk-margin-medium-left uk-margin-large-top">
+        <div class="h1-subHeader">Subheader with small heading</div>
+        <h1>{{portfolios[0].name}}</h1>
+        <p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>
+        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+      </div>
     </div>
-  </div>
 
-  <div class="">
-    <img src="{{portfolios[0].extras.image}}">
-  </div>
-
-</div>
-
-<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-  <div class="">
-    <img src="{{portfolios[1].extras.image}}">
-  </div>
-
-  <div class="uk-section">
-    <div class="uk-container uk-margin-medium-right uk-margin-large-top">
-      <div class="h1-subHeader">Subheader with small heading</div>
-      <h1>{{portfolios[1].name}}</h1>
-      <p class="big-text uk-margin-medium-top">{{portfolios[1].description}}</p>
-      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    <div class="">
+      <img src="{{portfolios[0].extras.image}}">
     </div>
+
   </div>
 
-</div>
+  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
 
-<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-  <div class="uk-section">
-    <div class="uk-container uk-margin-medium-left uk-margin-large-top">
-      <div class="h1-subHeader">Subheader with small heading</div>
-      <h1>{{portfolios[2].name}}</h1>
-      <p class="big-text uk-margin-medium-top">{{portfolios[2].description}}</p>
-      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    <div class="">
+      <img src="{{portfolios[1].extras.image}}">
     </div>
-  </div>
 
-  <div class="">
-    <img src="{{portfolios[2].extras.image}}">
-  </div>
-
-</div>
-
-<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-  <div class="">
-    <img src="{{portfolios[3].extras.image}}">
-  </div>
-
-  <div class="uk-section">
-    <div class="uk-container uk-margin-medium-right uk-margin-large-top">
-      <div class="h1-subHeader">Subheader with small heading</div>
-      <h1>{{portfolios[3].name}}</h1>
-      <p class="big-text uk-margin-medium-top">{{portfolios[3].description}}</p>
-      <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+    <div class="uk-section">
+      <div class="uk-container uk-margin-medium-right uk-margin-large-top">
+        <div class="h1-subHeader">Subheader with small heading</div>
+        <h1>{{portfolios[1].name}}</h1>
+        <p class="big-text uk-margin-medium-top">{{portfolios[1].description}}</p>
+        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+      </div>
     </div>
+
   </div>
 
-</div>
+  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+    <div class="uk-section">
+      <div class="uk-container uk-margin-medium-left uk-margin-large-top">
+        <div class="h1-subHeader">Subheader with small heading</div>
+        <h1>{{portfolios[2].name}}</h1>
+        <p class="big-text uk-margin-medium-top">{{portfolios[2].description}}</p>
+        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+      </div>
+    </div>
+
+    <div class="">
+      <img src="{{portfolios[2].extras.image}}">
+    </div>
+
+  </div>
+
+  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
+
+    <div class="">
+      <img src="{{portfolios[3].extras.image}}">
+    </div>
+
+    <div class="uk-section">
+      <div class="uk-container uk-margin-medium-right uk-margin-large-top">
+        <div class="h1-subHeader">Subheader with small heading</div>
+        <h1>{{portfolios[3].name}}</h1>
+        <p class="big-text uk-margin-medium-top">{{portfolios[3].description}}</p>
+        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
 
 <!--EOSC SECTION-->
 <div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">

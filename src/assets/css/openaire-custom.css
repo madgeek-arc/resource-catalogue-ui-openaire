@@ -82,7 +82,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   color: var(--black);
-  text-align: left;
+  /*text-align: left;*/
   letter-spacing: 0px;
   opacity: 1;
 }
@@ -113,7 +113,7 @@ h6 {
 
 .h1-subHeader {
   color: var(--catalogue-light-purple);
-  text-align: left;
+  /*text-align: left;*/
   font: normal normal normal 22px/29px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
@@ -121,15 +121,22 @@ h6 {
 
 .h2-subHeader-blue {
   color: var(--eosc-blue);
-  text-align: left;
+  /*text-align: left;*/
   font: normal normal 600 22px/29px Aileron;
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+p.x-large-text {
+  color: var(--black);
+  font: normal normal normal 27px/34px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
 }
 
 p.big-text {
   color: var(--black);
-  text-align: left;
+  /*text-align: left;*/
   font: normal normal normal 22px/29px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
@@ -137,9 +144,25 @@ p.big-text {
 
 p.regular-text {
   color: var(--black);
-  text-align: left;
+  /*text-align: left;*/
   font: normal normal normal 16px/24px var(--main-font-family);
   letter-spacing: 0px;
+  opacity: 1;
+}
+
+dt {
+  color: var(--black);
+  /*text-align: left;*/
+  font: normal normal bold 16px/24px var(--main-font-family);
+  letter-spacing: 0;
+  opacity: 1;
+}
+
+dd {
+  color: var(--black);
+  /*text-align: left;*/
+  font: normal normal normal 14px/22px Aileron;
+  letter-spacing: 0.14px;
   opacity: 1;
 }
 
@@ -158,6 +181,15 @@ p.regular-text {
   text-transform: uppercase;
 }
 
+.uk-button-blue {
+  background: var(--openaire-light-blue) 0 0 no-repeat padding-box;
+  font: normal normal bold 12px/15px var(--main-font-family);
+  border-radius: 60px;
+  opacity: 1;
+  text-transform: uppercase;
+  padding: 12px 30px;
+}
+
 /* ========================================================================
    Menus
  ========================================================================== */
@@ -171,15 +203,67 @@ p.regular-text {
   opacity: 1 !important;
 }
 
+.service-menu {
+  margin-top: -10px;
+}
+
+.service-menu .uk-navbar-container {
+  background-color: var(--catalogue-dark-purple);
+  color: #fff;
+}
+
+.service-menu > .uk-active {
+  background-color: #fff;
+  color: #fff;
+}
+
+.service-menu-item {
+  font: normal normal normal 14px/22px var(--main-font-family) !important;
+  text-transform: capitalize !important;
+  color: #fff !important;
+  text-align: left !important;
+  letter-spacing: 0.14px !important;
+  opacity: 1 !important;
+}
+
+.service-menu > .uk-active .service-menu-item {
+  color: var(--black) !important;
+}
+
+.uk-active > .service-menu-item {
+  font: normal normal 600 14px/22px var(--main-font-family) !important;
+  color: var(--catalogue-light-purple) !important;
+  text-decoration: underline;
+}
+
+.service-menu > .uk-active .uk-active > .service-menu-item {
+  color: var(--catalogue-light-purple) !important;
+}
+
+.service-menu > :not(.uk-active) .uk-navbar-left {
+  display: none;
+}
+
 /* ========================================================================
    Cards
  ========================================================================== */
 
-.uk-card-dafault {
+.uk-card-default {
   background: var(--light-grey) 0 0 no-repeat padding-box;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
   opacity: 1;
 }
+
+/*.card-icon-no-button {*/
+  /**/
+/*}*/
+
+/*.insight-info-card {*/
+  /*background: var(--light-grey) 0 0 no-repeat padding-box;*/
+  /*border-radius: 6px;*/
+  /*opacity: 1;*/
+/*}*/
 
 /* ========================================================================
    Sliders

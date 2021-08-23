@@ -60,6 +60,7 @@ import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-request
 import {HighchartsChartModule} from 'highcharts-angular';
 import {FormControlService} from '../lib/pages/provider-resources/dynamic-service-form/form-control.service';
 import {environment} from '../environments/environment';
+import {ServiceStaticLandingPageComponent} from 'src/app/pages/landingpages/service/service-static-landing-page.component';
 
 
 declare var require: any;
@@ -76,6 +77,7 @@ declare var require: any;
     SearchAireComponent,
     ProvidersStatsComponent,
     ResourcesStatsComponent,
+    ServiceStaticLandingPageComponent,
     ServiceLandingPageComponent,
     ServiceLandingPageExtendedComponent,
     // PERSISTENT

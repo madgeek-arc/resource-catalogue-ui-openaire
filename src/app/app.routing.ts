@@ -18,6 +18,7 @@ import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit
 import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
 import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
 import {HomeAireComponent} from './pages/home/home.aire.component';
+import {ServiceStaticLandingPageComponent} from './pages/landingpages/service/service-static-landing-page.component';
 
 const appRoutes: Routes = [
   {
@@ -31,6 +32,13 @@ const appRoutes: Routes = [
     data: {
       breadcrumb: 'Home'
     }
+  },
+  {
+    path: 'service-static',
+    component: ServiceStaticLandingPageComponent,
+    // data: {
+    //   breadcrumb: 'Home'
+    // }
   },
   {
     path: 'search',
