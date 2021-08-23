@@ -72,7 +72,7 @@ export class DynamicFormComponent implements OnInit {
     console.log('super submit');
     // console.log(this.form.valid);
     // console.log(this.form);
-    if (this.form.valid) {
+    // if (this.form.valid) {
       window.scrollTo(0, 0);
       console.log(this.form.getRawValue());
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
@@ -91,7 +91,7 @@ export class DynamicFormComponent implements OnInit {
 
         }
       );
-    }
+    // }
   }
 
   initializations() {
@@ -139,6 +139,7 @@ export class DynamicFormComponent implements OnInit {
   handleBitSetOfComposite(data: HandleBitSet) {
     let field = data.field;
     let pos = data.position;
+    // console.log(field.field.name);
 
     if (field.field.multiplicity) {
       let formArray = this.form.get(field.field.accessPath) as FormArray;
@@ -195,6 +196,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   handleBitSet(data: Fields) {
+    // console.log(data.field.name);
     if (data.field.multiplicity) {
       this.handleBitSetOfGroup(data);
       return;
@@ -221,6 +223,9 @@ export class DynamicFormComponent implements OnInit {
         this.decreaseRemainingFieldsPerTab(data.field.form.group, data.field.form.order);
         this.loaderBitSet.set(parseInt(data.field.id), 1);
         break;
+      } else if (formArray.controls[i].pending) {
+        this.timeOut(300).then(() => this.handleBitSetOfGroup(data));
+        return;
       }
     }
     if (!flag) {

@@ -33,7 +33,6 @@ import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
 import {UserModule} from '../lib/pages/user/user.module';
 import {ServiceLandingPageComponent} from 'src/app/pages/landingpages/service/service-landing-page.component';
-import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
 import {SearchAireComponent} from './pages/search/search.aire.component';
@@ -61,6 +60,7 @@ import {HighchartsChartModule} from 'highcharts-angular';
 import {FormControlService} from '../lib/pages/provider-resources/dynamic-service-form/form-control.service';
 import {environment} from '../environments/environment';
 import {ServiceStaticLandingPageComponent} from 'src/app/pages/landingpages/service/service-static-landing-page.component';
+import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 
 
 declare var require: any;
@@ -79,7 +79,7 @@ declare var require: any;
     ResourcesStatsComponent,
     ServiceStaticLandingPageComponent,
     ServiceLandingPageComponent,
-    ServiceLandingPageExtendedComponent,
+    PortfolioItemComponent,
     // PERSISTENT
     TopMenuComponent,
     AireTopMenuComponent,

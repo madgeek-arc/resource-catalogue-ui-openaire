@@ -8,7 +8,6 @@ import {SearchComponent} from '../lib/pages/search/search.component';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.service';
 import {ServiceLandingPageComponent} from 'src/app/pages/landingpages/service/service-landing-page.component';
-import {ServiceLandingPageExtendedComponent} from './pages/landingpages/service/service-landing-page-extended.component';
 import {ForbiddenPageComponent} from '../lib/shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page.component';
 // import {ProviderModule} from './pages/provider/provider.module';
@@ -19,6 +18,7 @@ import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-
 import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {ServiceStaticLandingPageComponent} from './pages/landingpages/service/service-static-landing-page.component';
+import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 
 const appRoutes: Routes = [
   {
@@ -61,6 +61,14 @@ const appRoutes: Routes = [
     component: DynamicFormEditComponent,
     data: {
       breadcrumb: 'edit'
+    }
+  },
+
+  {
+    path: 'portfolio',
+    component: PortfolioItemComponent,
+    data: {
+      breadcrumb: 'portfolio'
     }
   },
 
