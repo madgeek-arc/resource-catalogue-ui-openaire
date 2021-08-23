@@ -99,6 +99,10 @@ export class ResourceService {
       this.base + `/service/rich/all?orderField=name&order=asc&${searchQuery.toString()}`, this.options);
   }
 
+  getVocabularyById(id: string) {
+    return this.http.get<Vocabulary>(this.base + `/vocabulary/${id}`);
+  }
+
   getAllVocabulariesByType() {
     return this.http.get<Map<Type, Vocabulary[]>>(this.base + `/vocabulary/byType`);
   }

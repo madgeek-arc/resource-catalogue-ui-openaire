@@ -1,40 +1,43 @@
 import {Component, OnInit} from '@angular/core';
 import {ResourceService} from '../../../../lib/services/resource.service';
-import {ActivatedRoute} from '@angular/router';
 import {Vocabulary} from '../../../../lib/domain/eic-model';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
-  selector: 'app-portfolio-item',
-  templateUrl: './portfolio-item.component.html',
+  selector: 'app-user-item',
+  templateUrl: './user-item.component.html',
 })
-export class PortfolioItemComponent implements OnInit{
+export class UserItemComponent implements OnInit {
 
   response: Map<string, Object[]>;
   services: Map<string, Object[]>;
-  portfolioVoc: Vocabulary;
-  portfolioName: string;
+  userVoc: Vocabulary;
+  userVocName: string;
 
   constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.portfolioName = this.route.snapshot.paramMap.get('name');
-    this.resourceService.getNewVocabulariesByType('PORTFOLIOS').subscribe(
+    this.userVocName = this.route.snapshot.paramMap.get('name');
+    this.resourceService.getNewVocabulariesByType('USERS').subscribe(
       res => {
         for (const [key, value] of Object.entries(res)) {
           console.log(`${key}: ${value}`);
-          if (value.name === this.portfolioName)
-            this.portfolioVoc = value;
+          if (value.name === this.userVocName) {
+            this.userVoc = value;
+          }
         }
       },
-      error => {console.log(error)},
+      error => {
+        console.log(error);
+      },
       () => {
-        console.log(this.portfolioVoc);
+        console.log(this.userVoc);
       }
     );
-    this.resourceService.getServicesByVocabularyTypeAndId('Portfolios', this.portfolioName)
-      .subscribe( res => {
+    this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocName)
+      .subscribe(res => {
           this.response = res;
           console.log(res);
           for (const [key, value] of Object.entries(res)) {
@@ -45,9 +48,9 @@ export class PortfolioItemComponent implements OnInit{
         },
         error => console.log(error),
         () => {
-        console.log(this.response);
-        console.log(this.services);
-      }
+          console.log(this.response);
+          console.log(this.services);
+        }
       );
   }
 }

@@ -19,6 +19,7 @@ import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-serv
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {ServiceStaticLandingPageComponent} from './pages/landingpages/service/service-static-landing-page.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
+import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 
 const appRoutes: Routes = [
   {
@@ -65,10 +66,18 @@ const appRoutes: Routes = [
   },
 
   {
-    path: 'portfolio',
+    path: 'Portfolios/:name',
     component: PortfolioItemComponent,
     data: {
       breadcrumb: 'portfolio'
+    }
+  },
+
+  {
+    path: 'Users/:name',
+    component: UserItemComponent,
+    data: {
+      breadcrumb: 'Users'
     }
   },
 

@@ -61,6 +61,7 @@ import {FormControlService} from '../lib/pages/provider-resources/dynamic-servic
 import {environment} from '../environments/environment';
 import {ServiceStaticLandingPageComponent} from 'src/app/pages/landingpages/service/service-static-landing-page.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
+import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 
 
 declare var require: any;
@@ -80,6 +81,7 @@ declare var require: any;
     ServiceStaticLandingPageComponent,
     ServiceLandingPageComponent,
     PortfolioItemComponent,
+    UserItemComponent,
     // PERSISTENT
     TopMenuComponent,
     AireTopMenuComponent,
