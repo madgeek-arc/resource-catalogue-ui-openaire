@@ -13,21 +13,16 @@ export class UserItemComponent implements OnInit {
   response: Map<string, Object[]>;
   services: Map<string, Object[]>;
   userVoc: Vocabulary;
-  userVocName: string;
+  userVocId: string;
 
   constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.userVocName = this.route.snapshot.paramMap.get('name');
-    this.resourceService.getNewVocabulariesByType('USERS').subscribe(
+    this.userVocId = this.route.snapshot.paramMap.get('id');
+    this.resourceService.getVocabularyById(this.userVocId).subscribe(
       res => {
-        for (const [key, value] of Object.entries(res)) {
-          console.log(`${key}: ${value}`);
-          if (value.name === this.userVocName) {
-            this.userVoc = value;
-          }
-        }
+        this.userVoc = res;
       },
       error => {
         console.log(error);
@@ -36,7 +31,7 @@ export class UserItemComponent implements OnInit {
         console.log(this.userVoc);
       }
     );
-    this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocName)
+    this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocId)
       .subscribe(res => {
           this.response = res;
           console.log(res);

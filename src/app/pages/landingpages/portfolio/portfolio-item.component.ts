@@ -13,27 +13,23 @@ export class PortfolioItemComponent implements OnInit{
   response: Map<string, Object[]>;
   services: Map<string, Object[]>;
   portfolioVoc: Vocabulary;
-  portfolioName: string;
+  portfolioId: string;
 
   constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.portfolioName = this.route.snapshot.paramMap.get('name');
-    this.resourceService.getNewVocabulariesByType('PORTFOLIOS').subscribe(
+    this.portfolioId = this.route.snapshot.paramMap.get('id');
+    this.resourceService.getVocabularyById(this.portfolioId).subscribe(
       res => {
-        for (const [key, value] of Object.entries(res)) {
-          console.log(`${key}: ${value}`);
-          if (value.name === this.portfolioName)
-            this.portfolioVoc = value;
-        }
+        this.portfolioVoc = res;
       },
       error => {console.log(error)},
       () => {
         console.log(this.portfolioVoc);
       }
     );
-    this.resourceService.getServicesByVocabularyTypeAndId('Portfolios', this.portfolioName)
+    this.resourceService.getServicesByVocabularyTypeAndId('Portfolios', this.portfolioId)
       .subscribe( res => {
           this.response = res;
           console.log(res);

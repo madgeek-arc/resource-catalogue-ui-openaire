@@ -118,7 +118,7 @@ export class ResourceService {
   getServicesByVocabularyTypeAndId(type: string, id: string) {
     let params = new HttpParams();
     params = params.append('value', id);
-    return this.http.get<Map<string, Object[]>>(this.base + `/infraService/dynamic/by/extra/${type}`, {params});
+    return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`, {params});
   }
 
   getSubcategoriesIdsFromSuperCategory(parent: string, type: string) {
