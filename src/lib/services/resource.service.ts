@@ -115,10 +115,14 @@ export class ResourceService {
     return this.http.get<VocabularyTree>(this.base + `/vocabulary/vocabularyTree/${type}`);
   }
 
-  getServicesByVocabularyTypeAndId(type: string, id: string) {
-    let params = new HttpParams();
-    params = params.append('value', id);
-    return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`, {params});
+  getServicesByVocabularyTypeAndId(type: string, id?: string) {
+    if (id) {
+      let params = new HttpParams();
+      params = params.append('value', id);
+      return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`, {params});
+    } else {
+      return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`);
+    }
   }
 
   getSubcategoriesIdsFromSuperCategory(parent: string, type: string) {

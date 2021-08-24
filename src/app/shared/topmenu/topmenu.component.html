@@ -94,10 +94,21 @@
                    class="uk-responsive-height" alt="OpenAIRE Catalogue" style="width: 250px">
             </a>
           </div>
-          <div class="uk-navbar-center">
-            <ul class="uk-navbar-nav">
-              <li><a class="default-menu-item">Browse Services <i class="fa fa-angle-down uk-margin-small-left"></i></a></li>
-            </ul>
+          <div class="uk-grid uk-navbar-center" >
+            <div class="uk-flex-row">
+              <ul class="uk-navbar-nav">
+                <li><a class="default-menu-item">Browse Services <i
+                  class="fa fa-angle-down uk-margin-small-left"></i></a></li>
+              </ul>
+            </div>
+            <div class="" *ngFor="let portfolio of services | keyvalue">
+              {{portfolio.key}}
+              <ul>
+                <li *ngFor="let service of portfolio.value | keyvalue">
+                  {{service.value['name']}}
+                </li>
+              </ul>
+            </div>
           </div>
           <!--<div class="uk-navbar-right">-->
             <!--<ul class="uk-navbar-nav">-->
