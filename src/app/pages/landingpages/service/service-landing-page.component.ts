@@ -28,7 +28,7 @@ const mapEU = require('@highcharts/map-collection/custom/europe.geo.json');
 
 @Component({
   selector: 'app-service-landing-page',
-  templateUrl: './service-landing-page.component.html',
+  templateUrl: './service-static-landing-page.component.html',
   styleUrls: ['../landing-page.component.css']
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {
@@ -48,7 +48,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   vocabularies: Map<string, UiVocabulary[]>;
   model: FormModel[] = null;
   form: FormGroup = this.fb.group({service: this.fb.group({}), extras: this.fb.group({})}, Validators.required);
-  loading = false;
+  loading = true;
   premiumSort = new PremiumSortPipe();
 
   private sub: Subscription;
@@ -183,6 +183,25 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  timeOut(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  onOutletLoaded(component) {
+    console.log(component);
+    // console.log('1 ' +  this.loading);
+    if (this.loading){
+      console.log(this.loading);
+      this.timeOut(300).then(() => this.onOutletLoaded(component));
+      return;
+    } else {
+      component.form = this.form;
+      component.model = this.model;
+      component.vocabularies = this.vocabularies;
+    }
+    return;
   }
 
   setCountriesForService(data: any) {

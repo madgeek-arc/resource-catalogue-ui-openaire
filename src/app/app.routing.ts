@@ -17,7 +17,6 @@ import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit
 import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
 import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
 import {HomeAireComponent} from './pages/home/home.aire.component';
-import {ServiceStaticLandingPageComponent} from './pages/landingpages/service/service-static-landing-page.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 
@@ -33,13 +32,6 @@ const appRoutes: Routes = [
     data: {
       breadcrumb: 'Home'
     }
-  },
-  {
-    path: 'service-static',
-    component: ServiceStaticLandingPageComponent,
-    // data: {
-    //   breadcrumb: 'Home'
-    // }
   },
   {
     path: 'search',
@@ -60,6 +52,7 @@ const appRoutes: Routes = [
   {
     path: 'edit/:id',
     component: DynamicFormEditComponent,
+    canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'edit'
     }
@@ -88,20 +81,16 @@ const appRoutes: Routes = [
   },
 
   {
-    path: 'service/:id',
-    // component: ServiceLandingPageExtendedComponent,
-    component: ServiceLandingPageComponent,
-    data: {
-      breadcrumb: 'Service'
-    }
+    path: 'service',
+    loadChildren: () => import('../app/pages/landingpages/service/service-landing-page.module').then(m => m.ServiceLandingPageModule),
   },
-  {
-    path: 'service/:id/:version',
-    component: ServiceLandingPageComponent,
-    data: {
-      breadcrumb: 'Service'
-    }
-  },
+  // {
+  //   path: 'service/:id/:version',
+  //   component: ServiceLandingPageComponent,
+  //   data: {
+  //     breadcrumb: 'Service'
+  //   }
+  // },
   {
     path: 'provider/openaire/resource/add',
     component: ServiceUploadComponent,

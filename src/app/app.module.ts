@@ -59,9 +59,9 @@ import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-request
 import {HighchartsChartModule} from 'highcharts-angular';
 import {FormControlService} from '../lib/pages/provider-resources/dynamic-service-form/form-control.service';
 import {environment} from '../environments/environment';
-import {ServiceStaticLandingPageComponent} from 'src/app/pages/landingpages/service/service-static-landing-page.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
+import {ServiceLandingPageModule} from './pages/landingpages/service/service-landing-page.module';
 
 
 declare var require: any;
@@ -78,8 +78,6 @@ declare var require: any;
     SearchAireComponent,
     ProvidersStatsComponent,
     ResourcesStatsComponent,
-    ServiceStaticLandingPageComponent,
-    ServiceLandingPageComponent,
     PortfolioItemComponent,
     UserItemComponent,
     // PERSISTENT
@@ -124,11 +122,11 @@ declare var require: any;
     SupportModule,
     UserModule,
     ProviderModule,
+    // ServiceLandingPageModule,
     ServiceFormModule,
     // ProviderDashboardModule,
     HighchartsChartModule,
     CookieLawModule,
-    AppRoutingModule,
     NgSelectModule,
     MatomoModule.forRoot({
       scriptUrl: environment.MATOMO_URL + 'matomo.js',
