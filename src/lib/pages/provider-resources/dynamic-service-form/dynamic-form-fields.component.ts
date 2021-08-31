@@ -89,13 +89,13 @@ export class DynamicFormFieldsComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      try {
-        (!this.fieldAsFormArray(name).get([position]).get(groupName).valid
+      // try {
+     return (!this.fieldAsFormArray(name).get([position]).get(groupName).valid
           && (edit || this.fieldAsFormArray(name).get([position]).get(groupName).dirty));
-      } catch (e) {
-        console.log(this.fieldAsFormArray(name).value);
-        console.error('Error!!!! ' + groupName + ' ' + name);
-      }
+      // } catch (e) {
+      //   console.log(this.fieldAsFormArray(name).value);
+      //   console.error('Error!!!! ' + groupName + ' ' + name);
+      // }
 
     }
     return (!this.fieldAsFormArray(name).get([position]).valid

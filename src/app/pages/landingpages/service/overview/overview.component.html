@@ -88,8 +88,8 @@
           <div *ngIf="getServiceArray('grantProjectNames').controls[0].value !== ''" class="uk-margin-medium-top">
             <dt>Grant/Project Name</dt>
             <dd>
-              <span *ngFor="let funder of getServiceArray('grantProjectNames').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{getVocabularyName('grantProjectNames', funder)}}</span>
+              <span *ngFor="let grant of getServiceArray('grantProjectNames').value; let i = index">
+                <span *ngIf="i > 0">, </span>{{grant}}</span>
             </dd>
           </div>
 
@@ -102,7 +102,7 @@
 </div>
 
 <!--BENEFITS-->
-<div *ngIf="form" class="uk-section uk-section-default uk-margin-xlarge-bottom">
+<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.value" class="uk-section uk-section-default uk-margin-xlarge-bottom">
   <div class="uk-container uk-container-xlarge">
 
     <h1 uk-sticky="offset: 100">Benefits</h1>
@@ -120,7 +120,7 @@
 
 
 <!--FEATURES-->
-<div *ngIf="form" class="uk-section uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+<div *ngIf="form && getExtrasArray('features')?.controls[0]?.value" class="uk-section uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
   <div class="uk-container uk-container-xlarge">
 
     <h1>Features</h1>
@@ -151,7 +151,7 @@
 
     <h1>Use Cases</h1>
 
-    <div class="uk-position-relative" uk-slideshow="ratio: 12:4">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let useCase of getExtrasArray('useCases').value" class="uk-flex-middle">
@@ -169,7 +169,7 @@
               <div class="">
                 <div class="slider-header">{{useCase.useCaseTitle}}</div>
                 <div class="slider-description uk-margin-top">{{useCase.useCaseText}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+<!--                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>-->
               </div>
             </div>
 
@@ -179,10 +179,9 @@
 
       <div class="uk-position-bottom-center uk-position-small">
         <ul class="uk-dotnav">
-          <li *ngFor="let useCase of getExtrasArray('useCases').value; let i=index" uk-slideshow-item="{{ i }}">
-            <a href="#">Item {{i}}</a>
+          <li *ngFor="let useCase of getExtrasArray('useCases').value; let i=index" uk-slideshow-item="{{i}}" [ngClass]="{'uk-active': slide === i}">
+            <a (click)="showSlide(i)">Item {{i}}</a>
           </li>
-<!--          <li uk-slideshow-item="1"><a href="#">Item 1</a></li>-->
         </ul>
       </div>
 
@@ -203,4 +202,4 @@
   </div>
 </div>
 
-<pre *ngIf="form">{{form.getRawValue() | json}}</pre>
+<!--<pre *ngIf="form">{{form.getRawValue() | json}}</pre>-->
