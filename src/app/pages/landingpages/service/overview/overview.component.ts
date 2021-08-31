@@ -2,9 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {FormModel, UiVocabulary} from '../../../../../lib/domain/dynamic-form-model';
 
+declare var UIkit: any;
+
 @Component({
   selector: 'app-service-landing-page',
-  templateUrl: 'overview.component.ts.html',
+  templateUrl: 'overview.component.html',
   styleUrls: ['../../landing-page.component.css']
 })
 export class OverviewComponent implements OnInit {
@@ -12,6 +14,8 @@ export class OverviewComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() model: FormModel[] = null;
   @Input() vocabularies: Map<string, UiVocabulary[]>;
+
+  slide = 0;
 
   ngOnInit() {
   }
@@ -46,6 +50,11 @@ export class OverviewComponent implements OnInit {
         }
       }
     }
+  }
+
+  showSlide(index: number) {
+    UIkit.slideshow('#slideShow').show(index);
+    this.slide = index;
   }
 
 }
