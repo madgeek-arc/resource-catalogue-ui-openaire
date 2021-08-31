@@ -56,6 +56,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   serviceMapOptions: any = null;
   myProviders: ProviderBundle[] = [];
   context = '';
+  path: string;
 
   formError = '';
   showForm = false;
@@ -190,10 +191,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   onOutletLoaded(component) {
-    console.log(component);
-    // console.log('1 ' +  this.loading);
+    // console.log(component);
     if (this.loading){
-      console.log(this.loading);
+      // console.log(this.loading);
       this.timeOut(300).then(() => this.onOutletLoaded(component));
       return;
     } else {
@@ -201,6 +201,17 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
       component.model = this.model;
       component.vocabularies = this.vocabularies;
     }
+    console.log(window.location);
+    if(window.location.toString().includes('overview')) {
+      this.path = 'overview';
+    } else if (window.location.toString().includes('pricing')) {
+      this.path = 'pricing';
+    } else if (window.location.toString().includes('resourcesAndSupport')) {
+      this.path = 'resourcesAndSupport';
+    } else if (window.location.toString().includes('miscellaneous')) {
+      this.path = 'miscellaneous';
+    }
+
     return;
   }
 

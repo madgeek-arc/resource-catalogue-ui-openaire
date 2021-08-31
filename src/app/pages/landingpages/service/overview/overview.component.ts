@@ -52,9 +52,15 @@ export class OverviewComponent implements OnInit {
     }
   }
 
+  test() {
+    console.log('test');
+  }
+
   showSlide(index: number) {
     UIkit.slideshow('#slideShow').show(index);
+    console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
     this.slide = index;
+
   }
 
 }

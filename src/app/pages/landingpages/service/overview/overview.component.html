@@ -179,7 +179,7 @@
 
       <div class="uk-position-bottom-center uk-position-small">
         <ul class="uk-dotnav">
-          <li *ngFor="let useCase of getExtrasArray('useCases').value; let i=index" uk-slideshow-item="{{i}}" [ngClass]="{'uk-active': slide === i}">
+          <li *ngFor="let useCase of getExtrasArray('useCases').value; let i=index" [ngClass]="{'uk-active': slide === i}">
             <a (click)="showSlide(i)">Item {{i}}</a>
           </li>
         </ul>

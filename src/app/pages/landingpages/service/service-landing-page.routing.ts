@@ -3,6 +3,8 @@ import {NgModule} from '@angular/core';
 import {ServiceLandingPageComponent} from './service-landing-page.component';
 import {OverviewComponent} from './overview/overview.component';
 import {PricingComponent} from './pricing/pricing.component';
+import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSupport.component';
+import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
 
 const serviceLandingPageRoutes: Routes = [
   {
@@ -24,6 +26,14 @@ const serviceLandingPageRoutes: Routes = [
       {
         path: 'pricing',
         component: PricingComponent,
+      },
+      {
+        path: 'resourcesAndSupport',
+        component: ResourcesAndSupportComponent,
+      },
+      {
+        path: 'miscellaneous',
+        component: MiscellaneousComponent,
       }
     ]
   }

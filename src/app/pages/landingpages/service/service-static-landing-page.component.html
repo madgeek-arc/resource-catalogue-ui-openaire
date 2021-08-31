@@ -35,12 +35,12 @@
 
           <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
-              <li class="uk-active"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-              <li><a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a></li>
-              <li><a class="service-menu-item">Resources & Support</a></li>
+              <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
+              <li [ngClass]="{'uk-active': path === 'pricing'}"><a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a></li>
+              <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}"><a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a></li>
               <li><a class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
               <li><a class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
-              <li><a class="service-menu-item">Miscellaneous</a></li>
+              <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Miscellaneous</a></li>
               <li class="uk-flex uk-flex-middle"><button class="uk-button uk-button-blue">Go to service</button></li>
             </ul>
           </div>
