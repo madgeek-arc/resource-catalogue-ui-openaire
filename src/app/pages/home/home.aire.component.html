@@ -47,7 +47,7 @@
               <div class="">
                 <div class="slider-header">{{users[0].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[0].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[0].id]">Learn more</a></div>
               </div>
             </div>
 
@@ -72,7 +72,7 @@
               <div class="">
                 <div class="slider-header">{{users[1].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[1].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[0].id]">Learn more</a></div>
               </div>
             </div>
 
@@ -97,7 +97,7 @@
               <div class="">
                 <div class="slider-header">{{users[2].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[2].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[0].id]">Learn more</a></div>
               </div>
             </div>
 
@@ -121,7 +121,7 @@
               <div class="">
                 <div class="slider-header">{{users[3].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[3].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[0].id]">Learn more</a></div>
               </div>
             </div>
 
@@ -198,7 +198,7 @@
         <div class="h1-subHeader">Subheader with small heading</div>
         <h1>{{portfolios[1].name}}</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[1].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+        <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/Portfolios', portfolios[1].id]">Learn more</button>
       </div>
     </div>
 
@@ -211,7 +211,7 @@
         <div class="h1-subHeader">Subheader with small heading</div>
         <h1>{{portfolios[2].name}}</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[2].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+        <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/Portfolios', portfolios[2].id]">Learn more</button>
       </div>
     </div>
 
@@ -232,7 +232,7 @@
         <div class="h1-subHeader">Subheader with small heading</div>
         <h1>{{portfolios[3].name}}</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[3].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+        <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/Portfolios', portfolios[3].id]">Learn more</button>
       </div>
     </div>
 
