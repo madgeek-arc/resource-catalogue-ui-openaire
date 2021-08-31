@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 
 @Component({
-  selector: 'app-service-landing-page',
+  selector: 'app-service-landing-page-pricing',
   templateUrl: 'pricing.component.html',
   styleUrls: ['../../landing-page.component.css']
 })

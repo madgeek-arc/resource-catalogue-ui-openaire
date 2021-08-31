@@ -47,7 +47,7 @@
               <div class="">
                 <div class="slider-header">{{users[0].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[0].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
               </div>
             </div>
 
@@ -72,7 +72,7 @@
               <div class="">
                 <div class="slider-header">{{users[1].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[1].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
               </div>
             </div>
 
@@ -97,7 +97,7 @@
               <div class="">
                 <div class="slider-header">{{users[2].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[2].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
               </div>
             </div>
 
@@ -121,7 +121,7 @@
               <div class="">
                 <div class="slider-header">{{users[3].name}}</div>
                 <div class="slider-description uk-margin-top">{{users[3].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
               </div>
             </div>
 
@@ -148,6 +148,28 @@
 
 <!--PORTFOLIO SECTIONS-->
 <ng-container *ngIf="portfolios">
+
+  <!--<div class="uk-section uk-section-primary uk-preserve-color">-->
+      <!--<div class="uk-container uk-container-xlarge">-->
+
+      <!--<div class="uk-grid uk-child-width-1-2">-->
+
+        <!--<div>-->
+          <!--<div class="h1-subHeader">Subheader with small heading</div>-->
+          <!--<h1>{{portfolios[0].name}}</h1>-->
+          <!--<p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>-->
+          <!--<button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>-->
+        <!--</div>-->
+
+        <!--<div class="uk-background-cover" style="background-image: url({{portfolios[0].extras.image}});">-->
+          <!--&lt;!&ndash;<img src="{{portfolios[0].extras.image}}">&ndash;&gt;-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+  <!--</div>-->
+
+
   <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
 
     <div class="uk-section">
@@ -155,7 +177,7 @@
         <div class="h1-subHeader">Subheader with small heading</div>
         <h1>{{portfolios[0].name}}</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>
+        <a class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/Portfolios', portfolios[0].id]">Learn more</a>
       </div>
     </div>
 

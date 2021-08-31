@@ -16,7 +16,6 @@
 :root {
   --main-font-family: 'Aileron';
   --secondary-font-family: 'Bitter';
-  --footer-font-family: 'Roboto';
   --black: #1A1A1A;
   --grey: #6E6E6E;
   --catalogue-light-purple: #AD20E7;
@@ -25,6 +24,7 @@
   --dark-grey: #2B2B2B;
   --eosc-blue: #3A75AB;
   --openaire-light-blue: #3086ED;
+  --default-element-bg: #DEDEDE;
 
   --primary-color: #222080;
   --link-color: #2D72D6;
@@ -61,6 +61,7 @@ body {
 .uk-section-primary {
   /*background-color: #222080;*/
   background-color: #fff;
+  background-image: none;
 }
 
 
@@ -127,6 +128,14 @@ h6 {
   opacity: 1;
 }
 
+.h5-subheader {
+  color: var(--catalogue-light-purple);
+  /*text-align: left;*/
+  font: normal normal normal 16px/24px var(--main-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
 p.x-large-text {
   color: var(--black);
   font: normal normal normal 27px/34px var(--main-font-family);
@@ -167,6 +176,14 @@ dd {
 }
 
 /* ========================================================================
+   Divider
+ ========================================================================== */
+
+hr {
+  border: 2px solid var(--default-element-bg);
+}
+
+/* ========================================================================
    Links
  ========================================================================== */
 
@@ -174,11 +191,19 @@ dd {
    Buttons
  ========================================================================== */
 
+.uk-button-text {
+  text-transform: uppercase;
+  color: var(--catalogue-light-purple);
+  font: normal normal normal 16px/92px var(--main-font-family);
+  letter-spacing: -0.4px;
+}
+
 .uk-button-primary {
   background: transparent linear-gradient(254deg, var(--openaire-light-blue) 0%, var(--catalogue-light-purple) 100%) 0 0 no-repeat padding-box;
   border-radius: 60px;
   opacity: 1;
   text-transform: uppercase;
+  border: none;
 }
 
 .uk-button-blue {
@@ -193,6 +218,18 @@ dd {
 /* ========================================================================
    Menus
  ========================================================================== */
+
+.uk-navbar-dropbar {
+  background-color: #fff;
+  color: var(--dark-grey);
+}
+
+.navbar .nav > li > .dropdown-menu, .uk-navbar-dropdown {
+  padding: 20px 0;
+  color: var(--dark-grey);
+  font: normal normal normal 16px/24px Aileron;
+  letter-spacing: 0px;
+}
 
 .default-menu-item {
   font: normal normal normal 14px/22px var(--main-font-family) !important;
@@ -250,7 +287,7 @@ dd {
 
 .uk-card-default {
   background: var(--light-grey) 0 0 no-repeat padding-box;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  /*box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);*/
   border-radius: 6px;
   opacity: 1;
 }
@@ -332,13 +369,13 @@ dd {
 
 .footerSection {
   text-align: left;
-  font: normal normal 300 12px/20px var(--footer-font-family);
+  font: normal normal 300 12px/20px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
 }
 
 .footerLink {
-  font: normal normal normal 16px/21px var(--footer-font-family);
+  font: normal normal normal 16px/21px var(--main-font-family);
 }
 
 .newsletter-link {

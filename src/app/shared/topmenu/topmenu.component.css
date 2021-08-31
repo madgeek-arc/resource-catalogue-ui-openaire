@@ -6,26 +6,26 @@
   white-space: nowrap;
 }
 
-.uk-navbar-container {
-  /*padding: 20px;*/
-}
+/*.uk-navbar-container {*/
+  /*!*padding: 20px;*!*/
+/*}*/
 
-.uk-navbar-dropdown, .navbar .nav > li > .dropdown-menu {
-  /*display: none;*/
-  /*position: absolute;*/
-  /*z-index: 1020;*/
-  /*box-sizing: border-box;*/
-  /*width: 200px;*/
-  /*padding: 25px;*/
-  background: #222080;
-  color: #fff;
-  /*box-shadow: 0 2px 8px rgba(0,0,0,0.08);*/
-}
+/*.uk-navbar-dropdown, .navbar .nav > li > .dropdown-menu {*/
+  /*!*display: none;*!*/
+  /*!*position: absolute;*!*/
+  /*!*z-index: 1020;*!*/
+  /*!*box-sizing: border-box;*!*/
+  /*!*width: 200px;*!*/
+  /*!*padding: 25px;*!*/
+  /*background: #222080;*/
+  /*color: #fff;*/
+  /*!*box-shadow: 0 2px 8px rgba(0,0,0,0.08);*!*/
+/*}*/
 
-.uk-navbar-dropdown-nav > li > a {
-  color: #fff;
-  font-size: 14px;
-}
+/*.uk-navbar-dropdown-nav > li > a {*/
+  /*color: #fff;*/
+  /*font-size: 14px;*/
+/*}*/
 
 
 .tm-header {
