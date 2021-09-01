@@ -151,7 +151,7 @@
 
     <h1>Use Cases</h1>
 
-    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let useCase of getExtrasArray('useCases').value" class="uk-flex-middle">

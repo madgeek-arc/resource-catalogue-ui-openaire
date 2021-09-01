@@ -69,10 +69,10 @@ export class DynamicFormComponent implements OnInit {
 
 
   onSubmit(tempSave: boolean, pendingService?: boolean) {
-    console.log('super submit');
+    // console.log('super submit');
     // console.log(this.form.valid);
     // console.log(this.form);
-    // if (this.form.valid) {
+    if (this.form.valid) {
       window.scrollTo(0, 0);
       console.log(this.form.getRawValue());
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
@@ -91,7 +91,7 @@ export class DynamicFormComponent implements OnInit {
 
         }
       );
-    // }
+    }
   }
 
   initializations() {

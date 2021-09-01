@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {FormModel, UiVocabulary} from '../../../../../lib/domain/dynamic-form-model';
+import * as uikit from 'uikit';
 
-declare var UIkit: any;
 
 @Component({
   selector: 'app-service-landing-page',
@@ -52,13 +52,13 @@ export class OverviewComponent implements OnInit {
     }
   }
 
-  test() {
-    console.log('test');
+  dragSlide() {
+    this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
   }
 
   showSlide(index: number) {
-    UIkit.slideshow('#slideShow').show(index);
-    console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
+    uikit.slideshow('#slideShow').show(index);
+    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
     this.slide = index;
 
   }

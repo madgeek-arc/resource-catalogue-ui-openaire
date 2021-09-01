@@ -393,30 +393,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     }, {});
   }
 
-  getServiceArray(field: string) {
-    return this.form.get('service.' + field) as FormArray;
-  }
-
-  getServiceField(field: string) {
-    return this.form.get('service.' + field) as FormControl;
-  }
-
-  getVocabularyName(field: string, name: string): string {
-    let vocType;
-    for (let i = 0; i < this.model.length; i++) {
-      for (let j = 0; j < this.model[i].fields.length; j++) {
-        if (this.model[i].fields[j].field.name === field && this.model[i].fields[j].field.type === 'vocabulary') {
-          vocType = this.model[i].fields[j].field.form.vocabulary;
-          for (let k = 0; k < this.vocabularies[vocType].length; k++) {
-            if (this.vocabularies[vocType][k].id === name) {
-              return (this.vocabularies[vocType][k].name);
-            }
-          }
-        }
-      }
-    }
-  }
-
   getCompositeVocName(field: string, id: string): string {
     for (let k = 0; k < this.vocabularies[field].length; k++) {
       if (this.vocabularies[field][k].id === id) {
