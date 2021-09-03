@@ -39,6 +39,14 @@ export class DynamicFormFieldsComponent implements OnInit {
     return this.form.get(field) as FormArray;
   }
 
+  testFormArray(parent: string, parentIndex: number, name: string) {
+    // console.log(parent+', '+parentIndex+', '+name);
+    // console.log(this.form.get([parent,parentIndex,name]));
+    // return this.form.get([parent,parentIndex,name]) as FormArray;
+    let control = this.form.get(parent) as FormArray;
+    return control.controls[parentIndex].get(name) as FormArray;
+  }
+
   push(field: string, required: boolean, type: string) {
     switch (type) {
       case 'url':
@@ -48,7 +56,16 @@ export class DynamicFormFieldsComponent implements OnInit {
       default:
         this.fieldAsFormArray(field).push(required ? new FormControl('', Validators.required) : new FormControl(''));
     }
+  }
 
+  pushToArrayInsideComposite(parent: string, parentIndex: number, name: string, required: boolean) {
+    const control = <FormArray>this.form.get([parent,parentIndex,name]);
+    control.push(required ? new FormControl('', Validators.required) : new FormControl(''));
+  }
+
+  removeFromArrayInsideComposite(parent: string, parentIndex: number, name: string, index: number) {
+    const control = <FormArray>this.form.get([parent,parentIndex,name]);
+    control.removeAt(index);
   }
 
   remove(field: string, i: number) {
@@ -58,8 +75,15 @@ export class DynamicFormFieldsComponent implements OnInit {
   pushComposite(field: string, subFields: Fields[]) {
     const group: any = {};
     subFields.forEach(subField => {
-      group[subField.field.name] = subField.field.form.mandatory ? new FormControl('', Validators.required)
-        : new FormControl('');
+      if (subField.field.multiplicity) {
+        group[subField.field.name] = subField.field.form.mandatory ?
+          new FormArray([new FormControl('', Validators.required)])
+          : new FormArray([new FormControl('')]);
+      } else {
+        group[subField.field.name] = subField.field.form.mandatory ? new FormControl('', Validators.required)
+          : new FormControl('');
+      }
+
       if (subField.field.form.dependsOn !== null) {
         group[subField.field.name].disable();
       }
@@ -89,14 +113,14 @@ export class DynamicFormFieldsComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      try {
+      // try {
       return (!this.fieldAsFormArray(name).get([position]).get(groupName).valid
           && (edit || this.fieldAsFormArray(name).get([position]).get(groupName).dirty));
-      } catch (e) {
-        console.error('Error!!!! ' + groupName + ' ' + name);
-        console.log(e);
-        console.log(this.form);
-      }
+      // } catch (e) {
+      //   console.error('Error!!!! ' + groupName + ' ' + name);
+      //   console.log(e);
+      //   console.log(this.form);
+      // }
 
     }
     return (!this.fieldAsFormArray(name).get([position]).valid

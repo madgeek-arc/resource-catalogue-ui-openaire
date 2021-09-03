@@ -73,8 +73,14 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
               i = 0;  // increase the loops
             }
             for (i; i < form[key][formElementKey].length; i++) {
+              console.log(form[key][formElementKey]);
               if (formFieldData.field.type === 'composite') {
                 this.pushComposite(key, formElementKey, formFieldData.subFieldGroups);
+                for (let formSubElementKey in form[key][formElementKey]) {
+                  if(form[key][formElementKey].hasOwnProperty(formSubElementKey)) {
+                    console.log(formSubElementKey);
+                  }
+                }
               } else {
                 this.push(key, formElementKey, formFieldData.field.form.mandatory);
               }
@@ -83,6 +89,11 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
         }
       }
     }
+  }
+
+  removeFromArrayInsideComposite(parent: string, parentIndex: number, name: string, index: number) {
+    const control = <FormArray>this.form.get([parent,parentIndex,name]);
+    control.removeAt(index);
   }
 
   validateForm() {
@@ -123,8 +134,14 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
   pushComposite(group: string, field: string, subFields: Fields[]) {
     const formGroup: any = {};
     subFields.forEach(subField => {
-      formGroup[subField.field.name] = subField.field.form.mandatory ? new FormControl('', Validators.required)
-        : new FormControl('');
+      if (subField.field.multiplicity) {
+        formGroup[subField.field.name] = subField.field.form.mandatory ?
+          new FormArray([new FormControl('', Validators.required)])
+          : new FormArray([new FormControl('')]);
+      } else {
+        formGroup[subField.field.name] = subField.field.form.mandatory ? new FormControl('', Validators.required)
+          : new FormControl('');
+      }
       // In this case fields must be enabled
       // if (subField.field.form.dependsOn !== null) {
       //   formGroup[subField.field.name].disable();

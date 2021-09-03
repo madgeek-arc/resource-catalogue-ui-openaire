@@ -70,8 +70,14 @@ export class DynamicFormComponent implements OnInit {
 
   onSubmit(tempSave: boolean, pendingService?: boolean) {
     // console.log('super submit');
-    // console.log(this.form.valid);
-    // console.log(this.form);
+    // console.log('is form valid: ' + this.form.valid);
+    console.log('is service valid: ' + this.form.get('service').valid);
+    console.log('is extras valid: ' + this.form.get('extras').valid);
+    // console.log(this.form.get('extras.paymentCategories'));
+    for (let extrasKey in this.form.get('extras').value) {
+      console.log();
+      console.log(extrasKey + ': '+ this.form.get('extras.'+extrasKey).valid);
+    }
     if (this.form.valid) {
       window.scrollTo(0, 0);
       console.log(this.form.getRawValue());

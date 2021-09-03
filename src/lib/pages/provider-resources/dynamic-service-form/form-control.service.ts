@@ -66,6 +66,12 @@ export class FormControlService {
                   subGroup[subField.field.name] = subField.field.form.mandatory ?
                     new FormControl('', Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
                     : new FormControl('', Validators.pattern('[+]?\\d+$'));
+                } else if (subField.field.multiplicity) { // add array inside composite element
+                  console.log(subField.field.name);
+                  subGroup[subField.field.name] = subField.field.form.mandatory ?
+                    new FormArray([new FormControl('', Validators.required)])
+                    : new FormArray([new FormControl('')]);
+                  console.log(subGroup);
                 } else {
                   subGroup[subField.field.name] = subField.field.form.mandatory ?
                     new FormControl('', Validators.required)

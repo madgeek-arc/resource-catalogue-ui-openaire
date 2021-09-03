@@ -116,6 +116,25 @@
                     <div class="uk-form-description uk-margin-top uk-width-9-10">
                       {{fieldData.subFieldGroups[j].field.form.description}}
                     </div>
+                    <div *ngIf="fieldData.subFieldGroups[j].field.multiplicity && fieldData.subFieldGroups[j].field.type === 'string'" class="uk-form-controls uk-margin-medium-top" [formArrayName]="fieldData.subFieldGroups[j].field.name">
+                      <div *ngFor="let input of testFormArray(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name).controls; let k=index" class="uk-margin-bottom">
+                        <input [id]="fieldData.subFieldGroups[j].field.name" [formControlName]="k"
+                               class="uk-input uk-width-9-10 uk-animation-slide-top-small">
+
+                        <a *ngIf="testFormArray(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name).length > 1"
+                           (click)="removeFromArrayInsideComposite(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name, k); updateBitSet(fieldData); unsavedChangesPrompt()"
+                           class="remove-element uk-padding-small uk-animation-slide-top-small">
+                          <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
+                      </div>
+
+                      <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
+                        <a class="add-new-element" (click)="pushToArrayInsideComposite(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name, fieldData.field.form.mandatory)">
+                          <i class="fa fa-plus" aria-hidden="true"></i>Add {{fieldData.subFieldGroups[j].field.label}}
+                        </a>
+                      </div>
+
+                    </div>
 
                     <div *ngIf="fieldData.subFieldGroups[j].field.type === 'vocabulary'" class="uk-form-controls uk-margin-medium-top">
                       <ng-select class="uk-width-9-10" [id]="fieldData.subFieldGroups[j].field.name"
@@ -131,8 +150,9 @@
                         <i><small>{{fieldData.subFieldGroups[j].field.form.suggestion}}</small></i>
                       </div>
                     </div>
-                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'string' || fieldData.subFieldGroups[j].field.type === 'email'
-                                || fieldData.subFieldGroups[j].field.type === 'phone' || fieldData.subFieldGroups[j].field.type === 'url'">
+                    <div *ngIf="(fieldData.subFieldGroups[j].field.type === 'string' || fieldData.subFieldGroups[j].field.type === 'email'
+                                || fieldData.subFieldGroups[j].field.type === 'phone' || fieldData.subFieldGroups[j].field.type === 'url')
+                                && !fieldData.subFieldGroups[j].field.multiplicity">
                       <input [id]="fieldData.subFieldGroups[j].field.name" class="uk-input uk-width-9-10"
                              [formControlName]="fieldData.subFieldGroups[j].field.name"
                              (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()"
@@ -144,6 +164,23 @@
                                 (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()"
                                 [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.subFieldGroups[j].field.parent, i, this.editMode, fieldData.subFieldGroups[j].field.name)}">
                       </textarea>
+                    </div>
+                    <div *ngIf="fieldData.subFieldGroups[j].field.type === 'boolean'">
+                      <div *ngIf="fieldData.subFieldGroups[j].field.multiplicity; else noMultiplicity;" [formArrayName]="fieldData.subFieldGroups[j].field.name">
+                        <!--To add multiplicity if needed-->
+                      </div>
+                      <ng-template #noMultiplicity>
+                        <label>
+                          <input class="uk-radio" type="radio" [formControlName]="fieldData.subFieldGroups[j].field.name" [value]="true"
+                                 (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()" [name]="fieldData.subFieldGroups[j].field.name"
+                                 [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.subFieldGroups[j].field.parent, i, this.editMode, fieldData.subFieldGroups[j].field.name) }"/>&nbsp;Yes&nbsp;
+                        </label>
+                        <label>
+                          <input class="uk-radio" type="radio" [formControlName]="fieldData.subFieldGroups[j].field.name" [value]="false"
+                                 (input)="updateBitSetOfComposite(fieldData, j); unsavedChangesPrompt()" [name]="fieldData.subFieldGroups[j].field.name"
+                                 [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.subFieldGroups[j].field.parent, i, this.editMode, fieldData.subFieldGroups[j].field.name) }"/>&nbsp;&nbsp;No&nbsp;
+                        </label>
+                      </ng-template>
                     </div>
                   </div>
                 </div>

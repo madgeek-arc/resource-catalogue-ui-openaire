@@ -16,12 +16,12 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
       res => {
 
         this.services = res;
-        for (const [key, value] of Object.entries(this.services)) {
-          console.log(`${key}: `);
-          for ( const [count, service] of Object.entries(value)) {
-            console.log(`${count}: ` + service['id'] + ' ' + service['name'] );
-          }
-        }
+        // for (const [key, value] of Object.entries(this.services)) {
+        //   console.log(`${key}: `);
+        //   for ( const [count, service] of Object.entries(value)) {
+        //     console.log(`${count}: ` + service['id'] + ' ' + service['name'] );
+        //   }
+        // }
       },
       error => {console.log(error)},
       () => {}
