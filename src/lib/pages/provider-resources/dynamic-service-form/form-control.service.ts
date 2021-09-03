@@ -7,7 +7,6 @@ import {ServiceProviderService} from '../../../services/service-provider.service
 import {environment} from '../../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthenticationService} from '../../../services/authentication.service';
-import {RichService} from '../../../domain/eic-model';
 
 @Injectable()
 export class FormControlService {
@@ -17,13 +16,6 @@ export class FormControlService {
 
   base = environment.API_ENDPOINT;
   private options = {withCredentials: true};
-  private httpOption = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Accept': 'application/json;charset=UTF-8'
-    }),
-    withCredentials: true
-  };
 
   getFormModel() {
     return this.http.get<FormModel[]>(this.base + '/ui/form/model');
@@ -34,11 +26,11 @@ export class FormControlService {
   }
 
   getDynamicService(id: string) {
-    return this.http.get(this.base + `/infraService/dynamic/${id}/`, this.options);
+    return this.http.get(this.base + `/ui/services/${id}/`, this.options);
   }
 
   postDynamicService(service, edit:boolean) {
-    return this.http[edit ? 'put' : 'post'](this.base + '/infraService/dynamic', service, this.options);
+    return this.http[edit ? 'put' : 'post'](this.base + '/ui/services', service, this.options);
   }
 
   toFormGroup(form: FormModel[], checkImmutable: boolean) {
@@ -67,11 +59,9 @@ export class FormControlService {
                     new FormControl('', Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
                     : new FormControl('', Validators.pattern('[+]?\\d+$'));
                 } else if (subField.field.multiplicity) { // add array inside composite element
-                  console.log(subField.field.name);
                   subGroup[subField.field.name] = subField.field.form.mandatory ?
                     new FormArray([new FormControl('', Validators.required)])
                     : new FormArray([new FormControl('')]);
-                  console.log(subGroup);
                 } else {
                   subGroup[subField.field.name] = subField.field.form.mandatory ?
                     new FormControl('', Validators.required)

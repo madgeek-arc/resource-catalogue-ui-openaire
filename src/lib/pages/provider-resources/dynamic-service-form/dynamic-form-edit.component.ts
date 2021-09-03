@@ -8,6 +8,7 @@ import {Fields, FormModel, HandleBitSet} from '../../../domain/dynamic-form-mode
 import {NavigationService} from '../../../services/navigation.service';
 import {ResourceService} from '../../../services/resource.service';
 import {zip} from 'rxjs/internal/observable/zip';
+import {formatNumber} from '@angular/common';
 
 @Component({
   selector: 'app-dynamic-form-edit',
@@ -73,12 +74,24 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
               i = 0;  // increase the loops
             }
             for (i; i < form[key][formElementKey].length; i++) {
-              console.log(form[key][formElementKey]);
               if (formFieldData.field.type === 'composite') {
                 this.pushComposite(key, formElementKey, formFieldData.subFieldGroups);
-                for (let formSubElementKey in form[key][formElementKey]) {
-                  if(form[key][formElementKey].hasOwnProperty(formSubElementKey)) {
-                    console.log(formSubElementKey);
+                for (let formSubElementKey in form[key][formElementKey]) { // Special case when composite contains array
+                  for (let formSubElementName in form[key][formElementKey][formSubElementKey]) {
+                    if(form[key][formElementKey][formSubElementKey].hasOwnProperty(formSubElementName)) {
+                      if(Array.isArray(form[key][formElementKey][formSubElementKey][formSubElementName])) {
+                        const control = <FormArray>this.form.get([key,formElementKey,formSubElementKey,formSubElementName]);
+                        let required = false;
+                        for (let j = 0; j < formFieldData.subFieldGroups.length; j++) {
+                          if (formFieldData.subFieldGroups[j].field.name === formSubElementName) {
+                            required = formFieldData.subFieldGroups[j].field.form.mandatory;
+                          }
+                        }
+                        for (let j = 0; j < form[key][formElementKey][formSubElementKey][formSubElementName].length - 1; j++) {
+                          control.push(required ? new FormControl('', Validators.required) : new FormControl(''));
+                        }
+                      }
+                    }
                   }
                 }
               } else {
@@ -91,10 +104,15 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
     }
   }
 
-  removeFromArrayInsideComposite(parent: string, parentIndex: number, name: string, index: number) {
+  pushToArrayInsideComposite(parent: string, parentIndex: number, name: string, required: boolean) {
     const control = <FormArray>this.form.get([parent,parentIndex,name]);
-    control.removeAt(index);
+    control.push(required ? new FormControl('', Validators.required) : new FormControl(''));
   }
+  //
+  // removeFromArrayInsideComposite(parent: string, parentIndex: number, name: string, index: number) {
+  //   const control = <FormArray>this.form.get([parent,parentIndex,name]);
+  //   control.removeAt(index);
+  // }
 
   validateForm() {
     for (let control in this.form.controls) {
