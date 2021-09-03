@@ -1,4 +1,4 @@
-<div class="uk-section uk-section-primary uk-preserve-color">
+<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container uk-container-large uk-margin-large-top uk-margin-large-bottom">
 
     <div class="uk-grid uk-child-width-1-2">
@@ -7,59 +7,69 @@
 
     <div class="uk-grid uk-grid-match uk-child-width-1-3 uk-flex-center uk-text-center">
 
-      <div class="uk-margin-large-top">
+      <div *ngIf="getServiceField('privacyPolicy').value !== ''" class="uk-margin-large-top">
         <div class="el-item uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="uk-animation-fade" style="">
 
           <img class="el-image uk-text-emphasis" alt="" src="../../../../../assets/images/icons/Asset%207@2x.png" width="51">
           <h5 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Service Privacy-Policy</h5>
           <div class="el-content uk-panel uk-margin-top">OpenAIRE places particular emphasis on the security of personal data and
             the protection of the data subject. For this reason, OpenAIRE has introduced this Personal Data Policy.</div>
-          <div class="uk-margin-medium-top"><button uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button></div>
+          <div class="uk-margin-medium-top">
+            <button (click)="navigateTo(getServiceField('privacyPolicy').value)" uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button>
+          </div>
 
         </div>
       </div>
 
-      <div class="uk-margin-large-top">
+      <div *ngIf="getServiceField('serviceLevel').value !== ''" class="uk-margin-large-top">
         <div class="el-item uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="uk-animation-fade" style="">
 
           <img class="el-image uk-text-emphasis" alt="" src="../../../../../assets/images/icons/Asset%206@2x.png" width="50">
           <h5 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Level Agreement</h5>
           <div class="el-content uk-panel uk-margin-top">OpenAIRE Infrastructure Service Level Agreements (SLAs) refers
             to the levels of availability, serviceability, performance, operation, or other attributes of the Infrastructure.</div>
-          <div class="uk-margin-medium-top"><button uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button></div>
+          <div class="uk-margin-medium-top">
+            <button (click)="navigateTo(getServiceField('serviceLevel').value)" uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button>
+          </div>
 
         </div>
       </div>
-
-      <div class="uk-margin-large-top">
+      <!--TODO: Confirm that the correct url is shown here-->
+      <div *ngIf="getServiceField('accessPolicy').value !== ''" class="uk-margin-large-top">
         <div class="el-item uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="uk-animation-fade" style="">
 
           <img class="el-image uk-text-emphasis" alt="" src="../../../../../assets/images/icons/Asset%207@2x.png" width="51">
           <h5 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">OpenAIRE Policies</h5>
           <div class="el-content uk-panel uk-margin-top">How to provide content, how to use our services and data</div>
-          <div class="uk-margin-medium-top"><button uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button></div>
+          <div class="uk-margin-medium-top">
+            <button (click)="navigateTo(getServiceField('accessPolicy').value)" uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button>
+          </div>
 
         </div>
       </div>
 
-      <div class="uk-margin-large-top">
+      <div *ngIf="getServiceField('statusMonitoring').value !== ''" class="uk-margin-large-top">
         <div class="el-item uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="uk-animation-fade" style="">
 
           <img class="el-image uk-text-emphasis" alt="" src="../../../../../assets/images/icons/Asset%2010@2x.png" width="68">
           <h5 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Status Monitoring</h5>
           <div class="el-content uk-panel uk-margin-top">Webpage with monitoring information about this Resource.</div>
-          <div class="uk-margin-medium-top"><button uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button></div>
+          <div class="uk-margin-medium-top">
+            <button (click)="navigateTo(getServiceField('statusMonitoring').value)" uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button>
+          </div>
 
         </div>
       </div>
 
-      <div class="uk-margin-large-top">
+      <div *ngIf="getServiceField('maintenance').value !== ''" class="uk-margin-large-top">
         <div class="el-item uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="uk-animation-fade" style="">
 
           <img class="el-image uk-text-emphasis" alt="" src="../../../../../assets/images/icons/Asset%2011@2x.png" width="55">
           <h5 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Maintenance</h5>
           <div class="el-content uk-panel uk-margin-top">Webpage with information about planned maintenance windows for this Resource.</div>
-          <div class="uk-margin-medium-top"><button uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button></div>
+          <div class="uk-margin-medium-top">
+            <button (click)="navigateTo(getServiceField('maintenance').value)" uk-scroll="" class="el-link uk-button uk-button-primary">Read More</button>
+          </div>
 
         </div>
       </div>
@@ -68,3 +78,5 @@
 
   </div>
 </div>
+
+<pre *ngIf="form">{{form.getRawValue() | json}}</pre>
