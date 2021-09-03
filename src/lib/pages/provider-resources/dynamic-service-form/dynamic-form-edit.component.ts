@@ -73,27 +73,33 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
               this.popComposite(key, formElementKey)  // remove it first
               i = 0;  // increase the loops
             }
+            let count = 0;
             for (i; i < form[key][formElementKey].length; i++) {
               if (formFieldData.field.type === 'composite') {
                 this.pushComposite(key, formElementKey, formFieldData.subFieldGroups);
-                for (let formSubElementKey in form[key][formElementKey]) { // Special case when composite contains array
-                  for (let formSubElementName in form[key][formElementKey][formSubElementKey]) {
-                    if(form[key][formElementKey][formSubElementKey].hasOwnProperty(formSubElementName)) {
-                      if(Array.isArray(form[key][formElementKey][formSubElementKey][formSubElementName])) {
-                        const control = <FormArray>this.form.get([key,formElementKey,formSubElementKey,formSubElementName]);
+                // for (let formSubElementKey in form[key][formElementKey]) { // Special case when composite contains array
+                  for (let formSubElementName in form[key][formElementKey][count]) {
+                    if(form[key][formElementKey][count].hasOwnProperty(formSubElementName)) {
+                      if(Array.isArray(form[key][formElementKey][count][formSubElementName])) {
+                        console.log(form[key][formElementKey][count][formSubElementName]);
+                        // console.log(this.form.get([key,formElementKey,count,formSubElementName]));
+                        console.log('Key: ' + key + ' formElementKey: ' + formElementKey + ' count: ' + count + ' formSubElementName: ' + formSubElementName);
+                        const control = <FormArray>this.form.get([key,formElementKey,count,formSubElementName]);
+                        console.log(control);
                         let required = false;
                         for (let j = 0; j < formFieldData.subFieldGroups.length; j++) {
                           if (formFieldData.subFieldGroups[j].field.name === formSubElementName) {
                             required = formFieldData.subFieldGroups[j].field.form.mandatory;
                           }
                         }
-                        for (let j = 0; j < form[key][formElementKey][formSubElementKey][formSubElementName].length - 1; j++) {
+                        for (let j = 0; j < form[key][formElementKey][count][formSubElementName].length - 1; j++) {
                           control.push(required ? new FormControl('', Validators.required) : new FormControl(''));
                         }
                       }
                     }
                   }
-                }
+                // }
+                count++;
               } else {
                 this.push(key, formElementKey, formFieldData.field.form.mandatory);
               }
