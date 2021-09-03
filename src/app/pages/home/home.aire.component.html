@@ -42,127 +42,40 @@
 
     <h1>Users</h1>
 
-    <div class="uk-position-relative" uk-slideshow="ratio: 12:4">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
-        <li class="uk-flex-middle">
-
+        <li *ngFor="let user of users" class="uk-flex-middle">
           <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
 
             <div class="slider-image uk-flex uk-flex-right">
               <div class="uk-card uk-card-default uk-margin" uk-grid>
                 <div class="uk-card-media uk-cover-container">
-                  <img src="{{users[0].extras.image}}" alt="" uk-cover>
+                  <img src="{{user.extras.image}}" alt="" uk-cover>
                   <canvas width="294" height="325"></canvas>
                 </div>
               </div>
             </div>
 
             <div class="slider-text uk-flex uk-flex-middle">
-              <div class="slider-bold-background-header">{{users[0].name}}</div>
+              <div class="slider-bold-background-header">{{user.name}}</div>
 
               <div class="">
-                <div class="slider-header">{{users[0].name}}</div>
-                <div class="slider-description uk-margin-top">{{users[0].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[0].id]">Learn more</a></div>
-              </div>
-            </div>
-
-
-          </div>
-
-          <!--<img src="images/photo.jpg" alt="" uk-cover>-->
-        </li>
-        <li class="uk-flex-middle">
-
-          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
-
-            <div class="slider-image uk-flex uk-flex-right">
-              <div class="uk-card uk-card-default uk-margin" uk-grid>
-                <div class="uk-card-media uk-cover-container">
-                  <img src="{{users[1].extras.image}}" alt="" uk-cover>
-                  <canvas width="294" height="325"></canvas>
-                </div>
-              </div>
-            </div>
-
-            <div class="slider-text uk-flex uk-flex-middle">
-              <div class="slider-bold-background-header">{{users[1].name}}</div>
-
-              <div class="">
-                <div class="slider-header">{{users[1].name}}</div>
-                <div class="slider-description uk-margin-top">{{users[1].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[1].id]">Learn more</a></div>
-              </div>
-            </div>
-
-
-          </div>
-
-          <!--<img src="images/dark.jpg" alt="" uk-cover>-->
-        </li>
-        <li class="uk-flex-middle">
-
-          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
-
-            <div class="slider-image uk-flex uk-flex-right">
-              <div class="uk-card uk-card-default uk-margin" uk-grid>
-                <div class="uk-card-media uk-cover-container">
-                  <img src="{{users[2].extras.image}}" alt="" uk-cover>
-                  <canvas width="294" height="325"></canvas>
-                </div>
-              </div>
-            </div>
-
-            <div class="slider-text uk-flex uk-flex-middle">
-              <div class="slider-bold-background-header">{{users[2].name}}</div>
-
-              <div class="">
-                <div class="slider-header">{{users[2].name}}</div>
-                <div class="slider-description uk-margin-top">{{users[2].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[2].id]">Learn more</a></div>
+                <div class="slider-header">{{user.name}}</div>
+                <div class="slider-description uk-margin-top">{{user.description}}</div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', user.id]">Learn more</a></div>
               </div>
             </div>
 
           </div>
-
-          <!--<img src="images/size1.jpg" alt="" uk-cover>-->
-        </li>
-        <li class="uk-flex-middle">
-
-          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
-
-            <div class="slider-image uk-flex uk-flex-right">
-              <div class="uk-card uk-card-default uk-margin" uk-grid>
-                <div class="uk-card-media uk-cover-container">
-                  <img src="{{users[3].extras.image}}" alt="" uk-cover>
-                  <canvas width="294" height="325"></canvas>
-                </div>
-              </div>
-            </div>
-
-            <div class="slider-text uk-flex uk-flex-middle">
-              <div class="slider-bold-background-header">{{users[3].name}}</div>
-
-              <div class="">
-                <div class="slider-header">{{users[3].name}}</div>
-                <div class="slider-description uk-margin-top">{{users[3].description}}</div>
-                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/Users', users[3].id]">Learn more</a></div>
-              </div>
-            </div>
-
-          </div>
-
-          <!--<img src="images/size1.jpg" alt="" uk-cover>-->
         </li>
       </ul>
 
       <div class="uk-position-bottom-center uk-position-small">
         <ul class="uk-dotnav">
-          <li uk-slideshow-item="0"><a href="#">Item 1</a></li>
-          <li uk-slideshow-item="1"><a href="#">Item 2</a></li>
-          <li uk-slideshow-item="2"><a href="#">Item 3</a></li>
-          <li uk-slideshow-item="3"><a href="#">Item 3</a></li>
+          <li *ngFor="let user of users; let i=index" [ngClass]="{'uk-active': slide === i}">
+            <a (click)="showSlide(i)">Item {{i}}</a>
+          </li>
         </ul>
       </div>
 
