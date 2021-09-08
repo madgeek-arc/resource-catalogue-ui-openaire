@@ -33,6 +33,4 @@ export class ResourcesAndSupportComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-
-
 }

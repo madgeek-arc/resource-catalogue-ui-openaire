@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ResourceService} from '../../../../lib/services/resource.service';
 import {ActivatedRoute} from '@angular/router';
 import {Vocabulary} from '../../../../lib/domain/eic-model';
+import {zip} from 'rxjs/internal/observable/zip';
 
 
 @Component({
@@ -14,36 +15,31 @@ export class PortfolioItemComponent implements OnInit{
   services: Map<string, Object[]>;
   portfolioVoc: Vocabulary;
   portfolioId: string;
+  ready = false;
 
   constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.portfolioId = this.route.snapshot.paramMap.get('id');
-    this.resourceService.getVocabularyById(this.portfolioId).subscribe(
+    zip(
+      this.resourceService.getVocabularyById(this.portfolioId),
+      this.resourceService.getServicesByVocabularyTypeAndId('Portfolios', this.portfolioId)
+    ).subscribe(
       res => {
-        this.portfolioVoc = res;
+        this.portfolioVoc = res[0];
+        this.response = res[1];
+        for (const [key, value] of Object.entries(res[1])) {
+          console.log(`${key}: ${value}`);
+          this.services = value;
+        }
       },
       error => {console.log(error)},
       () => {
-        console.log(this.portfolioVoc);
+        console.log(this.services);
+        this.ready = true
       }
     );
-    this.resourceService.getServicesByVocabularyTypeAndId('Portfolios', this.portfolioId)
-      .subscribe( res => {
-          this.response = res;
-          console.log(res);
-          for (const [key, value] of Object.entries(res)) {
-            console.log(`${key}: ${value}`);
-            this.services = value;
-          }
-          // this.services = res;
-        },
-        error => console.log(error),
-        () => {
-        console.log(this.response);
-        console.log(this.services);
-      }
-      );
   }
+
 }
