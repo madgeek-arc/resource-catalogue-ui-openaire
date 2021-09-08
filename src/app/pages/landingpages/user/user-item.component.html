@@ -14,7 +14,7 @@
 
 </div>
 
-<div class="uk-section uk-section-default uk-margin-xlarge-bottom">
+<div *ngIf="ready && services['length'] > 0" class="uk-section uk-section-default uk-margin-xlarge-bottom">
   <div class="uk-container uk-container-large">
 
     <h1>Which service is right for you?</h1>
@@ -45,54 +45,6 @@
               <p>{{service['description']}}</p>
             </div>
             <div class=""><a [routerLink]="['/service/', service['id']]" class="uk-button uk-button-text">Learn more</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="uk-card uk-card-default">
-          <div class="uk-card-media-top">
-            <img src="../../../../assets/images/mocks/zenodo.jpg" alt="">
-          </div>
-          <div class="uk-card-body">
-            <div>
-              <div class="h5-subheader">Zenodo</div>
-              <h5 class="">A catch-all repository</h5>
-              <p>Zenodo is a general purpose repository that enables researchers, scientists, projects and institutions to share, preserve and showcase multidisciplinary research results (data, software and publications) that are not part of the existing institutional or subject-based repositories of the research communities.</p>
-            </div>
-            <div class=""><a class="uk-button uk-button-text">Learn more</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="uk-card uk-card-default">
-          <div class="uk-card-media-top">
-            <img src="../../../../assets/images/mocks/amnesia.jpg" alt="">
-          </div>
-          <div class="uk-card-body uk-flex uk-flex-column">
-            <div>
-              <div class="h5-subheader">Amnesia</div>
-              <h5 class="">Anonymize your datasets</h5>
-              <p>An OpenAIRE service to let you easily anonymize sensitive research data and share with others.</p>
-            </div>
-            <div class=""><a class="uk-button uk-button-text">Learn more</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="uk-card uk-card-default">
-          <div class="uk-card-media-top">
-            <img src="../../../../assets/images/mocks/argos.jpg" alt="">
-          </div>
-          <div class="uk-card-body">
-            <div>
-              <div class="h5-subheader">Argos</div>
-              <h5 class="">Create, Link, Share DMPs</h5>
-              <p>ARGOS is an online tool in support of automated processes to creating, managing, sharing and linking DMPs with research artifacts they correspond to.</p>
-            </div>
-            <div class="uk-margin-medium-top"><a class="uk-button uk-button-text">Learn more</a></div>
           </div>
         </div>
       </div>

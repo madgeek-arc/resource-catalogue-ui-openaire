@@ -59,7 +59,7 @@ const appRoutes: Routes = [
   },
 
   {
-    path: 'Portfolios/:id',
+    path: 'portfolios/:id',
     component: PortfolioItemComponent,
     data: {
       breadcrumb: 'portfolio'
@@ -67,7 +67,7 @@ const appRoutes: Routes = [
   },
 
   {
-    path: 'Users/:id',
+    path: 'users/:id',
     component: UserItemComponent,
     data: {
       breadcrumb: 'Users'
