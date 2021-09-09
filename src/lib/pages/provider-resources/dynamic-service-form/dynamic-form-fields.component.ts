@@ -39,7 +39,7 @@ export class DynamicFormFieldsComponent implements OnInit {
     return this.form.get(field) as FormArray;
   }
 
-  testFormArray(parent: string, parentIndex: number, name: string) {
+  compositeFormArray(parent: string, parentIndex: number, name: string) {
     // console.log(parent+', '+parentIndex+', '+name);
     // console.log(this.form.get([parent,parentIndex,name]));
     // return this.form.get([parent,parentIndex,name]) as FormArray;
@@ -114,8 +114,8 @@ export class DynamicFormFieldsComponent implements OnInit {
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
       // try {
-      return (!this.fieldAsFormArray(name).get([position]).get(groupName).valid
-          && (edit || this.fieldAsFormArray(name).get([position]).get(groupName).dirty));
+      return (!this.fieldAsFormArray(name)?.get([position])?.get(groupName).valid
+          && (edit || this.fieldAsFormArray(name)?.get([position])?.get(groupName).dirty));
       // } catch (e) {
       //   console.error('Error!!!! ' + groupName + ' ' + name);
       //   console.log(e);

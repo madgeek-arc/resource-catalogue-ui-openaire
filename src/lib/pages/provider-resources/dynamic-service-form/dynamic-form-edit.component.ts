@@ -81,11 +81,9 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
                   for (let formSubElementName in form[key][formElementKey][count]) {
                     if(form[key][formElementKey][count].hasOwnProperty(formSubElementName)) {
                       if(Array.isArray(form[key][formElementKey][count][formSubElementName])) {
-                        console.log(form[key][formElementKey][count][formSubElementName]);
-                        // console.log(this.form.get([key,formElementKey,count,formSubElementName]));
-                        console.log('Key: ' + key + ' formElementKey: ' + formElementKey + ' count: ' + count + ' formSubElementName: ' + formSubElementName);
+                        // console.log('Key: ' + key + ' formElementKey: ' + formElementKey + ' count: ' + count + ' formSubElementName: ' + formSubElementName);
                         const control = <FormArray>this.form.get([key,formElementKey,count,formSubElementName]);
-                        console.log(control);
+                        // console.log(control);
                         let required = false;
                         for (let j = 0; j < formFieldData.subFieldGroups.length; j++) {
                           if (formFieldData.subFieldGroups[j].field.name === formSubElementName) {

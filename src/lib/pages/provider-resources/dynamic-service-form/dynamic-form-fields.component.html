@@ -117,11 +117,11 @@
                       {{fieldData.subFieldGroups[j].field.form.description}}
                     </div>
                     <div *ngIf="fieldData.subFieldGroups[j].field.multiplicity && fieldData.subFieldGroups[j].field.type === 'string'" class="uk-form-controls uk-margin-medium-top" [formArrayName]="fieldData.subFieldGroups[j].field.name">
-                      <div *ngFor="let input of testFormArray(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name).controls; let k=index" class="uk-margin-bottom">
+                      <div *ngFor="let input of compositeFormArray(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name).controls; let k=index" class="uk-margin-bottom">
                         <input [id]="fieldData.subFieldGroups[j].field.name" [formControlName]="k"
                                class="uk-input uk-width-9-10 uk-animation-slide-top-small">
 
-                        <a *ngIf="testFormArray(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name).length > 1"
+                        <a *ngIf="compositeFormArray(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name).length > 1"
                            (click)="removeFromArrayInsideComposite(fieldData.subFieldGroups[j].field.parent, i, fieldData.subFieldGroups[j].field.name, k); updateBitSet(fieldData); unsavedChangesPrompt()"
                            class="remove-element uk-padding-small uk-animation-slide-top-small">
                           <i class="fa fa-times" aria-hidden="true"></i>
