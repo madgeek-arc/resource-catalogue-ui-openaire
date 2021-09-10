@@ -44,7 +44,6 @@ export class HomeAireComponent implements OnInit {
     this.resourceService.getNewVocabulariesByType('PORTFOLIOS').subscribe(
       suc => {
         this.portfolios = suc;
-        console.log(this.portfolios);
       }
     );
 
