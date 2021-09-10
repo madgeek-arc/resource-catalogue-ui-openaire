@@ -25,7 +25,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   public projectName = environment.projectName;
   serviceORresource = environment.serviceORresource;
-  // services: RichService[] = [];
   public errorMessage: string;
   public serviceId;
   vocabularies: Map<string, UiVocabulary[]>;
@@ -36,11 +35,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   private sub: Subscription;
   serviceMapOptions: any = null;
-  myProviders: ProviderBundle[] = [];
   path: string;
 
   showForm = false;
-  canAddOrEditService = false;
   places: Vocabulary[] = null;
 
   constructor(public route: ActivatedRoute,
@@ -64,7 +61,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           this.formService.getFormModel(),
           this.formService.getDynamicService(params['id']),
           this.formService.getUiVocabularies(),
-          this.providerService.getMyServiceProviders(),
         ).subscribe(suc => {
             this.model = <FormModel[]>suc[0];
             this.vocabularies = <Map<string, UiVocabulary[]>>suc[2];
@@ -73,14 +69,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
             ResourceService.removeNulls(suc[1]['extras']);
             this.prepareForm(suc[1]);
             this.form.patchValue(suc[1]);
-            this.myProviders = <ProviderBundle[]>suc[3];
-
-            /* check if the current user can edit the service */
-            // this.canEditService = this.myProviders.some(p => this.richService.service.resourceProviders.some(x => x === p.id));
-
-            if (this.projectName === 'OpenAIRE Catalogue') {
-              this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-            }
           },
           err => {
             if (err.status === 404) {
@@ -247,6 +235,10 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  goto(url: string) {
+    window.open(url, '_blank');
   }
 
 }
