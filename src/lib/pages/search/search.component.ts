@@ -555,6 +555,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     return this.navigateUsingParameters();
   }
 
+  clearSelections(e, category: string) {
+    let categoryIndex = 0;
+    for (const urlParameter of this.urlParameters) {
+      if (urlParameter.key === category) {
+        console.log(urlParameter);
+        this.urlParameters.splice(categoryIndex, 1);
+      }
+      categoryIndex++;
+    }
+    return this.navigateUsingParameters();
+  }
+
   navigateUsingParameters() {
     const map: { [name: string]: string; } = {};
     for (const urlParameter of this.urlParameters) {

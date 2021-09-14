@@ -35,7 +35,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'search',
-    component: SearchComponent,
+    component: SearchAireComponent,
     data: {
       breadcrumb: 'Search'
     }

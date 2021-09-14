@@ -7,17 +7,15 @@ declare var UIkit: any;
 @Component({
   selector: 'app-search',
   templateUrl: './search.aire.component.html',
-  styleUrls: ['./search.aire.component.css']
+  styleUrls: ['../../../lib/pages/search/search.component.css']
 })
 export class SearchAireComponent extends SearchComponent implements OnInit {
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
 
   ngOnInit() {
-    this.pageSize = 9;
     super.ngOnInit();
     this.canAddOrEditService = false;
-    this.listViewActive = false;
     this.resourceService.getMyServiceProviders().subscribe(
       res => this.myProviders = res,
       er => console.log(er),
