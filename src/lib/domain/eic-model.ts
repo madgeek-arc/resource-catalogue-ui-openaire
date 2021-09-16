@@ -176,6 +176,20 @@ export class RichService {
   providerInfo: ProviderInfo[];
 }
 
+export class Snippet {
+  image: URL;
+  paymentTitle: string;
+  name: string;
+  description: string;
+  tagline: string;
+  logo: URL;
+  main: string;
+  id: string;
+  pitch: string;
+  label: string;
+  user: string;
+}
+
 export class ServiceProviderDomain {
   scientificDomain: string;
   scientificSubdomain: string;

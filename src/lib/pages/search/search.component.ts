@@ -139,6 +139,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log('parent init')
     this.listViewActive = true;
     zip(
       this.resourceService.getProvidersNames(),
@@ -202,14 +203,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         () => {
           console.log(this.recommendations);
         }
-      );
-    }
-
-      if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
-      this.resourceService.getMyServiceProviders().subscribe(
-        res => this.myProviders = res,
-        er => console.log(er),
-        () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
       );
     }
   }

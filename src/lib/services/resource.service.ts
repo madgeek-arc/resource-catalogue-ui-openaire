@@ -11,7 +11,7 @@ import {
   Service,
   ServiceHistory,
   Vocabulary,
-  Type
+  Type, Snippet
 } from '../domain/eic-model';
 import {BrowseResults} from '../domain/browse-results';
 import {Paging} from '../domain/paging';
@@ -97,6 +97,17 @@ export class ResourceService {
     // return this.http.get<SearchResults<RichService>>(this.base + `/service/rich/all${questionMark}${searchQuery.toString()}`, this.options)
     return this.http.get<Paging<RichService>>(
       this.base + `/service/rich/all?orderField=name&order=asc&${searchQuery.toString()}`, this.options);
+  }
+
+  searchSnippets(urlParameters: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
+    }
+    searchQuery.delete('to');
+    return this.http.get<Paging<Snippet>>(this.base + `/ui/services/snippets?order=asc&orderField=name${'&' + searchQuery.toString()}`, this.options);
   }
 
   getVocabularyById(id: string) {
