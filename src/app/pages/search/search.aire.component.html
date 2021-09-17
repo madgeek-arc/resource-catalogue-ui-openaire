@@ -53,7 +53,8 @@
 <!--            </ng-template>-->
 
             <ng-template ngFor let-facet [ngForOf]="searchResultsSnippets.facets">
-              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl'" class="refineCategory uk-grid-margin">
+              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
+                        || facet.field === 'portfolios'" class="refineCategory uk-grid-margin">
                 <read-more [maxHeight]="235">
                   <a class="uk-flex-right uk-float-right" (click)="clearSelections($event, facet.field)">clear</a>
                   <h4 class="uk-h4">{{facet.label}}</h4>

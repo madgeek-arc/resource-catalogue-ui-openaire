@@ -6,7 +6,6 @@ import {URLParameter} from '../../../lib/domain/url-parameter';
 import {Paging} from '../../../lib/domain/paging';
 import {PremiumSortFacetsPipe} from '../../../lib/shared/pipes/premium-sort.pipe';
 
-declare var UIkit: any;
 
 @Component({
   selector: 'app-search',
@@ -20,7 +19,6 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
 
   ngOnInit() {
     // super.ngOnInit();
-    console.log('child init');
     this.listViewActive = true;
     this.sub = this.route.params.subscribe(params => {
       this.urlParameters.splice(0, this.urlParameters.length);
@@ -37,7 +35,6 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
 
       // request results from the registry
       this.loading = true;
-      // console.log(this.urlParameters);
       return this.resourceService.searchSnippets(this.urlParameters).subscribe(
         searchResults => {
           this.updateSearchResultsSnippets(searchResults);
@@ -80,7 +77,6 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
         }
       }
     }
-    // this.orderFacets();
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {
       if (urlParameter.key === 'searchFields') {
