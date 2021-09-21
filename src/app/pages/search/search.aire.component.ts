@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SearchComponent} from 'src/lib/pages/search/search.component';
 import {Provider, RichService, Snippet} from 'src/lib/domain/eic-model';
-import {zip} from 'rxjs/internal/observable/zip';
 import {URLParameter} from '../../../lib/domain/url-parameter';
 import {Paging} from '../../../lib/domain/paging';
 import {PremiumSortFacetsPipe} from '../../../lib/shared/pipes/premium-sort.pipe';
@@ -16,6 +15,7 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
   searchResultsSnippets: Paging<Snippet>;
+  private sortFacets = new PremiumSortFacetsPipe();
 
   ngOnInit() {
     // super.ngOnInit();
@@ -59,9 +59,10 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
   updateSearchResultsSnippets(searchResults: Paging<Snippet>) {
 
     // INITIALISATIONS
-    const sortLanguages = new PremiumSortFacetsPipe();
+
     this.errorMessage = null;
     this.searchResultsSnippets = searchResults;
+    this.searchResultsSnippets.facets.sort();
     this.isFirstPageDisabled = false;
     this.isPreviousPageDisabled = false;
     this.isLastPageDisabled = false;
@@ -69,13 +70,7 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
     if (this.searchResultsSnippets.results.length === 0) {
       this.foundResults = false;
     } else {
-      for (let i = 0; i < this.searchResultsSnippets.facets.length; i++) {
-        if (this.searchResultsSnippets.facets[i].label === 'Language') {
-          sortLanguages.transform(this.searchResultsSnippets.facets[i].values, ['English']);
-        } else {
-          this.searchResultsSnippets.facets[i].values.sort((a, b) => 0 - (a.label > b.label ? -1 : 1));
-        }
-      }
+      this.sortFacets.transform(this.searchResultsSnippets.facets,['Portfolios', 'Users', 'TRL', 'Life Cycle Status'])
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {

@@ -12,7 +12,7 @@ import {ResourceService} from '../../services/resource.service';
 import {UserService} from '../../services/user.service';
 import {zip} from 'rxjs/internal/observable/zip';
 import {flatMap} from 'rxjs/operators';
-import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
+import {PremiumSortFacetValuesPipe} from '../../shared/pipes/premium-sort.pipe';
 import {OrderDownlineTreeviewEventParser, TreeviewConfig, TreeviewEventParser, TreeviewItem} from 'ngx-treeview';
 import {EmailService} from '../../services/email.service';
 import {environment} from '../../../environments/environment';
@@ -239,7 +239,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   updateSearchResults(searchResults: Paging<RichService>) {
 
     // INITIALISATIONS
-    const sortLanguages = new PremiumSortFacetsPipe();
+    const sortLanguages = new PremiumSortFacetValuesPipe();
     this.errorMessage = null;
     this.searchResults = searchResults;
     this.isFirstPageDisabled = false;

@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {FacetValue} from '../../domain/facet';
+import {Facet, FacetValue} from '../../domain/facet';
 import {Vocabulary} from '../../domain/eic-model';
 import {UiVocabulary} from '../../domain/dynamic-form-model';
 
@@ -27,6 +27,28 @@ export class PremiumSortPipe implements PipeTransform {
 
 @Pipe({name: 'premiumSortFacets'})
 export class PremiumSortFacetsPipe implements PipeTransform {
+  transform(arr: Facet[], weights: string[]): any {
+    const ret = (arr || []).sort((a, b): number => {
+      let val = 0;
+      const weightA = weights.indexOf(a.label);
+      const weightB = weights.indexOf(b.label);
+      if (weightA !== -1 && weightB !== -1) {
+        val = weightA - weightB;
+      } else if (weightA !== -1) {
+        val = -1;
+      } else if (weightB !== -1) {
+        val = 1;
+      } else {
+        val = a.label.localeCompare(b.label);
+      }
+      return val;
+    });
+    return ret;
+  }
+}
+
+@Pipe({name: 'premiumSortFacetValues'})
+export class PremiumSortFacetValuesPipe implements PipeTransform {
   transform(arr: FacetValue[], weights: string[]): any {
     const ret = (arr || []).sort((a, b): number => {
       let val = 0;

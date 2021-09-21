@@ -10,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {URLParameter} from '../../domain/url-parameter';
 import {NavigationService} from '../../services/navigation.service';
-import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
+import {PremiumSortFacetValuesPipe} from '../../shared/pipes/premium-sort.pipe';
 
 declare var UIkit: any;
 

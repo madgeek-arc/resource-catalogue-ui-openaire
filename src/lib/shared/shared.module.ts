@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {JoinPipe} from './pipes/join.pipe';
 import {KeysPipe} from './pipes/keys.pipe';
 import {LookUpPipe} from './pipes/lookup.pipe';
-import {PremiumSortFacetsPipe, PremiumSortPipe} from './pipes/premium-sort.pipe';
+import {PremiumSortFacetsPipe, PremiumSortFacetValuesPipe, PremiumSortPipe} from './pipes/premium-sort.pipe';
 import {SafePipe} from './pipes/safe.pipe';
 import {StringArraySortPipe} from './pipes/sort.pipe';
 import {ValuesPipe} from './pipes/getValues.pipe';
@@ -30,6 +30,7 @@ import {PreviewResourceComponent} from '../pages/previewresource/preview-resourc
     StringArraySortPipe,
     LookUpPipe,
     PremiumSortPipe,
+    PremiumSortFacetValuesPipe,
     PremiumSortFacetsPipe,
     SafePipe,
     ValuesPipe,
@@ -46,7 +47,7 @@ import {PreviewResourceComponent} from '../pages/previewresource/preview-resourc
     StringArraySortPipe,
     LookUpPipe,
     PremiumSortPipe,
-    PremiumSortFacetsPipe,
+    PremiumSortFacetValuesPipe,
     SafePipe,
     ValuesPipe,
     EmailModalComponent,
