@@ -107,16 +107,33 @@
 
     <h1>Benefits</h1>
 
-    <div *ngFor="let benefit of getExtrasArray('benefits').value" class="uk-grid uk-child-width-1-2">
-      <div>
-        <h3>{{benefit.benefitsTitle}}</h3>
-        <p>{{benefit.benefitsText}}</p>
-      </div>
-      <div></div>
-    </div>
+    <div id="BenefitSlideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4" (beforeitemshow)="dragSlide()">
 
+      <ul class="uk-slideshow-items">
+        <li *ngFor="let benefit of getExtrasArray('benefits').value" class="uk-grid uk-child-width-1-2">
+          <div class="uk-width-1-1 uk-grid">
+
+            <div class="uk-width-1-2">
+              <div class="slider-header">{{benefit.benefitsTitle}}</div>
+              <div class="slider-description uk-margin-top">{{benefit.benefitsText}}</div>
+            </div>
+            <div class="uk-width-1-2">
+            <img src="{{benefit.benefitsImage}}" width="400">
+            </div>
+
+          </div>
+        </li>
+      </ul>
+
+      <div class="uk-position-bottom-center uk-position-small">
+        <ul class="uk-dotnav">
+          <li *ngFor="let benefit of getExtrasArray('benefits').value; let i=index" [ngClass]="{'uk-active': slide === i}">
+            <a (click)="showSlide(i)">Item {{i}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-</div>
 
 
 <!--FEATURES-->

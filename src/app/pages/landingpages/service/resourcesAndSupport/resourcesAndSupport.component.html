@@ -716,11 +716,28 @@
       </div>
 
       <div class="">
-        <p class="big-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
+        <p class="big-text">Download and read an overview of the service</p>
         <button (click)="goto(getExtrasArray('factsheets').value[0])" class="uk-button uk-button-primary uk-margin-medium-top">View all
           <i class="fa fa-external-link uk-margin-small-left"></i>
         </button>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!--LATEST NEWS-->
+<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
+  <div *ngIf="getExtrasField('latestNews').value !== ''" class="uk-container uk-container-large uk-margin-top">
+    <div class="text-center">
+      <h1>Latest News</h1>
+    </div>
+
+    <div class="text-center">
+      <p class="big-text">Stay informed about the news and developments!</p>
+      <button (click)="goto(getExtrasField('latestNews').value)" class="uk-button uk-button-primary uk-margin-medium-top">View all
+        <i class="fa fa-external-link uk-margin-small-left"></i>
+      </button>
     </div>
 
   </div>

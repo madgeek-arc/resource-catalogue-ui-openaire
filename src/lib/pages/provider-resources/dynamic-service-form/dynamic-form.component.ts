@@ -95,6 +95,13 @@ export class DynamicFormComponent implements OnInit {
 
         }
       );
+    } else {
+      console.log('is service valid: ' + this.form.get('service').valid);
+      console.log('is extras valid: ' + this.form.get('extras').valid);
+      for (let extrasKey in this.form.get('extras').value) {
+        console.log(this.form.get('extras.'+extrasKey));
+        console.log(extrasKey + ': '+ this.form.get('extras.'+extrasKey).valid);
+      }
     }
   }
 
