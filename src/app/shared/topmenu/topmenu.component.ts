@@ -16,6 +16,7 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
       res => {
 
         this.services = res;
+        console.log(this.services);
         // for (const [key, value] of Object.entries(this.services)) {
         //   console.log(`${key}: `);
         //   for ( const [count, service] of Object.entries(value)) {

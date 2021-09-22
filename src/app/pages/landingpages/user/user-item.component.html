@@ -1,6 +1,7 @@
 <div *ngIf="!ready" class="uk-margin-large-top" style="height: 400px">
   <div class="loader-big"></div>
 </div>
+
 <div *ngIf="ready" class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-bottom" uk-height-viewport="offset-bottom: 30">
 
   <div class="uk-section">
@@ -24,30 +25,18 @@
 
     <div class="uk-grid uk-child-width-1-3 uk-margin-large-top" uk-height-match="target: > div > .uk-card > .uk-card-body">
 
-      <!--<div *ngFor="let service of services">-->
-      <!--<div class="uk-card uk-card-default">-->
-      <!--<div class="uk-card-media-top">-->
-      <!--<img src="images/light.jpg" alt="">-->
-      <!--</div>-->
-      <!--<div class="uk-card-body">-->
-      <!--<h5 class="">{{service.name}}</h5>-->
-      <!--<p>{{service.desc}}</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
-
       <div *ngFor="let service of services">
         <div class="uk-card uk-card-default">
           <div class="uk-card-media-top">
-            <img src="{{service['image']}}" alt="">
+            <img src="{{service['extras']['image']}}" alt="">
           </div>
           <div class="uk-card-body">
             <div>
-              <div class="h5-subheader">{{service['name']}}</div>
-              <h5 class="">{{service['tagline']}}</h5>
-              <p>{{service['description']}}</p>
+              <div class="h5-subheader">{{service['service']['name']}}</div>
+              <h5 class="">{{service['service']['tagline']}}</h5>
+              <p>{{service['service']['description']}}</p>
             </div>
-            <div class=""><a [routerLink]="['/service/', service['id']]" class="uk-button uk-button-text">Learn more</a></div>
+            <div class=""><a [routerLink]="['/service/', service['service']['id']]" class="uk-button uk-button-text">Learn more</a></div>
           </div>
         </div>
       </div>
