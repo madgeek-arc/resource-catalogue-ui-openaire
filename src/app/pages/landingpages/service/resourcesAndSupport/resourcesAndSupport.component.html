@@ -274,7 +274,7 @@
 
               <p class="regular-text uk-margin-top">Access the service open source resources available on cloud development platforms</p>
 
-              <button (click)="goto(getExtrasArray('git').value[0])" class="uk-button uk-button-text">MOVE TO GITHUB</button>
+              <button *ngFor="let link of getExtrasArray('git').value" (click)="goto(link)" class="uk-button uk-button-text">MOVE TO SOURCE CODE</button>
             </div>
           </div>
 
