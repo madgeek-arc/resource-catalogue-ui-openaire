@@ -16,6 +16,7 @@ export class OverviewComponent implements OnInit {
   @Input() vocabularies: Map<string, UiVocabulary[]>;
 
   slide = 0;
+  benefitSlide = 0;
 
   ngOnInit() {
   }
@@ -52,14 +53,22 @@ export class OverviewComponent implements OnInit {
     }
   }
 
-  dragSlide() {
-    this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  dragSlide(id: string) {
+    if (id === 'slideShow')
+      this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+    else
+      this.benefitSlide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
   }
 
-  showSlide(index: number) {
-    uikit.slideshow('#slideShow').show(index);
+  showSlide(id: string, index: number) {
+    uikit.slideshow('#' + id).show(index);
     // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
-    this.slide = index;
+    if (id === 'slideShow') {
+      this.slide = index;
+    }
+    else {
+      this.benefitSlide = index;
+    }
 
   }
 
