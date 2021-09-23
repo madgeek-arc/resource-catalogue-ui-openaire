@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {Dependent, Fields, HandleBitSet, UiVocabulary} from '../../../domain/dynamic-form-model';
-import {Vocabulary} from '../../../domain/eic-model';
+import {Fields, HandleBitSet, UiVocabulary} from '../../../domain/dynamic-form-model';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {environment} from '../../../../environments/environment';
 import {urlAsyncValidator, URLValidator} from '../../../shared/validators/generic.validator';
@@ -113,14 +112,8 @@ export class DynamicFormFieldsComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      // try {
       return (!this.fieldAsFormArray(name)?.get([position])?.get(groupName).valid
-          && (edit || this.fieldAsFormArray(name)?.get([position])?.get(groupName).dirty));
-      // } catch (e) {
-      //   console.error('Error!!!! ' + groupName + ' ' + name);
-      //   console.log(e);
-      //   console.log(this.form);
-      // }
+        && (edit || this.fieldAsFormArray(name)?.get([position])?.get(groupName).dirty));
 
     }
     return (!this.fieldAsFormArray(name).get([position]).valid
@@ -142,9 +135,11 @@ export class DynamicFormFieldsComponent implements OnInit {
   /** <--Return Vocabulary items for composite fields **/
 
   updateBitSet(fieldData: Fields) {
-    if (fieldData.field.form.mandatory) {
-      this.handleBitSets.emit(fieldData);
-    }
+    this.timeOut(200).then(() => { // Needed for radio buttons strange behaviour
+      if (fieldData.field.form.mandatory) {
+        this.handleBitSets.emit(fieldData);
+      }
+    });
   }
 
   updateBitSetOfComposite(fieldData: Fields, position: number) {
@@ -159,5 +154,13 @@ export class DynamicFormFieldsComponent implements OnInit {
   unsavedChangesPrompt() {
     this.hasChanges = true;
   }
+
+  timeOut(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // printToConsole(name: string) {
+  //   console.log(this.form.get(name).valid)
+  // }
 
 }

@@ -75,6 +75,12 @@ const appRoutes: Routes = [
   },
 
   {
+    path: 'provider',
+    loadChildren: () => import('../lib/pages/provider/provider.module').then(m => m.ProviderModule),
+    canActivate: [CanActivateViaAuthGuard]
+  },
+
+  {
     path: 'resource-dashboard',
     loadChildren: () => import('../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
     canActivate: [CanActivateViaAuthGuard]

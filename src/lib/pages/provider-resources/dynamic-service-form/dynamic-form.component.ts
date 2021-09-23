@@ -212,6 +212,7 @@ export class DynamicFormComponent implements OnInit {
       this.handleBitSetOfGroup(data);
       return;
     }
+    // console.log(this.form.get(data.field.accessPath).valid);
     if (this.form.get(data.field.accessPath).valid) {
       this.decreaseRemainingFieldsPerTab(data.field.form.group, data.field.form.order);
       this.loaderBitSet.set(parseInt(data.field.id), 1);
