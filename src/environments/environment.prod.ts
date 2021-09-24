@@ -5,6 +5,7 @@ export const environment = {
   MATOMO_SITE: 147,
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
+  STATS_ENDPOINT: 'https://providers.eosc-portal.eu/stats-api/',
   API_TOKEN_ENDPOINT: '',
   projectName: 'OpenAIRE Catalogue',
   projectMail: 'example@oac.eu',

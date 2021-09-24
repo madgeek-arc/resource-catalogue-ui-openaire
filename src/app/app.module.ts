@@ -32,7 +32,6 @@ import {DashboardComponent} from '../lib/pages/provider/dashboard/dashboard.comp
 import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
 import {UserModule} from '../lib/pages/user/user.module';
-import {ServiceLandingPageComponent} from 'src/app/pages/landingpages/service/service-landing-page.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
 import {SearchAireComponent} from './pages/search/search.aire.component';
@@ -62,6 +61,7 @@ import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {ServiceLandingPageModule} from './pages/landingpages/service/service-landing-page.module';
+import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
 
 
 declare var require: any;
@@ -80,6 +80,7 @@ declare var require: any;
     ResourcesStatsComponent,
     PortfolioItemComponent,
     UserItemComponent,
+    ServiceLandingPageComponent,
     // PERSISTENT
     TopMenuComponent,
     AireTopMenuComponent,

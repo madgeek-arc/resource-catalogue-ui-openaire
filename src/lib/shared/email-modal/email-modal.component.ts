@@ -16,7 +16,7 @@ declare var UIkit: any;
 })
 export class EmailModalComponent {
 
-  @Input() serviceIdsArray;
+  @Input('serviceIdsArray') serviceIdsArray;
   public emailErrorMessage = '';
 
   constructor(public fb: FormBuilder, public router: NavigationService, public route: ActivatedRoute,
