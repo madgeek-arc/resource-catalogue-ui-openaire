@@ -9,7 +9,7 @@ import {PremiumSortFacetsPipe} from '../../../lib/shared/pipes/premium-sort.pipe
 @Component({
   selector: 'app-search',
   templateUrl: './search.aire.component.html',
-  styleUrls: ['../../../lib/pages/search/search.component.css']
+  // styleUrls: ['../../../lib/pages/search/search.component.css']
 })
 export class SearchAireComponent extends SearchComponent implements OnInit {
   canAddOrEditService: boolean;

@@ -6,7 +6,7 @@
 
   <div class="uk-section">
     <div class="uk-container uk-margin-medium-left uk-margin-large-top">
-      <div class="h1-subHeader">Subheader with small heading</div>
+      <div *ngIf="portfolioVoc.extras.tagline" class="h1-subHeader">{{portfolioVoc.extras.tagline}}</div>
       <h1>{{portfolioVoc.name}}</h1>
       <p class="big-text uk-margin-medium-top">{{portfolioVoc.description}}</p>
     </div>

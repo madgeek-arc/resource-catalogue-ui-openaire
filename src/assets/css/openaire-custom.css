@@ -26,7 +26,7 @@
   --openaire-light-blue: #3086ED;
   --default-element-bg: #DEDEDE;
 
-  --primary-color: #222080;
+  --primary-color: #1D193C;
   --link-color: #2D72D6;
   --link-hover-color: #3665ab;
   --breadcrumb-active-color: #4687E6;
@@ -151,6 +151,14 @@ p.big-text {
   opacity: 1;
 }
 
+p.big-text-header {
+  color: var(--black);
+  /*text-align: left;*/
+  font: normal normal normal 27px/41px var(--main-font-family);
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
 p.regular-text {
   color: var(--black);
   /*text-align: left;*/
@@ -179,6 +187,13 @@ dd {
   color: var(--catalogue-light-purple);
 }
 
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* ========================================================================
    Divider
  ========================================================================== */
@@ -190,6 +205,20 @@ hr {
 /* ========================================================================
    Links
  ========================================================================== */
+
+.eosc-link.uk-link, a.eosc-link {
+  color: var(--eosc-blue);
+}
+
+/*a {*/
+  /*color: var(--catalogue-light-purple) !important;*/
+  /*text-decoration: none !important;*/
+/*}*/
+
+/*a:hover {*/
+  /*color: var(--openaire-light-blue) !important;*/
+  /*text-decoration: none !important;*/
+/*}*/
 
 /* ========================================================================
    Buttons
@@ -255,6 +284,20 @@ hr {
   color: var(--grey);
 }
 
+.uk-button-secondary {
+  text-transform: uppercase;
+  border: 1px solid var(--catalogue-light-purple);
+  color: var(--catalogue-light-purple);
+}
+
+.uk-button-secondary:hover {
+  background: transparent linear-gradient(254deg, var(--openaire-light-blue) 0%, var(--catalogue-light-purple) 100%) 0 0 no-repeat padding-box;
+}
+
+a.uk-button {
+  line-height: 50px;
+}
+
 
 
 .uk-button-blue {
@@ -291,9 +334,24 @@ hr {
   opacity: 1 !important;
 }
 
-.service-menu {
-  margin-top: -10px;
+.browse-dropdown-menu .services a {
+  color: var(--black) !important;
+  text-decoration: none;
 }
+
+.browse-dropdown-menu .help-section a {
+  color: var(--catalogue-light-purple) !important;
+  text-decoration: none;
+}
+
+.browse-dropdown-menu .help-section a:hover {
+  color: var(--openaire-light-blue) !important;
+}
+
+
+/*.service-menu {*/
+  /*margin-top: -10px;*/
+/*}*/
 
 .service-menu .uk-navbar-container {
   background-color: var(--catalogue-dark-purple);
@@ -321,17 +379,14 @@ hr {
 .uk-active > .service-menu-item {
   font: normal normal 600 14px/22px var(--main-font-family) !important;
   color: var(--catalogue-light-purple) !important;
-  text-decoration-line: underline;
+  text-decoration-line: underline !important;
   text-underline-offset: 5px;
   text-decoration-thickness: 1.5px;
 }
 
-/*.uk-active a.service-menu-item:after {*/
-  /*content: '';*/
-  /*height: 1px;*/
-  /*background: black;*/
-  /*display:block;*/
-/*}*/
+a.service-menu-item:hover {
+  color: #fff !important;
+}
 
 .service-menu > .uk-active .uk-active > .service-menu-item {
   color: var(--catalogue-light-purple) !important;
@@ -373,6 +428,10 @@ hr {
 
 .uk-card-primary {
   background: transparent linear-gradient(213deg, var(--openaire-light-blue) 0%, var(--catalogue-light-purple) 100%) 0% 0% no-repeat padding-box;
+}
+
+.uk-card-default.uk-card-hover:hover {
+  background: var(--light-grey) 0 0 no-repeat padding-box;
 }
 /*.card-icon-no-button {*/
   /**/
@@ -469,3 +528,130 @@ hr {
 .newsletter-link {
   font: normal normal 600 19px/26px Open Sans;
 }
+
+
+/* ========================================================================
+   Forms
+ ========================================================================== */
+
+.uk-tab-left > * > a {
+  text-decoration: none;
+}
+
+.uk-input:not([class*="menuSearch"]) {
+  background-color: #fff;
+  border: 1px solid var(--default-element-bg);
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.ng-select {
+  background-color: #fff;
+  border: 1px solid var(--default-element-bg);
+}
+
+/* ========================================================================
+   Search
+ ========================================================================== */
+
+.refineOption > input {
+  margin-right: 5px !important;
+}
+
+input[type="checkbox"] {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: inset 0px 1px 3px #00000026 !important;
+  border: 0.5px solid #D4D4D5;
+  border-radius: 4px !important;
+}
+
+.menuSearch {
+  /*box-shadow: inset -10px -10px 13px #FFFFFFE6;*/
+  border-radius: 54px;
+  width: 350px;
+  background: #f7f7f7;
+}
+
+.menuSearchFields {
+  height: 48px !important;
+  background: #f7f7f7;
+  width: 200px;
+}
+
+a.serviceDetails {
+ text-decoration: none;
+}
+
+.serviceDetails .portfolioSection {
+  width: 35px;
+  background: #ececec 0% 0% no-repeat padding-box;
+}
+
+.serviceDetails .portfolioSection span {
+  transform: rotate(-90deg);
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-left: -30px;
+
+@include transform(rotate(270deg));
+@include transform-origin(0 0);
+}
+
+aside {
+  display: block;
+  position: relative;
+  margin: 40px 0;
+}
+
+aside .portfolioSection {
+  font: bold 12px Sans-Serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: #ececec;
+  /*color: #fff;*/
+  padding: 5px 10px;
+  margin: 0 0 10px 0;
+  line-height: 24px;
+}
+
+.serviceDetails aside {
+  border-left: 34px solid #ececec;
+  padding-left: 10px;
+}
+.serviceDetails aside .portfolioSection {
+  /* Abs positioning makes it not take up vert space */
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  /* Border is the new background */
+  background: none;
+
+  /* Rotate from top left corner (not default) */
+  transform-origin: 0 0;
+  transform: rotate(-90deg);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
