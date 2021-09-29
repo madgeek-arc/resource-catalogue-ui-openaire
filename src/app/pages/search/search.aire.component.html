@@ -143,33 +143,15 @@
                     <!--<span>Showing {{searchResultsSnippets.from + 1}} - {{searchResultsSnippets.to}} of {{searchResultsSnippets.total}} results</span>-->
                   </p>
 
-                  <div style="width: 300px;">
-                    <ul class="uk-pagination">
-
-                      <li class="uk-disabled" *ngIf="isPreviousPageDisabled">
-                        <a class="uk-disabled" href="#">
-                          <span class="uk-margin-small-right" uk-pagination-previous></span> Previous
-                        </a>
-                      </li>
-                      <li *ngIf="!isPreviousPageDisabled">
-                        <a (click)="this.goToPreviousPage()">
-                          <span class="uk-margin-small-right" uk-pagination-previous></span> Previous
-                        </a>
-                      </li>
-
-                      <li class="uk-margin-auto-left uk-disabled" *ngIf="isNextPageDisabled">
-                        <a class="uk-disabled" href="#">Next
-                          <span class="uk-margin-small-left" uk-pagination-next></span>
-                        </a>
-                      </li>
-                      <li class="uk-margin-auto-left" *ngIf="!isNextPageDisabled">
-                        <a (click)="this.goToNextPage()">Next
-                          <span class="uk-margin-small-left" uk-pagination-next></span>
-                        </a>
-                      </li>
-                    </ul>
-                    <!--<div class="resultsPageLabel">page {{currentPage}} of {{totalPages}}</div>-->
-                  </div>
+                  <ul class="uk-pagination">
+                    <li *ngIf="currentPage>2 && pageTotal>5"><a (click)="goToPage(1)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a></li>
+                    <li *ngIf="currentPage!==1"><a (click)="previousPage()"><span uk-pagination-previous></span></a></li>
+                    <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active': ''">
+                      <a (click)="goToPage(i)">{{i}}</a>
+                    </li>
+                    <li *ngIf="currentPage!==pageTotal"><a (click)="nextPage()"><span uk-pagination-next></span></a></li>
+                    <li *ngIf="currentPage<pageTotal-1 && pageTotal>5"><a (click)="goToPage(pageTotal)"><span uk-pagination-next></span><span uk-pagination-next></span></a></li>
+                  </ul>
 
                 </div>
               </div>
@@ -339,33 +321,15 @@
                 <i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>
             </div>
 
-            <div class="uk-width-1-1 uk-row-first">
-              <ul class="uk-pagination">
-
-                <li class="uk-disabled" *ngIf="isPreviousPageDisabled">
-                  <a class="uk-disabled" href="#">
-                    <span class="uk-margin-small-right" uk-pagination-previous></span> Previous
-                  </a>
-                </li>
-                <li *ngIf="!isPreviousPageDisabled">
-                  <a (click)="this.goToPreviousPage()">
-                    <span class="uk-margin-small-right" uk-pagination-previous></span> Previous
-                  </a>
-                </li>
-
-                <li class="uk-margin-auto-left uk-disabled" *ngIf="isNextPageDisabled">
-                  <a class="uk-disabled" href="#">Next
-                    <span class="uk-margin-small-left" uk-pagination-next></span>
-                  </a>
-                </li>
-                <li class="uk-margin-auto-left" *ngIf="!isNextPageDisabled">
-                  <a (click)="this.goToNextPage()">Next
-                    <span class="uk-margin-small-left" uk-pagination-next></span>
-                  </a>
-                </li>
-              </ul>
-              <div class="resultsPageLabel">page {{currentPage}} of {{totalPages}}</div>
-            </div>
+            <ul class="uk-pagination uk-flex-right uk-margin">
+              <li *ngIf="currentPage>2 && pageTotal>5"><a (click)="goToPage(1)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a></li>
+              <li *ngIf="currentPage!==1"><a (click)="previousPage()"><span uk-pagination-previous></span></a></li>
+              <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active': ''">
+                <a (click)="goToPage(i)">{{i}}</a>
+              </li>
+              <li *ngIf="currentPage!==pageTotal"><a (click)="nextPage()"><span uk-pagination-next></span></a></li>
+              <li *ngIf="currentPage<pageTotal-1 && pageTotal>5"><a (click)="goToPage(pageTotal)"><span uk-pagination-next></span><span uk-pagination-next></span></a></li>
+            </ul>
 
           </div>
 

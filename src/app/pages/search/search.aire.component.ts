@@ -17,6 +17,13 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
   searchResultsSnippets: Paging<Snippet>;
   private sortFacets = new PremiumSortFacetsPipe();
 
+  //Paging
+  total: number;
+  currentPage = 1;
+  pageTotal: number;
+  pages: number[] = [];
+  offset = 2;
+
   ngOnInit() {
     // super.ngOnInit();
     this.listViewActive = true;
@@ -41,6 +48,7 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
         },
         error => {},
         () => {
+          this.paginationInit();
           this.loading = false;
         }
       );
@@ -108,4 +116,57 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
       this.isNextPageDisabled = true;
     }
   }
+
+  paginationInit() {
+    let addToEndCounter = 0;
+    let addToStartCounter = 0;
+    this.pages = [];
+    this.currentPage = (this.searchResultsSnippets.from / this.pageSize) + 1;
+    this.pageTotal = Math.ceil(this.searchResultsSnippets.total / this.pageSize);
+    for ( let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
+      if ( i < 1 ) { addToEndCounter++; }
+      if ( i > this.pageTotal ) { addToStartCounter++; }
+      if ((i >= 1) && (i <= this.pageTotal)) {
+        this.pages.push(i);
+      }
+    }
+    for ( let i = 0; i < addToEndCounter; ++i ) {
+      if (this.pages.length < this.pageTotal) {
+        this.pages.push(this.pages.length + 1);
+      }
+    }
+    for ( let i = 0; i < addToStartCounter; ++i ) {
+      if (this.pages[0] > 1) {
+        this.pages.unshift(this.pages[0] - 1 );
+      }
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    let from: number = (this.currentPage - 1) * this.pageSize
+    this.updatePagingURLParameters(from);
+    return this.navigateUsingParameters();
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      let from: number = this.searchResultsSnippets.from;
+      from -= this.pageSize;
+      this.updatePagingURLParameters(from);
+      return this.navigateUsingParameters();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.pageTotal) {
+      this.currentPage++;
+      let from: number = this.searchResultsSnippets.from;
+      from += this.pageSize;
+      this.updatePagingURLParameters(from);
+      return this.navigateUsingParameters();
+    }
+  }
+
 }
