@@ -355,6 +355,9 @@ export class ServiceProviderFormComponent implements OnInit {
           if (this.edit) {
             this.router.navigate(['/provider/my']);
           } else {
+            if (environment.projectName === 'OpenAIRE Catalogue')
+              this.authService.refreshLogin('/');
+            else
             this.authService.refreshLogin('/provider/my');
           }
         }
