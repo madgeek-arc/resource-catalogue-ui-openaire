@@ -72,7 +72,7 @@
             </dd>
           </div>
 
-          <div *ngif="getServiceField('trl').value !== ''" class="uk-margin-medium-top">
+          <div *ngIf="getServiceField('trl').value !== ''" class="uk-margin-medium-top">
             <dt>TRL</dt>
             <dd>{{getVocabularyName('trl', getServiceField('trl').value)}}</dd>
           </div>

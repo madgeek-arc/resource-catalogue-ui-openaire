@@ -69,14 +69,7 @@ export class DynamicFormComponent implements OnInit {
 
 
   onSubmit(tempSave: boolean, pendingService?: boolean) {
-    // console.log('is service valid: ' + this.form.get('service').valid);
-    // console.log('is extras valid: ' + this.form.get('extras').valid);
-    // console.log(this.form.get('extras.paymentCategories'));
-    // for (let extrasKey in this.form.get('extras').value) {
-    //   console.log(this.form.get('extras.'+extrasKey));
-    //   console.log(extrasKey + ': '+ this.form.get('extras.'+extrasKey).valid);
-    // }
-    if (this.form.valid) {
+    if (this.form.get('service').valid) {
       window.scrollTo(0, 0);
       console.log(this.form.getRawValue());
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
@@ -91,17 +84,17 @@ export class DynamicFormComponent implements OnInit {
           this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error.error.error);
           console.log(error);
         },
-        () => {
-
-        }
+        () => {}
       );
     } else {
+      this.errorMessage = 'Please check if all the required fields have a value.';
+      window.scrollTo(0, 0);
       console.log('is service valid: ' + this.form.get('service').valid);
       console.log('is extras valid: ' + this.form.get('extras').valid);
-      for (let extrasKey in this.form.get('extras').value) {
-        console.log(this.form.get('extras.'+extrasKey));
-        console.log(extrasKey + ': '+ this.form.get('extras.'+extrasKey).valid);
-      }
+      // for (let extrasKey in this.form.get('extras').value) {
+      //   console.log(this.form.get('extras.'+extrasKey));
+      //   console.log(extrasKey + ': '+ this.form.get('extras.'+extrasKey).valid);
+      // }
     }
   }
 
