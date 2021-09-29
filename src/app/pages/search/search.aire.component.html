@@ -110,7 +110,7 @@
               <div>
                 <div class="">
                   <label class="" for="pageSize">Results per page </label>
-                  <div class="uk-inline">
+                  <div class="uk-inline uk-margin-left">
                     <select class="uk-input uk-select" id="pageSize" [ngModel]="pageSize" (change)="onPageSizeChange($event)" style="height: 40px !important;">
                       <option value="10" selected>10</option>
                       <option value="25">25</option>
@@ -138,7 +138,7 @@
 
                 <div class="uk-flex uk-flex-between uk-flex-middle">
 
-                  <p class="big-text">
+                  <p class="big-text uk-margin-remove">
                     <span class="uk-text-bold">{{searchResultsSnippets.total}}</span> Services, Page <span class="uk-text-bold">{{currentPage}}</span> of {{totalPages}}
                     <!--<span>Showing {{searchResultsSnippets.from + 1}} - {{searchResultsSnippets.to}} of {{searchResultsSnippets.total}} results</span>-->
                   </p>
@@ -168,15 +168,16 @@
                 <a [routerLink]="['/service/' + resourceInfo.id]" class="serviceDetails">
                   <div class="uk-card uk-card-default uk-card-hover uk-margin-bottom">
 
-                    <aside>
-                      <div class="portfolioSection">Publish, Expand</div>
+                    <div class="service-details-card-content">
+
+                      <div *ngIf="resourceInfo.portfolios" class="portfolioSection">Publish</div>
 
                       <div class="">
                         <!--<div class="uk-grid" uk-grid="">-->
                         <div>
 
 
-                          <div class="uk-width-4-5@m uk-card-body uk-margin-medium-left">
+                          <div class="uk-width-4-5@m uk-card-body">
                             <div>
                               <h5
                                 class="uk-margin-remove uk-text-left@m uk-text-center uk-scrollspy-inview uk-animation-fade uk-inline"
@@ -192,10 +193,17 @@
                               {{resourceInfo.description}}
                             </div>
 
+                            <div *ngIf="resourceInfo.user" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade" uk-scrollspy-class="" style="">
+                              <span class="field-label">Users: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.user}}</span>
+                            </div>
+
+                            <div *ngIf="resourceInfo.paymentTitle" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade" uk-scrollspy-class="" style="">
+                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.paymentTitle}}</span>
+                            </div>
 
                           </div>
 
-                          <div class="uk-position-bottom-right uk-overlay uk-overlay-default">
+                          <div class="uk-position-bottom-right uk-overlay uk-overlay-default service-image">
                             Bottom Right
                           </div>
 
@@ -220,15 +228,7 @@
 
 
 
-                    </aside>
-
-
-
-
-
-
-
-
+                    </div>
 
 
                   </div>
