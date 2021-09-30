@@ -71,7 +71,8 @@ export class DynamicFormComponent implements OnInit {
   onSubmit(tempSave: boolean, pendingService?: boolean) {
     if (this.form.get('service').valid) {
       window.scrollTo(0, 0);
-      console.log(this.form.getRawValue());
+      // console.log(this.form.getRawValue());
+      this.ready = false;
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
         res => {
           if (this.projectName === 'OpenAIRE Catalogue') {
@@ -82,9 +83,12 @@ export class DynamicFormComponent implements OnInit {
         },
         error => {
           this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error.error.error);
+          this.ready = true;
           console.log(error);
         },
-        () => {}
+        () => {
+          this.ready = true;
+        }
       );
     } else {
       this.errorMessage = 'Please check if all the required fields have a value.';
