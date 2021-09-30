@@ -117,7 +117,7 @@
               <div class="slider-description uk-margin-top">{{benefit.benefitsText}}</div>
             </div>
             <div class="uk-width-1-2">
-            <img src="{{benefit.benefitsImage}}" width="400">
+              <img src="{{benefit.benefitsImage !== '' ? benefit.benefitsImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_15_253Z.png'}}" width="400">
             </div>
 
           </div>
@@ -135,7 +135,6 @@
   </div>
 </div>
 
-
 <!--FEATURES-->
 <div *ngIf="form && getExtrasArray('features')?.controls[0]?.get('featuresTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
   <div class="uk-container uk-container-large">
@@ -148,7 +147,7 @@
         <div class="uk-card uk-card-default">
           <div class="uk-card-body uk-text-center">
 
-            <img src="{{feature.featuresImage}}" width="80">
+            <img src="{{feature.featuresImage !== '' ? feature.featuresImage : '../../../../../assets/images/mocks/image_2021_09_30T11_52_55_688Z.png'}}" width="80">
             <h6 class="uk-margin-top">{{feature.featuresTitle}}</h6>
             <p class="regular-text uk-margin-medium-top">{{feature.featuresText}}</p>
 
@@ -176,7 +175,9 @@
 
             <div class="slider-image uk-flex uk-flex-right">
               <div class="uk-card uk-card-default">
-                <div style="background-color: #F0F9FF; width: 294px; height:325px" class=""></div>
+<!--                <div style="background-color: #F0F9FF; width: 294px; height:325px" class="">-->
+                  <img src="{{useCase.useCaseImage !== '' ? useCase.useCaseImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_37_207Z.png'}}" width="294">
+<!--                </div>-->
               </div>
             </div>
 
