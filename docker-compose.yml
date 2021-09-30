@@ -16,6 +16,9 @@ services:
     networks:
     - eic-net
 
+    volumes:
+      - <my/images/dir>:/images
+
     deploy:
       restart_policy:
         condition: on-failure
