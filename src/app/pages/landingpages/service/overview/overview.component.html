@@ -1,17 +1,16 @@
 
-<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-bottom">
+<div *ngIf="form" class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-bottom">
 
   <div class="uk-section">
     <div class="uk-container uk-margin-medium-left uk-margin-large-top">
-      <!--<div class="h1-subHeader">Subheader with small heading</div>-->
-      <img src="https://monitor.openaire.eu/dashboard/logo-large-monitor.3c00128de8ab7dc5817c.png" width="310px">
-      <h1>Simplify research tracking & monitoring.</h1>
-      <p class="regular-text uk-margin-medium-top">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+      <p *ngIf="getServiceField('name').value !== ''" class="big-text uk-text-primary">Why {{getServiceField('name').value}}</p>
+      <h1 *ngIf="getServiceField('tagline').value !== ''">{{getServiceField('tagline').value}} </h1>
+      <p *ngIf="getExtrasField('pitch').value !== ''" class="regular-text uk-margin-medium-top">{{getExtrasField('pitch').value}}</p>
     </div>
   </div>
 
   <div class="uk-flex uk-flex-right">
-    <img src="../../../../../assets/images/mocks/_0008_amnesia.png" style="height: 540px">
+    <img src="{{getExtrasField('longImage').value}}" style="height: 540px">
   </div>
 
 </div>
