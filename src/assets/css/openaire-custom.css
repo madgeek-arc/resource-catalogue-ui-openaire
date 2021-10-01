@@ -185,7 +185,7 @@ dd {
 }
 
 .uk-text-primary {
-  color: var(--catalogue-light-purple);
+  color: var(--catalogue-light-purple) !important;
 }
 
 .line-clamp {
@@ -658,6 +658,12 @@ a.serviceDetails {
 
 .serviceDetails .service-image {
   border-radius: 6px;
+}
+
+.serviceDetails .serviceDescription,
+.serviceDetails .service-users,
+.serviceDetails .service-pricing {
+  font-size: 16px;
 }
 
 

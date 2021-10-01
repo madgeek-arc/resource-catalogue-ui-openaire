@@ -192,11 +192,11 @@
                               {{resourceInfo.description}}
                             </div>
 
-                            <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0] === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade" uk-scrollspy-class="" style="">
+                            <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0] === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label">Users: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.user}}</span>
                             </div>
                             <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade" uk-scrollspy-class="" style="">
+                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
                               <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.paymentTitle}}</span>
                             </div>
 

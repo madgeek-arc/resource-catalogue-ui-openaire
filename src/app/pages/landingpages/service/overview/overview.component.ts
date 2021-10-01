@@ -7,7 +7,7 @@ import * as uikit from 'uikit';
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: 'overview.component.html',
-  styleUrls: ['../../landing-page.component.css']
+  // styleUrls: ['../../landing-page.component.css']
 })
 export class OverviewComponent implements OnInit {
 

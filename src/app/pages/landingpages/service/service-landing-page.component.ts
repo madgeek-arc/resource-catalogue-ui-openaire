@@ -19,7 +19,7 @@ import {PremiumSortPipe} from 'src/lib/shared/pipes/premium-sort.pipe';
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: './service-static-landing-page.component.html',
-  styleUrls: ['../landing-page.component.css']
+  // styleUrls: ['../landing-page.component.css']
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 

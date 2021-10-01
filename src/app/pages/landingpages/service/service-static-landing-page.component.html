@@ -8,8 +8,8 @@
       <div class="uk-container uk-container-large">
         <nav class="uk-navbar" uk-navbar="{&quot;align&quot;:&quot;left&quot;}">
 
-          <div class="uk-navbar-left">
-            <img src="https://monitor.openaire.eu/dashboard/logo-large-monitor.3c00128de8ab7dc5817c.png" width="210px">
+          <div *ngIf="!loading" class="uk-navbar-left">
+            <img src="{{form.get('service.logo').value}}" width="210px">
           </div>
 
           <div *ngIf="!loading" class="uk-navbar-right">

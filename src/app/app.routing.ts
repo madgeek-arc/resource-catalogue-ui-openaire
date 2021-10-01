@@ -144,7 +144,11 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(appRoutes,
+      {
+        relativeLinkResolution: 'legacy',
+        scrollPositionRestoration: 'enabled'
+      })
   ],
   declarations: [],
   exports: [RouterModule]

@@ -4,7 +4,7 @@ import {FormArray, FormGroup} from '@angular/forms';
 @Component({
   selector: 'app-service-landing-page-pricing',
   templateUrl: 'pricing.component.html',
-  styleUrls: ['../../landing-page.component.css']
+  // styleUrls: ['../../landing-page.component.css']
 })
 export class PricingComponent implements OnInit {
 
