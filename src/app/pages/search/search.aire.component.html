@@ -193,7 +193,8 @@
                             </div>
 
                             <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0] === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
-                              <span class="field-label">Users: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.user}}</span>
+                              <span class="field-label">Users: </span>
+                              <span *ngFor="let user of resourceInfo.user" class="field-value uk-margin-small-left">{{getCompositeVocName('Users', user)}}</span>
                             </div>
                             <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">

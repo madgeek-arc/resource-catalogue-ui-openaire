@@ -4,6 +4,8 @@ import {Provider, RichService, Snippet} from 'src/lib/domain/eic-model';
 import {URLParameter} from '../../../lib/domain/url-parameter';
 import {Paging} from '../../../lib/domain/paging';
 import {PremiumSortFacetsPipe} from '../../../lib/shared/pipes/premium-sort.pipe';
+import {FormModel, UiVocabulary} from '../../../lib/domain/dynamic-form-model';
+import {zip} from 'rxjs/internal/observable/zip';
 
 
 @Component({
@@ -16,6 +18,8 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
   myProviders:  Provider[] = [];
   searchResultsSnippets: Paging<Snippet>;
   private sortFacets = new PremiumSortFacetsPipe();
+  model: FormModel[] = null;
+  vocabularies: Map<string, UiVocabulary[]>;
 
   //Paging
   total: number;
@@ -28,6 +32,13 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
     // super.ngOnInit();
     this.listViewActive = true;
     this.sub = this.route.params.subscribe(params => {
+      zip(
+        this.formService.getFormModel(),
+        this.formService.getUiVocabularies()
+      ).subscribe(suc => {
+        this.model = <FormModel[]>suc[0];
+        this.vocabularies = <Map<string, UiVocabulary[]>>suc[1];
+      });
       this.urlParameters.splice(0, this.urlParameters.length);
       this.foundResults = true;
       for (const obj in params) {
@@ -138,6 +149,14 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
     for ( let i = 0; i < addToStartCounter; ++i ) {
       if (this.pages[0] > 1) {
         this.pages.unshift(this.pages[0] - 1 );
+      }
+    }
+  }
+
+  getCompositeVocName(field: string, id: string): string {
+    for (let k = 0; k < this.vocabularies[field].length; k++) {
+      if (this.vocabularies[field][k].id === id) {
+        return (this.vocabularies[field][k].name);
       }
     }
   }
