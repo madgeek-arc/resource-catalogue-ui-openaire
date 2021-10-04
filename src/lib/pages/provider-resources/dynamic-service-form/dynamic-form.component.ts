@@ -34,6 +34,7 @@ export class DynamicFormComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   ready = false;
+  showLoader = false;
   hasChanges = false;
   pendingService = false;
   serviceName = '';
@@ -72,7 +73,7 @@ export class DynamicFormComponent implements OnInit {
     if (this.form.get('service').valid) {
       window.scrollTo(0, 0);
       // console.log(this.form.getRawValue());
-      this.ready = false;
+      this.showLoader = true;
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
         res => {
           if (this.projectName === 'OpenAIRE Catalogue') {
@@ -83,11 +84,11 @@ export class DynamicFormComponent implements OnInit {
         },
         error => {
           this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error.error.error);
-          this.ready = true;
+          this.showLoader = false;
           console.log(error);
         },
         () => {
-          this.ready = true;
+          this.showLoader = false;
         }
       );
     } else {
