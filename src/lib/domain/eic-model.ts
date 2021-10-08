@@ -2,6 +2,8 @@
 /* eslint-disable */
 // Generated using typescript-generator version 2.16.538 on 2020-06-10 11:50:49.
 
+import {UiVocabulary} from './dynamic-form-model';
+
 export class Bundle<T> implements Identifiable {
   id: string;
   metadata: Metadata;
@@ -183,11 +185,11 @@ export class Snippet {
   description: string;
   tagline: string;
   logo: URL;
-  main: string;
+  portfolios: UiVocabulary[];
   id: string;
   pitch: string;
   label: string;
-  user: string;
+  user: UiVocabulary[];
 }
 
 export class ServiceProviderDomain {
