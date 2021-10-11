@@ -129,7 +129,12 @@
 
                     <div class="service-details-card-content">
 
-                      <div *ngIf="resourceInfo.portfolios" class="portfolioSection">Publish</div>
+                      <div *ngIf="resourceInfo.portfolios?.length>0" class="portfolioSection">
+                        <ng-container *ngFor="let portfolio of resourceInfo.portfolios; let i = index">
+                          <ng-container *ngIf="i!=0">, </ng-container>
+                          {{portfolio.name}}
+                        </ng-container>
+                      </div>
 
                       <div class="">
                         <!--<div class="uk-grid" uk-grid="">-->
@@ -147,7 +152,7 @@
                             </p>
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
                                  uk-scrollspy-class="" style="">
-                              {{resourceInfo.description}}
+                              {{resourceInfo.pitch}}
                             </div>
 
                             <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
@@ -162,7 +167,7 @@
                           </div>
 
                           <div class="uk-width-1-3@m uk-padding-remove uk-position-bottom-right uk-overlay uk-overlay-default service-image">
-                            <img src="{{resourceInfo.image}}" >
+                            <img src="{{resourceInfo.longImage}}" >
                           </div>
 
                         </div>
