@@ -16,6 +16,7 @@ import {PremiumSortFacetValuesPipe} from '../../shared/pipes/premium-sort.pipe';
 import {OrderDownlineTreeviewEventParser, TreeviewConfig, TreeviewEventParser, TreeviewItem} from 'ngx-treeview';
 import {EmailService} from '../../services/email.service';
 import {environment} from '../../../environments/environment';
+import {FormControlService} from '../provider-resources/dynamic-service-form/form-control.service';
 
 declare var UIkit: any;
 
@@ -69,7 +70,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(public fb: FormBuilder, public router: NavigationService, public route: ActivatedRoute,
               public userService: UserService, public resourceService: ResourceService,
               public authenticationService: AuthenticationService, public comparisonService: ComparisonService,
-              public navigationService: NavigationService, public emailService: EmailService) {
+              public navigationService: NavigationService, public emailService: EmailService,
+              protected formService: FormControlService) {
     this.searchForm = fb.group({'query': [''], 'searchFields': ['']});
   }
 
