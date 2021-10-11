@@ -30,5 +30,14 @@
   </div>
 </div>
 
+<div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService" class="uk-float-right"
+     style="z-index: 100; top: 300px; position: fixed; right: 45px;">
+  <a [routerLink]="['/edit/', id]" style="padding: 30px;"
+     class="uk-icon-button uk-button-secondary">
+    <i class="fa fa-pencil-square-o"></i>
+    <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
+    <!--</span>-->
+  </a>
+</div>
 
 <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>

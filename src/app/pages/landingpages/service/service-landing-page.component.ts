@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {ProviderBundle, RichService, Type, Vocabulary} from 'src/lib/domain/eic-model';
+import {Provider, ProviderBundle, RichService, Type, Vocabulary} from 'src/lib/domain/eic-model';
 import {AuthenticationService} from 'src/lib/services/authentication.service';
 import {NavigationService} from 'src/lib/services/navigation.service';
 import {ResourceService} from 'src/lib/services/resource.service';
@@ -30,12 +30,14 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   vocabularies: Map<string, UiVocabulary[]>;
   model: FormModel[] = null;
   form: FormGroup = this.fb.group({service: this.fb.group({}), extras: this.fb.group({})}, Validators.required);
+  id: string;
   loading = true;
   premiumSort = new PremiumSortPipe();
 
   private sub: Subscription;
-  serviceMapOptions: any = null;
   path: string;
+  myProviders:  Provider[] = [];
+  canAddOrEditService = false;
 
   showForm = false;
   places: Vocabulary[] = null;
@@ -80,6 +82,12 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
           });
+        this.resourceService.getMyServiceProviders().subscribe(
+          res => this.myProviders = res,
+          er => console.log(er),
+          () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
+        );
+        this.id = params['id'];
       });
     } else {
       this.sub = this.route.params.subscribe(params => {
@@ -102,6 +110,8 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           () => {
             this.loading = false;
           });
+
+        this.id = params['id'];
       });
     }
   }
