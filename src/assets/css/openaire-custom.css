@@ -26,6 +26,10 @@
   --openaire-light-blue: #3086ED;
   --default-element-bg: #DEDEDE;
 
+
+  --grey-900: #2C2C2C;
+
+
   --primary-color: #1D193C;
   /*--primary-color: #AD20E7;*/
   --link-color: #2D72D6;
@@ -41,6 +45,7 @@ body {
   font-family: var(--main-font-family), sans-serif !important;
   color: var(--black) !important;
   background-color: var(--light-grey) !important;
+  font-size: 16px;
   opacity: 1;
 }
 
@@ -83,34 +88,34 @@ body {
  ========================================================================== */
 
 h1, h2, h3, h4, h5, h6 {
-  color: var(--black);
+  color: var(--grey-900);
   /*text-align: left;*/
   letter-spacing: 0px;
   opacity: 1;
 }
 
 h1 {
-  font: normal normal bold 64px/80px var(--main-font-family) !important;
+  font: normal normal 600 66px/83px var(--main-font-family) !important;
 }
 
 h2 {
-  font: normal normal 600 54px/64px var(--main-font-family) !important;
+  font: normal normal 600 52px/65px var(--main-font-family) !important;
 }
 
 h3 {
-  font: normal normal 600 45px/52px var(--main-font-family) !important;
+  font: normal normal 600 41px/51px var(--main-font-family) !important;
 }
 
 h4 {
-  font: normal normal 600 36px/45px var(--main-font-family) !important;
+  font: normal normal 600 32px/40px var(--main-font-family) !important;
 }
 
 h5 {
-  font: normal normal bold 27px/36px var(--main-font-family) !important;
+  font: normal normal 600 26px/33px var(--main-font-family) !important;
 }
 
 h6 {
-  font: normal normal 600 22px/29px var(--main-font-family) !important;
+  font: normal normal 600 20px/27px var(--main-font-family) !important;
 }
 
 .h1-subHeader {

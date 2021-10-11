@@ -232,7 +232,7 @@
 
       </div>
 
-      <div *ngIf="getServiceArray('changeLog')?.controls[0].value !== ''" class="uk-width-3-5">
+      <div class="uk-width-3-5">
         <div class="uk-card uk-card-default uk-card-large uk-card-body uk-margin-medium-left">
 
           <div class="uk-text-right">
@@ -241,7 +241,13 @@
 
           <h5 class="uk-margin-medium-bottom">Change Log</h5>
 
-          <p *ngFor="let log of getServiceArray('changeLog').value">{{log}}</p>
+          <ng-container *ngIf="getServiceArray('changeLog')?.controls[0].value !== ''; else noChangeLog">
+            <p *ngFor="let log of getServiceArray('changeLog').value">{{log}}</p>
+          </ng-container>
+          <ng-template #noChangeLog>
+            <p>Nothing available</p>
+          </ng-template>
+
 
         </div>
       </div>

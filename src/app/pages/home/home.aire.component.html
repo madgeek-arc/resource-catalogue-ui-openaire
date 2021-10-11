@@ -6,7 +6,7 @@
       <h1>OpenAIRE services catalogue: our portfolio at a glance!</h1>
       <p class="big-text uk-margin-medium-top">Find/discover which services meet your demands and needs,
         learn about specific characteristics, features, benefits, resources, support and costs,
-        get access and achieve the best results possible</p>
+        get access and achieve the best results possible.</p>
     </div>
   </div>
 
@@ -44,7 +44,7 @@
 
     <h1>Users</h1>
 
-    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4" (beforeitemshow)="dragSlide()">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let user of users" class="uk-flex-middle">
@@ -116,7 +116,7 @@
     <div class="uk-section">
       <div class="uk-container uk-margin-xlarge-left uk-margin-large-top">
         <div *ngIf="portfolios[0].extras.tagline" class="h1-subHeader">{{portfolios[0].extras.tagline}}</div>
-        <h1>{{portfolios[0].name}}</h1>
+        <h1>{{portfolios[0].name}} Portfolio</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>
         <a class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[0].id]">Learn more</a>
       </div>
@@ -137,7 +137,7 @@
     <div class="uk-section">
       <div class="uk-container uk-margin-xlarge-right uk-margin-large-top">
         <div *ngIf="portfolios[1].extras.tagline" class="h1-subHeader">{{portfolios[1].extras.tagline}}</div>
-        <h1>{{portfolios[1].name}}</h1>
+        <h1>{{portfolios[1].name}} Portfolio</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[1].description}}</p>
         <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[1].id]">Learn more</button>
       </div>
@@ -150,7 +150,7 @@
     <div class="uk-section">
       <div class="uk-container uk-margin-xlarge-left uk-margin-large-top">
         <div *ngIf="portfolios[2].extras.tagline" class="h1-subHeader">{{portfolios[2].extras.tagline}}</div>
-        <h1>{{portfolios[2].name}}</h1>
+        <h1>{{portfolios[2].name}} Portfolio</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[2].description}}</p>
         <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[2].id]">Learn more</button>
       </div>
@@ -171,7 +171,7 @@
     <div class="uk-section">
       <div class="uk-container uk-margin-xlarge-right uk-margin-large-top">
         <div *ngIf="portfolios[3].extras.tagline" class="h1-subHeader">{{portfolios[3].extras.tagline}}</div>
-        <h1>{{portfolios[3].name}}</h1>
+        <h1>{{portfolios[3].name}} Portfolio</h1>
         <p class="big-text uk-margin-medium-top">{{portfolios[3].description}}</p>
         <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[3].id]">Learn more</button>
       </div>
