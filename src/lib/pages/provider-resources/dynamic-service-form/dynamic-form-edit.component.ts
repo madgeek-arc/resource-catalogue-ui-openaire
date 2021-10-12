@@ -8,7 +8,7 @@ import {Fields, FormModel, HandleBitSet} from '../../../domain/dynamic-form-mode
 import {NavigationService} from '../../../services/navigation.service';
 import {ResourceService} from '../../../services/resource.service';
 import {zip} from 'rxjs/internal/observable/zip';
-import {formatNumber} from '@angular/common';
+import {DataSharingService} from '../../../services/data-sharing.service';
 
 @Component({
   selector: 'app-dynamic-form-edit',
@@ -23,8 +23,9 @@ export class DynamicFormEditComponent extends DynamicFormComponent {
   constructor(public route: ActivatedRoute,
               protected formControlService: FormControlService,
               protected fb: FormBuilder,
-              protected router: NavigationService) {
-    super(formControlService, fb, router);
+              protected router: NavigationService,
+              protected dataSharing: DataSharingService) {
+    super(formControlService, fb, router, dataSharing);
     // super.ngOnInit();
   }
 

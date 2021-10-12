@@ -184,9 +184,7 @@
 
             <div class="slider-image uk-flex uk-flex-right">
               <div class="uk-card uk-card-default">
-<!--                <div style="background-color: #F0F9FF; width: 294px; height:325px" class="">-->
-                  <img src="{{useCase.useCaseImage !== '' ? useCase.useCaseImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_37_207Z.png'}}" width="294">
-<!--                </div>-->
+                <img src="{{useCase.useCaseImage !== '' ? useCase.useCaseImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_37_207Z.png'}}" width="294">
               </div>
             </div>
 
@@ -196,7 +194,11 @@
               <div class="">
                 <div class="slider-header">{{useCase.useCaseTitle}}</div>
                 <div class="slider-description uk-margin-top">{{useCase.useCaseText}}</div>
-<!--                <div class="uk-margin-medium-top"><a class="uk-link uk-text-uppercase">Learn more <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>-->
+                <div *ngIf="useCase.useCaseLink !== ''" class="uk-margin-medium-top">
+                  <a href="{{useCase.useCaseLink}}" target="_blank" class="uk-link uk-text-uppercase">Learn more
+                    <i class="fa fa-long-arrow-right uk-margin-small-left"></i>
+                  </a>
+                </div>
               </div>
             </div>
 

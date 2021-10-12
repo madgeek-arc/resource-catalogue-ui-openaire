@@ -9,6 +9,7 @@ import {ResourceService} from '../../services/resource.service';
 import {URLParameter} from '../../domain/url-parameter';
 import {Subscription} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {DataSharingService} from '../../services/data-sharing.service';
 
 @Component({
   selector: 'app-top-menu',
@@ -30,9 +31,8 @@ export class TopMenuComponent implements OnInit, OnDestroy {
   categoriesOpen = false;
   supportOpen = false;
 
-  constructor(public authenticationService: AuthenticationService, private renderer: Renderer2,
-              public router: Router, public fb: FormBuilder, public navigationService: NavigationService,
-              private route: ActivatedRoute, public resourceService: ResourceService) {
+  constructor(public authenticationService: AuthenticationService, public router: Router, public fb: FormBuilder,
+              public navigationService: NavigationService, public resourceService: ResourceService) {
     this.searchForm = fb.group({'query': ['']});
   }
 

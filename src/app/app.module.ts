@@ -62,6 +62,7 @@ import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-i
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {ServiceLandingPageModule} from './pages/landingpages/service/service-landing-page.module';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
+import {DataSharingService} from '../lib/services/data-sharing.service';
 
 
 declare var require: any;
@@ -161,6 +162,7 @@ declare var require: any;
     ServiceProviderService,
     EmailService,
     FormControlService,
+    DataSharingService,
     DatePipe
   ],
   exports: [

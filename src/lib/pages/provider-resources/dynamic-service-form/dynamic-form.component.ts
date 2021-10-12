@@ -9,7 +9,7 @@ import BitSet from 'bitset/bitset';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 import {zip} from 'rxjs/internal/observable/zip';
 import {NavigationService} from '../../../services/navigation.service';
-import {element} from 'protractor';
+import {DataSharingService} from '../../../services/data-sharing.service';
 
 declare var UIkit: any;
 
@@ -47,7 +47,8 @@ export class DynamicFormComponent implements OnInit {
 
   constructor(protected formControlService: FormControlService,
               protected fb: FormBuilder,
-              protected router: NavigationService) {
+              protected router: NavigationService,
+              protected dataSharing: DataSharingService) {
   }
 
   ngOnInit() {
@@ -81,6 +82,8 @@ export class DynamicFormComponent implements OnInit {
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
         res => {
           if (this.projectName === 'OpenAIRE Catalogue') {
+            this.dataSharing.refreshRequired.next(true);
+            this.dataSharing.print();
             return this.router.service(res['service'].id);  // redirect to service-landing-page
           } else {
             // return this.router.resourceDashboard(this.providerId, res.id);
