@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Provider, ProviderBundle, RichService, Type, Vocabulary} from 'src/lib/domain/eic-model';
+import {Provider, Vocabulary} from 'src/lib/domain/eic-model';
 import {AuthenticationService} from 'src/lib/services/authentication.service';
 import {NavigationService} from 'src/lib/services/navigation.service';
 import {ResourceService} from 'src/lib/services/resource.service';
@@ -55,70 +55,43 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('init');
     this.loading = true;
 
-    // if (this.authenticationService.isLoggedIn()) {
-      this.sub = this.route.params.subscribe(params => {
-        zip(
-          this.formService.getFormModel(),
-          this.formService.getDynamicService(params['id']),
-          this.formService.getUiVocabularies(),
-        ).subscribe(suc => {
-            this.model = <FormModel[]>suc[0];
-            this.vocabularies = <Map<string, UiVocabulary[]>>suc[2];
-            this.initializations();
-            ResourceService.removeNulls(suc[1]['service']);
-            ResourceService.removeNulls(suc[1]['extras']);
-            this.prepareForm(suc[1]);
-            this.form.patchValue(suc[1]);
-          },
-          err => {
-            if (err.status === 404) {
-              this.router.go('/404');
-            }
-            this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
-          },
-          () => {
-            this.loading = false;
-            if (this.authenticationService.isLoggedIn()) {
-              this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
-            }
-          });
-        if (this.authenticationService.isLoggedIn()) {
-          this.resourceService.getMyServiceProviders().subscribe(
-            res => this.myProviders = res,
-            er => console.log(er),
-            () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
-          );
-        }
-        this.id = params['id'];
-      });
-    // } else {
-    //   this.sub = this.route.params.subscribe(params => {
-    //     zip(
-    //       this.formService.getFormModel(),
-    //       this.formService.getDynamicService(params['id']),
-    //       this.formService.getUiVocabularies(),
-    //     ).subscribe(suc => {
-    //         this.model = <FormModel[]>suc[0];
-    //         this.vocabularies = suc[2];
-    //         this.initializations();
-    //         ResourceService.removeNulls(suc[1]['service']);
-    //         ResourceService.removeNulls(suc[1]['extras']);
-    //         this.prepareForm(suc[1]);
-    //         this.form.patchValue(suc[1]);
-    //       },
-    //       err => {
-    //         this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
-    //       },
-    //       () => {
-    //         this.loading = false;
-    //       });
-    //
-    //     this.id = params['id'];
-    //   });
-    // }
+    this.sub = this.route.params.subscribe(params => {
+      zip(
+        this.formService.getFormModel(),
+        this.formService.getDynamicService(params['id']),
+        this.formService.getUiVocabularies(),
+      ).subscribe(suc => {
+          this.model = <FormModel[]>suc[0];
+          this.vocabularies = <Map<string, UiVocabulary[]>>suc[2];
+          this.initializations();
+          ResourceService.removeNulls(suc[1]['service']);
+          ResourceService.removeNulls(suc[1]['extras']);
+          this.prepareForm(suc[1]);
+          this.form.patchValue(suc[1]);
+        },
+        err => {
+          if (err.status === 404) {
+            this.router.go('/404');
+          }
+          this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
+        },
+        () => {
+          this.loading = false;
+          if (this.authenticationService.isLoggedIn()) {
+            this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
+          }
+        });
+      if (this.authenticationService.isLoggedIn()) {
+        this.resourceService.getMyServiceProviders().subscribe(
+          res => this.myProviders = res,
+          er => console.log(er),
+          () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
+        );
+      }
+      this.id = params['id'];
+    });
   }
 
   ngOnDestroy(): void {
@@ -130,8 +103,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   onOutletLoaded(component) {
-    console.log(component);
-    console.log(this.loading);
     if (this.loading){
       this.timeOut(300).then(() => this.onOutletLoaded(component));
       return;

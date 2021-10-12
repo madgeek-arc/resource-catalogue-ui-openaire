@@ -109,7 +109,7 @@
                           <div class="" *ngFor="let portfolio of services | keyvalue">
                             <h6>{{portfolio.key}}</h6>
                             <div *ngFor="let service of portfolio.value | keyvalue">
-                              <a [routerLink]="['/service', service.value['service']['id']]">{{service.value['service']['name']}}</a>
+                              <a (click)="redirectTo('/service/' + service.value['service']['id'])">{{service.value['service']['name']}}</a>
                             </div>
                           </div>
                         </div>

@@ -35,7 +35,8 @@ const serviceLandingPageRoutes: Routes = [
         path: 'miscellaneous',
         component: MiscellaneousComponent,
       }
-    ]
+    ],
+    runGuardsAndResolvers: 'always'
   }
 ]
 

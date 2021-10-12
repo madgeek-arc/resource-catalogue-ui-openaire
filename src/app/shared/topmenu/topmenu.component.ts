@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TopMenuComponent} from '../../../lib/shared/topmenu/topmenu.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-top-menu-aire',
@@ -27,5 +28,10 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
       error => {console.log(error)},
       () => {}
     );
+  }
+
+  redirectTo(url: string){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+      this.router.navigate([url]));
   }
 }
