@@ -55,9 +55,10 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log('init');
     this.loading = true;
 
-    if (this.authenticationService.isLoggedIn()) {
+    // if (this.authenticationService.isLoggedIn()) {
       this.sub = this.route.params.subscribe(params => {
         zip(
           this.formService.getFormModel(),
@@ -80,40 +81,44 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           },
           () => {
             this.loading = false;
-            this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
+            if (this.authenticationService.isLoggedIn()) {
+              this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
+            }
           });
-        this.resourceService.getMyServiceProviders().subscribe(
-          res => this.myProviders = res,
-          er => console.log(er),
-          () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
-        );
+        if (this.authenticationService.isLoggedIn()) {
+          this.resourceService.getMyServiceProviders().subscribe(
+            res => this.myProviders = res,
+            er => console.log(er),
+            () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
+          );
+        }
         this.id = params['id'];
       });
-    } else {
-      this.sub = this.route.params.subscribe(params => {
-        zip(
-          this.formService.getFormModel(),
-          this.formService.getDynamicService(params['id']),
-          this.formService.getUiVocabularies(),
-        ).subscribe(suc => {
-            this.model = <FormModel[]>suc[0];
-            this.vocabularies = suc[2];
-            this.initializations();
-            ResourceService.removeNulls(suc[1]['service']);
-            ResourceService.removeNulls(suc[1]['extras']);
-            this.prepareForm(suc[1]);
-            this.form.patchValue(suc[1]);
-          },
-          err => {
-            this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
-          },
-          () => {
-            this.loading = false;
-          });
-
-        this.id = params['id'];
-      });
-    }
+    // } else {
+    //   this.sub = this.route.params.subscribe(params => {
+    //     zip(
+    //       this.formService.getFormModel(),
+    //       this.formService.getDynamicService(params['id']),
+    //       this.formService.getUiVocabularies(),
+    //     ).subscribe(suc => {
+    //         this.model = <FormModel[]>suc[0];
+    //         this.vocabularies = suc[2];
+    //         this.initializations();
+    //         ResourceService.removeNulls(suc[1]['service']);
+    //         ResourceService.removeNulls(suc[1]['extras']);
+    //         this.prepareForm(suc[1]);
+    //         this.form.patchValue(suc[1]);
+    //       },
+    //       err => {
+    //         this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
+    //       },
+    //       () => {
+    //         this.loading = false;
+    //       });
+    //
+    //     this.id = params['id'];
+    //   });
+    // }
   }
 
   ngOnDestroy(): void {
@@ -125,9 +130,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   onOutletLoaded(component) {
-    // console.log(component);
+    console.log(component);
+    console.log(this.loading);
     if (this.loading){
-      // console.log(this.loading);
       this.timeOut(300).then(() => this.onOutletLoaded(component));
       return;
     } else {

@@ -180,6 +180,7 @@ export class RichService {
 
 export class Snippet {
   image: URL;
+  longImage: URL;
   paymentTitle: string;
   name: string;
   description: string;

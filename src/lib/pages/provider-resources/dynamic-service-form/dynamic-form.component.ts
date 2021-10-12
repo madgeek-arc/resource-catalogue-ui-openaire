@@ -74,6 +74,10 @@ export class DynamicFormComponent implements OnInit {
       window.scrollTo(0, 0);
       // console.log(this.form.getRawValue());
       this.showLoader = true;
+      // this.clearEmptyFields(); // Maybe clear form from empty strings
+      // if (!this.editMode) {
+        this.form.get('extras.EOSCReady').setValue(true);
+      // }
       this.formControlService.postDynamicService(this.form.getRawValue(), this.editMode).subscribe(
         res => {
           if (this.projectName === 'OpenAIRE Catalogue') {
@@ -101,6 +105,16 @@ export class DynamicFormComponent implements OnInit {
       //   console.log(extrasKey + ': '+ this.form.get('extras.'+extrasKey).valid);
       // }
     }
+  }
+
+  clearEmptyFields() {
+    Object.keys(this.form.controls).forEach(key => {
+      console.log(key);
+      Object.keys(this.form['controls'][key]['controls']).forEach(key2 => {
+        console.log(key2);
+        console.log(this.form['controls'][key]['controls'][key2].value);
+      })
+    });
   }
 
   initializations() {
