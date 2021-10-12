@@ -35,6 +35,6 @@ export class AppComponent implements OnInit {
 
   isDashboardRoute() {
     // console.log('Is home route? Route is: ' + this.router.url);
-    return (this.router.url.includes('dashboard'));
+    return (this.router.url.includes('/dashboard'));
   }
 }
