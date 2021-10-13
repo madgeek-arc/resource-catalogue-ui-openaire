@@ -1,19 +1,24 @@
+<ng-container *ngIf="form">
 
-<div *ngIf="form" class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-bottom">
+  <div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove" uk-height-viewport="offset-bottom: 30">
+    <div class="uk-grid uk-child-width-expand">
 
-  <div class="uk-section">
-    <div class="uk-container uk-margin-medium-left uk-margin-large-top">
-      <p *ngIf="getServiceField('name').value !== ''" class="big-text uk-text-primary">Why {{getServiceField('name').value}}</p>
-      <h1 *ngIf="getServiceField('tagline').value !== ''">{{getServiceField('tagline').value}} </h1>
-      <p *ngIf="getExtrasField('pitch').value !== ''" class="regular-text uk-margin-medium-top">{{getExtrasField('pitch').value}}</p>
+      <div class="uk-width-1-2 uk-flex-last uk-text-right">
+        <img src="{{getExtrasField('longImage').value}}" style="height: 540px">
+      </div>
+
+      <div class="uk-first-column">
+        <div class="uk-padding-large uk-margin-large-left uk-margin-large-top">
+          <p *ngIf="getServiceField('name').value !== ''" class="big-text uk-text-primary">Why {{getServiceField('name').value}}</p>
+          <h1 *ngIf="getServiceField('tagline').value !== ''">{{getServiceField('tagline').value}} </h1>
+          <p *ngIf="getExtrasField('pitch').value !== ''" class="regular-text uk-margin-medium-top">{{getExtrasField('pitch').value}}</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="uk-flex uk-flex-right">
-    <img src="{{getExtrasField('longImage').value}}" style="height: 540px">
-  </div>
-
-</div>
+</ng-container>
 
 <!--INSIGHT INFO-->
 <div *ngIf="form" class="uk-section uk-section-default">

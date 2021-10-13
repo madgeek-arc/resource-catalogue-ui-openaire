@@ -2,21 +2,28 @@
   <div class="loader-big"></div>
 </div>
 
-<div *ngIf="ready" class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-bottom" uk-height-viewport="offset-bottom: 30">
+<ng-container *ngIf="ready">
 
-  <div class="uk-section">
-    <div class="uk-container uk-margin-medium-left uk-margin-large-top">
-      <div *ngIf="userVoc.extras.tagline" class="h1-subHeader">{{userVoc.extras.tagline}}</div>
-      <h1>{{userVoc.name}}</h1>
-      <p class="big-text uk-margin-medium-top">{{userVoc.description}}</p>
+  <div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove" uk-height-viewport="offset-bottom: 30">
+    <div class="uk-grid uk-child-width-expand">
+
+      <div class="uk-width-1-2 uk-flex-last">
+        <img src="{{userVoc.extras.image}}">
+      </div>
+
+      <div class="uk-first-column">
+        <div class="uk-padding-large uk-margin-large-left uk-margin-large-top">
+          <div *ngIf="userVoc.extras.tagline" class="h1-subHeader">{{userVoc.extras.tagline}}</div>
+          <h1>{{userVoc.name}}</h1>
+          <p class="big-text uk-margin-medium-top">{{userVoc.description}}</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="">
-    <img src="{{userVoc.extras.image}}">
-  </div>
+</ng-container>
 
-</div>
 
 <div *ngIf="ready && services['length'] > 0" class="uk-section uk-section-default uk-margin-xlarge-bottom">
   <div class="uk-container uk-container-large">

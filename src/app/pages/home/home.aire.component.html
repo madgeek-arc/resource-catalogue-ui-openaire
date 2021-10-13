@@ -1,41 +1,22 @@
 <!--HERO SECTION-->
-<div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-bottom">
+<div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove">
+  <div class="uk-grid uk-child-width-expand">
 
-  <div class="uk-section">
-    <div class="uk-container uk-margin-xlarge-left uk-margin-large-top">
-      <h1>OpenAIRE services catalogue: our portfolio at a glance!</h1>
-      <p class="big-text uk-margin-medium-top">Find/discover which services meet your demands and needs,
-        learn about specific characteristics, features, benefits, resources, support and costs,
-        get access and achieve the best results possible.</p>
+    <div class="uk-width-1-2 uk-flex-last">
+      <img src="../../../assets/images/catalogue-hero-home.png">
     </div>
-  </div>
 
-  <div class="">
-    <img src="../../../assets/images/catalogue-hero-home.png">
-  </div>
+    <div class="uk-first-column">
+      <div class="uk-padding-large uk-margin-large-left uk-margin-large-top">
+        <h1>OpenAIRE services catalogue: our portfolio at a glance!</h1>
+        <p class="big-text uk-margin-medium-top">Find/discover which services meet your demands and needs,
+          learn about specific characteristics, features, benefits, resources, support and costs,
+          get access and achieve the best results possible.</p>
+      </div>
+    </div>
 
+  </div>
 </div>
-<!--<div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">-->
-
-  <!--<div class="uk-container uk-container-large">-->
-    <!--<div class="uk-grid uk-child-width-1-2">-->
-
-      <!--<div>-->
-        <!--<h1>Excepteur sint occaecat cupidatat.</h1>-->
-        <!--<p class="big-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>-->
-      <!--</div>-->
-
-      <!--<div>-->
-        <!--<div style="background-color: #F0F9FF; width: auto; height:473px" class="uk-margin-left">-->
-
-        <!--</div>-->
-
-      <!--</div>-->
-
-    <!--</div>-->
-  <!--</div>-->
-
-<!--</div>-->
 
 <!--USER GROUPS SECTION-->
 <div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
@@ -90,94 +71,27 @@
 <!--PORTFOLIO SECTIONS-->
 <ng-container *ngIf="portfolios">
 
-  <!--<div class="uk-section uk-section-primary uk-preserve-color">-->
-      <!--<div class="uk-container uk-container-large">-->
+  <ng-container *ngFor="let portfolio of portfolios; let i = index">
+    <div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove">
+      <div class="uk-grid uk-child-width-expand">
 
-      <!--<div class="uk-grid uk-child-width-1-2">-->
+        <div class="uk-width-1-2" [ngClass]="{'uk-flex-last' : i%2==0}">
+          <img src="{{portfolio.extras.image}}">
+        </div>
 
-        <!--<div>-->
-          <!--<div class="h1-subHeader">Subheader with small heading</div>-->
-          <!--<h1>{{portfolios[0].name}}</h1>-->
-          <!--<p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>-->
-          <!--<button class="uk-button uk-button-primary uk-margin-medium-top">Learn more</button>-->
-        <!--</div>-->
+        <div class="uk-first-column">
+          <div class="uk-padding-large uk-margin-large-top" [ngClass]="{'uk-margin-large-left' : i%2==0}">
+            <div *ngIf="portfolio.extras.tagline" class="h1-subHeader">{{portfolio.extras.tagline}}</div>
+            <h1>{{portfolio.name}} Portfolio</h1>
+            <p class="big-text uk-margin-medium-top">{{portfolio.description}}</p>
+            <a class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>
+          </div>
+        </div>
 
-        <!--<div class="uk-background-cover" style="background-image: url({{portfolios[0].extras.image}});">-->
-          <!--&lt;!&ndash;<img src="{{portfolios[0].extras.image}}">&ndash;&gt;-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-
-  <!--</div>-->
-
-
-  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-    <div class="uk-section">
-      <div class="uk-container uk-margin-xlarge-left uk-margin-large-top">
-        <div *ngIf="portfolios[0].extras.tagline" class="h1-subHeader">{{portfolios[0].extras.tagline}}</div>
-        <h1>{{portfolios[0].name}} Portfolio</h1>
-        <p class="big-text uk-margin-medium-top">{{portfolios[0].description}}</p>
-        <a class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[0].id]">Learn more</a>
       </div>
     </div>
+  </ng-container>
 
-    <div class="">
-      <img src="{{portfolios[0].extras.image}}">
-    </div>
-
-  </div>
-
-  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-    <div class="">
-      <img src="{{portfolios[1].extras.image}}">
-    </div>
-
-    <div class="uk-section">
-      <div class="uk-container uk-margin-xlarge-right uk-margin-large-top">
-        <div *ngIf="portfolios[1].extras.tagline" class="h1-subHeader">{{portfolios[1].extras.tagline}}</div>
-        <h1>{{portfolios[1].name}} Portfolio</h1>
-        <p class="big-text uk-margin-medium-top">{{portfolios[1].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[1].id]">Learn more</button>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-    <div class="uk-section">
-      <div class="uk-container uk-margin-xlarge-left uk-margin-large-top">
-        <div *ngIf="portfolios[2].extras.tagline" class="h1-subHeader">{{portfolios[2].extras.tagline}}</div>
-        <h1>{{portfolios[2].name}} Portfolio</h1>
-        <p class="big-text uk-margin-medium-top">{{portfolios[2].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[2].id]">Learn more</button>
-      </div>
-    </div>
-
-    <div class="">
-      <img src="{{portfolios[2].extras.image}}">
-    </div>
-
-  </div>
-
-  <div class="uk-grid uk-child-width-1-2 uk-section-primary uk-preserve-color uk-margin-xlarge-top uk-margin-xlarge-bottom">
-
-    <div class="">
-      <img src="{{portfolios[3].extras.image}}">
-    </div>
-
-    <div class="uk-section">
-      <div class="uk-container uk-margin-xlarge-right uk-margin-large-top">
-        <div *ngIf="portfolios[3].extras.tagline" class="h1-subHeader">{{portfolios[3].extras.tagline}}</div>
-        <h1>{{portfolios[3].name}} Portfolio</h1>
-        <p class="big-text uk-margin-medium-top">{{portfolios[3].description}}</p>
-        <button class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolios[3].id]">Learn more</button>
-      </div>
-    </div>
-
-  </div>
 </ng-container>
 
 

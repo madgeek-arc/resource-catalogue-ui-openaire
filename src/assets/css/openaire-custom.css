@@ -70,6 +70,10 @@ body {
   background-image: none;
 }
 
+.uk-padding-xlarge {
+  padding: 100px;
+}
+
 
 /* ========================================================================
    Margins
