@@ -19,6 +19,7 @@ import {URLParameter} from '../domain/url-parameter';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {Info} from '../domain/info';
+import {UiVocabulary} from '../domain/dynamic-form-model';
 
 declare var UIkit: any;
 
@@ -134,6 +135,12 @@ export class ResourceService {
     } else {
       return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`);
     }
+  }
+
+  getServicesByIndexedField(field: string, vocabularyType: string) {
+      let params = new HttpParams();
+      params = params.append('vocabularyType', vocabularyType);
+      return this.http.get<Map<string, UiVocabulary[]>>(this.base + `/ui/services/names/by/indexed/${field}`, {params});
   }
 
   getSubcategoriesIdsFromSuperCategory(parent: string, type: string) {
