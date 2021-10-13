@@ -108,8 +108,8 @@
                         <div class="uk-grid uk-child-width-1-4 uk-margin-top">
                           <div class="" *ngFor="let portfolio of services | keyvalue">
                             <h6>{{portfolio.key}}</h6>
-                            <div *ngFor="let service of portfolio.value | keyvalue">
-                              <a (click)="redirectTo('/service/' + service.value['service']['id'])">{{service.value['service']['name']}}</a>
+                            <div *ngFor="let service of portfolio.value">
+                              <a (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
                             </div>
                           </div>
                         </div>

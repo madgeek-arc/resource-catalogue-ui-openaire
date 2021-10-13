@@ -6,6 +6,7 @@ import {FormBuilder} from '@angular/forms';
 import {NavigationService} from '../../../lib/services/navigation.service';
 import {ResourceService} from '../../../lib/services/resource.service';
 import {DataSharingService} from '../../../lib/services/data-sharing.service';
+import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
 
 @Component({
   selector: 'app-top-menu-aire',
@@ -15,7 +16,7 @@ import {DataSharingService} from '../../../lib/services/data-sharing.service';
 
 export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
 
-  services: Map<string, Object[]>;
+  services: Map<string, UiVocabulary[]>;
   refresh = false;
 
   constructor(public authenticationService: AuthenticationService, public router: Router, public fb: FormBuilder,
@@ -27,13 +28,12 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
   ngOnInit() {
 
     this.dataSharingService.refreshRequired.subscribe( value => {
-      this.dataSharingService.print()
       this.refresh = value;
       if (this.refresh) {
-        this.resourceService.getServicesByVocabularyTypeAndId('Portfolios').subscribe(
+        this.resourceService.getServicesByIndexedField('portfolios','Portfolios').subscribe(
           res => {this.services = res;},
           error => {console.log(error)},
-          () => {this.dataSharingService.refreshRequired.next(false); this.dataSharingService.print()}
+          () => {this.dataSharingService.refreshRequired.next(false);}
         );
       }
     })
