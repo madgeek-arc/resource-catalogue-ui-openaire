@@ -204,7 +204,7 @@
 <!--                      &lt;!&ndash;                        <div style="position: absolute;left: -5px;height: 20px;">&ndash;&gt;-->
 <!--                      &lt;!&ndash;                        <star-rating-comp #rating2 (click)="rateService(i, rating2.rating)" [starType]="'svg'"&ndash;&gt;-->
 <!--                      &lt;!&ndash;                                          [rating]="resourceInfo.hasRate" [step]="1"&ndash;&gt;-->
-<!--                      &lt;!&ndash;                                          [showHalfStars]="true" [readOnly]=!this.authenticationService.isLoggedIn()&ndash;&gt;-->
+<!--                      &lt;!&ndash;                                          [showHalfStars]="true" [readOnly]=!this.authenticationService.getIsLoggedIn()&ndash;&gt;-->
 <!--                      &lt;!&ndash;                                          [size]="'medium'"&ndash;&gt;-->
 <!--                      &lt;!&ndash;                                          [staticColor]="'ok'" title="Rate this service" uk-tooltip="delay: 500"&ndash;&gt;-->
 <!--                      &lt;!&ndash;                                          labelText="{{resourceInfo.hasRate}} ({{ resourceInfo.ratings }})"&ndash;&gt;-->
@@ -280,7 +280,7 @@
         </div>
       </div>
 
-      <div class="uk-margin-large-top" *ngIf="authenticationService.isLoggedIn() && recommendations?.length > 0">
+      <div class="uk-margin-large-top" *ngIf="authenticationService.getIsLoggedIn() && recommendations?.length > 0">
         <h3>Recommended for you</h3>
         <div class="uk-grid uk-child-width-1-5 gridView" uk-height-match="target: > div > .uk-card">
 

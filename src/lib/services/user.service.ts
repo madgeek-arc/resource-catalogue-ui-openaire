@@ -23,7 +23,7 @@ export class UserService {
   }
 
   addFavourite(serviceID: string, value: boolean): Observable<EicEvent> {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       /*return this.http.put(`/event/favourite/service/${serviceID}`,{});*/
       this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + serviceID, 'favorite', value ? 3 : -3);
       // new addFavourite method
@@ -34,7 +34,7 @@ export class UserService {
   }
 
   public getFavouritesOfUser() {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       return this.http.get<RichService[]>(this.base + `/userEvents/favourites/`, this.options);
     } else {
       return null;
@@ -42,7 +42,7 @@ export class UserService {
   }
 
   getIfFavouriteOfUser(service: string) {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       return this.http.get(`/event/favourite/service/${service}`);
     } else {
       this.authenticationService.login();
@@ -58,13 +58,13 @@ export class UserService {
   }
 
   public canEditService(service: Service) {
-    /*return this.authenticationService.isLoggedIn() && service.providers && service.providers.length > 0 &&
+    /*return this.authenticationService.getIsLoggedIn() && service.providers && service.providers.length > 0 &&
         service.providers.indexOf(this.authenticationService.getUser()) > -1;*/
     return false;
   }
 
   public rateService(serviceID: string, rating: number): Observable<EicEvent> {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       return this.http.post<EicEvent>(this.base + `/event/rating/service/${serviceID}?rating=${rating}`, {}, this.options);
       // return this.resourceService.recordEvent(serviceID, "RATING", value).subscribe(console.log);
     } else {
@@ -73,7 +73,7 @@ export class UserService {
   }
 
   public getRatingsOfUser() {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       return this.http.get(`/event/ratings`);
     } else {
       return null;
@@ -81,7 +81,7 @@ export class UserService {
   }
 
   getUserRating(service: string) {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       return this.http.get(`/event/rating/service/${service}`);
     } else {
       this.authenticationService.login();

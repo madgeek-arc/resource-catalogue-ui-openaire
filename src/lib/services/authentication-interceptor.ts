@@ -1,20 +1,20 @@
-import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 
-declare var UIkit: any;
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
-  constructor(public http: HttpClient, public router: Router, public authenticationService: AuthenticationService) {
+  constructor(public router: Router, private injector: Injector) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // const authenticationService = this.injector.get(AuthenticationService);
 
     return next.handle(request).pipe(
       catchError((response: HttpErrorResponse) => {
@@ -34,7 +34,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
           console.error('An error occurred:', response.error.message);
         } else {
           if (response.status === 401) {
-            this.authenticationService.refreshLogin(this.router.url);
+            // authenticationService.refreshLogin(this.router.url);
             return null;
           } else if (response.status === 403) {
             this.router.navigate(['/forbidden']);

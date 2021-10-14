@@ -275,7 +275,7 @@ export class ServiceFormComponent implements OnInit {
   }
 
   onSubmit(service: Service, tempSave: boolean, pendingService?: boolean) {
-    if (!this.authenticationService.isLoggedIn()) {
+    if (!this.authenticationService.getIsLoggedIn()) {
       console.log('Submit');
       sessionStorage.setItem('service', JSON.stringify(this.serviceForm.value));
       this.authenticationService.login();
