@@ -1,5 +1,5 @@
 <!--HERO SECTION-->
-<div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove">
+<div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove uk-visible@m">
   <div class="uk-grid uk-child-width-expand">
 
     <div class="uk-width-1-2 uk-flex-last">
@@ -8,28 +8,40 @@
 
     <div class="uk-first-column">
       <div class="uk-padding-large uk-margin-large-left uk-margin-large-top">
-        <h1>OpenAIRE services catalogue: our portfolio at a glance!</h1>
-        <p class="big-text uk-margin-medium-top">Find/discover which services meet your demands and needs,
-          learn about specific characteristics, features, benefits, resources, support and costs,
-          get access and achieve the best results possible.</p>
+        <h1>Services for open science.</h1>
+        <p class="big-text uk-margin-medium-top">Find services that meet your needs. Learn about their features and benefits.
+          Get support and access. Achieve the best results possible.</p>
       </div>
     </div>
 
   </div>
 </div>
 
+<!--HERO SECTION MOBILE-->
+<div class="uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove uk-hidden@m">
+
+  <div class="uk-section uk-light uk-background-cover uk-position-relative"
+       style="background: url('../../../assets/images/catalogue-hero-home.png') rgba(0, 0, 0, 0.7); background-blend-mode: multiply; background-size: cover">
+    <div class="uk-padding-large uk-margin-large-top uk-text-center">
+      <h1>Services for open science.</h1>
+      <p class="big-text uk-margin-medium-top">Find services that meet your needs. Learn about their features and benefits.
+        Get support and access. Achieve the best results possible.</p>
+    </div>
+  </div>
+</div>
+
 <!--USER GROUPS SECTION-->
-<div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+<div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-visible@m">
 
   <div class="uk-container uk-container-large">
 
-    <h1>Users</h1>
+    <h1 class="">Ideal for</h1>
 
-    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000" (beforeitemshow)="dragSlide()">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let user of users" class="uk-flex-middle">
-          <div class="uk-width-1-1 uk-grid uk-child-width-1-2">
+          <div class="uk-width-1-1 uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
 
             <div class="slider-image uk-flex uk-flex-right">
               <div class="uk-card uk-card-default uk-margin" uk-grid>
@@ -41,7 +53,7 @@
             </div>
 
             <div class="slider-text uk-flex uk-flex-middle">
-              <div class="slider-bold-background-header">{{user.name}}</div>
+              <div class="slider-bold-background-header uk-visible@m">{{user.name}}</div>
 
               <div class="">
                 <div class="slider-header">{{user.name}}</div>
@@ -68,23 +80,73 @@
 
 </div>
 
+<!--USER GROUPS SECTION MOBILE-->
+<div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-hidden@m">
+
+  <div class="uk-container uk-container-large">
+
+    <h1 class="uk-margin-medium-bottom">Ideal for</h1>
+
+    <div id="slideShowMobile" class="uk-position-relative" uk-slideshow="ratio: 12:4; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile()">
+
+      <ul class="uk-slideshow-items">
+        <li *ngFor="let user of users" class="">
+          <div class="">
+
+            <div class="slider-image uk-flex uk-flex-center">
+              <div class="uk-card uk-card-default uk-margin" uk-grid>
+                <div class="uk-card-media uk-cover-container">
+                  <img src="{{user.extras.image}}" alt="" uk-cover>
+                  <canvas width="294" height="325"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="slider-text uk-text-center uk-margin-medium-top">
+              <div class="slider-bold-background-header uk-visible@m">{{user.name}}</div>
+
+              <div class="">
+                <div class="slider-header">{{user.name}}</div>
+                <div class="slider-description uk-margin-top">{{user.description}}</div>
+                <div class="uk-margin-medium-top"><a class="uk-button uk-button-text" [routerLink]="['/users', user.id]">Learn more</a></div>
+              </div>
+            </div>
+
+          </div>
+        </li>
+      </ul>
+
+      <div class="uk-position-bottom-center uk-position-small">
+        <ul class="uk-dotnav">
+          <li *ngFor="let user of users; let i=index" [ngClass]="{'uk-active': slideMobile === i}">
+            <a (click)="showSlideMobile(i)">Item {{i}}</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
 <!--PORTFOLIO SECTIONS-->
 <ng-container *ngIf="portfolios">
 
   <ng-container *ngFor="let portfolio of portfolios; let i = index">
     <div class="uk-section uk-section-primary uk-preserve-color uk-padding-remove">
-      <div class="uk-grid uk-child-width-expand">
+      <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
 
-        <div class="uk-width-1-2" [ngClass]="{'uk-flex-last' : i%2==0}">
+        <div class="" [ngClass]="{'uk-flex-last@m' : i%2==0, 'uk-flex-last@l' : i%2==0}">
           <img src="{{portfolio.extras.image}}">
         </div>
 
         <div class="uk-first-column">
-          <div class="uk-padding-large uk-margin-large-top" [ngClass]="{'uk-margin-large-left' : i%2==0}">
+          <div class="uk-padding-large uk-margin-large-top" [ngClass]="{'uk-margin-large-left@m' : i%2==0, 'uk-margin-large-left@l' : i%2==0}">
             <div *ngIf="portfolio.extras.tagline" class="h1-subHeader">{{portfolio.extras.tagline}}</div>
             <h1>{{portfolio.name}} Portfolio</h1>
             <p class="big-text uk-margin-medium-top">{{portfolio.description}}</p>
-            <a class="uk-button uk-button-primary uk-margin-medium-top" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>
+            <a class="uk-button uk-button-primary uk-margin-medium-top uk-margin-large-bottom" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>
           </div>
         </div>
 
@@ -99,15 +161,15 @@
 <div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
   <div class="uk-container uk-container-large">
 
-    <div class="uk-grid uk-child-width-1-2">
+    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <div>
         <img src="../../../assets/images/eosc.png">
       </div>
       <div class="uk-margin-medium-top">
         <div class="h2-subHeader-blue">Path to EOSC</div>
-        <h2 class="uk-margin-top">Enter the EOSC ecosystem through the OpenAIRE services and be part of the new era for Open Science</h2>
+        <h2 class="uk-margin-top">Enter the European Open Science Cloud by using OpenAIRE services. Don’t stay behind.</h2>
         <div class="uk-margin-medium-top"><a href="https://marketplace.eosc-portal.eu/services?providers%5B%5D=70" target="_blank" class="uk-link uk-text-uppercase eosc-link">
-          External link <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
+          Start now <i class="fa fa-long-arrow-right uk-margin-small-left"></i></a></div>
       </div>
     </div>
 

@@ -19,6 +19,8 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
   services: Map<string, UiVocabulary[]>;
   refresh = false;
 
+  public portfolioItemActive: string = null;
+
   constructor(public authenticationService: AuthenticationService, public router: Router, public fb: FormBuilder,
               public navigationService: NavigationService, public resourceService: ResourceService,
               private dataSharingService: DataSharingService) {
@@ -43,5 +45,9 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
   redirectTo(url: string){
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
       this.router.navigate([url]));
+  }
+
+  portfolioActive(portfolioItem: string) {
+    this.portfolioItemActive = portfolioItem;
   }
 }

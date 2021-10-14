@@ -1,81 +1,179 @@
 <!--MOBILE-->
-<div class="tm-header-mobile uk-hidden@m">
-  <nav class="uk-navbar-container uk-navbar" uk-navbar="">
-    <div class="uk-navbar-left">
-      <a class="uk-navbar-toggle" href="#tm-mobile" uk-toggle="">
-        <div uk-navbar-toggle-icon="" class="uk-navbar-toggle-icon uk-icon"></div>
-      </a>
-    </div>
-    <div class="uk-navbar-center">
-      <a class="uk-navbar-item uk-logo" [routerLink]="['/search']">
-        <img src="../../../assets/images/Logo_Horizontal.png" class="uk-responsive-height" alt="OpenAIRE">
-      </a>
-    </div>
-  </nav>
-  <div id="tm-mobile" uk-offcanvas="" mode="slide" overlay="" class="uk-offcanvas">
-    <div class="uk-offcanvas-bar">
-      <button class="uk-offcanvas-close uk-close uk-icon" type="button" uk-close=""></button>
-      <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
-        <div>
-          <div class="uk-panel" id="module-0">
-            <ul class="uk-nav uk-nav-default">
-              <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">Catalogue
-                <ul class="uk-nav-sub">
-                  <li><a href="/search;query=Researchers">Researchers</a></li>
-                  <li><a href="/search;query=Content Providers">Content Providers</a></li>
-                  <li><a href="/search;query=Research Managers">Research Managers</a></li>
-                  <li><a href="/search;query=Funders">Funders</a></li>
-                  <li><a href="/search;query=Research Communities">Research Communities</a></li>
-                  <li><a href="/search;query=Innovators">Innovators</a></li>
-                  <li class="uk-nav-divider"></li>
-                  <li class="emphasized_menu">
-                    <a href="/search">Full Service Catalogue</a>
-                  </li>
-                </ul>
-              </li>
+<div class="tm-header-mobile uk-hidden@l">
 
-              <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">
-                <span *ngIf="authenticationService.isLoggedIn()">
-                  <span> {{authenticationService.user.name}} {{authenticationService.user.surname}}
-                    <span class="uk-margin-small-right uk-icon">
-                      <svg width="20" height="20"
-                           viewBox="0 0 20 20"
-                           xmlns="http://www.w3.org/2000/svg"
-                           ratio="1"><circle fill="none"
-                                             stroke="#000"
-                                             stroke-width="1.1"
-                                             cx="9.9" cy="6.4"
-                                             r="4.4"></circle><path
-                        fill="none" stroke="#000" stroke-width="1.1"
-                        d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2"></path>
-                      </svg>
-                    </span>
-                  </span>
-                </span>
-                <span *ngIf="!authenticationService.isLoggedIn()">
-                  <span style="color: rgb(255, 255, 255); border: medium none rgb(255, 255, 255);"
-                        class="btl-dropdown">
-                      <a class="loginLink" (click)="authenticationService.login()"> Log In   </a>
-                  </span>
-                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-                       ratio="1"><circle fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4"
-                                         r="4.4"></circle>
-                    <path fill="none" stroke="#000" stroke-width="1.1"
-                          d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">
-                    </path>
-                  </svg>
-                </span>
-                <ul *ngIf="authenticationService.isLoggedIn()" class="uk-nav-sub">
-                  <li><a routerLink="/home" (click)="authenticationService.logout()">Log out</a></li>
-                </ul>
-              </li>
-            </ul>
+  <div uk-sticky="" cls-active="uk-navbar-sticky" sel-target=".uk-navbar-container" class="uk-sticky uk-sticky-fixed" style="position: fixed; top: 0px; width: 375px;">
+
+    <div class="uk-navbar-container">
+      <nav uk-navbar="container: .tm-header-mobile" class="uk-navbar">
+
+        <div class="uk-navbar-left">
+
+
+          <a class="uk-navbar-toggle" uk-toggle="target: #tm-mobile; animation: uk-animation-slide-top" aria-expanded="false">
+            <div uk-navbar-toggle-icon="" class="uk-icon uk-navbar-toggle-icon"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect y="9" width="20" height="2"></rect><rect y="3" width="20" height="2"></rect><rect y="15" width="20" height="2"></rect></svg></div>
+          </a>
+
+
+        </div>
+
+        <div class="uk-navbar-center">
+
+          <a routerLink="/home" class="uk-navbar-item uk-logo">
+            <img alt="OpenAIRE" src="../../../assets/images/logo.png" style="width: 200px"></a>
+        </div>
+
+
+      </nav>
+    </div>
+
+
+    <div class="uk-position-relative tm-header-mobile-slide">
+
+      <div id="tm-mobile" class="uk-position-top" style="" hidden="">
+        <div class="uk-background-default uk-padding">
+
+          <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+
+            <div class="uk-first-column">
+
+              <div class="uk-panel" id="module-menu-mobile">
+
+                <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
+                  <h5 class="uk-text-center">Services</h5>
+
+                  <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of services | keyvalue">
+                    <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
+                    <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
+                  </div>
+                </div>
+
+                <ng-container *ngFor="let portfolio of services | keyvalue">
+                  <div style="display: none" [ngClass]="portfolioItemActive===portfolio.key?'uk-display-block':'uk-display-none'">
+
+                    <div class="uk-flex uk-flex-middle">
+                      <a (click)="portfolioActive(null)"><i class="fa fa-2x fa-angle-left"></i></a>
+                      <h5 class="uk-text-center uk-margin-remove" style="width: 100%">{{portfolio.key}}</h5>
+                    </div>
+
+                    <div *ngFor="let service of portfolio.value" class="uk-margin-medium-top">
+                      <a (click)="redirectTo('/service/' + service.id)">
+                        <h6 class="uk-text-normal">{{service.name}}</h6>
+                      </a>
+                    </div>
+
+                  </div>
+                </ng-container>
+
+                <div class="uk-flex uk-flex-center">
+                  <button class="uk-margin-medium-top uk-margin-bottom uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="help-section">
+          <div class="uk-padding" style="background: #F9F9F9 0% 0% no-repeat padding-box;">
+            <div class="uk-margin-top">
+              <p>Didn't find what you are looking for? <a href="mailto:info@openaire.eu">Contact us</a></p>
+              <p>Need service advices? <a href="https://www.openaire.eu/contact-noads" target="_blank">Contact NOADs</a></p>
+              <p><a href="https://www.openaire.eu/support/helpdesk" target="_blank">Help Desk</a></p>
+            </div>
           </div>
         </div>
+
       </div>
+
     </div>
+
+
   </div>
+  <div class="uk-sticky-placeholder" style="height: 91px; margin: 0px;"></div>
+
+
 </div>
+
+
+<!--<div class="tm-header-mobile uk-hidden@m">-->
+  <!--<nav class="uk-navbar-container uk-navbar" uk-navbar="">-->
+    <!--<div class="uk-navbar-left">-->
+      <!--<a class="uk-navbar-toggle" href="#tm-mobile" uk-toggle="">-->
+        <!--<div uk-navbar-toggle-icon="" class="uk-navbar-toggle-icon uk-icon"></div>-->
+      <!--</a>-->
+    <!--</div>-->
+    <!--<div class="uk-navbar-center">-->
+      <!--<a class="uk-navbar-item uk-logo" [routerLink]="['/search']">-->
+        <!--<img src="../../../assets/images/logo.png" class="uk-responsive-height" alt="OpenAIRE" style="width: 170px">-->
+      <!--</a>-->
+    <!--</div>-->
+  <!--</nav>-->
+
+  <!--<div id="tm-mobile" uk-offcanvas="" mode="slide" overlay="" class="uk-offcanvas">-->
+    <!--<div class="uk-offcanvas-bar">-->
+      <!--<button class="uk-offcanvas-close uk-close uk-icon" type="button" uk-close=""></button>-->
+      <!--<div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">-->
+        <!--<div>-->
+          <!--<div class="uk-panel" id="module-0">-->
+            <!--<ul class="uk-nav uk-nav-default">-->
+              <!--<li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">Catalogue-->
+                <!--<ul class="uk-nav-sub">-->
+                  <!--<li><a href="/search;query=Researchers">Researchers</a></li>-->
+                  <!--<li><a href="/search;query=Content Providers">Content Providers</a></li>-->
+                  <!--<li><a href="/search;query=Research Managers">Research Managers</a></li>-->
+                  <!--<li><a href="/search;query=Funders">Funders</a></li>-->
+                  <!--<li><a href="/search;query=Research Communities">Research Communities</a></li>-->
+                  <!--<li><a href="/search;query=Innovators">Innovators</a></li>-->
+                  <!--<li class="uk-nav-divider"></li>-->
+                  <!--<li class="emphasized_menu">-->
+                    <!--<a href="/search">Full Service Catalogue</a>-->
+                  <!--</li>-->
+                <!--</ul>-->
+              <!--</li>-->
+
+              <!--<li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">-->
+                <!--<span *ngIf="authenticationService.isLoggedIn()">-->
+                  <!--<span> {{authenticationService.user.name}} {{authenticationService.user.surname}}-->
+                    <!--<span class="uk-margin-small-right uk-icon">-->
+                      <!--<svg width="20" height="20"-->
+                           <!--viewBox="0 0 20 20"-->
+                           <!--xmlns="http://www.w3.org/2000/svg"-->
+                           <!--ratio="1"><circle fill="none"-->
+                                             <!--stroke="#000"-->
+                                             <!--stroke-width="1.1"-->
+                                             <!--cx="9.9" cy="6.4"-->
+                                             <!--r="4.4"></circle><path-->
+                        <!--fill="none" stroke="#000" stroke-width="1.1"-->
+                        <!--d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2"></path>-->
+                      <!--</svg>-->
+                    <!--</span>-->
+                  <!--</span>-->
+                <!--</span>-->
+                <!--<span *ngIf="!authenticationService.isLoggedIn()">-->
+                  <!--<span style="color: rgb(255, 255, 255); border: medium none rgb(255, 255, 255);"-->
+                        <!--class="btl-dropdown">-->
+                      <!--<a class="loginLink" (click)="authenticationService.login()"> Log In   </a>-->
+                  <!--</span>-->
+                  <!--<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"-->
+                       <!--ratio="1"><circle fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4"-->
+                                         <!--r="4.4"></circle>-->
+                    <!--<path fill="none" stroke="#000" stroke-width="1.1"-->
+                          <!--d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">-->
+                    <!--</path>-->
+                  <!--</svg>-->
+                <!--</span>-->
+                <!--<ul *ngIf="authenticationService.isLoggedIn()" class="uk-nav-sub">-->
+                  <!--<li><a routerLink="/home" (click)="authenticationService.logout()">Log out</a></li>-->
+                <!--</ul>-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
 
 <!--NO MOBILE-->

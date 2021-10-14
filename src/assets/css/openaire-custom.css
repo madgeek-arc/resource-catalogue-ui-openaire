@@ -74,6 +74,18 @@ body {
   padding: 100px;
 }
 
+.uk-background-default {
+  background-color: #fff;
+}
+
+.uk-text-normal {
+  font-weight: 400 !important;
+}
+
+.uk-display-none {
+  display: none;
+}
+
 
 /* ========================================================================
    Margins
@@ -125,17 +137,19 @@ h6 {
 .h1-subHeader {
   color: var(--catalogue-light-purple);
   /*text-align: left;*/
-  font: normal normal normal 22px/29px var(--main-font-family);
+  font: normal normal normal 20px/27px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
+  margin-bottom: 0.5em;
 }
 
 .h2-subHeader-blue {
   color: var(--eosc-blue);
   /*text-align: left;*/
-  font: normal normal 600 22px/29px Aileron;
+  font: normal normal 600 20px/27px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
+  margin-bottom: 0.5em;
 }
 
 .h5-subheader {
@@ -144,17 +158,41 @@ h6 {
   font: normal normal normal 16px/24px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
+  margin-bottom: 0.5em;
+}
+
+@media only screen and (max-width: 960px) {
+
+  h1 {
+    font: normal normal 600 41px var(--main-font-family) !important;
+  }
+
+  h2 {
+    font: normal normal 600 36px var(--main-font-family) !important;
+  }
+
+  h5 {
+    font: normal normal 600 23px var(--main-font-family) !important;
+  }
+
+  .h1-subHeader {
+    font: normal normal normal 18px var(--main-font-family);
+  }
+
+  .h2-subHeader-blue {
+    font: normal normal 600 18px var(--main-font-family);
+  }
 }
 
 p.x-large-text {
-  color: var(--black);
+  /*color: var(--black);*/
   font: normal normal normal 27px/34px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
 }
 
 p.big-text {
-  color: var(--black);
+  /*color: var(--black);*/
   /*text-align: left;*/
   font: normal normal normal 22px/29px var(--main-font-family);
   letter-spacing: 0px;
@@ -162,7 +200,7 @@ p.big-text {
 }
 
 p.big-text-header {
-  color: var(--black);
+  /*color: var(--black);*/
   /*text-align: left;*/
   font: normal normal normal 27px/41px var(--main-font-family);
   letter-spacing: 0px;
@@ -170,7 +208,7 @@ p.big-text-header {
 }
 
 p.regular-text {
-  color: var(--black);
+  /*color: var(--black);*/
   /*text-align: left;*/
   font: normal normal normal 16px/24px var(--main-font-family);
   letter-spacing: 0px;
@@ -209,6 +247,10 @@ dd {
  ========================================================================== */
 
 hr {
+  border: 1px solid var(--default-element-bg);
+}
+
+.browse-dropdown-menu hr {
   border: 2px solid var(--default-element-bg);
 }
 
@@ -317,6 +359,7 @@ a.uk-button {
   opacity: 1;
   text-transform: uppercase;
   padding: 12px 30px;
+  color: #fff;
 }
 
 /* ========================================================================
@@ -349,15 +392,14 @@ a.uk-button {
   text-decoration: none;
 }
 
-.browse-dropdown-menu .help-section a {
+.help-section a {
   color: var(--catalogue-light-purple) !important;
   text-decoration: none;
 }
 
-.browse-dropdown-menu .help-section a:hover {
+.help-section a:hover {
   color: var(--openaire-light-blue) !important;
 }
-
 
 /*.service-menu {*/
   /*margin-top: -10px;*/
@@ -413,6 +455,49 @@ a.service-menu-item:hover {
 .uk-navbar-nav > li > a::before {
   background-image: none;
 }
+
+@media only screen and (max-width: 960px) {
+
+  .uk-navbar-container:not(.uk-navbar-transparent) {
+    background: #fff;
+    opacity: 1;
+  }
+
+  .uk-navbar-toggle, .uk-navbar-toggle:focus {
+    color: var(--grey-900);
+  }
+
+  .help-section {
+    font-size: 20px;
+  }
+
+  .service-tabs.uk-tab {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    background: var(--catalogue-dark-purple);
+    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-left: 20px;
+    margin-bottom: 0px;
+  }
+
+  .service-tabs.uk-tab > .uk-active > a {
+    border: none;
+  }
+
+  .service-tabs.uk-tab > .uk-active > a {
+    color: var(--catalogue-light-purple) !important;
+  }
+
+  .service-tabs.uk-tab > * > a {
+    color: #fff !important;
+  }
+
+  .service-tabs.uk-tab > li:not(.uk-active) > a {
+    text-decoration: none;
+  }
+}
+
 
 /* ========================================================================
    Cards
@@ -505,7 +590,7 @@ a.service-menu-item:hover {
 
 .slider-header {
   color: var(--black);
-  text-align: left;
+  /*text-align: left;*/
   font: normal normal normal 45px/56px var(--secondary-font-family);
   letter-spacing: 0px;
   opacity: 1;
@@ -513,7 +598,7 @@ a.service-menu-item:hover {
 
 .slider-description {
   color: var(--grey);
-  text-align: left;
+  /*text-align: left;*/
   font: normal normal normal 16px/24px var(--main-font-family);
   letter-spacing: 0px;
   opacity: 1;
@@ -533,6 +618,7 @@ a.service-menu-item:hover {
 
 .footerLink {
   font: normal normal normal 16px/21px var(--main-font-family);
+  text-decoration: none;
 }
 
 .newsletter-link {

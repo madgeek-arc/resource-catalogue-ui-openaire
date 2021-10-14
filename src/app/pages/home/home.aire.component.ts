@@ -33,6 +33,7 @@ export class HomeAireComponent implements OnInit {
   public portfolios: Vocabulary[] = null;
   public users: Vocabulary[] = null;
   public slide = 0;
+  public slideMobile = 0;
 
   constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService) {
     this.searchForm = fb.group({'query': ['']});
@@ -67,6 +68,17 @@ export class HomeAireComponent implements OnInit {
     uikit.slideshow('#slideShow').show(index);
     // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
     this.slide = index;
+
+  }
+
+  dragSlideMobile() {
+    this.slideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  }
+
+  showSlideMobile(index: number) {
+    uikit.slideshow('#slideShowMobile').show(index);
+    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
+    this.slideMobile = index;
 
   }
 }
