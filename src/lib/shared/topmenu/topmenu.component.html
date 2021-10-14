@@ -24,7 +24,7 @@
               </li>
               <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">Dashboard
                 <ul class="uk-nav-sub">
-                  <li *ngIf="authenticationService.isLoggedIn() && (authenticationService.isProvider() || authenticationService.isAdmin())">
+                  <li *ngIf="authenticationService.getIsLoggedIn() && (authenticationService.isProvider() || authenticationService.isAdmin())">
                     <a [routerLink]="['/myServiceProviders']" routerLinkActive="uk-active"
                        class="uk-offcanvas-close offcanvas-close">Providers</a>
                   </li>
@@ -42,7 +42,7 @@
               </li>
 
               <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">
-                <span *ngIf="authenticationService.isLoggedIn()">
+                <span *ngIf="authenticationService.getIsLoggedIn()">
                   <span> {{authenticationService.user.name}} {{authenticationService.user.surname}}
                     <span class="uk-margin-small-right uk-icon">
                       <svg width="20" height="20"
@@ -59,7 +59,7 @@
                     </span>
                   </span>
                 </span>
-                <span *ngIf="!authenticationService.isLoggedIn()">
+                <span *ngIf="!authenticationService.getIsLoggedIn()">
                   <span style="color: rgb(255, 255, 255); border: medium none rgb(255, 255, 255);"
                         class="btl-dropdown">
                       <a class="loginLink" (click)="authenticationService.login()"> Log In   </a>
@@ -72,7 +72,7 @@
                     </path>
                   </svg>
                 </span>
-                <ul *ngIf="authenticationService.isLoggedIn()" class="uk-nav-sub">
+                <ul *ngIf="authenticationService.getIsLoggedIn()" class="uk-nav-sub">
                   <li><a routerLink="/home" (click)="authenticationService.logout()">Log out</a></li>
                 </ul>
               </li>
@@ -113,7 +113,7 @@
                 <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
                   <div class="uk-first-column">
                     <ul class="uk-nav uk-navbar-dropdown-nav">
-                      <li *ngIf="authenticationService.isLoggedIn() && (authenticationService.isProvider() || authenticationService.isAdmin())">
+                      <li *ngIf="authenticationService.getIsLoggedIn() && (authenticationService.isProvider() || authenticationService.isAdmin())">
                         <a [routerLink]="['/provider/my']" routerLinkActive="uk-active">Providers</a>
                       </li>
                     </ul>
@@ -155,7 +155,7 @@
 
         <div class="uk-navbar-right">
           <ul class="uk-navbar-nav">
-            <li *ngIf="authenticationService.isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">
+            <li *ngIf="authenticationService.getIsLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">
               <a href="#" class="" aria-expanded="false">
                 <span> {{authenticationService.getUserName()}} {{authenticationService.getUserSurname()}}
                   <span class="uk-margin-small-right uk-icon">
@@ -198,7 +198,7 @@
                 </div>
               </div>
             </li>
-            <li *ngIf="!authenticationService.isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">
+            <li *ngIf="!authenticationService.getIsLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">
               <a class="loginLink" (click)="authenticationService.login()">Log In</a>
             </li>
           </ul>

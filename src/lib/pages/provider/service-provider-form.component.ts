@@ -289,7 +289,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   registerProvider(tempSave: boolean) {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.getIsLoggedIn()) {
       console.log('Submit');
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
       this.authService.login();
@@ -355,10 +355,14 @@ export class ServiceProviderFormComponent implements OnInit {
           if (this.edit) {
             this.router.navigate(['/provider/my']);
           } else {
-            if (environment.projectName === 'OpenAIRE Catalogue')
-              this.authService.refreshLogin('/');
-            else
-            this.authService.refreshLogin('/provider/my');
+            if (environment.projectName === 'OpenAIRE Catalogue') {
+              this.authService.redirectURL = '/';
+              this.authService.login();
+            }
+            else {
+              this.authService.redirectURL = '/provider/my';
+              this.authService.login();
+            }
           }
         }
       );

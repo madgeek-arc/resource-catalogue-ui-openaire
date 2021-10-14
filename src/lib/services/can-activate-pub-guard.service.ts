@@ -9,6 +9,6 @@ export class CanActivateViaPubGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return !this.authenticationService.isLoggedIn() || (this.router.home() && false);
+        return !this.authenticationService.getIsLoggedIn() || (this.router.home() && false);
     }
 }

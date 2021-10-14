@@ -35,7 +35,7 @@
               </li>
 
               <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">
-                <span *ngIf="authenticationService.isLoggedIn()">
+                <span *ngIf="authenticationService.getIsLoggedIn()">
                   <span> {{authenticationService.user.name}} {{authenticationService.user.surname}}
                     <span class="uk-margin-small-right uk-icon">
                       <svg width="20" height="20"
@@ -52,7 +52,7 @@
                     </span>
                   </span>
                 </span>
-                <span *ngIf="!authenticationService.isLoggedIn()">
+                <span *ngIf="!authenticationService.getIsLoggedIn()">
                   <span style="color: rgb(255, 255, 255); border: medium none rgb(255, 255, 255);"
                         class="btl-dropdown">
                       <a class="loginLink" (click)="authenticationService.login()"> Log In   </a>
@@ -65,7 +65,7 @@
                     </path>
                   </svg>
                 </span>
-                <ul *ngIf="authenticationService.isLoggedIn()" class="uk-nav-sub">
+                <ul *ngIf="authenticationService.getIsLoggedIn()" class="uk-nav-sub">
                   <li><a routerLink="/home" (click)="authenticationService.logout()">Log out</a></li>
                 </ul>
               </li>

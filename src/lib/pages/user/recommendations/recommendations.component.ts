@@ -40,7 +40,7 @@ export class RecommendationsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.getIsLoggedIn()) {
       this.loadingMessage = 'Loading user recommendations...';
       this.resourceService.getRecommendedServices(20).subscribe(
         suc => {

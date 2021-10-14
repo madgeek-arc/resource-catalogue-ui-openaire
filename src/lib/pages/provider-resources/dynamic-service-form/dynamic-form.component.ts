@@ -83,7 +83,6 @@ export class DynamicFormComponent implements OnInit {
         res => {
           if (this.projectName === 'OpenAIRE Catalogue') {
             this.dataSharing.refreshRequired.next(true);
-            this.dataSharing.print();
             return this.router.service(res['service'].id);  // redirect to service-landing-page
           } else {
             // return this.router.resourceDashboard(this.providerId, res.id);
