@@ -10,14 +10,14 @@
       <div class="uk-width-1-1">
         <form class="uk-flex uk-flex-center" [formGroup]="searchForm"
               (ngSubmit)="onSubmit(searchForm.controls['query'].value)">
-          <div class="">
+          <div class="uk-visible@m uk-margin-right">
             <select *ngIf="showSearchFieldDropDown" class="uk-select menuSearchFields"
                     (change)="updateSearchField($event)" formControlName="searchFields">
               <option value="">--Search field--</option>
               <option *ngFor="let field of searchFields" value="{{field}}">{{field}}</option>
             </select>
           </div>
-          <div class="uk-margin-left">
+          <div class="">
             <input type="text" class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..." name="keyword"
                    formControlName="query">
           </div>
@@ -27,7 +27,8 @@
 
     <div class="uk-grid uk-margin-large-top" uk-grid="">
 
-      <aside id="tm-sidebar" class="tm-sidebar uk-width-1-4@m">
+      <!--FILTERS LAPTOP & PAD LANDSCAPE-->
+      <aside id="tm-sidebar" class="tm-sidebar uk-width-1-4@m uk-visible@m">
 
         <div *ngIf="searchResultsSnippets != null" class="sidemenu refines">
 
@@ -79,22 +80,22 @@
 
           <div *ngIf="searchResultsSnippets.results != null && searchResultsSnippets.results.length > 0">
 
-            <div class="uk-flex uk-flex-middle uk-flex-between">
-              <div>
-                <div class="">
-                  <label class="" for="pageSize">Results per page </label>
-                  <div class="uk-inline uk-margin-left">
-                    <select class="uk-input uk-select" id="pageSize" [ngModel]="pageSize" (change)="onPageSizeChange($event)" style="height: 40px !important;">
-                      <option value="10" selected>10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+            <!--<div class="uk-flex uk-flex-middle uk-flex-between">-->
+              <!--<div>-->
+                <!--<div class="">-->
+                  <!--<label class="" for="pageSize">Results per page </label>-->
+                  <!--<div class="uk-inline uk-margin-left">-->
+                    <!--<select class="uk-input uk-select" id="pageSize" [ngModel]="pageSize" (change)="onPageSizeChange($event)" style="height: 40px !important;">-->
+                      <!--<option value="10" selected>10</option>-->
+                      <!--<option value="25">25</option>-->
+                      <!--<option value="50">50</option>-->
+                      <!--<option value="100">100</option>-->
+                    <!--</select>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
 
-            </div>
+            <!--</div>-->
 
             <div class="uk-grid uk-row-first uk-margin-bottom uk-margin-top">
               <div class="uk-width-1-1">
@@ -105,7 +106,7 @@
                     <span class="uk-text-bold">{{searchResultsSnippets.total}}</span> Services, Page <span class="uk-text-bold">{{currentPage}}</span> of {{totalPages}}
                   </p>
 
-                  <ul class="uk-pagination">
+                  <ul class="uk-pagination uk-visible@m">
                     <li *ngIf="currentPage>2 && pageTotal>5"><a (click)="goToPage(1)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a></li>
                     <li *ngIf="currentPage!==1"><a (click)="previousPage()"><span uk-pagination-previous></span></a></li>
                     <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active': ''">
@@ -127,7 +128,8 @@
                 <a [routerLink]="['/service/' + resourceInfo.id]" class="serviceDetails">
                   <div class="uk-card uk-card-default uk-card-hover uk-margin-bottom">
 
-                    <div class="service-details-card-content">
+                    <!--LAPTOP & PAD LANDSCAPE-->
+                    <div class="service-details-card-content uk-visible@m">
 
                       <div *ngIf="resourceInfo.portfolios?.length>0" class="portfolioSection">
                         <ng-container *ngFor="let portfolio of resourceInfo.portfolios; let i = index">
@@ -171,6 +173,55 @@
                           </div>
 
                         </div>
+                      </div>
+
+                    </div>
+
+                    <!--MOBILE & PAD PORTRAIT-->
+                    <div class="service-details-card-content uk-hidden@m">
+
+                      <div class="uk-padding-remove service-image">
+                        <img src="{{resourceInfo.longImage}}" >
+                      </div>
+
+                      <div class="">
+                        <!--<div class="uk-grid" uk-grid="">-->
+                        <div>
+
+                          <div class="uk-card-body">
+                            <div>
+                              <h5 class="uk-margin-remove uk-text-left uk-scrollspy-inview uk-animation-fade uk-inline"
+                                  uk-scrollspy-class="" style="">
+                                {{resourceInfo.name || "Not Available"}}
+                              </h5>
+                            </div>
+                            <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">
+                              "{{resourceInfo.tagline}}"
+                            </p>
+                            <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
+                                 uk-scrollspy-class="" style="">
+                              {{resourceInfo.pitch}}
+                            </div>
+
+                            <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0] === '' || resourceInfo.user[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                              <span class="field-label">Users: </span>
+                              <span *ngFor="let user of resourceInfo.user" class="field-value uk-margin-small-left">{{user.name}}</span>
+                            </div>
+                            <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
+                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
+                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.paymentTitle}}</span>
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div *ngIf="resourceInfo.portfolios?.length>0" class="portfolioSection">
+                        <ng-container *ngFor="let portfolio of resourceInfo.portfolios; let i = index">
+                          <ng-container *ngIf="i!=0">, </ng-container>
+                          {{portfolio.name}}
+                        </ng-container>
                       </div>
 
                     </div>
@@ -400,7 +451,17 @@
      style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
   <a [routerLink]="['/provider/openaire/resource/add']" style="padding: 30px;"
      class="uk-icon-button uk-button-secondary">
-    <i class="fa fa-plus"></i>
+    <i class="fa fa-2x fa-plus"></i>
+    <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
+    <!--</span>-->
+  </a>
+</div>
+
+<div class="uk-float-right"
+     style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
+  <a style="padding: 20px;"
+     class="uk-icon-button uk-button-blue">
+    <i class="fa fa-2x fa-filter"></i>
     <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
     <!--</span>-->
   </a>

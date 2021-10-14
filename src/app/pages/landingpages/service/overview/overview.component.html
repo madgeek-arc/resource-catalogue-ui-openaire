@@ -129,12 +129,12 @@
 </div>
 
 <!--BENEFITS-->
-<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-bottom">
+<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-bottom uk-visible@m">
   <div class="uk-container uk-container-large">
 
     <h1>Benefits</h1>
 
-    <div id="BenefitSlideShow" class="uk-position-relative uk-margin-medium-top" uk-slideshow="ratio: 12:4; animation: fade; autoplay: true; autoplay-interval: 4000" (beforeitemshow)="dragSlide('BenefitSlideShow')">
+    <div id="BenefitSlideShow" class="uk-position-relative uk-margin-medium-top" uk-slideshow="ratio: 12:4; animation: fade; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlide('BenefitSlideShow')">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let benefit of getExtrasArray('benefits').value" class="uk-grid uk-child-width-1-2 ">
@@ -156,6 +156,42 @@
         <ul class="uk-dotnav">
           <li *ngFor="let benefit of getExtrasArray('benefits').value; let i=index" [ngClass]="{'uk-active': benefitSlide === i}">
             <a (click)="showSlide('BenefitSlideShow', i)">Item {{i}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--BENEFITS MOBILE-->
+<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-bottom uk-hidden@m">
+  <div class="uk-container uk-container-large">
+
+    <h1>Benefits</h1>
+
+    <div id="BenefitSlideShowMobile" class="uk-position-relative uk-margin-medium-top" uk-slideshow="ratio: 12:4; min-height: 750; animation: fade; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile('BenefitSlideShowMobile')">
+
+      <ul class="uk-slideshow-items">
+        <li *ngFor="let benefit of getExtrasArray('benefits').value" class="uk-grid uk-child-width-1-1">
+
+          <div class="uk-flex uk-flex-center">
+            <img src="{{benefit.benefitsImage !== '' ? benefit.benefitsImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_15_253Z.png'}}" width="400">
+          </div>
+          <div class="uk-flex uk-flex-middle">
+            <div>
+              <h4 class="uk-text-primary">{{benefit.benefitsTitle}}</h4>
+              <p class="slider-description uk-margin-top big-text-header">{{benefit.benefitsText}}</p>
+            </div>
+          </div>
+
+
+        </li>
+      </ul>
+
+      <div class="uk-position-bottom-center uk-position-small uk-margin-medium-top" style="bottom: -60px">
+        <ul class="uk-dotnav">
+          <li *ngFor="let benefit of getExtrasArray('benefits').value; let i=index" [ngClass]="{'uk-active': benefitSlideMobile === i}">
+            <a (click)="showSlideMobile('BenefitSlideShowMobile', i)">Item {{i}}</a>
           </li>
         </ul>
       </div>
@@ -189,13 +225,13 @@
 </div>
 
 <!--USE CASES-->
-<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-visible@m">
 
   <div class="uk-container uk-container-large">
 
     <h1>Use Cases</h1>
 
-    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000" (beforeitemshow)="dragSlide('slideShow')">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlide('slideShow')">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let useCase of getExtrasArray('useCasesExtras').value" class="uk-flex-middle">
@@ -227,6 +263,55 @@
         <ul class="uk-dotnav">
           <li *ngFor="let useCase of getExtrasArray('useCasesExtras').value; let i=index" [ngClass]="{'uk-active': slide === i}">
             <a (click)="showSlide('slideShow', i)">Item {{i}}</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!--USE CASES MOBILE-->
+<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-hidden@m">
+
+  <div class="uk-container uk-container-large">
+
+    <h1 class="uk-margin-medium-bottom">Use Cases</h1>
+
+    <div id="slideShowMobile" class="uk-position-relative" uk-slideshow="ratio: 12:4; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile('slideShowMobile')">
+
+      <ul class="uk-slideshow-items">
+        <li *ngFor="let useCase of getExtrasArray('useCasesExtras').value" class="">
+          <div class="">
+
+            <div class="slider-image uk-flex uk-flex-center">
+              <div class="uk-card uk-card-default">
+                <img src="{{useCase.useCaseImage !== '' ? useCase.useCaseImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_37_207Z.png'}}" width="294">
+              </div>
+            </div>
+
+            <div class="slider-text uk-text-center uk-margin-medium-top">
+              <div class="slider-bold-background-header uk-visible@m">{{useCase.useCaseTitle}}</div>
+
+              <div class="">
+                <div class="slider-header">{{useCase.useCaseTitle}}</div>
+                <div class="slider-description uk-margin-top">{{useCase.useCaseText}}</div>
+                <div *ngIf="useCase.useCaseLink !== ''" class="uk-margin-medium-top">
+                  <a href="{{useCase.useCaseLink}}" target="_blank" class="uk-button uk-button-text">Learn more</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </li>
+      </ul>
+
+      <div class="uk-position-bottom-center uk-position-small">
+        <ul class="uk-dotnav">
+          <li *ngFor="let useCase of getExtrasArray('useCasesExtras').value; let i=index" [ngClass]="{'uk-active': slideMobile === i}">
+            <a (click)="showSlideMobile('slideShowMobile', i)">Item {{i}}</a>
           </li>
         </ul>
       </div>

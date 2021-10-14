@@ -18,6 +18,9 @@ export class OverviewComponent implements OnInit {
   slide = 0;
   benefitSlide = 0;
 
+  slideMobile = 0;
+  benefitSlideMobile = 0;
+
   ngOnInit() {
   }
 
@@ -68,6 +71,24 @@ export class OverviewComponent implements OnInit {
     }
     else {
       this.benefitSlide = index;
+    }
+  }
+
+  dragSlideMobile(id: string) {
+    if (id === 'slideShowMobile')
+      this.slideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+    else
+      this.benefitSlideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  }
+
+  showSlideMobile(id: string, index: number) {
+    uikit.slideshow('#' + id).show(index);
+    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
+    if (id === 'slideShowMobile') {
+      this.slideMobile = index;
+    }
+    else {
+      this.benefitSlideMobile = index;
     }
 
   }

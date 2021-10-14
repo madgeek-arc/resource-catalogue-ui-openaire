@@ -147,7 +147,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes,
       {
         relativeLinkResolution: 'legacy',
-        scrollPositionRestoration: 'enabled',
+        // scrollPositionRestoration: 'enabled',
+        scrollPositionRestoration: 'disabled',
         onSameUrlNavigation: 'reload'
       })
   ],

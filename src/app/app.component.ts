@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {environment} from '../environments/environment';
+import {SmoothScroll} from './services/smooth-scroll';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ export class AppComponent implements OnInit {
 
   breadcrumbs: string[] = [];
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private smoothScroll: SmoothScroll) {
     if (sessionStorage.getItem('state.location')) {
       const state = sessionStorage.getItem('state.location');
       this.router.navigate([state]);

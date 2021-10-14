@@ -28,6 +28,7 @@
 
 
   --grey-900: #2C2C2C;
+  --grey-700: #6E6E6E;
 
 
   --primary-color: #1D193C;
@@ -348,6 +349,10 @@ hr {
 
 a.uk-button {
   line-height: 50px;
+}
+
+a.uk-icon-button {
+  text-decoration: none;
 }
 
 
@@ -714,11 +719,12 @@ a.serviceDetails {
 }
 
 .service-details-card-content .portfolioSection {
-  font: bold 12px Sans-Serif;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  /*font: bold 12px Sans-Serif;*/
+  /*letter-spacing: 2px;*/
+  /*text-transform: uppercase;*/
   background: #ececec;
   /*color: #fff;*/
+  color: var(--grey-700);
   padding: 5px 10px;
   margin: 0 0 10px 0;
   line-height: 24px;
@@ -729,6 +735,7 @@ a.serviceDetails {
   border-radius: 6px;
   /*padding-left: 10px;*/
 }
+
 .serviceDetails .service-details-card-content .portfolioSection {
   /* Abs positioning makes it not take up vert space */
   position: absolute;
@@ -757,11 +764,25 @@ a.serviceDetails {
 
 .serviceDetails .serviceDescription,
 .serviceDetails .service-users,
-.serviceDetails .service-pricing {
+.serviceDetails .service-pricing,
+.service-details-card-content .portfolioSection {
   font-size: 16px;
 }
 
+@media only screen and (max-width: 960px) {
 
+  .serviceDetails .service-details-card-content {
+    border-left: none;
+    border-bottom: 34px solid #ececec;
+  }
+
+  .serviceDetails .service-details-card-content .portfolioSection {
+    /*background-color: #ececec;*/
+    transform: none;
+    left: 21px;
+    bottom: -45px;
+  }
+}
 
 
 
