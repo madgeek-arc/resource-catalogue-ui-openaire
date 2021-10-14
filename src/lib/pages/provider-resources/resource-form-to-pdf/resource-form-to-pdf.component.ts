@@ -264,7 +264,7 @@ export class ResourceFormToPdfComponent implements OnInit {
   }
 
   onSubmit(service: Service, tempSave: boolean, pendingService?: boolean) {
-    if (!this.authenticationService.getIsLoggedIn()) {
+    if (!this.authenticationService.isLoggedIn()) {
       console.log('Submit');
       sessionStorage.setItem('service', JSON.stringify(this.serviceForm.value));
       this.authenticationService.login();

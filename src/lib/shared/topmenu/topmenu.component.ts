@@ -60,7 +60,7 @@ export class TopMenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.getIsLoggedIn();
+    // this.isLoggedIn();
     // this.getUsername();
     // this.getUsersurname();
 

@@ -59,7 +59,7 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
     });
 
     this.canAddOrEditService = false;
-    if (this.authenticationService.getIsLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
+    if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
       this.resourceService.getMyServiceProviders().subscribe(
         res => this.myProviders = res,
         er => console.log(er),

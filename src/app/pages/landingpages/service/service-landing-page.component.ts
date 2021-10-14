@@ -79,11 +79,11 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         },
         () => {
           this.loading = false;
-          if (this.authenticationService.getIsLoggedIn()) {
+          if (this.authenticationService.isLoggedIn()) {
             this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
           }
         });
-      if (this.authenticationService.getIsLoggedIn()) {
+      if (this.authenticationService.isLoggedIn()) {
         this.resourceService.getMyServiceProviders().subscribe(
           res => this.myProviders = res,
           er => console.log(er),

@@ -151,7 +151,7 @@
                       <!--                                                                      [starType]="'svg'" [rating]="resourceInfo.hasRate"-->
                       <!--                                                                      [step]="1"-->
                       <!--                                                                      [showHalfStars]="true"-->
-                      <!--                                                                      [readOnly]=!this.authenticationService.getIsLoggedIn()-->
+                      <!--                                                                      [readOnly]=!this.authenticationService.isLoggedIn()-->
                       <!--                                                                      [size]="'medium'"-->
                       <!--                                                                      [staticColor]="'ok'" title="Rate this resource"-->
                       <!--                                                                      uk-tooltip="delay: 500"-->
@@ -227,7 +227,7 @@
                       <div style="position: absolute;left: -5px;height: 20px;">
                         <!--                        <star-rating-comp #rating2 (click)="rateService(i, rating2.rating)" [starType]="'svg'"-->
                         <!--                                          [rating]="resourceInfo.hasRate" [step]="1"-->
-                        <!--                                          [showHalfStars]="true" [readOnly]=!this.authenticationService.getIsLoggedIn()-->
+                        <!--                                          [showHalfStars]="true" [readOnly]=!this.authenticationService.isLoggedIn()-->
                         <!--                                          [size]="'medium'"-->
                         <!--                                          [staticColor]="'ok'" title="Rate this service" uk-tooltip="delay: 500"-->
                         <!--                                          labelText="{{resourceInfo.hasRate}} ({{ resourceInfo.ratings }})"-->
