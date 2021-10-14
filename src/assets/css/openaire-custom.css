@@ -486,7 +486,7 @@ a.service-menu-item:hover {
 
 .slider-text {
   position: relative;
-  left: -70px;
+  /*left: -70px;*/
 }
 
 .slider-bold-background-header {
@@ -497,7 +497,7 @@ a.service-menu-item:hover {
   opacity: 0.03;
   position: absolute;
   top: -80px;
-  left: -10px;
+  left: -80px;
   white-space: nowrap;
   overflow: clip;
   z-index: -10;
