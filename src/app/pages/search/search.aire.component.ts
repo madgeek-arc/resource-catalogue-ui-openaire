@@ -26,6 +26,8 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
   pages: number[] = [];
   offset = 2;
 
+  filtersMobileShown = false;
+
   ngOnInit() {
     // super.ngOnInit();
     this.listViewActive = true;
@@ -169,6 +171,10 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
       this.updatePagingURLParameters(from);
       return this.navigateUsingParameters();
     }
+  }
+
+  showFiltersMobile(show: boolean) {
+    this.filtersMobileShown = show;
   }
 
 }

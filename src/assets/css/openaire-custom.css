@@ -785,7 +785,19 @@ a.serviceDetails {
 }
 
 
+#offcanvas-filters .uk-offcanvas-bar {
+  width: 100%;
+  background-color: #F9F9F9;
+}
 
+#offcanvas-filters .uk-offcanvas-bar .header {
+  background-color: #fff;
+  border-bottom: 1px solid #ececec;
+}
+
+#offcanvas-filters .uk-offcanvas-close {
+  position: initial;
+}
 
 
 

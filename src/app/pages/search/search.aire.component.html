@@ -459,10 +459,41 @@
 
 <div class="uk-float-right"
      style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
-  <a style="padding: 20px;"
+  <a href="#offcanvas-filters" uk-toggle style="padding: 20px;"
      class="uk-icon-button uk-button-blue">
     <i class="fa fa-2x fa-filter"></i>
     <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
     <!--</span>-->
   </a>
+</div>
+
+<div id="offcanvas-filters" uk-offcanvas="overlay: true">
+  <div class="uk-offcanvas-bar uk-padding-remove">
+
+    <div class="header uk-padding uk-flex uk-flex-middle">
+      <button class="uk-offcanvas-close" type="button" uk-close></button>
+      <p class="big-text-header uk-width-1-1 uk-text-center uk-margin-remove">Filters</p>
+    </div>
+
+    <div class="uk-padding">
+      <ng-template ngFor let-facet [ngForOf]="searchResultsSnippets.facets">
+        <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
+                        || facet.field === 'portfolios'" class="uk-margin-medium-bottom">
+          <read-more [maxHeight]="235">
+            <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
+                                                                (click)="clearSelections($event, facet.field)">Clear</a>
+            <div class="refineOption" *ngFor="let facetValue of facet.values">
+              <input type="checkbox" class=""
+                     (change)="this.onSelection($event, facet.field, facetValue.value)"
+                     [checked]="facetValue.isChecked">
+              {{facetValue.label}}
+              <span>({{facetValue.count}})</span>
+            </div>
+          </read-more>
+        </div>
+      </ng-template>
+    </div>
+
+
+  </div>
 </div>
