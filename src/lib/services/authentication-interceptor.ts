@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {Injectable, Injector} from '@angular/core';
-import { AuthenticationService } from './authentication.service';
 
 
 @Injectable()
@@ -34,7 +33,9 @@ export class AuthenticationInterceptor implements HttpInterceptor {
           console.error('An error occurred:', response.error.message);
         } else {
           if (response.status === 401) {
-            // authenticationService.refreshLogin(this.router.url);
+            // authenticationService.redirectURL = this.router.url
+            // authenticationService.login();
+            console.log('came here don\'t know what to do...');
             return null;
           } else if (response.status === 403) {
             this.router.navigate(['/forbidden']);

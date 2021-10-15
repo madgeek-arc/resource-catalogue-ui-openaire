@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NavigationService} from './navigation.service';
 import {environment} from '../../environments/environment';
-import {User} from '../domain/user';
+import {UserInfo} from '../domain/userInfo';
 import {deleteCookie, getCookie} from '../domain/utils';
+import {UserService} from './user.service';
 
 
 @Injectable()
@@ -16,7 +17,7 @@ export class AuthenticationService {
   isLoggedIn = false;
   cookieName = 'info';
 
-  user: User= new User();
+  user: UserInfo= new UserInfo();
 
   constructor(public navigationService: NavigationService, public http: HttpClient) {
     this.tryLogin();
@@ -37,7 +38,7 @@ export class AuthenticationService {
     if (this.redirectURL) {
       const url = this.redirectURL;
       this.redirectURL = null;
-      // console.log('stored location', url);
+      console.log('stored location', url);
       sessionStorage.setItem('state.location', url);
     } else {
       sessionStorage.setItem("state.location", this.navigationService.router.url);
@@ -47,10 +48,10 @@ export class AuthenticationService {
   }
 
   public tryLogin() {
-    // console.log(getCookie(this.cookieName));
+    console.log(getCookie(this.cookieName));
     if (getCookie(this.cookieName) !== null) {
       // console.log(`session.name wasn't found --> logging in via repo-service!`);
-      this.http.get<User>(this.apiUrl + '/user/info', { withCredentials: true }).subscribe(
+      this.http.get<UserInfo>(this.apiUrl + '/user/info', { withCredentials: true }).subscribe(
         userInfo => {
           // console.log(userInfo);
           sessionStorage.setItem('name', userInfo.name);
@@ -65,7 +66,13 @@ export class AuthenticationService {
           console.log(error);
           this.isLoggedIn = false;
         },
-        () => {}
+        () => {
+          if (this.redirectURL) {
+            const url = this.redirectURL;
+            this.redirectURL = null;
+            this.navigationService.router.navigate([url]);
+          }
+        }
       );
     }
   }
@@ -80,7 +87,8 @@ export class AuthenticationService {
   }
 
   public getIsLoggedIn(): boolean {
-    return this.isLoggedIn && sessionStorage.getItem('email') !== null;
+    console.log(this.isLoggedIn + ' ' + sessionStorage.getItem('email'));
+    return sessionStorage.getItem('email') !== null;
   }
 
   public getUserName() {

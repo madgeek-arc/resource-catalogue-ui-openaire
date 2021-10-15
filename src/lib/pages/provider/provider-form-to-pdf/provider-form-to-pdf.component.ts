@@ -439,7 +439,7 @@ export class ProviderFormToPdfComponent implements OnInit {
 
   /** <--Contact Info **/
 
-  /** User Array -->**/
+  /** UserInfo Array -->**/
   user(): FormGroup {
     return this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -475,7 +475,7 @@ export class ProviderFormToPdfComponent implements OnInit {
     this.usersArray.controls[0].get('surname').setValue(this.userInfo.family_name);
   }
 
-  /** <-- User Array**/
+  /** <-- UserInfo Array**/
 
   downloadProviderFormPDF() {
     window.open('../../../lib/files/providerForm.pdf', '_blank');

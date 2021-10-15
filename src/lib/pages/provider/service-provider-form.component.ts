@@ -619,7 +619,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** <--Contact Info **/
 
-  /** User Array -->**/
+  /** UserInfo Array -->**/
   user(): FormGroup {
     return this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -658,7 +658,7 @@ export class ServiceProviderFormComponent implements OnInit {
     this.newProviderForm.controls['mainContact'].get('email').setValue(this.userInfo.email);
   }
 
-  /** <-- User Array**/
+  /** <-- UserInfo Array**/
 
   showLogoUrlModal() {
     if (this.newProviderForm && this.newProviderForm.get('logo').value) {

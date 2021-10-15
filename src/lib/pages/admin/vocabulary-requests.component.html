@@ -326,7 +326,7 @@
       <h6><span style="color: #808080">Details regarding vocabulary entry request: </span>{{ this.selectedCuration.entryValueName }}</h6>
       <h6 class="uk-margin-medium-bottom"><span style="color: #808080">Vocabulary: </span>{{ this.selectedCuration.vocabulary | titlecase }}</h6>
       <div *ngFor="let entry of selectedVocabularyEntryRequests">
-        <div><span style="color: #808080">User Id: </span>{{ entry.userId }}</div>
+        <div><span style="color: #808080">UserInfo Id: </span>{{ entry.userId }}</div>
         <div><span style="color: #808080">Creation Date: </span>{{ entry.dateOfRequest | date }}</div>
         <div><span style="color: #808080">Resource Type: </span>{{ entry.resourceType | titlecase }}</div>
         <div><span style="color: #808080">Provider Id: </span>{{ entry.providerId }}</div>

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
 import {Service, User, Event as EicEvent, RichService} from '../domain/eic-model';
+import {UserInfo} from '../domain/userInfo';
 import {AuthenticationService} from './authentication.service';
 import {NavigationService} from './navigation.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
@@ -39,6 +40,10 @@ export class UserService {
     } else {
       return null;
     }
+  }
+
+  getUserInfo() {
+    return this.http.get<UserInfo>(this.base + '/user/info', { withCredentials: true });
   }
 
   getIfFavouriteOfUser(service: string) {
