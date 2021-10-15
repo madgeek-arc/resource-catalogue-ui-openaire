@@ -22,7 +22,7 @@
           <div class="el-content uk-panel uk-text-left uk-margin-medium-top">
             <ul class="uk-list uk-list-large">
               <li *ngFor="let include of paymentCategory['paymentIncludes']">
-                <div class="uk-grid-small uk-grid" uk-grid="">
+                <div *ngIf="include !== ''" class="uk-grid-small uk-grid" uk-grid="">
                   <div class="uk-width-auto uk-first-column">
                     <img class="uk-text-success" src="/demo/devstack/images/check.svg" uk-svg="" hidden="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="9" viewBox="0 0 12 9" class="uk-text-success uk-svg">
@@ -30,7 +30,6 @@
                     </svg>
                   </div>
                   <div class="uk-width-expand">{{include}}</div>
-<!--                  <div class="uk-text-meta">Lorem ipsum dolor sit amet</div>-->
                 </div>
               </li>
             </ul>

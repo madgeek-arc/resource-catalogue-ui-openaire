@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {SearchComponent} from 'src/lib/pages/search/search.component';
-import {Provider, RichService, Snippet} from 'src/lib/domain/eic-model';
+import {Provider, Snippet} from 'src/lib/domain/eic-model';
 import {URLParameter} from '../../../lib/domain/url-parameter';
 import {Paging} from '../../../lib/domain/paging';
 import {PremiumSortFacetsPipe} from '../../../lib/shared/pipes/premium-sort.pipe';
-import {FormModel, UiVocabulary} from '../../../lib/domain/dynamic-form-model';
-import {zip} from 'rxjs/internal/observable/zip';
 
 
 @Component({

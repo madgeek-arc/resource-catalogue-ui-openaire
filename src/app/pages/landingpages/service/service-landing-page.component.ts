@@ -188,6 +188,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   push(group: string, field: string, required: boolean) {
+    // console.log('group: ' + group + ' field: ' + field);
     let tmpArr = this.form.get(group).get(field) as FormArray;
     tmpArr.push(required ? new FormControl('', Validators.required) : new FormControl(''));
   }
@@ -204,11 +205,13 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           : new FormControl('');
       }
     });
+    // console.log('group: ' + group + ' field: ' + field);
     let tmpArr = this.form.get(group).get(field) as FormArray;
     tmpArr.push(new FormGroup(formGroup));
   }
 
   popComposite(group: string, field: string) {
+    // console.log('group: ' + group + ' field: ' + field);
     let tmpArr = this.form.get(group).get(field) as FormArray;
     tmpArr.removeAt(0);
   }

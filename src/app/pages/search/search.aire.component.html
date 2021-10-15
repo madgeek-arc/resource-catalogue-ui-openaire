@@ -475,7 +475,7 @@
       <p class="big-text-header uk-width-1-1 uk-text-center uk-margin-remove">Filters</p>
     </div>
 
-    <div class="uk-padding">
+    <div *ngIf="searchResultsSnippets != null" class="uk-padding">
       <ng-template ngFor let-facet [ngForOf]="searchResultsSnippets.facets">
         <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
                         || facet.field === 'portfolios'" class="uk-margin-medium-bottom">
@@ -483,8 +483,7 @@
             <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
                                                                 (click)="clearSelections($event, facet.field)">Clear</a>
             <div class="refineOption" *ngFor="let facetValue of facet.values">
-              <input type="checkbox" class=""
-                     (change)="this.onSelection($event, facet.field, facetValue.value)"
+              <input type="checkbox" (change)="this.onSelection($event, facet.field, facetValue.value)"
                      [checked]="facetValue.isChecked">
               {{facetValue.label}}
               <span>({{facetValue.count}})</span>
