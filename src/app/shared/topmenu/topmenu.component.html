@@ -205,7 +205,7 @@
                         <div class="uk-grid uk-child-width-1-4 uk-margin-top">
                           <div class="" *ngFor="let portfolio of services | keyvalue">
                             <h6>{{portfolio.key}}</h6>
-                            <div *ngFor="let service of portfolio.value">
+                            <div *ngFor="let service of portfolio.value" class="uk-margin-small-top">
                               <a (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
                             </div>
                           </div>
