@@ -9,7 +9,7 @@ export class CanActivateViaAuthGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const ret = this.authenticationService.getIsLoggedIn();
+        const ret = this.authenticationService.isLoggedIn();
         if (!ret) {
             this.authenticationService.redirectURL = state.url;
             this.authenticationService.login();

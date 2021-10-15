@@ -71,7 +71,7 @@
 <!--                  <star-rating-comp #rating (click)="rateService(rating.rating)"-->
 <!--                                    [starType]="'svg'" [rating]="richService.hasRate" [step]="1"-->
 <!--                                    [showHalfStars]="true"-->
-<!--                                    [readOnly]=!this.authenticationService.getIsLoggedIn()-->
+<!--                                    [readOnly]=!this.authenticationService.isLoggedIn()-->
 <!--                                    [size]="'medium'"-->
 <!--                                    [staticColor]="'ok'" title="Rate this service"-->
 <!--                                    uk-tooltip="delay: 500" class="uk-inline starRating"-->
@@ -133,7 +133,7 @@
             <!--<star-rating-comp #rating (click)="rateService(rating.rating)"-->
             <!--[starType]="'svg'" [rating]="richService.hasRate" [step]="1"-->
             <!--[showHalfStars]="true"-->
-            <!--[readOnly]=!this.authenticationService.getIsLoggedIn()-->
+            <!--[readOnly]=!this.authenticationService.isLoggedIn()-->
             <!--[size]="'medium'"-->
             <!--[staticColor]="'ok'" title="Rate this service"-->
             <!--uk-tooltip="delay: 500" class="uk-inline starRating"-->
