@@ -28,58 +28,61 @@
     <div class="uk-position-relative tm-header-mobile-slide">
 
       <div id="tm-mobile" class="uk-position-top" style="" hidden="">
-        <div class="uk-background-default uk-padding">
 
-          <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+        <div class="">
+          <div class="uk-background-default uk-padding">
 
-            <div class="uk-first-column">
+            <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
 
-              <div class="uk-panel" id="module-menu-mobile">
+              <div class="uk-first-column">
 
-                <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
-                  <h5 class="uk-text-center">Services</h5>
+                <div class="uk-panel" id="module-menu-mobile">
 
-                  <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of services | keyvalue">
-                    <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
-                    <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
-                  </div>
-                </div>
+                  <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
+                    <h5 class="uk-text-center">Services</h5>
 
-                <ng-container *ngFor="let portfolio of services | keyvalue">
-                  <div style="display: none" [ngClass]="portfolioItemActive===portfolio.key?'uk-display-block':'uk-display-none'">
-
-                    <div class="uk-flex uk-flex-middle">
-                      <a (click)="portfolioActive(null)"><i class="fa fa-2x fa-angle-left"></i></a>
-                      <h5 class="uk-text-center uk-margin-remove" style="width: 100%">{{portfolio.key}}</h5>
+                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of services | keyvalue">
+                      <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
+                      <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
                     </div>
-
-                    <div *ngFor="let service of portfolio.value" class="uk-margin-medium-top">
-                      <a (click)="redirectTo('/service/' + service.id)">
-                        <h6 class="uk-text-normal">{{service.name}}</h6>
-                      </a>
-                    </div>
-
                   </div>
-                </ng-container>
 
-                <div class="uk-flex uk-flex-center">
-                  <button class="uk-margin-medium-top uk-margin-bottom uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                  <ng-container *ngFor="let portfolio of services | keyvalue">
+                    <div style="display: none" [ngClass]="portfolioItemActive===portfolio.key?'uk-display-block':'uk-display-none'">
+
+                      <div class="uk-flex uk-flex-middle">
+                        <a (click)="portfolioActive(null)"><i class="fa fa-2x fa-angle-left"></i></a>
+                        <h5 class="uk-text-center uk-margin-remove" style="width: 100%">{{portfolio.key}}</h5>
+                      </div>
+
+                      <div *ngFor="let service of portfolio.value" class="uk-margin-medium-top">
+                        <a (click)="redirectTo('/service/' + service.id)">
+                          <h6 class="uk-text-normal">{{service.name}}</h6>
+                        </a>
+                      </div>
+
+                    </div>
+                  </ng-container>
+
+                  <div class="uk-flex uk-flex-center">
+                    <button class="uk-margin-medium-top uk-margin-bottom uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                  </div>
+
                 </div>
-
               </div>
             </div>
+
           </div>
 
-        </div>
+          <div class="help-section">
+            <div class="uk-padding" style="background: #F9F9F9 0% 0% no-repeat padding-box;">
+              <div class="uk-margin-top">
+                <p>Didn't find what you are looking for? <a href="mailto:info@openaire.eu">Contact us</a></p>
+                <p>Need service advices? <a href="https://www.openaire.eu/contact-noads" target="_blank">Contact NOADs</a></p>
+                <p><a href="https://www.openaire.eu/support/helpdesk" target="_blank">Help Desk</a></p>
+              </div>
 
-        <div class="help-section">
-          <div class="uk-padding" style="background: #F9F9F9 0% 0% no-repeat padding-box;">
-            <div class="uk-margin-top">
-              <p>Didn't find what you are looking for? <a href="mailto:info@openaire.eu">Contact us</a></p>
-              <p>Need service advices? <a href="https://www.openaire.eu/contact-noads" target="_blank">Contact NOADs</a></p>
-              <p><a href="https://www.openaire.eu/support/helpdesk" target="_blank">Help Desk</a></p>
             </div>
-
           </div>
         </div>
 
@@ -193,7 +196,7 @@
                   <a class="default-menu-item">Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i></a>
                   <div class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
 
-                    <div class="uk-grid uk-grid-column-medium">
+                    <div class="uk-grid uk-grid-column-medium uk-margin-medium-bottom">
                       <div class="uk-width-2-3 services">
                         <div class="uk-flex uk-flex-between">
                           <h5 class="uk-flex-left uk-margin-bottom">Services</h5>
