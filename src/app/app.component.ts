@@ -14,6 +14,11 @@ export class AppComponent implements OnInit {
   breadcrumbs: string[] = [];
 
   constructor(public router: Router, private smoothScroll: SmoothScroll) {
+    if (sessionStorage.getItem('state.location') !== null) {
+      const url = sessionStorage.getItem('state.location');
+      sessionStorage.removeItem('state.location');
+      this.router.navigate([url]);
+    }
   }
 
   ngOnInit() {
