@@ -62,7 +62,7 @@
                 <!--<rect class="uk-preserve" x="35" y="35" width="60" height="60"-->
                 <!--fill="url(../../../../../assets/images/icons/Asset%2012@2x.png)"-->
                 <!--mask="url(../../../../../assets/images/icons/Asset%2012@2x.png)"></rect>-->
-                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Asset%2013@2x.png" clip-path="url(#myCircle)" />
+                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Helpdesk%20Email@2x.png" clip-path="url(#myCircle)" />
 
               </svg>
 
@@ -117,12 +117,12 @@
                 </style>
 
                 <rect class="uk-preserve" x="0" y="0" width="110" height="110" rx="60" fill="#f7f8fc"></rect>
-                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Icon%20awesome-link@2x.png" clip-path="url(#myCircle)" />
+                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Helpdesk%20Page@2x.png" clip-path="url(#myCircle)" />
 
               </svg>
 
               <div>
-                <button (click)="goto(getServiceField('helpdeskPage').value)" class="uk-button uk-button-text">Helpdesk page</button>
+                <button (click)="goto(getServiceField('helpdeskPage').value)" class="uk-button uk-button-text">Helpdesk page<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@
                 </style>
 
                 <rect class="uk-preserve" x="0" y="0" width="110" height="110" rx="60" fill="#f7f8fc"></rect>
-                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Asset%2017@2x.png" clip-path="url(#myCircle)" />
+                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Version@2x.png" clip-path="url(#myCircle)" />
 
               </svg>
 
@@ -225,7 +225,7 @@
                 </style>
 
                 <rect class="uk-preserve" x="0" y="0" width="110" height="110" rx="60" fill="#f7f8fc"></rect>
-                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Icon%20material-update@2x.png" clip-path="url(#myCircle)" />
+                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Last%20update@2x.png" clip-path="url(#myCircle)" />
 
               </svg>
 
@@ -279,14 +279,14 @@
           <div class="uk-margin uk-width-medium uk-margin-auto uk-text-center">
             <div>
               <div>
-                <img src="../../../../../assets/images/icons/GitHub-Mark-120px-plus.png" width="81">
+                <img src="../../../../../assets/images/icons/repositories@2x.png" width="81">
               </div>
 
               <h5 class="uk-margin-medium-top">Our <span class="uk-text-primary">Source Code</span></h5>
 
               <p class="regular-text uk-margin-top">Access the service open source resources available on cloud development platforms</p>
 
-              <button *ngFor="let link of getExtrasArray('git').value" (click)="goto(link)" class="uk-button uk-button-text">MOVE TO SOURCE CODE</button>
+              <button *ngFor="let link of getExtrasArray('git').value" (click)="goto(link)" class="uk-button uk-button-text">MOVE TO SOURCE CODE<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
             </div>
           </div>
 
@@ -329,14 +329,14 @@
           <div class="uk-margin uk-width-medium uk-margin-auto uk-text-center">
             <div>
               <div>
-                <img src="../../../../../assets/images/icons/Layer%202.png" width="81">
+                <img src="../../../../../assets/images/icons/old/Layer%202.png" width="81">
               </div>
 
               <h5 class="uk-margin-medium-top">Start with our <span class="uk-text-primary">Datasets</span></h5>
 
               <p class="regular-text uk-margin-top">A collection of open access datasets related to the service</p>
 
-              <button (click)="goto(getExtrasArray('datasets').value[0])" class="uk-button uk-button-primary uk-margin-top">DATASETS</button>
+              <button (click)="goto(getExtrasArray('datasets').value[0])" class="uk-button uk-button-primary uk-margin-top">DATASETS<i class="fa fa-external-link uk-margin-small-left"></i></button>
             </div>
           </div>
 
@@ -408,7 +408,7 @@
             <!--<rect class="uk-preserve" x="35" y="35" width="60" height="60"-->
                   <!--fill="url(../../../../../assets/images/icons/Asset%2012@2x.png)"-->
                   <!--mask="url(../../../../../assets/images/icons/Asset%2012@2x.png)"></rect>-->
-            <image width="67" height="48" x=35 y=35 xlink:href="../../../../../assets/images/icons/Asset%2012@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/Asset%2012@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
@@ -417,7 +417,7 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Follow OpenAIRE’s series of community calls, stay
             up-to-date with all the latest information on the service and have your questions answered.</p>
 
-          <button (click)="goto(getExtrasField('communityCalls').value)" class="uk-button uk-button-text">View all</button>
+          <button (click)="goto(getExtrasField('communityCalls').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 
@@ -466,7 +466,7 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <image width="67" height="48" x=35 y=35 xlink:href="../../../../../assets/images/icons/Asset%201@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/Asset%201@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
@@ -475,7 +475,7 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Register to the service’s webinars and interact live
             with the service managers.</p>
 
-          <button (click)="goto(getExtrasField('webinars').value)" class="uk-button uk-button-text">View all</button>
+          <button (click)="goto(getExtrasField('webinars').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 
@@ -524,7 +524,7 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <image width="67" height="48" x=35 y=35 xlink:href="../../../../../assets/images/icons/Asset%208@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/Asset%208@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
@@ -532,7 +532,7 @@
 
           <p class="el-content uk-panel uk-margin-top regular-text">Get familiar with the service at your own pace.</p>
 
-          <button (click)="goto(getExtrasField('tutorials').value)" class="uk-button uk-button-text">View all</button>
+          <button (click)="goto(getExtrasField('tutorials').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 
@@ -581,7 +581,7 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <image width="67" height="48" x=35 y=35 xlink:href="../../../../../assets/images/icons/book@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/book@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
@@ -590,7 +590,7 @@
           <p class="el-content uk-panel uk-margin-top regular-text">View the full list of useful terms related to the
             service.</p>
 
-          <button (click)="goto(getExtrasField('glossary').value)" class="uk-button uk-button-text">View all</button>
+          <button (click)="goto(getExtrasField('glossary').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 
@@ -639,7 +639,7 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <image width="67" height="48" x=35 y=35 xlink:href="../../../../../assets/images/icons/faq@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/faq@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
@@ -648,7 +648,7 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Get answers to common questions about the
             service.</p>
 
-          <button (click)="goto(getExtrasField('faqs').value)" class="uk-button uk-button-text">View all</button>
+          <button (click)="goto(getExtrasField('faqs').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 
@@ -697,7 +697,7 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <image width="67" height="48" x=35 y=35 xlink:href="../../../../../assets/images/icons/guides@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/guides@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
@@ -705,7 +705,7 @@
 
           <p class="el-content uk-panel uk-margin-top regular-text">Understand how to make the best use of the service.</p>
 
-          <button (click)="goto(getExtrasField('guides').value)" class="uk-button uk-button-text">View all</button>
+          <button (click)="goto(getExtrasField('guides').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 

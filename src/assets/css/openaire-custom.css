@@ -298,6 +298,10 @@ hr {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2211%22%20viewBox%3D%220%200%2020%2011%22%3E%0A%20%20%20%20%3Cpolyline%20fill%3D%22none%22%20stroke%3D%22%23AD20E7%22%20stroke-width%3D%221.2%22%20points%3D%2213%201%2018%205.5%2013%2010%20%22%2F%3E%0A%20%20%20%20%3Cline%20fill%3D%22none%22%20stroke%3D%22%23AD20E7%22%20stroke-width%3D%221.2%22%20x1%3D%220%22%20y1%3D%225.5%22%20x2%3D%2218.4%22%20y2%3D%225.5%22%2F%3E%0A%3C%2Fsvg%3E%0A");
 }
 
+.uk-button-text.eosc-link::before {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2211%22%20viewBox%3D%220%200%2020%2011%22%3E%0A%20%20%20%20%3Cpolyline%20fill%3D%22none%22%20stroke%3D%22%233A75AB%22%20stroke-width%3D%221.2%22%20points%3D%2213%201%2018%205.5%2013%2010%20%22%2F%3E%0A%20%20%20%20%3Cline%20fill%3D%22none%22%20stroke%3D%22%233A75AB%22%20stroke-width%3D%221.2%22%20x1%3D%220%22%20y1%3D%225.5%22%20x2%3D%2218.4%22%20y2%3D%225.5%22%2F%3E%0A%3C%2Fsvg%3E%0A");
+}
+
 .uk-button-text:hover {
   color: var(--openaire-light-blue);
 }
@@ -346,6 +350,7 @@ hr {
 
 .uk-button-secondary:hover {
   background: transparent linear-gradient(254deg, var(--openaire-light-blue) 0%, var(--catalogue-light-purple) 100%) 0 0 no-repeat padding-box;
+  border: 0px;
 }
 
 a.uk-button {
@@ -396,6 +401,10 @@ a.uk-icon-button {
 .browse-dropdown-menu .services a {
   color: var(--black) !important;
   text-decoration: none;
+}
+
+.browse-dropdown-menu .services a:hover {
+  color: var(--openaire-light-blue) !important;
 }
 
 .help-section a {
@@ -539,7 +548,7 @@ a.service-menu-item:hover {
   border-radius: 6px;
   opacity: 1;
   color: var(--black);
-  font: normal normal normal 14px/22px var(--main-font-family);
+  font: normal normal normal 16px/22px var(--main-font-family);
   letter-spacing: 0.14px;
 }
 
@@ -553,6 +562,10 @@ a.service-menu-item:hover {
 
 .uk-card-default.uk-card-hover:hover {
   background: var(--light-grey) 0 0 no-repeat padding-box;
+}
+
+.service-list-card {
+  font: normal normal normal 14px/22px var(--main-font-family);
 }
 /*.card-icon-no-button {*/
   /**/
@@ -747,28 +760,40 @@ a.serviceDetails {
   /*color: #fff;*/
   color: var(--grey-700);
   padding: 5px 10px;
-  margin: 0 0 10px 0;
+  /*margin: 0 0 10px 0;*/
   line-height: 24px;
 }
 
 .serviceDetails .service-details-card-content {
-  border-left: 34px solid #ececec;
+  /*border-left: 34px solid #ececec;*/
+  /*display: flex;*/
   border-radius: 6px;
   /*padding-left: 10px;*/
 }
 
 .serviceDetails .service-details-card-content .portfolioSection {
-  /* Abs positioning makes it not take up vert space */
-  position: absolute;
-  bottom: 0;
-  left: -34px;
+  /*!* Abs positioning makes it not take up vert space *!*/
+  /*position: absolute;*/
+  /*bottom: 0;*/
+  /*left: -34px;*/
 
-  /* Border is the new background */
-  background: none;
+  /*!* Border is the new background *!*/
+  /*background: none;*/
 
-  /* Rotate from top left corner (not default) */
-  transform-origin: 0 0;
+  /*!* Rotate from top left corner (not default) *!*/
+  /*transform-origin: 0 0;*/
+  /*transform: rotate(-90deg);*/
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  border-radius: 6px 0px 0px 6px;
+}
+
+.serviceDetails .service-details-card-content .portfolioSection > div {
   transform: rotate(-90deg);
+  white-space: nowrap;
 }
 
 .serviceDetails .field-label {
@@ -795,7 +820,7 @@ a.serviceDetails {
 
   .serviceDetails .service-details-card-content {
     border-left: none;
-    border-bottom: 34px solid #ececec;
+    /*border-bottom: 34px solid #ececec;*/
   }
 
   .serviceDetails .service-details-card-content .portfolioSection {
@@ -803,6 +828,8 @@ a.serviceDetails {
     transform: none;
     left: 21px;
     bottom: -45px;
+    width: 100%;
+    border-radius: 0px 0px 6px 6px;
   }
 }
 

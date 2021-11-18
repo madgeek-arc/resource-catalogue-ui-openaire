@@ -3,8 +3,9 @@
   <div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove" uk-height-viewport="offset-bottom: 30">
     <div class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
 
-      <div class="uk-flex-last@m uk-flex-last@l uk-text-right">
-        <img src="{{getExtrasField('longImage').value}}">
+      <div class="uk-flex-last@m uk-flex-last@l uk-text-right"
+           style="background-image: url({{getExtrasField('longImage').value}}); background-repeat: no-repeat; background-position: bottom right; background-size: contain">
+        <!--<img src="{{getExtrasField('longImage').value}}">-->
       </div>
 
       <div class="uk-first-column">
@@ -119,7 +120,7 @@
         </div>
 
         <div *ngIf="getServiceField('termsOfUse')?.value !== ''" class="uk-margin-top">
-          <a href="{{getServiceField('termsOfUse').value}}" target="_blank" class="uk-button uk-button-text uk-margin-top">Terms of use</a>
+          <a href="{{getServiceField('termsOfUse').value}}" target="_blank" class="uk-button uk-button-text uk-margin-top">Terms of use<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a>
         </div>
 
       </div>
@@ -250,7 +251,7 @@
                 <div class="slider-header">{{useCase.useCaseTitle}}</div>
                 <div class="slider-description uk-margin-top">{{useCase.useCaseText}}</div>
                 <div *ngIf="useCase.useCaseLink !== ''" class="uk-margin-medium-top">
-                  <a href="{{useCase.useCaseLink}}" target="_blank" class="uk-button uk-button-text">Learn more</a>
+                  <a href="{{useCase.useCaseLink}}" target="_blank" class="uk-button uk-button-text">Learn more<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a>
                 </div>
               </div>
             </div>
@@ -299,7 +300,7 @@
                 <div class="slider-header">{{useCase.useCaseTitle}}</div>
                 <div class="slider-description uk-margin-top">{{useCase.useCaseText}}</div>
                 <div *ngIf="useCase.useCaseLink !== ''" class="uk-margin-medium-top">
-                  <a href="{{useCase.useCaseLink}}" target="_blank" class="uk-button uk-button-text">Learn more</a>
+                  <a href="{{useCase.useCaseLink}}" target="_blank" class="uk-button uk-button-text">Learn more<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a>
                 </div>
               </div>
             </div>
