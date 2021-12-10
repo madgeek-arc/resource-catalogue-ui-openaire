@@ -3,7 +3,9 @@
  */
 export class UserInfo {
   sub: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
   email: string;
   roles: [string];
 }

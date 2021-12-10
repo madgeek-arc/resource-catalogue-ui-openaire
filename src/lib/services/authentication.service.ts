@@ -14,9 +14,9 @@ export class AuthenticationService {
   // store the URL so we can redirect after logging in
   public redirectURL: string;
   loggedIn = false;
-  cookieName = 'info';
+  cookieName = 'AccessToken';
 
-  user: UserInfo= new UserInfo();
+  user: UserInfo = new UserInfo();
 
   constructor(public navigationService: NavigationService, public http: HttpClient) {
     this.tryLogin();
@@ -40,7 +40,7 @@ export class AuthenticationService {
       console.log('stored location', url);
       sessionStorage.setItem('state.location', url);
     } else {
-      sessionStorage.setItem("state.location", this.navigationService.router.url);
+      sessionStorage.setItem('state.location', this.navigationService.router.url);
     }
     // console.log('redirect location', sessionStorage.getItem('state.location'));
     window.location.href = this.loginUrl;
@@ -53,7 +53,9 @@ export class AuthenticationService {
       this.http.get<UserInfo>(this.apiUrl + '/user/info', { withCredentials: true }).subscribe(
         userInfo => {
           // console.log(userInfo);
-          sessionStorage.setItem('name', userInfo.name);
+          sessionStorage.setItem('firstName', userInfo.firstName);
+          sessionStorage.setItem('lastName', userInfo.lastName);
+          sessionStorage.setItem('fullName', userInfo.fullName);
           sessionStorage.setItem('email', userInfo.email.trim());
           sessionStorage.setItem('role', userInfo.roles.toString());
           sessionStorage.setItem('sub', userInfo.sub);

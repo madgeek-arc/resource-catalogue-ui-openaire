@@ -24,7 +24,7 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
   constructor(public authenticationService: AuthenticationService, public router: Router, public fb: FormBuilder,
               public navigationService: NavigationService, public resourceService: ResourceService,
               private dataSharingService: DataSharingService) {
-    super(authenticationService, router, fb,navigationService, resourceService);
+    super(authenticationService, router, fb, navigationService, resourceService);
   }
 
   ngOnInit() {
@@ -32,17 +32,17 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
     this.dataSharingService.refreshRequired.subscribe( value => {
       this.refresh = value;
       if (this.refresh) {
-        this.resourceService.getServicesByIndexedField('portfolios','Portfolios').subscribe(
-          res => {this.services = res;},
-          error => {console.log(error)},
-          () => {this.dataSharingService.refreshRequired.next(false);}
+        this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
+          res => {this.services = res; },
+          error => {console.log(error); },
+          () => {this.dataSharingService.refreshRequired.next(false); }
         );
       }
-    })
+    });
 
   }
 
-  redirectTo(url: string){
+  redirectTo(url: string) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
       this.router.navigate([url]));
   }

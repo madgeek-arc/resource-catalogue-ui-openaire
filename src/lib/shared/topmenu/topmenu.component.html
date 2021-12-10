@@ -43,7 +43,7 @@
 
               <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">
                 <span *ngIf="authenticationService.isLoggedIn()">
-                  <span> {{authenticationService.user.name}} {{authenticationService.user.surname}}
+                  <span> {{authenticationService.user.firstName}} {{authenticationService.user.lastName}}
                     <span class="uk-margin-small-right uk-icon">
                       <svg width="20" height="20"
                            viewBox="0 0 20 20"
