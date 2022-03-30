@@ -664,6 +664,21 @@ a.service-menu-item:hover {
   font: normal normal 600 19px/26px Open Sans;
 }
 
+/* ========================================================================
+   Tabs
+ ========================================================================== */
+
+.uk-tab:not([class*="uk-tab-left"]) > * > a {
+  background: none;
+  border-radius: 0px;
+  color: var(--black) !important;
+  text-decoration: none;
+}
+
+.uk-tab::before {
+  border-bottom: none;
+}
+
 
 /* ========================================================================
    Forms

@@ -1,20 +1,47 @@
 <!--HERO SECTION-->
-<div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove uk-visible@m">
-  <div class="uk-grid uk-child-width-expand">
+<!--<div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove uk-visible@m">-->
+  <!--<div class="uk-grid uk-child-width-expand">-->
 
-    <div class="uk-width-1-2 uk-flex-last">
-      <img src="../../../assets/images/catalogue-hero-home.png">
-    </div>
+    <!--<div class="uk-width-1-2 uk-flex-last">-->
+      <!--<img src="../../../assets/images/catalogue-hero-home.png">-->
+    <!--</div>-->
 
-    <div class="uk-first-column">
-      <div class="uk-padding-large uk-margin-large-left uk-margin-large-top">
-        <h1>Services for open science.</h1>
-        <p class="big-text uk-margin-medium-top">Find services that meet your needs. Learn about their features and benefits.
-          Get support and access. Achieve the best results possible.</p>
-      </div>
-    </div>
+    <!--<div class="uk-first-column">-->
+      <!--<div class="uk-padding-large uk-margin-large-left uk-margin-large-top">-->
+        <!--<h1>Services for open science.</h1>-->
+        <!--<p class="big-text uk-margin-medium-top">Find services that meet your needs. Learn about their features and benefits.-->
+          <!--Get support and access. Achieve the best results possible.</p>-->
+      <!--</div>-->
+    <!--</div>-->
 
-  </div>
+  <!--</div>-->
+<!--</div>-->
+<div class="uk-section-muted uk-cover-container uk-section uk-padding-remove-vertical uk-flex uk-flex-middle" uk-scrollspy="target: [uk-scrollspy-class]; cls: uk-animation-fade; delay: false;" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(-100px + 80vh);">
+
+  <video src="https://www.openaire.eu/images/_test/Your%20project%205-hd.mp4" loop="" autoplay="" muted="" playsinline="" uk-cover="" style="height: 100%; width: 100%"></video>
+
+  <!--<div class="uk-width-1-1">-->
+
+    <!--<div class="uk-position-relative uk-panel">-->
+
+      <!--<div class="tm-grid-expand uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">-->
+        <!--<div class="uk-width-1-1@m uk-first-column">-->
+
+
+
+
+
+
+
+
+
+
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+  <!--</div>-->
+
 </div>
 
 <!--HERO SECTION MOBILE-->
@@ -32,13 +59,13 @@
 </div>
 
 <!--USER GROUPS SECTION-->
-<div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-visible@m">
+<div *ngIf="users && users.length>0" class="uk-section uk-section-primary uk-preserve-color uk-visible@m">
 
   <div class="uk-container uk-container-large">
 
     <h1 class="">Ideal for</h1>
-
-    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlide()">
+    <!--autoplay: true; autoplay-interval: 4000;-->
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4;  pause-on-hover: true;" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let user of users" class="uk-flex-middle">
@@ -82,7 +109,7 @@
 </div>
 
 <!--USER GROUPS SECTION MOBILE-->
-<div *ngIf="users && users.length>0" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-hidden@m">
+<div *ngIf="users && users.length>0" class="uk-section uk-section-primary uk-preserve-color uk-hidden@m">
 
   <div class="uk-container uk-container-large">
 
@@ -132,34 +159,274 @@
 </div>
 
 <!--PORTFOLIO SECTIONS-->
-<ng-container *ngIf="portfolios">
+<!--<ng-container *ngIf="portfolios">-->
 
-  <ng-container *ngFor="let portfolio of portfolios; let i = index">
-    <div class="uk-section uk-section-primary uk-preserve-color uk-padding-remove">
-      <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
+  <!--<ng-container *ngFor="let portfolio of portfolios; let i = index">-->
+    <!--<div class="uk-section uk-section-primary uk-preserve-color uk-padding-remove">-->
+      <!--<div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">-->
 
-        <div class="" [ngClass]="{'uk-flex-last@m' : i%2==0, 'uk-flex-last@l' : i%2==0}">
-          <img src="{{portfolio.extras.image}}">
+        <!--<div class="" [ngClass]="{'uk-flex-last@m' : i%2==0, 'uk-flex-last@l' : i%2==0}">-->
+          <!--<img src="{{portfolio.extras.image}}">-->
+        <!--</div>-->
+
+        <!--<div class="uk-first-column">-->
+          <!--<div class="uk-padding-large uk-margin-large-top" [ngClass]="{'uk-margin-large-left@m' : i%2==0, 'uk-margin-large-left@l' : i%2==0}">-->
+            <!--<div *ngIf="portfolio.extras.tagline" class="h1-subHeader">{{portfolio.extras.tagline}}</div>-->
+            <!--<h1>{{portfolio.name}} portfolio</h1>-->
+            <!--<p class="big-text uk-margin-medium-top">{{portfolio.description}}</p>-->
+            <!--<a class="uk-button uk-button-primary uk-margin-medium-top uk-margin-large-bottom" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>-->
+          <!--</div>-->
+        <!--</div>-->
+
+      <!--</div>-->
+    <!--</div>-->
+  <!--</ng-container>-->
+
+<!--</ng-container>-->
+<div class="uk-section-default uk-preserve-color uk-section uk-section-large" *ngIf="portfolios && services">
+
+  <div class="uk-container uk-container-large">
+
+    <div class="h1-subHeader">Find a service that fits your needs</div>
+    <h1 >Explore our service portfolios</h1>
+
+  </div>
+
+  <div class="uk-container uk-container-large uk-margin-large-top">
+
+    <div class="tm-grid-expand uk-child-width-1-1 uk-margin-large uk-grid uk-grid-stack" uk-grid="">
+      <div class="uk-first-column">
+
+
+        <div class="uk-margin-large">
+
+          <!--change uk-flex-center with uk-child-width-expand / uk-flex-center-->
+          <ul uk-tab="connect: #portfolios-tabs; animation: uk-animation-fade" class="uk-tab uk-child-width-expand">
+            <li *ngFor="let portfolio of portfolios; let i = index">
+              <a class="el-link" href="https://www.openaire.eu">{{portfolio.name}}</a>
+            </li>
+          </ul>
+
+          <ul id="portfolios-tabs" class="uk-switcher">
+            <li *ngFor="let portfolio of portfolios; let i = index">
+
+              <div class="uk-grid uk-margin-large-top uk-grid-large">
+
+                <div class="uk-width-1-3">
+                  <div>
+                    <div *ngIf="portfolio.extras.tagline" class="h5-subheader">{{portfolio.extras.tagline}}</div>
+                    <h5>{{portfolio.name}} portfolio</h5>
+                    <p class="regular-text uk-margin-medium-top">{{portfolio.description}}</p>
+                    <a class="uk-button uk-button-primary uk-margin-medium-top uk-margin-large-bottom" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>
+                  </div>
+                </div>
+
+                <div class="uk-width-expand">
+
+                  <div class="uk-grid uk-child-width-1-2 uk-grid-match uk-grid-large">
+
+                    <div class="uk-margin-large-bottom" *ngFor="let service of services[portfolio.name] | slice:0:3;">
+                      <div
+                        class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
+                        <div class="uk-inline-clip">
+
+
+                          <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="https://www.openaire.eu/templates/yootheme/cache/lurm-527078-unsplash-d85850c0.webp">
+
+
+                          <div class="uk-position-bottom uk-overlay-default">
+                            <div class="uk-overlay uk-padding-small uk-margin-remove-first-child">
+
+                              <div class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom">{{service.name}}</div>
+                              <div class="el-meta uk-margin-top">Search in more than 200 mi research records</div>
+                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>
+
+                              <div class="uk-margin-top"><a href="https://www.openaire.eu"
+                                                            class="el-link uk-button uk-button-text uk-button-large">View</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="uk-panel uk-margin-remove-first-child uk-margin-xlarge" id="page#2-2-2-1">
+
+
+                      <div class="el-content uk-panel uk-h5 uk-margin-medium-top uk-margin-remove-bottom"><p
+                        style="font-weight:bold; color:#19116D;">Interested to see other available services?</p></div>
+
+                      <div class="uk-margin-small-top"><a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View
+                        all</a></div>
+
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+            </li>
+          </ul>
+
         </div>
 
-        <div class="uk-first-column">
-          <div class="uk-padding-large uk-margin-large-top" [ngClass]="{'uk-margin-large-left@m' : i%2==0, 'uk-margin-large-left@l' : i%2==0}">
-            <div *ngIf="portfolio.extras.tagline" class="h1-subHeader">{{portfolio.extras.tagline}}</div>
-            <h1>{{portfolio.name}} portfolio</h1>
-            <p class="big-text uk-margin-medium-top">{{portfolio.description}}</p>
-            <a class="uk-button uk-button-primary uk-margin-medium-top uk-margin-large-bottom" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>
-          </div>
-        </div>
 
       </div>
     </div>
-  </ng-container>
+    <!--<div class="uk-grid-margin uk-container">-->
+      <!--<div class="tm-grid-expand uk-grid" uk-grid="" uk-height-match="target: .uk-card">-->
+        <!--<div class="uk-width-1-3@m uk-first-column">-->
 
-</ng-container>
+
+          <!--<div class="uk-panel uk-margin-remove-first-child uk-margin" id="page#2-2-0-0">-->
+
+
+            <!--<div class="el-meta uk-text-meta uk-margin-top">Discover open scholarly works.</div>-->
+            <!--<h3 class="el-title uk-h2 uk-font-primary uk-margin-small-top uk-margin-remove-bottom"> Discover-->
+              <!--portfolio </h3>-->
+
+
+            <!--<div class="el-content uk-panel uk-margin-top">Enabling research discovery and making Open Access research-->
+              <!--accessible in Europe and beyond.-->
+            <!--</div>-->
+
+            <!--<div class="uk-margin-top"><a href="https://www.openaire.e" class="el-link uk-button uk-button-primary">Learn-->
+              <!--more</a></div>-->
+
+
+          <!--</div>-->
+
+
+        <!--</div>-->
+
+        <!--<div class="uk-width-1-3@s uk-width-1-3@m">-->
+
+
+          <!--<div class="uk-margin uk-text-left" id="page#2-2-1-0">-->
+            <!--<div-->
+              <!--class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">-->
+              <!--<div class="uk-inline-clip">-->
+
+
+                <!--<img alt="" class="el-image uk-transition-scale-down uk-transition-opaque"-->
+                     <!--data-src="/templates/yootheme/cache/karim-ghantous-329207-unsplash-7d86fb7e.webp"-->
+                     <!--data-srcset="/templates/yootheme/cache/karim-ghantous-329207-unsplash-7d86fb7e.webp 550w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9rYXJpbS1naGFudG91cy0zMjkyMDctdW5zcGxhc2guanBnIixbWyJkb1Jlc2l6ZSIsWzk0NSw2MjgsOTQ1LDYyOF1dLFsiZG9Dcm9wIixbNzY4LDYyOCw4OCwwXV0sWyJ0eXBlIixbIndlYnAiLCI4NSJdXV1d&amp;hash=e408e9c56e9c126a465da0085e3149d1 768w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9rYXJpbS1naGFudG91cy0zMjkyMDctdW5zcGxhc2guanBnIixbWyJkb1Jlc2l6ZSIsWzEyNjEsODM4LDEyNjEsODM4XV0sWyJkb0Nyb3AiLFsxMDI0LDgzOCwxMTgsMF1dLFsidHlwZSIsWyJ3ZWJwIiwiODUiXV1dXQ%3D%3D&amp;hash=3dd8463c86978686b8e9796680b5fafc 1024w, /templates/yootheme/cache/karim-ghantous-329207-unsplash-982f24f1.webp 1100w"-->
+                     <!--data-sizes="(min-width: 550px) 550px" data-width="550" data-height="450" uk-img=""-->
+                     <!--src="https://www.openaire.eu/templates/yootheme/cache/karim-ghantous-329207-unsplash-982f24f1.webp"-->
+                     <!--sizes="(min-width: 550px) 550px"-->
+                     <!--srcset="/templates/yootheme/cache/karim-ghantous-329207-unsplash-7d86fb7e.webp 550w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9rYXJpbS1naGFudG91cy0zMjkyMDctdW5zcGxhc2guanBnIixbWyJkb1Jlc2l6ZSIsWzk0NSw2MjgsOTQ1LDYyOF1dLFsiZG9Dcm9wIixbNzY4LDYyOCw4OCwwXV0sWyJ0eXBlIixbIndlYnAiLCI4NSJdXV1d&amp;hash=e408e9c56e9c126a465da0085e3149d1 768w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9rYXJpbS1naGFudG91cy0zMjkyMDctdW5zcGxhc2guanBnIixbWyJkb1Jlc2l6ZSIsWzEyNjEsODM4LDEyNjEsODM4XV0sWyJkb0Nyb3AiLFsxMDI0LDgzOCwxMTgsMF1dLFsidHlwZSIsWyJ3ZWJwIiwiODUiXV1dXQ%3D%3D&amp;hash=3dd8463c86978686b8e9796680b5fafc 1024w, /templates/yootheme/cache/karim-ghantous-329207-unsplash-982f24f1.webp 1100w">-->
+
+
+                <!--<div class="uk-position-bottom uk-overlay-default">-->
+                  <!--<div class="uk-overlay uk-padding-small uk-margin-remove-first-child">-->
+
+                    <!--<div class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom"> Explore</div>-->
+                    <!--<div class="el-meta uk-margin-top">Search in more than 200 mi research records</div>-->
+                    <!--<div class="el-content uk-panel uk-margin-top"><p>hello</p></div>-->
+
+                    <!--<div class="uk-margin-top"><a href="https://www.openaire.eu"-->
+                                                  <!--class="el-link uk-button uk-button-text uk-button-large">View</a>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+          <!--<div class="uk-margin-large uk-margin-remove-bottom uk-text-left" id="page#2-2-1-1">-->
+            <!--<div-->
+              <!--class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge uk-inline-clip uk-transition-toggle">-->
+
+
+              <!--<img alt="" class="el-image uk-transition-scale-down uk-transition-opaque"-->
+                   <!--data-src="/templates/yootheme/cache/Screen-Shot-2018-05-18-at-23.52.39-81e95941.webp"-->
+                   <!--data-srcset="/templates/yootheme/cache/Screen-Shot-2018-05-18-at-23.52.39-81e95941.webp 550w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9TY3JlZW4tU2hvdC0yMDE4LTA1LTE4LWF0LTIzLjUyLjM5LnBuZyIsW1siZG9SZXNpemUiLFsxMTQ5LDYyOCwxMTQ5LDYyOF1dLFsiZG9Dcm9wIixbNzY4LDYyOCwxOTAsMF1dLFsidHlwZSIsWyJ3ZWJwIiwiMTAwIl1dXV0%3D&amp;hash=62cce9087a69741a456afba1f80906dd 768w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9TY3JlZW4tU2hvdC0yMDE4LTA1LTE4LWF0LTIzLjUyLjM5LnBuZyIsW1siZG9SZXNpemUiLFsxNTMzLDgzOCwxNTMzLDgzOF1dLFsiZG9Dcm9wIixbMTAyNCw4MzgsMjU0LDBdXSxbInR5cGUiLFsid2VicCIsIjEwMCJdXV1d&amp;hash=80052c91b126cbe89c14bdce5a5ba2d5 1024w, /templates/yootheme/cache/Screen-Shot-2018-05-18-at-23.52.39-75693fac.webp 1100w"-->
+                   <!--data-sizes="(min-width: 550px) 550px" data-width="550" data-height="450" uk-img=""-->
+                   <!--src="https://www.openaire.eu/templates/yootheme/cache/Screen-Shot-2018-05-18-at-23.52.39-75693fac.webp"-->
+                   <!--sizes="(min-width: 550px) 550px"-->
+                   <!--srcset="/templates/yootheme/cache/Screen-Shot-2018-05-18-at-23.52.39-81e95941.webp 550w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9TY3JlZW4tU2hvdC0yMDE4LTA1LTE4LWF0LTIzLjUyLjM5LnBuZyIsW1siZG9SZXNpemUiLFsxMTQ5LDYyOCwxMTQ5LDYyOF1dLFsiZG9Dcm9wIixbNzY4LDYyOCwxOTAsMF1dLFsidHlwZSIsWyJ3ZWJwIiwiMTAwIl1dXV0%3D&amp;hash=62cce9087a69741a456afba1f80906dd 768w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9TY3JlZW4tU2hvdC0yMDE4LTA1LTE4LWF0LTIzLjUyLjM5LnBuZyIsW1siZG9SZXNpemUiLFsxNTMzLDgzOCwxNTMzLDgzOF1dLFsiZG9Dcm9wIixbMTAyNCw4MzgsMjU0LDBdXSxbInR5cGUiLFsid2VicCIsIjEwMCJdXV1d&amp;hash=80052c91b126cbe89c14bdce5a5ba2d5 1024w, /templates/yootheme/cache/Screen-Shot-2018-05-18-at-23.52.39-75693fac.webp 1100w">-->
+
+
+              <!--<div class="uk-position-bottom uk-overlay-default">-->
+                <!--<div class="uk-overlay uk-padding-small uk-margin-remove-first-child">-->
+
+                  <!--<h3 class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom"> Metadata-->
+                    <!--Broker </h3>-->
+                  <!--<div class="el-meta uk-margin-top">Enrich your repository content</div>-->
+
+
+                  <!--<div class="uk-margin-top"><a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View</a>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+
+            <!--</div>-->
+          <!--</div>-->
+
+
+        <!--</div>-->
+
+        <!--<div class="uk-width-1-3@s uk-width-1-3@m">-->
+
+
+          <!--<div class="uk-margin uk-text-left" id="page#2-2-2-0">-->
+            <!--<div-->
+              <!--class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge uk-inline-clip uk-transition-toggle">-->
+
+
+              <!--<img alt="" class="el-image uk-transition-scale-down uk-transition-opaque"-->
+                   <!--data-src="/templates/yootheme/cache/lurm-527078-unsplash-f36b2eab.webp"-->
+                   <!--data-srcset="/templates/yootheme/cache/lurm-527078-unsplash-f36b2eab.webp 550w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9sdXJtLTUyNzA3OC11bnNwbGFzaC5qcGciLFtbImRvUmVzaXplIixbODM3LDYyOCw4MzcsNjI4XV0sWyJkb0Nyb3AiLFs3NjgsNjI4LDM0LDBdXSxbInR5cGUiLFsid2VicCIsIjg1Il1dXV0%3D&amp;hash=63721e84e7dfee1be284a71f45d15310 768w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9sdXJtLTUyNzA3OC11bnNwbGFzaC5qcGciLFtbImRvUmVzaXplIixbMTExNyw4MzgsMTExNyw4MzhdXSxbImRvQ3JvcCIsWzEwMjQsODM4LDQ2LDBdXSxbInR5cGUiLFsid2VicCIsIjg1Il1dXV0%3D&amp;hash=3a1adbaa8c96266517385576cd527a55 1024w, /templates/yootheme/cache/lurm-527078-unsplash-d85850c0.webp 1100w"-->
+                   <!--data-sizes="(min-width: 550px) 550px" data-width="550" data-height="450" uk-img=""-->
+                   <!--src="https://www.openaire.eu/templates/yootheme/cache/lurm-527078-unsplash-d85850c0.webp"-->
+                   <!--sizes="(min-width: 550px) 550px"-->
+                   <!--srcset="/templates/yootheme/cache/lurm-527078-unsplash-f36b2eab.webp 550w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9sdXJtLTUyNzA3OC11bnNwbGFzaC5qcGciLFtbImRvUmVzaXplIixbODM3LDYyOCw4MzcsNjI4XV0sWyJkb0Nyb3AiLFs3NjgsNjI4LDM0LDBdXSxbInR5cGUiLFsid2VicCIsIjg1Il1dXV0%3D&amp;hash=63721e84e7dfee1be284a71f45d15310 768w, /index.php?option=com_ajax&amp;p=image&amp;src=WyJpbWFnZXNcL190ZXN0XC9sdXJtLTUyNzA3OC11bnNwbGFzaC5qcGciLFtbImRvUmVzaXplIixbMTExNyw4MzgsMTExNyw4MzhdXSxbImRvQ3JvcCIsWzEwMjQsODM4LDQ2LDBdXSxbInR5cGUiLFsid2VicCIsIjg1Il1dXV0%3D&amp;hash=3a1adbaa8c96266517385576cd527a55 1024w, /templates/yootheme/cache/lurm-527078-unsplash-d85850c0.webp 1100w">-->
+
+
+              <!--<div class="uk-position-bottom uk-overlay-default">-->
+                <!--<div class="uk-overlay uk-padding-small uk-margin-remove-first-child">-->
+
+                  <!--<h3 class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom"> Connect-->
+                    <!--Dashboard </h3>-->
+                  <!--<div class="el-meta uk-margin-top">Create your community portal</div>-->
+
+
+                  <!--<div class="uk-margin-top"><a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View</a>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+
+            <!--</div>-->
+          <!--</div>-->
+
+          <!--<div class="uk-panel uk-margin-remove-first-child uk-margin-xlarge" id="page#2-2-2-1">-->
+
+
+            <!--<div class="el-content uk-panel uk-h5 uk-margin-medium-top uk-margin-remove-bottom"><p-->
+              <!--style="font-weight:bold; color:#19116D;">Interested to see other available services?</p></div>-->
+
+            <!--<div class="uk-margin-small-top"><a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View-->
+              <!--all</a></div>-->
+
+
+          <!--</div>-->
+
+
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  </div>
+
+
+</div>
 
 
 <!--EOSC SECTION-->
-<div class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
+<div class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container uk-container-large">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
@@ -167,10 +434,10 @@
         <img src="../../../assets/images/eosc.png">
       </div>
       <div class="uk-margin-medium-top">
-        <div class="h2-subHeader-blue">Path to EOSC</div>
-        <h2 class="uk-margin-top">Enter the European Open Science Cloud by using OpenAIRE services. Don’t stay behind.</h2>
+        <div class="h2-subHeader-blue">A path to the European Open Science Cloud</div>
+        <h2 class="uk-margin-top">OpenAIRE services guarantee your compliance and use of EOSC.</h2>
         <div class="uk-margin-medium-top"><a href="https://marketplace.eosc-portal.eu/services?providers%5B%5D=70" target="_blank" class="uk-button uk-button-text eosc-link">
-          Start now<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a></div>
+          View in the EOSC Catalogue<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a></div>
       </div>
     </div>
 

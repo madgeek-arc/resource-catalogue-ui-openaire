@@ -5,6 +5,8 @@ import {SearchQuery} from 'src/lib/domain/search-query';
 import {NavigationService} from 'src/lib/services/navigation.service';
 import {ResourceService} from '../../../lib/services/resource.service';
 import * as uikit from 'uikit';
+import {DataSharingService} from '../../../lib/services/data-sharing.service';
+import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
 
 @Component({
   selector: 'app-home',
@@ -29,13 +31,15 @@ export class HomeAireComponent implements OnInit {
     {value: 'Data registration', icon: 'cloud_server.svg', hover: 'cloud_server_hover.svg'},
     {value: 'Data storage', icon: 'database_security.svg', hover: 'database_security_hover.svg'}
   ];
-  private services: Service[];
+
+  services: Map<string, UiVocabulary[]>;
   public portfolios: Vocabulary[] = null;
   public users: Vocabulary[] = null;
   public slide = 0;
   public slideMobile = 0;
 
-  constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService) {
+  constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService,
+              private dataSharingService: DataSharingService) {
     this.searchForm = fb.group({'query': ['']});
   }
 
@@ -52,6 +56,11 @@ export class HomeAireComponent implements OnInit {
       suc => {
         this.users = suc;
       }
+    );
+
+    this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
+      res => {this.services = res; },
+      error => {console.log(error); }
     );
 
   }
