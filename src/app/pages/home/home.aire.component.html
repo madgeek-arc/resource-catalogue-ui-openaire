@@ -27,15 +27,6 @@
       <!--<div class="tm-grid-expand uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">-->
         <!--<div class="uk-width-1-1@m uk-first-column">-->
 
-
-
-
-
-
-
-
-
-
         <!--</div>-->
       <!--</div>-->
     <!--</div>-->
@@ -159,36 +150,13 @@
 </div>
 
 <!--PORTFOLIO SECTIONS-->
-<!--<ng-container *ngIf="portfolios">-->
 
-  <!--<ng-container *ngFor="let portfolio of portfolios; let i = index">-->
-    <!--<div class="uk-section uk-section-primary uk-preserve-color uk-padding-remove">-->
-      <!--<div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">-->
-
-        <!--<div class="" [ngClass]="{'uk-flex-last@m' : i%2==0, 'uk-flex-last@l' : i%2==0}">-->
-          <!--<img src="{{portfolio.extras.image}}">-->
-        <!--</div>-->
-
-        <!--<div class="uk-first-column">-->
-          <!--<div class="uk-padding-large uk-margin-large-top" [ngClass]="{'uk-margin-large-left@m' : i%2==0, 'uk-margin-large-left@l' : i%2==0}">-->
-            <!--<div *ngIf="portfolio.extras.tagline" class="h1-subHeader">{{portfolio.extras.tagline}}</div>-->
-            <!--<h1>{{portfolio.name}} portfolio</h1>-->
-            <!--<p class="big-text uk-margin-medium-top">{{portfolio.description}}</p>-->
-            <!--<a class="uk-button uk-button-primary uk-margin-medium-top uk-margin-large-bottom" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>-->
-          <!--</div>-->
-        <!--</div>-->
-
-      <!--</div>-->
-    <!--</div>-->
-  <!--</ng-container>-->
-
-<!--</ng-container>-->
 <div class="uk-section-default uk-preserve-color uk-section uk-section-large" *ngIf="portfolios && services">
 
   <div class="uk-container uk-container-large">
 
     <div class="h1-subHeader">Find a service that fits your needs</div>
-    <h1 >Explore our service portfolios</h1>
+    <h1>Explore our service portfolios</h1>
 
   </div>
 
@@ -196,7 +164,6 @@
 
     <div class="tm-grid-expand uk-child-width-1-1 uk-margin-large uk-grid uk-grid-stack" uk-grid="">
       <div class="uk-first-column">
-
 
         <div class="uk-margin-large">
 
@@ -226,23 +193,20 @@
                   <div class="uk-grid uk-child-width-1-2 uk-grid-match uk-grid-large">
 
                     <div class="uk-margin-large-bottom" *ngFor="let service of services[portfolio.name] | slice:0:3;">
-                      <div
-                        class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
+                      <div class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
                         <div class="uk-inline-clip">
 
-
-                          <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="https://www.openaire.eu/templates/yootheme/cache/lurm-527078-unsplash-d85850c0.webp">
-
+                          <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{service.image}}">
 
                           <div class="uk-position-bottom uk-overlay-default">
                             <div class="uk-overlay uk-padding-small uk-margin-remove-first-child">
 
                               <div class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom">{{service.name}}</div>
-                              <div class="el-meta uk-margin-top">Search in more than 200 mi research records</div>
-                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>
+                              <div class="el-meta uk-margin-top">{{service.tagline}}</div>
+<!--                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>-->
 
-                              <div class="uk-margin-top"><a href="https://www.openaire.eu"
-                                                            class="el-link uk-button uk-button-text uk-button-large">View</a>
+                              <div class="uk-margin-top">
+                                <a href="https://www.openaire.eu" class="el-link uk-button uk-button-text uk-button-large">View</a>
                               </div>
                             </div>
                           </div>
@@ -253,12 +217,13 @@
                     <div class="uk-panel uk-margin-remove-first-child uk-margin-xlarge" id="page#2-2-2-1">
 
 
-                      <div class="el-content uk-panel uk-h5 uk-margin-medium-top uk-margin-remove-bottom"><p
-                        style="font-weight:bold; color:#19116D;">Interested to see other available services?</p></div>
+                      <div class="el-content uk-panel uk-h5 uk-margin-medium-top uk-margin-remove-bottom">
+                        <p style="font-weight:bold; color:#19116D;">Interested to see other available services?</p>
+                      </div>
 
-                      <div class="uk-margin-small-top"><a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View
-                        all</a></div>
-
+                      <div class="uk-margin-small-top">
+                        <a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View all</a>
+                      </div>
 
                     </div>
 

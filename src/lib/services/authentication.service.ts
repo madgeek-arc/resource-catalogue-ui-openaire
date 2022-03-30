@@ -4,6 +4,7 @@ import {NavigationService} from './navigation.service';
 import {environment} from '../../environments/environment';
 import {UserInfo} from '../domain/userInfo';
 import {deleteCookie, getCookie} from '../domain/utils';
+import {isNullOrUndefined} from '../shared/tools';
 
 
 @Injectable()
@@ -23,12 +24,12 @@ export class AuthenticationService {
   }
 
   getUserProperty(property: string) {
-    // if (isNullOrUndefined(this.user)) {
-    //   this.user = JSON.parse(sessionStorage.getItem('userInfo'));
-    // }
-    // if (!isNullOrUndefined(this.user) && !isNullOrUndefined(this.user[property]) && (this.user[property] !== 'null')) {
-    //   return this.user[property];
-    // }
+    if (isNullOrUndefined(this.user)) {
+      this.user = JSON.parse(sessionStorage.getItem('userInfo'));
+    }
+    if (!isNullOrUndefined(this.user) && !isNullOrUndefined(this.user[property]) && (this.user[property] !== 'null')) {
+      return this.user[property];
+    }
     return null;
   }
 
@@ -71,7 +72,9 @@ export class AuthenticationService {
           if (this.redirectURL) {
             const url = this.redirectURL;
             this.redirectURL = null;
-            this.navigationService.router.navigate([url]);
+            this.navigationService.router.navigate([url]).then(
+              success => {}
+            );
           }
         }
       );

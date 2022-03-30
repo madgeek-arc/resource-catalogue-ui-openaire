@@ -7,6 +7,7 @@ import {NavigationService} from '../../../lib/services/navigation.service';
 import {ResourceService} from '../../../lib/services/resource.service';
 import {DataSharingService} from '../../../lib/services/data-sharing.service';
 import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
+import {PortfolioMap} from '../../entities/portfolioMap';
 
 @Component({
   selector: 'app-top-menu-aire',
@@ -16,7 +17,7 @@ import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
 
 export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
 
-  services: Map<string, UiVocabulary[]>;
+  services: PortfolioMap;
   refresh = false;
 
   public portfolioItemActive: string = null;

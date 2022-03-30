@@ -17,9 +17,7 @@
         </div>
 
         <div class="uk-navbar-center">
-
-          <a routerLink="/home" class="uk-navbar-item uk-logo">
-            <img alt="OpenAIRE" src="../../../assets/images/logo.png" style="width: 200px"></a>
+          <a routerLink="/home" class="uk-navbar-item uk-logo"><img alt="OpenAIRE" src="../../../assets/images/logo.png" style="width: 200px"></a>
         </div>
 
 
@@ -210,9 +208,8 @@
                             <h6>{{portfolio.key}}</h6>
                             <div *ngFor="let service of portfolio.value" class="uk-margin-small-top">
                               <a (click)="redirectTo('/service/' + service.id)">
-                                {{service.name.replace('OpenAIRE ', '')}}
-                                <!--<img src="../../../assets/images/icons/OpenAIRE%20badge.svg" width="20" style="margin-top: -4px" class="uk-margin-small-left">-->
-                                <span *ngIf="service.name.includes('OpenAIRE')"><img src="../../../assets/images/icons/OpenAIRE%20badge.svg" width="20" style="margin-top: -4px" class="uk-margin-small-left"></span>
+                                {{service.name}}
+<!--                                <span *ngIf="service.name.includes('OpenAIRE')"><img src="../../../assets/images/icons/OpenAIRE%20badge.svg" width="20" style="margin-top: -4px" class="uk-margin-small-left"></span>-->
                               </a>
                             </div>
                           </div>

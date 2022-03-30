@@ -7,6 +7,7 @@ import {ResourceService} from '../../../lib/services/resource.service';
 import * as uikit from 'uikit';
 import {DataSharingService} from '../../../lib/services/data-sharing.service';
 import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
+import {PortfolioMap} from '../../entities/portfolioMap';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,7 @@ export class HomeAireComponent implements OnInit {
     {value: 'Data storage', icon: 'database_security.svg', hover: 'database_security_hover.svg'}
   ];
 
-  services: Map<string, UiVocabulary[]>;
+  services: PortfolioMap;
   public portfolios: Vocabulary[] = null;
   public users: Vocabulary[] = null;
   public slide = 0;

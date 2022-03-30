@@ -20,6 +20,7 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {Info} from '../domain/info';
 import {UiVocabulary} from '../domain/dynamic-form-model';
+import {PortfolioMap} from '../../app/entities/portfolioMap';
 
 declare var UIkit: any;
 
@@ -140,7 +141,7 @@ export class ResourceService {
   getServicesByIndexedField(field: string, vocabularyType: string) {
       let params = new HttpParams();
       params = params.append('vocabularyType', vocabularyType);
-      return this.http.get<Map<string, UiVocabulary[]>>(this.base + `/ui/services/names/by/indexed/${field}`, {params});
+      return this.http.get<PortfolioMap>(this.base + `/ui/services/names/by/indexed/${field}`, {params});
   }
 
   getSubcategoriesIdsFromSuperCategory(parent: string, type: string) {

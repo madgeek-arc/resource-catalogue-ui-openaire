@@ -6,19 +6,18 @@ import {getCookie} from '../domain/utils';
 
 @Injectable()
 export class CanActivateViaAuthGuard implements CanActivate {
-    constructor(public authenticationService: AuthenticationService, public router: NavigationService) {
-    }
+  constructor(public authenticationService: AuthenticationService, public router: NavigationService) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const ret = this.authenticationService.isLoggedIn();
-        // console.log(ret);
-        if (getCookie(this.authenticationService.cookieName) !== null) {
-          this.authenticationService.redirectURL = state.url;
-          this.authenticationService.tryLogin();
-        } else if (!ret) {
-            this.authenticationService.redirectURL = state.url;
-            this.authenticationService.login();
-        }
-        return ret;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    const ret = this.authenticationService.isLoggedIn();
+    // console.log(ret);
+    if (getCookie(this.authenticationService.cookieName) !== null) {
+      this.authenticationService.redirectURL = state.url;
+      this.authenticationService.tryLogin();
+    } else if (!ret) {
+      this.authenticationService.redirectURL = state.url;
+      this.authenticationService.login();
     }
+    return ret;
+  }
 }
