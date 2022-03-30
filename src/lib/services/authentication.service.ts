@@ -47,7 +47,7 @@ export class AuthenticationService {
   }
 
   public tryLogin() {
-    console.log(getCookie(this.cookieName));
+    // console.log(getCookie(this.cookieName));
     if (getCookie(this.cookieName) !== null) {
       // console.log(`session.name wasn't found --> logging in via repo-service!`);
       this.http.get<UserInfo>(this.apiUrl + '/user/info', { withCredentials: true }).subscribe(
@@ -88,7 +88,7 @@ export class AuthenticationService {
   }
 
   public isLoggedIn(): boolean {
-    console.log(this.loggedIn + ' ' + sessionStorage.getItem('email'));
+    // console.log(this.loggedIn + ' ' + sessionStorage.getItem('email'));
     return this.loggedIn && sessionStorage.getItem('email') !== null;
   }
 
