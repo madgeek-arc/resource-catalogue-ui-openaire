@@ -21,113 +21,276 @@
 
 </ng-container>
 
-<!--INSIGHT INFO-->
-<div *ngIf="form" class="uk-section uk-section-default">
-  <div class="uk-container uk-container-large">
 
-    <div class="uk-card uk-card-default uk-position-relative">
+<!--INFO-->
+<div class="uk-margin-remove-top tm-grid-expand uk-grid-collapse uk-grid" uk-grid="">
+  <div class="uk-grid-item-match uk-width-1-5@m uk-visible@m uk-first-column">
+    <div class="uk-tile-muted uk-tile uk-tile-small uk-flex uk-flex-middle">
+      <div class="uk-panel uk-width-1-1"></div>
+    </div>
+  </div>
 
-      <div class="uk-position-absolute" style="top: -40px; right: -40px">
-        <img src="../../../../../assets/images/icons/circle.png" width="110px">
-      </div>
+  <div class="uk-grid-item-match uk-width-3-5@m">
+    <div class="uk-tile-muted uk-tile uk-tile-small uk-flex uk-flex-middle">
+      <div class="uk-panel uk-width-1-1">
+        <ul class="uk-list uk-list-collapse uk-column-1-2@s uk-column-divider uk-text-small uk-scrollspy-inview "
+            id="page#1-1-1-0" uk-scrollspy-class="uk-animation-slide-bottom-medium" style="">
+          <li *ngIf="getServiceArray('targetUsers').controls[0].value !== ''" class="el-item">
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">For</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">
+                  <span class="" *ngFor="let targetUser of getServiceArray('targetUsers').value; let i = index">
+                    <span *ngIf="i > 0">| </span>{{ getVocabularyName('targetUsers',targetUser) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li *ngIf="getServiceField('trl').value !== ''" class="el-item">
 
-      <div class="uk-card-body uk-padding-large">
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">TRL</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">{{getVocabularyName('trl', getServiceField('trl').value)}}</div>
+              </div>
+            </div>
 
-        <h5 class="uk-text-uppercase">Insight Info</h5>
+          </li>
+          <li *ngIf="getServiceArray('accessTypes').controls[0].value !== ''" class="el-item">
 
-        <div class="uk-margin-medium-top">
-          <dt>Description</dt>
-          <dd class="uk-margin-small-top uk-visible@m">
-              <read-more-text [text]="getServiceField('description').value" [maxHeight]="69">
-              </read-more-text>
-          </dd>
-          <dd class="uk-margin-small-top uk-hidden@m">
-            <read-more-text [text]="getServiceField('description').value" [maxHeight]="134">
-            </read-more-text>
-          </dd>
-        </div>
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">Access Type</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">
+                  <span *ngFor="let accessType of getServiceArray('accessTypes').value; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('accessTypes', accessType)}}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-        <hr class="uk-margin-medium-top">
+          </li>
+          <li *ngIf="getServiceArray('accessModes').controls[0].value !== ''" class="el-item">
 
-        <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-4@m uk-child-width-1-4@l uk-margin-large-bottom" uk-grid="masonry: true">
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">Access Mode</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">
+                  <span *ngFor="let accessMode of getServiceArray('accessModes').value; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('accessModes', accessMode)}}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-          <div *ngIf="getServiceArray('targetUsers').controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Users</dt>
-            <dd class="uk-margin-small-top">
-              <span class="" *ngFor="let targetUser of getServiceArray('targetUsers').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{ getVocabularyName('targetUsers',targetUser) }}</span>
-            </dd>
-          </div>
+          </li>
+          <li *ngIf="getServiceField('resourceOrganisation')?.value !== ''" class="el-item">
 
-          <div *ngIf="getServiceField('resourceOrganisation')?.value !== ''" class="uk-margin-medium-top">
-            <dt>Resource Organization</dt>
-            <dd class="uk-margin-small-top">{{getVocabularyName('resourceOrganisation', getServiceField('resourceOrganisation').value)}}</dd>
-          </div>
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">Owned by</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">{{getVocabularyName('resourceOrganisation', getServiceField('resourceOrganisation').value)}}</div>
+              </div>
+            </div>
 
-          <div *ngIf="getServiceArray('accessModes').controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Access Mode</dt>
-            <dd class="uk-margin-small-top">
-              <span *ngFor="let accessMode of getServiceArray('accessModes').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{getVocabularyName('accessModes', accessMode)}}</span>
-            </dd>
-          </div>
+          </li>
+          <li *ngIf="getServiceArray('resourceProviders').controls[0].value !== ''" class="el-item">
 
-          <div *ngIf="getServiceArray('fundingBody')?.controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Funding Body</dt>
-            <dd class="uk-margin-small-top">
-              <span *ngFor="let funder of getServiceArray('fundingBody').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{getVocabularyName('fundingBody', funder)}}</span>
-            </dd>
-          </div>
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">Provided by</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">
+                  <span class="" *ngFor="let provider of getServiceArray('resourceProviders').value; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('resourceProviders', provider)}}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-          <div *ngIf="getServiceArray('resourceProviders').controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Resource Providers</dt>
-            <dd class="uk-margin-small-top">
-              <span class="" *ngFor="let provider of getServiceArray('resourceProviders').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{getVocabularyName('resourceProviders', provider)}}</span>
-            </dd>
-          </div>
+          </li>
+          <li *ngIf="getServiceArray('fundingPrograms').controls[0].value !== ''" class="el-item">
 
-          <div *ngIf="getServiceArray('accessTypes').controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Access Type</dt>
-            <dd class="uk-margin-small-top">
-              <span *ngFor="let accessType of getServiceArray('accessTypes').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{getVocabularyName('accessTypes', accessType)}}</span>
-            </dd>
-          </div>
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">Funded by</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">
+                  <span *ngFor="let funder of getServiceArray('fundingBody').value; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('fundingBody', funder)}}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-          <div *ngIf="getServiceField('trl').value !== ''" class="uk-margin-medium-top">
-            <dt>TRL</dt>
-            <dd class="uk-margin-small-top">{{getVocabularyName('trl', getServiceField('trl').value)}}</dd>
-          </div>
+          </li>
+          <li *ngIf="getServiceField('termsOfUse')?.value !== ''" class="el-item">
 
-          <div *ngIf="getServiceArray('fundingPrograms').controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Funding Program</dt>
-            <dd class="uk-margin-small-top">
-              <span *ngFor="let funder of getServiceArray('fundingPrograms').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{getVocabularyName('fundingPrograms', funder)}}</span>
-            </dd>
-          </div>
+            <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
+              <div class="uk-width-small uk-text-break uk-first-column">
+                <div class="el-title uk-margin-remove uk-text-bold">Terms of use</div>
+              </div>
+              <div>
+                <div class="el-content uk-panel">
+                  <a class="uk-margin-remove-last-child" href="{{getServiceField('termsOfUse').value}}" target="_blank">
+                    <p>View</p>
+                  </a>
+                </div>
+              </div>
+            </div>
 
-          <div *ngIf="getServiceArray('grantProjectNames').controls[0].value !== ''" class="uk-margin-medium-top">
-            <dt>Grant/Project Name</dt>
-            <dd class="uk-margin-small-top">
-              <span *ngFor="let grant of getServiceArray('grantProjectNames').value; let i = index">
-                <span *ngIf="i > 0">, </span>{{grant}}</span>
-            </dd>
-          </div>
-
-        </div>
-
-        <div *ngIf="getServiceField('termsOfUse')?.value !== ''" class="uk-margin-top">
-          <a href="{{getServiceField('termsOfUse').value}}" target="_blank" class="uk-button uk-button-text uk-margin-top">Terms of use<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a>
-        </div>
-
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
 
+  <div class="uk-grid-item-match uk-width-1-5@m uk-visible@m">
+    <div class="uk-tile-muted uk-tile uk-tile-small uk-flex uk-flex-middle">
+      <div class="uk-panel uk-width-1-1"></div>
+    </div>
   </div>
 </div>
+
+<!--ABOUT-->
+<div class="uk-section-default uk-section uk-padding-remove-bottom">
+  <div class="uk-container">
+    <div class="tm-grid-expand uk-grid-column-large uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
+      <div class="uk-first-column">
+        <h1 class="uk-h4 uk-font-primary uk-text-emphasis" id="page#3-0-0-0">About</h1>
+        <div class="uk-panel uk-dropcap uk-margin">
+          <p>{{getServiceField('description').value}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="tm-grid-expand uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
+      <div class="uk-first-column">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--OLD INFO-->
+<!--<div *ngIf="form" class="uk-section uk-section-default">-->
+<!--  <div class="uk-container uk-container-large">-->
+
+<!--    <div class="uk-card uk-card-default uk-position-relative">-->
+
+<!--      <div class="uk-position-absolute" style="top: -40px; right: -40px">-->
+<!--        <img src="../../../../../assets/images/icons/circle.png" width="110px">-->
+<!--      </div>-->
+
+<!--      <div class="uk-card-body uk-padding-large">-->
+
+<!--        <h5 class="uk-text-uppercase">Insight Info</h5>-->
+
+<!--        <div class="uk-margin-medium-top">-->
+<!--          <dt>Description</dt>-->
+<!--          <dd class="uk-margin-small-top uk-visible@m">-->
+<!--              <read-more-text [text]="getServiceField('description').value" [maxHeight]="69">-->
+<!--              </read-more-text>-->
+<!--          </dd>-->
+<!--          <dd class="uk-margin-small-top uk-hidden@m">-->
+<!--            <read-more-text [text]="getServiceField('description').value" [maxHeight]="134">-->
+<!--            </read-more-text>-->
+<!--          </dd>-->
+<!--        </div>-->
+
+<!--        <hr class="uk-margin-medium-top">-->
+
+<!--        <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-4@m uk-child-width-1-4@l uk-margin-large-bottom" uk-grid="masonry: true">-->
+
+<!--          <div *ngIf="getServiceArray('targetUsers').controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Users</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span class="" *ngFor="let targetUser of getServiceArray('targetUsers').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{ getVocabularyName('targetUsers',targetUser) }}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceField('resourceOrganisation')?.value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Resource Organization</dt>-->
+<!--            <dd class="uk-margin-small-top">{{getVocabularyName('resourceOrganisation', getServiceField('resourceOrganisation').value)}}</dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceArray('accessModes').controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Access Mode</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span *ngFor="let accessMode of getServiceArray('accessModes').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{getVocabularyName('accessModes', accessMode)}}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceArray('fundingBody')?.controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Funding Body</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span *ngFor="let funder of getServiceArray('fundingBody').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{getVocabularyName('fundingBody', funder)}}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceArray('resourceProviders').controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Resource Providers</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span class="" *ngFor="let provider of getServiceArray('resourceProviders').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{getVocabularyName('resourceProviders', provider)}}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceArray('accessTypes').controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Access Type</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span *ngFor="let accessType of getServiceArray('accessTypes').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{getVocabularyName('accessTypes', accessType)}}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceField('trl').value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>TRL</dt>-->
+<!--            <dd class="uk-margin-small-top">{{getVocabularyName('trl', getServiceField('trl').value)}}</dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceArray('fundingPrograms').controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Funding Program</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span *ngFor="let funder of getServiceArray('fundingPrograms').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{getVocabularyName('fundingPrograms', funder)}}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--          <div *ngIf="getServiceArray('grantProjectNames').controls[0].value !== ''" class="uk-margin-medium-top">-->
+<!--            <dt>Grant/Project Name</dt>-->
+<!--            <dd class="uk-margin-small-top">-->
+<!--              <span *ngFor="let grant of getServiceArray('grantProjectNames').value; let i = index">-->
+<!--                <span *ngIf="i > 0">, </span>{{grant}}</span>-->
+<!--            </dd>-->
+<!--          </div>-->
+
+<!--        </div>-->
+
+<!--        <div *ngIf="getServiceField('termsOfUse')?.value !== ''" class="uk-margin-top">-->
+<!--          <a href="{{getServiceField('termsOfUse').value}}" target="_blank" class="uk-button uk-button-text uk-margin-top">Terms of use<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a>-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
+<!--</div>-->
 
 <!--BENEFITS-->
 <div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''"
@@ -166,78 +329,6 @@
 
   </div>
 </div>
-
-
-<!--&lt;!&ndash;BENEFITS&ndash;&gt;-->
-<!--<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-bottom uk-visible@m">-->
-  <!--<div class="uk-container uk-container-large">-->
-
-    <!--<h1>Benefits</h1>-->
-
-    <!--<div id="BenefitSlideShow" class="uk-position-relative uk-margin-medium-top" uk-slideshow="ratio: 12:4; animation: fade; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlide('BenefitSlideShow')">-->
-
-      <!--<ul class="uk-slideshow-items">-->
-        <!--<li *ngFor="let benefit of getExtrasArray('benefits').value" class="uk-grid uk-child-width-1-2 ">-->
-
-          <!--<div class="uk-flex uk-flex-middle">-->
-            <!--<div>-->
-              <!--<h4 class="uk-text-primary">{{benefit.benefitsTitle}}</h4>-->
-              <!--<p class="slider-description uk-margin-top big-text-header">{{benefit.benefitsText}}</p>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="uk-flex uk-flex-center">-->
-            <!--<img src="{{benefit.benefitsImage !== '' ? benefit.benefitsImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_15_253Z.png'}}" width="400">-->
-          <!--</div>-->
-
-        <!--</li>-->
-      <!--</ul>-->
-
-      <!--<div class="uk-position-bottom-center uk-position-small uk-margin-medium-top" style="bottom: -60px">-->
-        <!--<ul class="uk-dotnav">-->
-          <!--<li *ngFor="let benefit of getExtrasArray('benefits').value; let i=index" [ngClass]="{'uk-active': benefitSlide === i}">-->
-            <!--<a (click)="showSlide('BenefitSlideShow', i)">Item {{i}}</a>-->
-          <!--</li>-->
-        <!--</ul>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash;BENEFITS MOBILE&ndash;&gt;-->
-<!--<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-bottom uk-hidden@m">-->
-  <!--<div class="uk-container uk-container-large">-->
-
-    <!--<h1>Benefits</h1>-->
-
-    <!--<div id="BenefitSlideShowMobile" class="uk-position-relative uk-margin-medium-top" uk-slideshow="ratio: 12:4; min-height: 750; animation: fade; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile('BenefitSlideShowMobile')">-->
-
-      <!--<ul class="uk-slideshow-items">-->
-        <!--<li *ngFor="let benefit of getExtrasArray('benefits').value" class="uk-grid uk-child-width-1-1">-->
-
-          <!--<div class="uk-flex uk-flex-center">-->
-            <!--<img src="{{benefit.benefitsImage !== '' ? benefit.benefitsImage : '../../../../../assets/images/mocks/image_2021_09_30T11_53_15_253Z.png'}}" width="400">-->
-          <!--</div>-->
-          <!--<div class="uk-flex uk-flex-middle">-->
-            <!--<div>-->
-              <!--<h4 class="uk-text-primary">{{benefit.benefitsTitle}}</h4>-->
-              <!--<p class="slider-description uk-margin-top big-text-header">{{benefit.benefitsText}}</p>-->
-            <!--</div>-->
-          <!--</div>-->
-
-
-        <!--</li>-->
-      <!--</ul>-->
-
-      <!--<div class="uk-position-bottom-center uk-position-small uk-margin-medium-top" style="bottom: -60px">-->
-        <!--<ul class="uk-dotnav">-->
-          <!--<li *ngFor="let benefit of getExtrasArray('benefits').value; let i=index" [ngClass]="{'uk-active': benefitSlideMobile === i}">-->
-            <!--<a (click)="showSlideMobile('BenefitSlideShowMobile', i)">Item {{i}}</a>-->
-          <!--</li>-->
-        <!--</ul>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
 
 <!--FEATURES-->
 <div *ngIf="form && getExtrasArray('features')?.controls[0]?.get('featuresTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">

@@ -68,8 +68,7 @@ export class OverviewComponent implements OnInit {
     // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
     if (id === 'slideShow') {
       this.slide = index;
-    }
-    else {
+    } else {
       this.benefitSlide = index;
     }
   }
@@ -86,8 +85,7 @@ export class OverviewComponent implements OnInit {
     // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
     if (id === 'slideShowMobile') {
       this.slideMobile = index;
-    }
-    else {
+    } else {
       this.benefitSlideMobile = index;
     }
 

@@ -103,7 +103,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   onOutletLoaded(component) {
-    if (this.loading){
+    if (this.loading) {
       this.timeOut(300).then(() => this.onOutletLoaded(component));
       return;
     } else {
@@ -111,7 +111,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
       component.model = this.model;
       component.vocabularies = this.vocabularies;
     }
-    if(window.location.toString().includes('overview')) {
+    if (window.location.toString().includes('overview')) {
       this.path = 'overview';
     } else if (window.location.toString().includes('pricing')) {
       this.path = 'pricing';
@@ -126,7 +126,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   initializations() {
     /** Create form **/
-    let tmpForm: any = {};
+    const tmpForm: any = {};
     tmpForm['service'] = this.formService.toFormGroup(this.model, true);
     tmpForm['extras'] = this.formService.toFormGroup(this.model, false);
     this.form = this.fb.group(tmpForm);
@@ -140,13 +140,13 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   prepareForm(form: Object) {
-    for (let key in form) {
-      for (let formElementKey in form[key]) {
+    for (const key in form) {
+      for (const formElementKey in form[key]) {
         if (form[key].hasOwnProperty(formElementKey)) {
           if (Array.isArray(form[key][formElementKey])) {
             // console.log(form[key][formElementKey]);
             // console.log(formElementKey);
-            let formFieldData = this.getModelData(this.model, formElementKey);
+            const formFieldData = this.getModelData(this.model, formElementKey);
             let i = 1;
             if (formFieldData.field.type === 'composite') { // In order for the fields to be enabled
               this.popComposite(key, formElementKey);  // remove it first
@@ -157,11 +157,11 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               if (formFieldData.field.type === 'composite') {
                 this.pushComposite(key, formElementKey, formFieldData.subFieldGroups);
                 // for (let formSubElementKey in form[key][formElementKey]) { // Special case when composite contains array
-                for (let formSubElementName in form[key][formElementKey][count]) {
-                  if(form[key][formElementKey][count].hasOwnProperty(formSubElementName)) {
-                    if(Array.isArray(form[key][formElementKey][count][formSubElementName])) {
+                for (const formSubElementName in form[key][formElementKey][count]) {
+                  if (form[key][formElementKey][count].hasOwnProperty(formSubElementName)) {
+                    if (Array.isArray(form[key][formElementKey][count][formSubElementName])) {
                       // console.log('Key: ' + key + ' formElementKey: ' + formElementKey + ' count: ' + count + ' formSubElementName: ' + formSubElementName);
-                      const control = <FormArray>this.form.get([key,formElementKey,count,formSubElementName]);
+                      const control = <FormArray>this.form.get([key, formElementKey, count, formSubElementName]);
                       // console.log(control);
                       let required = false;
                       for (let j = 0; j < formFieldData.subFieldGroups.length; j++) {
@@ -189,7 +189,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   push(group: string, field: string, required: boolean) {
     // console.log('group: ' + group + ' field: ' + field);
-    let tmpArr = this.form.get(group).get(field) as FormArray;
+    const tmpArr = this.form.get(group).get(field) as FormArray;
     tmpArr.push(required ? new FormControl('', Validators.required) : new FormControl(''));
   }
 
@@ -206,13 +206,13 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
       }
     });
     // console.log('group: ' + group + ' field: ' + field);
-    let tmpArr = this.form.get(group).get(field) as FormArray;
+    const tmpArr = this.form.get(group).get(field) as FormArray;
     tmpArr.push(new FormGroup(formGroup));
   }
 
   popComposite(group: string, field: string) {
     // console.log('group: ' + group + ' field: ' + field);
-    let tmpArr = this.form.get(group).get(field) as FormArray;
+    const tmpArr = this.form.get(group).get(field) as FormArray;
     tmpArr.removeAt(0);
   }
 
