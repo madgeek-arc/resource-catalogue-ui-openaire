@@ -170,7 +170,7 @@
           <!--change uk-flex-center with uk-child-width-expand / uk-flex-center-->
           <ul uk-tab="connect: #portfolios-tabs; animation: uk-animation-fade" class="uk-tab uk-child-width-expand">
             <li *ngFor="let portfolio of portfolios; let i = index">
-              <a class="el-link" href="https://www.openaire.eu">{{portfolio.name}}</a>
+              <a class="el-link">{{portfolio.name}}</a>
             </li>
           </ul>
 
@@ -206,7 +206,7 @@
 <!--                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>-->
 
                               <div class="uk-margin-top">
-                                <a href="https://www.openaire.eu" class="el-link uk-button uk-button-text uk-button-large">View</a>
+                                <a [routerLink]="['/service', service.id, 'overview']" class="el-link uk-button uk-button-text uk-button-large">View</a>
                               </div>
                             </div>
                           </div>
@@ -222,7 +222,7 @@
                       </div>
 
                       <div class="uk-margin-small-top">
-                        <a href="https://www.openaire.eu" class="el-link uk-button uk-button-text">View all</a>
+                        <a [routerLink]="['/portfolios', portfolio.id]" class="el-link uk-button uk-button-text">View all</a>
                       </div>
 
                     </div>
