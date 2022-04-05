@@ -6,7 +6,6 @@ import {FormBuilder} from '@angular/forms';
 import {NavigationService} from '../../../lib/services/navigation.service';
 import {ResourceService} from '../../../lib/services/resource.service';
 import {DataSharingService} from '../../../lib/services/data-sharing.service';
-import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
 import {PortfolioMap} from '../../entities/portfolioMap';
 
 @Component({
@@ -15,7 +14,7 @@ import {PortfolioMap} from '../../entities/portfolioMap';
   styleUrls: ['./topmenu.component.css'],
 })
 
-export class AireTopMenuComponent extends TopMenuComponent implements OnInit{
+export class AireTopMenuComponent extends TopMenuComponent implements OnInit {
 
   services: PortfolioMap;
   refresh = false;

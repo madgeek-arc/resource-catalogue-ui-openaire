@@ -190,7 +190,7 @@ export class Snippet {
   id: string;
   pitch: string;
   label: string;
-  user: UiVocabulary[];
+  users: UiVocabulary[];
 }
 
 export class ServiceProviderDomain {

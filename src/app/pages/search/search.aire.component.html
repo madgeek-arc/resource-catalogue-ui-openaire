@@ -159,9 +159,9 @@
                               {{resourceInfo.pitch}}
                             </div>
 
-                            <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                            <div *ngIf="!(resourceInfo.users === null || resourceInfo.users[0]?.name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label">Users: </span>
-                              <span *ngFor="let user of resourceInfo.user" class="field-value uk-margin-small-left">{{user.name}}</span>
+                              <span *ngFor="let user of resourceInfo.users" class="field-value uk-margin-small-left">{{user.name}}</span>
                             </div>
                             <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
@@ -205,9 +205,9 @@
                               {{resourceInfo.pitch}}
                             </div>
 
-                            <div *ngIf="!(resourceInfo.user === null || resourceInfo.user[0] === '' || resourceInfo.user[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                            <div *ngIf="!(resourceInfo.users === null || resourceInfo.users[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label">Users: </span>
-                              <span *ngFor="let user of resourceInfo.user" class="field-value uk-margin-small-left">{{user.name}}</span>
+                              <span *ngFor="let user of resourceInfo.users" class="field-value uk-margin-small-left">{{user.name}}</span>
                             </div>
                             <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
