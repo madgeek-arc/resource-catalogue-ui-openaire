@@ -17,7 +17,7 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
   searchResultsSnippets: Paging<Snippet>;
   private sortFacets = new PremiumSortFacetsPipe();
 
-  //Paging
+  // Paging
   total: number;
   currentPage = 1;
   pageTotal: number;
