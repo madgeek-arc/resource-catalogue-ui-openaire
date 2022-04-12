@@ -71,6 +71,14 @@ body {
   background-image: none;
 }
 
+.uk-section-muted {
+  background: #fafafa;
+}
+
+.uk-tile-muted {
+  background: #f9f9f9;
+}
+
 .uk-padding-xlarge {
   padding: 100px;
 }

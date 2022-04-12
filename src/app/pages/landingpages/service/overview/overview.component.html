@@ -1,6 +1,6 @@
 <ng-container *ngIf="form">
 
-  <div class="uk-section uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove" uk-height-viewport="offset-bottom: 30">
+  <div class="uk-section uk-section-primary uk-preserve-color uk-padding-remove" uk-height-viewport="offset-bottom: 30">
     <div class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
 
       <div class="uk-flex-last@m uk-flex-last@l uk-text-right"
@@ -10,7 +10,7 @@
 
       <div class="uk-first-column">
         <div class="uk-padding-large uk-margin-large-left@m uk-margin-large-left@l uk-margin-large-top">
-          <p *ngIf="getServiceField('name').value !== ''" class="big-text uk-text-primary">Why {{getServiceField('name').value}}</p>
+          <p *ngIf="getServiceField('name').value !== ''" class="big-text uk-text-primary">{{getServiceField('name').value}}</p>
           <h1 *ngIf="getServiceField('tagline').value !== ''">{{getServiceField('tagline').value}} </h1>
           <p *ngIf="getExtrasField('pitch').value !== ''" class="regular-text uk-margin-medium-top">{{getExtrasField('pitch').value}}</p>
         </div>
@@ -166,11 +166,11 @@
 </div>
 
 <!--ABOUT-->
-<div class="uk-section-default uk-section uk-padding-remove-bottom">
+<div class="uk-section-primary uk-section uk-padding-remove-bottom uk-preserve-color">
   <div class="uk-container">
     <div class="tm-grid-expand uk-grid-column-large uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
       <div class="uk-first-column">
-        <h1 class="uk-h4 uk-font-primary uk-text-emphasis" id="page#3-0-0-0">About</h1>
+        <h4 class="uk-h4 uk-font-primary uk-text-emphasis">About</h4>
         <div class="uk-panel uk-dropcap uk-margin">
           <p>{{getServiceField('description').value}}</p>
         </div>
@@ -294,14 +294,14 @@
 
 <!--BENEFITS-->
 <div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''"
-     class="uk-section uk-section-default uk-margin-xlarge-bottom"
+     class="uk-section uk-section-primary uk-preserve-color"
      style="background-image: url('../../../../../assets/images/benefits_bg.png'); background-repeat: no-repeat; background-position: left">
-  <div class="uk-container uk-container-large">
+  <div class="uk-container">
 
     <div class="tm-grid-expand uk-grid-large uk-margin-remove-vertical uk-grid" uk-grid="">
       <div class="uk-width-1-3@m uk-width-1-3@l uk-width-1-1@s uk-first-column">
 
-        <h1 class="uk-position-relative uk-text-left" style="z-index: 1;">Benefits</h1>
+        <h1 class="uk-position-relative uk-text-left" style="z-index: 1;">Why {{getServiceField('name').value}}</h1>
 
       </div>
 
@@ -331,10 +331,10 @@
 </div>
 
 <!--FEATURES-->
-<div *ngIf="form && getExtrasArray('features')?.controls[0]?.get('featuresTitle').value !== ''" class="uk-section uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom">
-  <div class="uk-container uk-container-large">
+<div *ngIf="form && getExtrasArray('features')?.controls[0]?.get('featuresTitle').value !== ''" class="uk-section uk-section-muted uk-section-large">
+  <div class="uk-container">
 
-    <h1>Features</h1>
+    <h1 class="uk-text-center@s uk-text-center">Features</h1>
 
     <div class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-3@m uk-child-width-1-3@l uk-margin-large-top uk-flex-center">
 
@@ -356,11 +356,13 @@
 </div>
 
 <!--USE CASES-->
-<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-visible@m">
+<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section uk-section-primary uk-section-large uk-preserve-color uk-visible@m">
 
-  <div class="uk-container uk-container-large">
+  <div class="uk-container">
 
-    <h1>Use Cases</h1>
+    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
+      <h4>Reach your goals by using a solution trusted by the community</h4>
+    </div>
 
     <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlide('slideShow')">
 
@@ -405,9 +407,9 @@
 </div>
 
 <!--USE CASES MOBILE-->
-<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section-default uk-margin-xlarge-top uk-margin-xlarge-bottom uk-hidden@m">
+<div *ngIf="form && getExtrasArray('useCasesExtras')?.controls[0]?.get('useCaseTitle').value !== ''" class="uk-section uk-section-primary uk-section-large uk-preserve-color uk-hidden@m">
 
-  <div class="uk-container uk-container-large">
+  <div class="uk-container">
 
     <h1 class="uk-margin-medium-bottom">Use Cases</h1>
 
