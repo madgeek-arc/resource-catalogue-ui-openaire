@@ -11,7 +11,7 @@ import * as uikit from 'uikit';
 })
 export class OverviewComponent implements OnInit {
 
-  @Input() form: FormGroup;
+  @Input() form: FormGroup = null;
   @Input() model: FormModel[] = null;
   @Input() vocabularies: Map<string, UiVocabulary[]>;
 

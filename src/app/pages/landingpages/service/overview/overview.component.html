@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <div class="uk-grid-item-match uk-width-3-5@m">
+  <div *ngIf="form" class="uk-grid-item-match uk-width-3-5@m">
     <div class="uk-tile-muted uk-tile uk-tile-small uk-flex uk-flex-middle">
       <div class="uk-panel uk-width-1-1">
         <ul class="uk-list uk-list-collapse uk-column-1-2@s uk-column-divider uk-text-small uk-scrollspy-inview "
@@ -166,7 +166,7 @@
 </div>
 
 <!--ABOUT-->
-<div class="uk-section-primary uk-section uk-padding-remove-bottom uk-preserve-color">
+<div *ngIf="form" class="uk-section-primary uk-section uk-padding-remove-bottom uk-preserve-color">
   <div class="uk-container">
     <div class="tm-grid-expand uk-grid-column-large uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
       <div class="uk-first-column">
