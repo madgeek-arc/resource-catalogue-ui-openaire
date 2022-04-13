@@ -60,7 +60,6 @@ export class AuthenticationService {
           sessionStorage.setItem('email', userInfo.email.trim());
           sessionStorage.setItem('role', userInfo.roles.toString());
           sessionStorage.setItem('sub', userInfo.sub);
-          this.loggedIn = true;
         },
         error => {
           sessionStorage.clear();
@@ -69,6 +68,7 @@ export class AuthenticationService {
           this.loggedIn = false;
         },
         () => {
+          this.loggedIn = true;
           if (this.redirectURL) {
             const url = this.redirectURL;
             this.redirectURL = null;
@@ -91,8 +91,7 @@ export class AuthenticationService {
   }
 
   public isLoggedIn(): boolean {
-    // console.log(this.loggedIn + ' ' + sessionStorage.getItem('email'));
-    return this.loggedIn && sessionStorage.getItem('email') !== null;
+    return getCookie(this.cookieName) !== null;
   }
 
   public getUserName() {

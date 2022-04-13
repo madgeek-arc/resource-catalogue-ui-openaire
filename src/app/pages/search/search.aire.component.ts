@@ -57,7 +57,9 @@ export class SearchAireComponent extends SearchComponent implements OnInit {
     });
 
     this.canAddOrEditService = false;
+    console.log('is logged in: ' + this.authenticationService.isLoggedIn());
     if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
+      console.log('for edit button');
       this.resourceService.getMyServiceProviders().subscribe(
         res => this.myProviders = res,
         er => console.log(er),
