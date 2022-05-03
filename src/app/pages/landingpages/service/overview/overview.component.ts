@@ -14,6 +14,7 @@ export class OverviewComponent implements OnInit {
   @Input() form: FormGroup = null;
   @Input() model: FormModel[] = null;
   @Input() vocabularies: Map<string, UiVocabulary[]>;
+  @Input() relatedServices: Object[] = null;
 
   slide = 0;
   benefitSlide = 0;
@@ -21,8 +22,7 @@ export class OverviewComponent implements OnInit {
   slideMobile = 0;
   benefitSlideMobile = 0;
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getServiceArray(field: string) {
     return this.form.get('service.' + field) as FormArray;
@@ -57,10 +57,11 @@ export class OverviewComponent implements OnInit {
   }
 
   dragSlide(id: string) {
-    if (id === 'slideShow')
+    if (id === 'slideShow') {
       this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
-    else
+    } else {
       this.benefitSlide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+    }
   }
 
   showSlide(id: string, index: number) {
@@ -74,10 +75,11 @@ export class OverviewComponent implements OnInit {
   }
 
   dragSlideMobile(id: string) {
-    if (id === 'slideShowMobile')
+    if (id === 'slideShowMobile') {
       this.slideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
-    else
+    } else {
       this.benefitSlideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+    }
   }
 
   showSlideMobile(id: string, index: number) {

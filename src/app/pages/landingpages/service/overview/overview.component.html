@@ -293,9 +293,8 @@
 <!--</div>-->
 
 <!--BENEFITS-->
-<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle').value !== ''"
-     class="uk-section uk-section-primary uk-preserve-color"
-     style="background-image: url('../../../../../assets/images/benefits_bg.png'); background-repeat: no-repeat; background-position: left">
+<div *ngIf="form && getExtrasArray('benefits')?.controls[0]?.get('benefitsTitle')?.value !== ''" style="background-image: url('../../../../../assets/images/benefits_bg.png'); background-repeat: no-repeat; background-position: left"
+     class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container">
 
     <div class="tm-grid-expand uk-grid-large uk-margin-remove-vertical uk-grid" uk-grid="">
@@ -403,6 +402,81 @@
     </div>
 
   </div>
+
+</div>
+
+<!--Related services-->
+<div *ngIf="relatedServices" class="uk-section-muted uk-section uk-flex uk-flex-middle" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(80vh);">
+
+  <div class="uk-width-1-1">
+
+    <div class="uk-container">
+
+      <div class="tm-grid-expand uk-child-width-1-1 uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
+        <div class="uk-first-column">
+
+          <h1 class="uk-heading-small uk-font-primary uk-margin-large" id="page#8-0-0-0">Related services</h1>
+          <div class="uk-margin uk-slider uk-slider-container" uk-slider="finite: 1; autoplay: 1;  autoplayInterval: 10000;" id="panel-slider-divider" uk-scrollspy="target: [uk-scrollspy-class];">
+            <div class="uk-position-relative uk-visible-toggle" tabindex="-1">
+
+              <ul class="uk-slider-items uk-grid uk-grid-large uk-grid-match" style="transform: translate3d(-422.733px, 0px, 0px);">
+                <li *ngFor="let service of relatedServices" class="uk-width-1-1 uk-width-1-2@s uk-width-1-3@m" tabindex="-1">
+                  <a class="el-item uk-panel uk-margin-remove-first-child uk-transition-toggle uk-link-toggle uk-display-block"
+                     href="{{service['webpage']}}">
+
+                    <div class="uk-child-width-expand uk-grid-column-small uk-grid-row-medium uk-flex-middle uk-grid" uk-grid="">
+                      <div class="uk-width-auto uk-first-column">
+                        <div class="uk-inline-clip">
+                          <img class="uk-transition-scale-up uk-transition-opaque" src="{{service['logo']}}" width="120">
+                        </div>
+                      </div>
+                      <div class="uk-margin-remove-first-child">
+
+                      <div class="el-meta uk-h6 uk-text-primary uk-margin-remove-bottom uk-margin-remove-top">{{service['tagline']}}</div>
+                      <h3 class="el-title uk-h5 uk-heading-line uk-margin-remove-top uk-margin-remove-bottom">
+                        <span><span class="uk-link">{{service['name']}}</span></span>
+                      </h3>
+
+                      </div>
+                    </div>
+
+                  </a>
+                </li>
+              </ul>
+
+              <div class="uk-visible@m uk-hidden-hover uk-hidden-touch uk-light">
+                <a class="el-slidenav uk-position-center-left uk-icon uk-slidenav-previous uk-slidenav" href="#"
+                   uk-slider-item="previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M9.07,17l-7-7,7-7" fill="none" stroke="#000" stroke-width="1.6"></path>
+                    <path d="M19,9.83H2" fill="none" stroke="#000" stroke-width="1.6"></path>
+                  </svg>
+                </a>
+                <a class="el-slidenav uk-position-center-right uk-icon uk-slidenav-next uk-slidenav uk-invisible"
+                   href="#" uk-slider-item="next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10.93,2.87l7,7-7,7.05" fill="none" stroke="#000" stroke-width="1.6"></path>
+                    <path d="M1,10H18" fill="none" stroke="#000" stroke-width="1.6"></path>
+                  </svg>
+                </a>
+              </div>
+
+            </div>
+
+            <ul class="el-nav uk-slider-nav uk-dotnav uk-flex-center uk-margin-medium-top uk-visible@s" uk-margin="">
+<!--              <li uk-slider-item="0" class="uk-first-column"><a href=""></a></li>-->
+<!--              <li uk-slider-item="1" class="uk-active"><a href=""></a></li>-->
+<!--              <li uk-slider-item="2" hidden=""><a href=""></a></li>-->
+<!--              <li uk-slider-item="3" hidden=""><a href=""></a></li>-->
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 
 </div>
 

@@ -22,7 +22,7 @@ export class MiscellaneousComponent implements OnInit {
   }
 
   navigateTo(url: string) {
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
 
 }

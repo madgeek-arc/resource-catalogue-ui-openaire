@@ -18,7 +18,7 @@ export class PricingComponent implements OnInit {
   }
 
   goto(url: string) {
-    window.open(url, '_blank')
+    window.open(url, '_blank');
   }
 
 }

@@ -40,7 +40,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   canAddOrEditService = false;
 
   showForm = false;
-  places: Vocabulary[] = null;
+  relatedServices: Object = [];
 
   constructor(public route: ActivatedRoute,
               public router: NavigationService,
@@ -50,8 +50,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               private providerService: ServiceProviderService,
               private formService: FormControlService,
               private fb: FormBuilder,
-              private matomoTracker: MatomoTracker,
-              public emailService: EmailService) {
+              private matomoTracker: MatomoTracker) {
   }
 
   ngOnInit() {
@@ -70,6 +69,11 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           ResourceService.removeNulls(suc[1]['extras']);
           this.prepareForm(suc[1]);
           this.form.patchValue(suc[1]);
+          this.resourceService.getSome('resource', this.form.get('service.relatedResources').value).subscribe(
+            res => { this.relatedServices = res; },
+            error => { console.log(error); },
+            () => { this.loading = false; }
+          );
         },
         err => {
           if (err.status === 404) {
@@ -78,7 +82,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
         },
         () => {
-          this.loading = false;
           if (this.authenticationService.isLoggedIn()) {
             this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
           }
@@ -110,6 +113,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
       component.form = this.form;
       component.model = this.model;
       component.vocabularies = this.vocabularies;
+      component.relatedServices = this.relatedServices;
     }
     if (window.location.toString().includes('overview')) {
       this.path = 'overview';
