@@ -56,7 +56,7 @@
 
     <h1 class="">Ideal for</h1>
     <!--autoplay: true; autoplay-interval: 4000;-->
-    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 12:4;  pause-on-hover: true;" (beforeitemshow)="dragSlide()">
+    <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 16:9;  pause-on-hover: true;" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let user of users" class="uk-flex-middle">
@@ -65,8 +65,8 @@
             <div class="slider-image uk-flex uk-flex-right">
               <div class="uk-card uk-card-default uk-margin" uk-grid>
                 <div class="uk-card-media uk-cover-container">
-                  <img src="{{user.extras.image}}" alt="" uk-cover>
-                  <canvas width="294" height="325"></canvas>
+                  <img class="uk-border-circle" src="{{user.extras.image}}" alt="" max>
+<!--                  <canvas width="294" height="325"></canvas>-->
                 </div>
               </div>
             </div>
