@@ -56,6 +56,9 @@
 
     <h1 class="">Ideal for</h1>
     <!--autoplay: true; autoplay-interval: 4000;-->
+  </div>
+
+  <div class="uk-container uk-container-medium">
     <div id="slideShow" class="uk-position-relative" uk-slideshow="ratio: 16:9;  pause-on-hover: true;" (beforeitemshow)="dragSlide()">
 
       <ul class="uk-slideshow-items">
@@ -63,10 +66,10 @@
           <div class="uk-width-1-1 uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
 
             <div class="slider-image uk-flex uk-flex-right">
-              <div class="uk-card uk-card-default uk-margin" uk-grid>
+              <div class="uk-margin" uk-grid>
                 <div class="uk-card-media uk-cover-container">
-                  <img class="uk-border-circle" src="{{user.extras.image}}" alt="" max>
-<!--                  <canvas width="294" height="325"></canvas>-->
+                  <img class="uk-border-circle" src="{{user.extras.image}}" alt="">
+                  <!--                  <canvas width="294" height="325"></canvas>-->
                 </div>
               </div>
             </div>
@@ -94,7 +97,6 @@
       </div>
 
     </div>
-
   </div>
 
 </div>
@@ -106,7 +108,10 @@
 
     <h1 class="uk-margin-medium-bottom">Ideal for</h1>
 
-    <div id="slideShowMobile" class="uk-position-relative" uk-slideshow="ratio: 12:4; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile()">
+  </div>
+
+  <div class="uk-container uk-container-medium">
+    <div id="slideShowMobile" class="uk-position-relative" uk-slideshow="ratio: 16:9; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile()">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let user of users" class="">
@@ -115,8 +120,7 @@
             <div class="slider-image uk-flex uk-flex-center">
               <div class="uk-card uk-card-default uk-margin" uk-grid>
                 <div class="uk-card-media uk-cover-container">
-                  <img src="{{user.extras.image}}" alt="" uk-cover>
-                  <canvas width="294" height="325"></canvas>
+                  <img class="uk-border-circle" src="{{user.extras.image}}" alt="" uk-cover>
                 </div>
               </div>
             </div>
@@ -144,7 +148,6 @@
       </div>
 
     </div>
-
   </div>
 
 </div>
