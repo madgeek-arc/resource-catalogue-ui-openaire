@@ -14,6 +14,8 @@ export class UserItemComponent implements OnInit {
   response: Map<string, Object[]>;
   services: Map<string, Object[]>;
   userVoc: Vocabulary;
+  portfolios: Vocabulary[];
+  portfoliosMap: Map<string, Object[]>;
   userVocId: string;
   ready = false;
 
@@ -24,20 +26,32 @@ export class UserItemComponent implements OnInit {
     this.userVocId = this.route.snapshot.paramMap.get('id');
     zip(
       this.resourceService.getVocabularyById(this.userVocId),
-      this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocId)
+      this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocId),
+      this.resourceService.getNewVocabulariesByType('PORTFOLIOS')
     ).subscribe(
       res => {
         this.userVoc = res[0];
         this.response = res[1];
         for (const [key, value] of Object.entries(res[1])) {
-          console.log(`${key}: ${value}`);
           this.services = value;
         }
+        this.portfolios = res[2];
+        for (const portfolio of this.portfolios) {
+          this.portfoliosMap = new Map<string, Object[]>();
+          this.portfoliosMap.set('all', []);
+          this.resourceService.getServicesSnippetByUserContentAndPortfolioType('users-content_%26_service_providers', portfolio['id']).subscribe(
+            next => {
+              this.portfoliosMap.set('all', this.portfoliosMap.get('all').concat(next.results));
+              this.portfoliosMap.set(portfolio.id, next.results);
+            },
+            error => { console.log(error); }
+          );
+
+        }
       },
-      error => {console.log(error)},
+      error => { console.log(error); },
       () => {
-        console.log(this.services);
-        this.ready = true
+        this.ready = true;
       }
     );
   }

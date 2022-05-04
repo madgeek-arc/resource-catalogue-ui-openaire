@@ -112,6 +112,10 @@ export class ResourceService {
     return this.http.get<Paging<Snippet>>(this.base + `/ui/services/snippets?order=asc&orderField=name${'&' + searchQuery.toString()}`, this.options);
   }
 
+  getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType: string) {
+    return this.http.get<Paging<Snippet>>(this.base + `/ui/services/snippets?quantity=100&users=${userType}&portfolios=${portfolioType}`, this.options);
+  }
+
   getVocabularyById(id: string) {
     return this.http.get<Vocabulary>(this.base + `/vocabulary/${id}`);
   }

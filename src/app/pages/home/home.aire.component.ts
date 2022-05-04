@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Service, Vocabulary} from 'src/lib/domain/eic-model';
+import {Vocabulary} from 'src/lib/domain/eic-model';
 import {SearchQuery} from 'src/lib/domain/search-query';
 import {NavigationService} from 'src/lib/services/navigation.service';
 import {ResourceService} from '../../../lib/services/resource.service';
-import * as uikit from 'uikit';
 import {DataSharingService} from '../../../lib/services/data-sharing.service';
-import {UiVocabulary} from '../../../lib/domain/dynamic-form-model';
 import {PortfolioMap} from '../../entities/portfolioMap';
+import * as uikit from 'uikit';
 
 @Component({
   selector: 'app-home',
