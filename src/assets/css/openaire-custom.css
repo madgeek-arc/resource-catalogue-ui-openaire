@@ -575,6 +575,10 @@ a.service-menu-item:hover {
 .service-list-card {
   font: normal normal normal 14px/22px var(--main-font-family);
 }
+
+.service-list-card .uk-card-media-top {
+  max-height: 200px;
+}
 /*.card-icon-no-button {*/
   /**/
 /*}*/

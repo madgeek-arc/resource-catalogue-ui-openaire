@@ -19,7 +19,7 @@
               <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}"><a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a></li>
               <li *ngIf="form.get('extras.documentation').value !== ''"><a href="{{form.get('extras.documentation').value}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
               <li *ngIf="form.get('extras.roadmap').value !== ''"><a href="{{form.get('extras.roadmap').value}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
-              <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Miscellaneous</a></li>
+              <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
               <li class="uk-flex uk-flex-middle"><button (click)="goto(form.get('service.webpage').value)" class="uk-button uk-button-blue">Go to service</button></li>
             </ul>
           </div>
