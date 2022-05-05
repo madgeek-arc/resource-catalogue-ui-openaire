@@ -69,7 +69,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           ResourceService.removeNulls(suc[1]['extras']);
           this.prepareForm(suc[1]);
           this.form.patchValue(suc[1]);
-          this.resourceService.getSome('resource', this.form.get('service.relatedResources').value).subscribe(
+          this.resourceService.getSomeSnippets(this.form.get('service.relatedResources').value).subscribe(
             res => { this.relatedServices = res; },
             error => { console.log(error); },
             () => { this.loading = false; }

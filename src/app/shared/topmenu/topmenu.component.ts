@@ -16,7 +16,7 @@ import {PortfolioMap} from '../../entities/portfolioMap';
 
 export class AireTopMenuComponent extends TopMenuComponent implements OnInit {
 
-  services: PortfolioMap;
+  services: PortfolioMap = null;
   refresh = false;
 
   public portfolioItemActive: string = null;
