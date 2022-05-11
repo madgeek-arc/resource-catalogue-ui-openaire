@@ -7,6 +7,8 @@ import {NavigationService} from '../../../lib/services/navigation.service';
 import {ResourceService} from '../../../lib/services/resource.service';
 import {DataSharingService} from '../../../lib/services/data-sharing.service';
 import {PortfolioMap} from '../../entities/portfolioMap';
+import * as UIkit from 'uikit';
+
 
 @Component({
   selector: 'app-top-menu-aire',
@@ -43,7 +45,8 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit {
   }
 
   redirectTo(url: string) {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+    UIkit.drop('#ukDrop').hide(false);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
       this.router.navigate([url]));
   }
 

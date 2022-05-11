@@ -97,7 +97,7 @@
   <div class="main-menu tm-header uk-visible@m tm-header-transparent">
     <div class="uk-navbar-container uk-navbar-transparent" style="background-color: rgb(255, 255, 255);">
       <div class="uk-container uk-container-large">
-        <nav class="uk-navbar" uk-navbar="dropbar: true; mode: click; delay-hide: 0;">
+        <nav id="topNavBar" class="uk-navbar" uk-navbar="dropbar: true; mode: click; delay-hide: 0;">
           <div class="uk-navbar-left">
             <a routerLink="/home" class="uk-navbar-item uk-logo">
               <img src="../../../assets/images/logo.png" class="uk-responsive-height" alt="OpenAIRE Catalogue" style="width: 250px">
@@ -108,7 +108,7 @@
               <ul class="uk-navbar-nav">
                 <li>
                   <a class="default-menu-item">Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i></a>
-                  <div class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
+                  <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
 
                     <div class="uk-grid uk-grid-column-medium uk-margin-medium-bottom">
                       <div class="uk-width-3-4 services">
@@ -122,8 +122,8 @@
                         <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
                           <div class="" *ngFor="let portfolio of services | keyvalue">
                             <h6>{{portfolio.key}}</h6>
-                            <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-margin-small-top">
-                              <a (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
+                            <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-margin-small-top uk-navbar-dropdown-close">
+                              <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
                               <!--<span *ngIf="service.name.includes('OpenAIRE')"><img src="../../../assets/images/icons/OpenAIRE%20badge.svg" width="20" style="margin-top: -4px" class="uk-margin-small-left"></span>-->
                             </div>
                           </div>
