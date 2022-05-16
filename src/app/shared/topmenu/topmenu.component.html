@@ -122,10 +122,13 @@
                         <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
                           <div class="" *ngFor="let portfolio of services | keyvalue">
                             <h6>{{portfolio.key}}</h6>
-                            <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-margin-small-top uk-navbar-dropdown-close">
+                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">
                               <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
                               <!--<span *ngIf="service.name.includes('OpenAIRE')"><img src="../../../assets/images/icons/OpenAIRE%20badge.svg" width="20" style="margin-top: -4px" class="uk-margin-small-left"></span>-->
                             </div>
+                            <!--<div class=" uk-navbar-dropdown-close">-->
+                              <!--<a class="" (click)="redirectTo('/portfolios/' + portfolio.value)">View more..</a>-->
+                            <!--</div>-->
                           </div>
                         </div>
                       </div>
