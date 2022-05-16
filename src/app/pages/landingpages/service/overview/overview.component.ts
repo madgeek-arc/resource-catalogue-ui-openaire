@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {FormModel, UiVocabulary} from '../../../../../lib/domain/dynamic-form-model';
 import * as uikit from 'uikit';
+import {MdEditorOption} from 'ngx-markdown-editor';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class OverviewComponent implements OnInit {
   @Input() vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Object[] = null;
 
-  mdOptions = {showBorder: false};
+  mdOptions: MdEditorOption = {showBorder: false};
 
   slide = 0;
   benefitSlide = 0;

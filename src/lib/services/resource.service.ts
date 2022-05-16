@@ -83,7 +83,7 @@ export class ResourceService {
   }
 
   getSomeSnippets(ids: string[]) {
-    return this.http.get(this.base + `/ui/services/snippets/ids/${ids.toString()}/`);
+    return this.http.get(this.base + `/ui/services/snippets/ids/${ids.toString()}`);
   }
 
   get(resourceType: string, id: string) {

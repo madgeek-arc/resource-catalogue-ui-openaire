@@ -40,7 +40,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   canAddOrEditService = false;
 
   showForm = false;
-  relatedServices: Object = [];
+  relatedServices: Object = null;
 
   constructor(public route: ActivatedRoute,
               public router: NavigationService,
@@ -69,11 +69,13 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           ResourceService.removeNulls(suc[1]['extras']);
           this.prepareForm(suc[1]);
           this.form.patchValue(suc[1]);
-          this.resourceService.getSomeSnippets(this.form.get('service.relatedResources').value).subscribe(
-            res => { this.relatedServices = res; },
-            error => { console.log(error); },
-            () => { this.loading = false; }
-          );
+          if (this.form.get('extras.relatedServices').value.length > 0 && this.form.get('extras.relatedServices').value[0] !== '') {
+            this.resourceService.getSomeSnippets(this.form.get('extras.relatedServices').value).subscribe(
+              res => { this.relatedServices = res; },
+              error => { console.log(error); },
+              () => { this.loading = false; }
+            );
+          }
         },
         err => {
           if (err.status === 404) {
@@ -85,7 +87,11 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
           if (this.authenticationService.isLoggedIn()) {
             this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
           }
+          if (this.form.get('extras.relatedServices').value.length === 1 && this.form.get('extras.relatedServices').value[0] === '') {
+            this.loading = false;
+          }
         });
+
       if (this.authenticationService.isLoggedIn()) {
         this.resourceService.getMyServiceProviders().subscribe(
           res => this.myProviders = res,
