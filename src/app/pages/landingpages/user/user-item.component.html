@@ -45,25 +45,20 @@
 
           <div class="uk-width-expand">
 
-            <div class="uk-grid uk-child-width-1-3 uk-grid-match uk-grid-large">
-              <div class="uk-margin-large-bottom" *ngFor="let snippet of portfoliosMap.get('all')">
-                <div class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
-                  <div class="uk-inline-clip">
+            <div class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-3@m uk-child-width-1-3@l uk-margin-large-top" uk-height-match="target: > div > .uk-card > .uk-card-body">
 
-                    <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{snippet.image}}">
-
-                    <div class="uk-position-bottom uk-overlay-default">
-                      <div class="uk-overlay uk-padding-small uk-margin-remove-first-child">
-
-                        <div class="uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom">{{snippet.name}}</div>
-                        <div class="uk-margin-top">{{snippet.tagline}}</div>
-                        <!--                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>-->
-
-                        <div class="uk-margin-top">
-                          <a [routerLink]="['/service', snippet.id, 'overview']" class="el-link uk-button uk-button-text uk-button-large">View</a>
-                        </div>
-                      </div>
+              <div *ngFor="let snippet of portfoliosMap.get('all')" class="uk-grid-margin">
+                <div class="uk-card uk-card-default service-list-card">
+                  <div class="uk-card-media-top">
+                    <img src="{{snippet['image']}}" alt="">
+                  </div>
+                  <div class="uk-card-body uk-flex uk-flex-column uk-flex-between">
+                    <div>
+                      <div class="h5-subheader">{{snippet['name']}}</div>
+                      <h5 class="">{{snippet['tagline']}}</h5>
+                      <p>{{snippet['pitch']}}</p>
                     </div>
+                    <div class=""><a [routerLink]="['/service/', snippet['id']]" class="uk-button uk-button-text">Learn more</a></div>
                   </div>
                 </div>
               </div>
@@ -78,56 +73,31 @@
 
         <div class="uk-grid uk-margin-large-top uk-grid-large">
 
-<!--          <div class="uk-width-1-3">-->
-<!--            <div>-->
-<!--              <div *ngIf="portfolio.extras.tagline" class="h5-subheader">{{portfolio.extras.tagline}}</div>-->
-<!--              <h5>{{portfolio.name}} portfolio</h5>-->
-<!--              <p class="regular-text uk-margin-medium-top">{{portfolio.description}}</p>-->
-<!--              <a class="uk-button uk-button-primary uk-margin-medium-top uk-margin-large-bottom" [routerLink]="['/portfolios', portfolio.id]">Learn more</a>-->
-<!--            </div>-->
-<!--          </div>-->
-
           <div class="uk-width-expand">
 
-            <div class="uk-grid uk-child-width-1-3 uk-grid-match uk-grid-large">
+            <div class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-3@m uk-child-width-1-3@l uk-margin-large-top" uk-height-match="target: > div > .uk-card > .uk-card-body">
 
               <div *ngIf="portfoliosMap.get(portfolio.id).length === 0" >
                 <p>Currently there no services for this portfolio type</p>
               </div>
 
-              <div class="uk-margin-large-bottom" *ngFor="let snippet of portfoliosMap.get(portfolio.id)">
-                <div class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
-                  <div class="uk-inline-clip">
-
-                    <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{snippet.image}}">
-
-                    <div class="uk-position-bottom uk-overlay-default">
-                      <div class="uk-overlay uk-padding-small uk-margin-remove-first-child">
-
-                        <div class="uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom">{{snippet.name}}</div>
-                        <div class="uk-margin-top">{{snippet.tagline}}</div>
-                        <!--                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>-->
-
-                        <div class="uk-margin-top">
-                          <a [routerLink]="['/service', snippet.id, 'overview']" class="el-link uk-button uk-button-text uk-button-large">View</a>
-                        </div>
-                      </div>
+              <div *ngFor="let snippet of portfoliosMap.get(portfolio.id)" class="uk-grid-margin">
+                <div class="uk-card uk-card-default service-list-card">
+                  <div class="uk-card-media-top">
+                    <img src="{{snippet['image']}}" alt="">
+                  </div>
+                  <div class="uk-card-body uk-flex uk-flex-column uk-flex-between">
+                    <div>
+                      <div class="h5-subheader">{{snippet['name']}}</div>
+                      <h5 class="">{{snippet['tagline']}}</h5>
+                      <p>{{snippet['pitch']}}</p>
+                    </div>
+                    <div class="">
+                      <a [routerLink]="['/service/', snippet['id']]" class="uk-button uk-button-text">Learn more</a>
                     </div>
                   </div>
                 </div>
               </div>
-
-<!--              <div class="uk-panel uk-margin-remove-first-child uk-margin-xlarge" id="page#2-2-2-1">-->
-
-<!--                <div class="uk-panel uk-h5 uk-margin-medium-top uk-margin-remove-bottom">-->
-<!--                  <p style="font-weight:bold; color:#19116D;">Interested to see other available services?</p>-->
-<!--                </div>-->
-
-<!--                <div class="uk-margin-small-top">-->
-<!--                  <a [routerLink]="['/portfolios', portfolio.id]" class="el-link uk-button uk-button-text">View all</a>-->
-<!--                </div>-->
-
-<!--              </div>-->
 
             </div>
 

@@ -16,6 +16,8 @@ export class OverviewComponent implements OnInit {
   @Input() vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Object[] = null;
 
+  mdOptions = {showBorder: false};
+
   slide = 0;
   benefitSlide = 0;
 

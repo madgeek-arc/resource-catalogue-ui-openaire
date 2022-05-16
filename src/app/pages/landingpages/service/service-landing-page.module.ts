@@ -7,6 +7,8 @@ import {PricingComponent} from './pricing/pricing.component';
 import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSupport.component';
 import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
 import {ReusableComponentsModule} from '../../../../lib/shared/reusablecomponents/reusable-components.module';
+import {LMarkdownEditorModule} from 'ngx-markdown-editor';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import {ReusableComponentsModule} from '../../../../lib/shared/reusablecomponent
   imports: [
     CommonModule,
     ReusableComponentsModule,
-    ServiceLandingPageRouting
+    ServiceLandingPageRouting,
+    LMarkdownEditorModule,
+    FormsModule
   ],
 })
 
