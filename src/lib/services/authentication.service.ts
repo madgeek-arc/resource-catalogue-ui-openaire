@@ -66,7 +66,6 @@ export class AuthenticationService {
           // if (error.status === 403) {
           //   this.login();
           // }
-          console.log('Error!');
           sessionStorage.clear();
           console.log(error);
           this.loggedIn = false;
