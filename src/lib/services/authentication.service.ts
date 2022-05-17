@@ -20,7 +20,7 @@ export class AuthenticationService {
   user: UserInfo = new UserInfo();
 
   constructor(public navigationService: NavigationService, public http: HttpClient) {
-    this.tryLogin();
+    // this.tryLogin();
   }
 
   getUserProperty(property: string) {
@@ -63,12 +63,12 @@ export class AuthenticationService {
         },
         error => {
           deleteCookie(this.cookieName);
-          if (error.status === 403) {
-            this.login();
-          }
+          // if (error.status === 403) {
+          //   this.login();
+          // }
           console.log('Error!');
           sessionStorage.clear();
-          console.log(error.status);
+          console.log(error);
           this.loggedIn = false;
         },
         () => {
