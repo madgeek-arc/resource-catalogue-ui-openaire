@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
     if (sessionStorage.getItem('state.location') !== null) {
       const url = sessionStorage.getItem('state.location');
       sessionStorage.removeItem('state.location');
+      console.log('navigating to: ' + url);
       this.router.navigate([url]);
     }
   }

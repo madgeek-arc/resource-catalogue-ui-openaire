@@ -36,17 +36,20 @@ export class UserItemComponent implements OnInit {
           this.services = value;
         }
         this.portfolios = res[2];
+        this.portfoliosMap = new Map<string, Object[]>();
+        this.resourceService.getServicesSnippetByUserContentAndPortfolioType(this.userVocId.replace('&', '%26')).subscribe(
+          next => {
+            this.portfoliosMap.set('all', next.results);
+          },
+          error => { console.log(error); }
+        );
         for (const portfolio of this.portfolios) {
-          this.portfoliosMap = new Map<string, Object[]>();
-          this.portfoliosMap.set('all', []);
-          this.resourceService.getServicesSnippetByUserContentAndPortfolioType('users-content_%26_service_providers', portfolio['id']).subscribe(
+          this.resourceService.getServicesSnippetByUserContentAndPortfolioType(this.userVocId.replace('&', '%26'), portfolio['id']).subscribe(
             next => {
-              this.portfoliosMap.set('all', this.portfoliosMap.get('all').concat(next.results));
               this.portfoliosMap.set(portfolio.id, next.results);
             },
             error => { console.log(error); }
           );
-
         }
       },
       error => { console.log(error); },

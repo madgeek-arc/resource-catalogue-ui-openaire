@@ -116,8 +116,9 @@ export class ResourceService {
     return this.http.get<Paging<Snippet>>(this.base + `/ui/services/snippets?order=asc&orderField=name${'&' + searchQuery.toString()}`, this.options);
   }
 
-  getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType: string) {
-    return this.http.get<Paging<Snippet>>(this.base + `/ui/services/snippets?quantity=100&users=${userType}&portfolios=${portfolioType}`, this.options);
+  getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {
+    const url = (portfolioType ? `/ui/services/snippets?quantity=100&users=${userType}&portfolios=${portfolioType}` : `/ui/services/snippets?quantity=100&users=${userType}`);
+    return this.http.get<Paging<Snippet>>(this.base + url, this.options);
   }
 
   getVocabularyById(id: string) {

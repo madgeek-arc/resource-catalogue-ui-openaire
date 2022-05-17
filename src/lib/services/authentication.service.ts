@@ -62,9 +62,13 @@ export class AuthenticationService {
           sessionStorage.setItem('sub', userInfo.sub);
         },
         error => {
-          sessionStorage.clear();
+          deleteCookie(this.cookieName);
+          if (error.status === 403) {
+            this.login();
+          }
           console.log('Error!');
-          console.log(error);
+          sessionStorage.clear();
+          console.log(error.status);
           this.loggedIn = false;
         },
         () => {
