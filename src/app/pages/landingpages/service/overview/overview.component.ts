@@ -3,6 +3,7 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {FormModel, UiVocabulary} from '../../../../../lib/domain/dynamic-form-model';
 import * as uikit from 'uikit';
 import {MdEditorOption} from 'ngx-markdown-editor';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -10,7 +11,7 @@ import {MdEditorOption} from 'ngx-markdown-editor';
   templateUrl: 'overview.component.html',
   // styleUrls: ['../../landing-page.component.css']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent {
 
   @Input() form: FormGroup = null;
   @Input() model: FormModel[] = null;
@@ -25,7 +26,8 @@ export class OverviewComponent implements OnInit {
   slideMobile = 0;
   benefitSlideMobile = 0;
 
-  ngOnInit() {}
+  constructor(private router: Router) {
+  }
 
   getServiceArray(field: string) {
     return this.form.get('service.' + field) as FormArray;
@@ -94,6 +96,12 @@ export class OverviewComponent implements OnInit {
       this.benefitSlideMobile = index;
     }
 
+  }
+
+  redirectTo(uri:string){
+    // In order to refresh data on same page
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+      this.router.navigate([uri]));
   }
 
 }
