@@ -437,7 +437,7 @@
                     <p>{{service['pitch']}}</p>
                   </div>
                   <div class="">
-                    <a (click)="redirectTo('/service/' + service['id'])" class="uk-button uk-button-text">Learn more</a>
+                    <a [routerLink]="['/service/', service['id']]" class="uk-button uk-button-text">Learn more</a>
                   </div>
                 </div>
               </div>

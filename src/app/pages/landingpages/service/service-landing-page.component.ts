@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Provider, Vocabulary} from 'src/lib/domain/eic-model';
 import {AuthenticationService} from 'src/lib/services/authentication.service';
@@ -43,7 +43,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   relatedServices: Object = null;
 
   constructor(public route: ActivatedRoute,
-              public router: NavigationService,
+              public router: Router,
               public authenticationService: AuthenticationService,
               public resourceService: ResourceService,
               public userService: UserService,
@@ -54,6 +54,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.loading = true;
 
     this.sub = this.route.params.subscribe(params => {
@@ -79,7 +80,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         },
         err => {
           if (err.status === 404) {
-            this.router.go('/404');
+            this.router.navigate(['/404']);
           }
           this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
         },

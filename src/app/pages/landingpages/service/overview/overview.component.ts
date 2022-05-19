@@ -98,10 +98,4 @@ export class OverviewComponent {
 
   }
 
-  redirectTo(uri:string){
-    // In order to refresh data on same page
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-      this.router.navigate([uri]));
-  }
-
 }
