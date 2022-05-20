@@ -437,7 +437,7 @@
                     <p>{{service['pitch']}}</p>
                   </div>
                   <div class="">
-                    <a [routerLink]="['/service/', service['id']]" class="uk-button uk-button-text">Learn more</a>
+                    <a (click)="reloadOnSamePage('/service/'+service['id'])" [routerLink]="[]" class="uk-button uk-button-text">Learn more</a>
                   </div>
                 </div>
               </div>

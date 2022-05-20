@@ -54,7 +54,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.loading = true;
 
     this.sub = this.route.params.subscribe(params => {

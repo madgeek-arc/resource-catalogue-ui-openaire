@@ -98,4 +98,10 @@ export class OverviewComponent {
 
   }
 
+  reloadOnSamePage(url: string) {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then( () => {
+      this.router.navigate([url]);
+    });
+  }
+
 }
