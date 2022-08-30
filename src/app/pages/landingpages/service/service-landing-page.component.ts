@@ -1,20 +1,18 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Provider, Vocabulary} from 'src/lib/domain/eic-model';
-import {AuthenticationService} from 'src/lib/services/authentication.service';
-import {NavigationService} from 'src/lib/services/navigation.service';
-import {ResourceService} from 'src/lib/services/resource.service';
-import {UserService} from 'src/lib/services/user.service';
-import {ServiceProviderService} from 'src/lib/services/service-provider.service';
+import {Provider} from '../../../entities/eic-model';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {ResourceService} from '../../../services/resource.service';
+import {UserService} from '../../../services/user.service';
+import {ServiceProviderService} from '../../../services/service-provider.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {zip} from 'rxjs/internal/observable/zip';
-import {EmailService} from 'src/lib/services/email.service';
 import {environment} from 'src/environments/environment';
 import {MatomoTracker} from 'ngx-matomo';
-import {FormControlService} from 'src/lib/pages/provider-resources/dynamic-service-form/form-control.service';
-import {Fields, FormModel, UiVocabulary} from 'src/lib/domain/dynamic-form-model';
-import {PremiumSortPipe} from 'src/lib/shared/pipes/premium-sort.pipe';
+import {FormControlService} from '../../../pages/provider-resources/dynamic-service-form/form-control.service';
+import {Fields, FormModel, UiVocabulary} from '../../../entities/dynamic-form-model';
+import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
 @Component({
   selector: 'app-service-landing-page',
@@ -46,7 +44,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               public router: Router,
               public authenticationService: AuthenticationService,
               public resourceService: ResourceService,
-              public userService: UserService,
               private providerService: ServiceProviderService,
               private formService: FormControlService,
               private fb: FormBuilder,
@@ -96,7 +93,11 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         this.resourceService.getMyServiceProviders().subscribe(
           res => this.myProviders = res,
           er => console.log(er),
-          () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
+          () => {
+            this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+            console.log(this.canAddOrEditService);
+            console.log(this.myProviders);
+          }
         );
       }
       this.id = params['id'];

@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {TopMenuComponent} from '../../../lib/shared/topmenu/topmenu.component';
-import {AuthenticationService} from '../../../lib/services/authentication.service';
+import {AuthenticationService} from '../../services/authentication.service';
 import {Router} from '@angular/router';
 import {FormBuilder} from '@angular/forms';
-import {NavigationService} from '../../../lib/services/navigation.service';
-import {ResourceService} from '../../../lib/services/resource.service';
-import {DataSharingService} from '../../../lib/services/data-sharing.service';
+import {NavigationService} from '../../services/navigation.service';
+import {ResourceService} from '../../services/resource.service';
+import {DataSharingService} from '../../services/data-sharing.service';
 import {PortfolioMap} from '../../entities/portfolioMap';
 import * as UIkit from 'uikit';
 
@@ -16,7 +15,7 @@ import * as UIkit from 'uikit';
   styleUrls: ['./topmenu.component.css'],
 })
 
-export class AireTopMenuComponent extends TopMenuComponent implements OnInit {
+export class AireTopMenuComponent implements OnInit {
 
   services: PortfolioMap = null;
   refresh = false;
@@ -25,9 +24,7 @@ export class AireTopMenuComponent extends TopMenuComponent implements OnInit {
 
   constructor(public authenticationService: AuthenticationService, public router: Router, public fb: FormBuilder,
               public navigationService: NavigationService, public resourceService: ResourceService,
-              private dataSharingService: DataSharingService) {
-    super(authenticationService, router, fb, navigationService, resourceService);
-  }
+              private dataSharingService: DataSharingService) {}
 
   ngOnInit() {
 

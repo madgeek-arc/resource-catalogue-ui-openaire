@@ -2,14 +2,11 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {SearchAireComponent} from './pages/search/search.aire.component';
-import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.service';
-import {ForbiddenPageComponent} from '../lib/shared/forbidden-page/forbidden-page.component';
-import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page.component';
-import {environment} from '../environments/environment';
-import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
-import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
-import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
-import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
+import {CanActivateViaAuthGuard} from './services/can-activate-auth-guard.service';
+import {ForbiddenPageComponent} from './shared/forbidden-page/forbidden-page.component';
+import {NotFoundPageComponent} from './shared/not-found-page/not-found-page.component';
+// import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
+// import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
@@ -34,23 +31,23 @@ const appRoutes: Routes = [
       breadcrumb: 'Search'
     }
   },
-
-  {
-    path: 'form',
-    component: DynamicFormComponent,
-    data: {
-      breadcrumb: 'forms'
-    }
-  },
-
-  {
-    path: 'edit/:id',
-    component: DynamicFormEditComponent,
-    canActivate: [CanActivateViaAuthGuard],
-    data: {
-      breadcrumb: 'edit'
-    }
-  },
+  //
+  // {
+  //   path: 'form',
+  //   component: DynamicFormComponent,
+  //   data: {
+  //     breadcrumb: 'forms'
+  //   }
+  // },
+  //
+  // {
+  //   path: 'edit/:id',
+  //   component: DynamicFormEditComponent,
+  //   canActivate: [CanActivateViaAuthGuard],
+  //   data: {
+  //     breadcrumb: 'edit'
+  //   }
+  // },
 
   {
     path: 'portfolios/:id',
@@ -70,13 +67,13 @@ const appRoutes: Routes = [
 
   {
     path: 'provider',
-    loadChildren: () => import('../lib/pages/provider/provider.module').then(m => m.ProviderModule),
+    loadChildren: () => import('../app/pages/provider/provider.module').then(m => m.ProviderModule),
     canActivate: [CanActivateViaAuthGuard]
   },
 
   {
     path: 'resource-dashboard',
-    loadChildren: () => import('../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
+    loadChildren: () => import('../app/pages/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
     canActivate: [CanActivateViaAuthGuard]
   },
 

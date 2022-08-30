@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
-import {FormModel, UiVocabulary} from '../../../../../lib/domain/dynamic-form-model';
+import {FormModel, UiVocabulary} from '../../../../entities/dynamic-form-model';
 import * as uikit from 'uikit';
 import {MdEditorOption} from 'ngx-markdown-editor';
 import {Router} from '@angular/router';

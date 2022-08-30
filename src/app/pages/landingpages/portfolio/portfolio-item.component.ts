@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ResourceService} from '../../../../lib/services/resource.service';
+import {ResourceService} from '../../../services/resource.service';
 import {ActivatedRoute} from '@angular/router';
-import {Vocabulary} from '../../../../lib/domain/eic-model';
+import {Vocabulary} from '../../../entities/eic-model';
 import {zip} from 'rxjs/internal/observable/zip';
 
 

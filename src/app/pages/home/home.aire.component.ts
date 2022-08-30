@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Vocabulary} from 'src/lib/domain/eic-model';
-import {SearchQuery} from 'src/lib/domain/search-query';
-import {NavigationService} from 'src/lib/services/navigation.service';
-import {ResourceService} from '../../../lib/services/resource.service';
-import {DataSharingService} from '../../../lib/services/data-sharing.service';
+import {Vocabulary} from '../../entities/eic-model';
+import {SearchQuery} from '../../entities/search-query';
+import {NavigationService} from '../../services/navigation.service';
+import {ResourceService} from '../../services/resource.service';
+import {DataSharingService} from '../../services/data-sharing.service';
 import {PortfolioMap} from '../../entities/portfolioMap';
 import * as uikit from 'uikit';
 
