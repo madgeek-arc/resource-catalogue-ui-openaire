@@ -4,13 +4,12 @@ import {Subscription} from 'rxjs';
 import {Provider} from '../../../entities/eic-model';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {ResourceService} from '../../../services/resource.service';
-import {UserService} from '../../../services/user.service';
 import {ServiceProviderService} from '../../../services/service-provider.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {zip} from 'rxjs/internal/observable/zip';
 import {environment} from 'src/environments/environment';
 import {MatomoTracker} from 'ngx-matomo';
-import {FormControlService} from '../../../pages/provider-resources/dynamic-service-form/form-control.service';
+// import {FormControlService} from '../../../pages/provider-resources/dynamic-service-form/form-control.service';
 import {Fields, FormModel, UiVocabulary} from '../../../entities/dynamic-form-model';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
@@ -45,7 +44,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               public authenticationService: AuthenticationService,
               public resourceService: ResourceService,
               private providerService: ServiceProviderService,
-              private formService: FormControlService,
+              // private formService: FormControlService,
               private fb: FormBuilder,
               private matomoTracker: MatomoTracker) {
   }
@@ -53,55 +52,55 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
 
-    this.sub = this.route.params.subscribe(params => {
-      zip(
-        this.formService.getFormModel(),
-        this.formService.getDynamicService(params['id']),
-        this.formService.getUiVocabularies(),
-      ).subscribe(suc => {
-          this.model = <FormModel[]>suc[0];
-          this.vocabularies = <Map<string, UiVocabulary[]>>suc[2];
-          this.initializations();
-          ResourceService.removeNulls(suc[1]['service']);
-          ResourceService.removeNulls(suc[1]['extras']);
-          this.prepareForm(suc[1]);
-          this.form.patchValue(suc[1]);
-          if (this.form.get('extras.relatedServices').value.length > 0 && this.form.get('extras.relatedServices').value[0] !== '') {
-            this.resourceService.getSomeSnippets(this.form.get('extras.relatedServices').value).subscribe(
-              res => { this.relatedServices = res; },
-              error => { console.log(error); },
-              () => { this.loading = false; }
-            );
-          }
-        },
-        err => {
-          if (err.status === 404) {
-            this.router.navigate(['/404']);
-          }
-          this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
-        },
-        () => {
-          if (this.authenticationService.isLoggedIn()) {
-            this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
-          }
-          if (this.form.get('extras.relatedServices').value.length === 1 && this.form.get('extras.relatedServices').value[0] === '') {
-            this.loading = false;
-          }
-        });
-
-      if (this.authenticationService.isLoggedIn()) {
-        this.resourceService.getMyServiceProviders().subscribe(
-          res => this.myProviders = res,
-          er => console.log(er),
-          () => {
-            this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-            console.log(this.canAddOrEditService);
-            console.log(this.myProviders);
-          }
-        );
-      }
-      this.id = params['id'];
-    });
+    // this.sub = this.route.params.subscribe(params => {
+    //   zip(
+    //     this.formService.getFormModel(),
+    //     this.formService.getDynamicService(params['id']),
+    //     this.formService.getUiVocabularies(),
+    //   ).subscribe(suc => {
+    //       this.model = <FormModel[]>suc[0];
+    //       this.vocabularies = <Map<string, UiVocabulary[]>>suc[2];
+    //       this.initializations();
+    //       ResourceService.removeNulls(suc[1]['service']);
+    //       ResourceService.removeNulls(suc[1]['extras']);
+    //       this.prepareForm(suc[1]);
+    //       this.form.patchValue(suc[1]);
+    //       if (this.form.get('extras.relatedServices').value.length > 0 && this.form.get('extras.relatedServices').value[0] !== '') {
+    //         this.resourceService.getSomeSnippets(this.form.get('extras.relatedServices').value).subscribe(
+    //           res => { this.relatedServices = res; },
+    //           error => { console.log(error); },
+    //           () => { this.loading = false; }
+    //         );
+    //       }
+    //     },
+    //     err => {
+    //       if (err.status === 404) {
+    //         this.router.navigate(['/404']);
+    //       }
+    //       this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
+    //     },
+    //     () => {
+    //       if (this.authenticationService.isLoggedIn()) {
+    //         this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + this.serviceId, 'visit', 1);
+    //       }
+    //       if (this.form.get('extras.relatedServices').value.length === 1 && this.form.get('extras.relatedServices').value[0] === '') {
+    //         this.loading = false;
+    //       }
+    //     });
+    //
+    //   if (this.authenticationService.isLoggedIn()) {
+    //     this.resourceService.getMyServiceProviders().subscribe(
+    //       res => this.myProviders = res,
+    //       er => console.log(er),
+    //       () => {
+    //         this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+    //         console.log(this.canAddOrEditService);
+    //         console.log(this.myProviders);
+    //       }
+    //     );
+    //   }
+    //   this.id = params['id'];
+    // });
   }
 
   ngOnDestroy(): void {
@@ -138,8 +137,8 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   initializations() {
     /** Create form **/
     const tmpForm: any = {};
-    tmpForm['service'] = this.formService.toFormGroup(this.model, true);
-    tmpForm['extras'] = this.formService.toFormGroup(this.model, false);
+    // tmpForm['service'] = this.formService.toFormGroup(this.model, true);
+    // tmpForm['extras'] = this.formService.toFormGroup(this.model, false);
     this.form = this.fb.group(tmpForm);
 
     /** Initialize and sort vocabulary arrays **/

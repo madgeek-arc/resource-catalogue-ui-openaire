@@ -43,7 +43,7 @@ declare var require: any;
     SearchAireComponent,
     PortfolioItemComponent,
     UserItemComponent,
-    ServiceLandingPageComponent,
+    // ServiceLandingPageComponent,
     AireTopMenuComponent,
     AireFooterComponent,
   ],
