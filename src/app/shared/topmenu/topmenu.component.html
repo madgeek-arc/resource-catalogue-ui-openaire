@@ -42,22 +42,22 @@
                     </div>
                   </div>
 
-                  <ng-container *ngFor="let portfolio of services | keyvalue">
-                    <div style="display: none" [ngClass]="portfolioItemActive===portfolio.key?'uk-display-block':'uk-display-none'">
+<!--                  <ng-container *ngFor="let portfolio of services | keyvalue">-->
+<!--                    <div style="display: none" [ngClass]="portfolioItemActive===portfolio.key?'uk-display-block':'uk-display-none'">-->
 
-                      <div class="uk-flex uk-flex-middle">
-                        <a (click)="portfolioActive(null)"><i class="fa fa-2x fa-angle-left"></i></a>
-                        <h5 class="uk-text-center uk-margin-remove" style="width: 100%">{{portfolio.key}}</h5>
-                      </div>
+<!--                      <div class="uk-flex uk-flex-middle">-->
+<!--                        <a (click)="portfolioActive(null)"><i class="fa fa-2x fa-angle-left"></i></a>-->
+<!--                        <h5 class="uk-text-center uk-margin-remove" style="width: 100%">{{portfolio.key}}</h5>-->
+<!--                      </div>-->
 
-                      <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-margin-medium-top">
-                        <a (click)="redirectTo('/service/' + service.id)">
-                          <h6 class="uk-text-normal">{{service.name}}</h6>
-                        </a>
-                      </div>
+<!--                      <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-margin-medium-top">-->
+<!--                        <a (click)="redirectTo('/service/' + service.id)">-->
+<!--                          <h6 class="uk-text-normal">{{service.name}}</h6>-->
+<!--                        </a>-->
+<!--                      </div>-->
 
-                    </div>
-                  </ng-container>
+<!--                    </div>-->
+<!--                  </ng-container>-->
 
                   <div class="uk-flex uk-flex-center">
                     <button class="uk-margin-medium-top uk-margin-bottom uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>

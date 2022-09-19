@@ -32,6 +32,9 @@ import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {ServiceLandingPageComponent} from './pages/landingpages/service/service-landing-page.component';
 import {DataSharingService} from './services/data-sharing.service';
 import {AuthenticationInterceptor} from './services/authentication-interceptor';
+import {FormsComponent} from './pages/forms/forms.component';
+import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
+import {DynamicFormModule} from '../catalogue-ui/pages/dynamic-form/dynamic-form.module';
 
 
 declare var require: any;
@@ -46,6 +49,7 @@ declare var require: any;
     // ServiceLandingPageComponent,
     AireTopMenuComponent,
     AireFooterComponent,
+    FormsComponent
   ],
   imports: [
     CommonModule,
@@ -73,6 +77,7 @@ declare var require: any;
     }),
     LMarkdownEditorModule,
     MarkdownModule.forRoot(),
+    CatalogueUiModule,
     AppRoutingModule,
   ],
   providers: [

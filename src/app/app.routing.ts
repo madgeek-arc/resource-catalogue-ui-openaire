@@ -10,6 +10,7 @@ import {NotFoundPageComponent} from './shared/not-found-page/not-found-page.comp
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
+import {FormsComponent} from './pages/forms/forms.component';
 
 const appRoutes: Routes = [
   {
@@ -31,14 +32,14 @@ const appRoutes: Routes = [
       breadcrumb: 'Search'
     }
   },
-  //
-  // {
-  //   path: 'form',
-  //   component: DynamicFormComponent,
-  //   data: {
-  //     breadcrumb: 'forms'
-  //   }
-  // },
+
+  {
+    path: 'form',
+    component: FormsComponent,
+    data: {
+      breadcrumb: 'forms'
+    }
+  },
   //
   // {
   //   path: 'edit/:id',

@@ -121,7 +121,7 @@ export class ResourceService {
   }
 
   getVocabularyById(id: string) {
-    return this.http.get<Vocabulary>(this.base + `/vocabulary/${id}`);
+    return this.http.get<Vocabulary>(this.base + `/vocabularies/${id}`);
   }
 
   getAllVocabulariesByType() {
@@ -129,7 +129,7 @@ export class ResourceService {
   }
 
   getNewVocabulariesByType(type: string) {
-    return this.http.get<Vocabulary[]>(this.base + `/vocabulary/byType/${type}`);
+    return this.http.get<Vocabulary[]>(this.base + `/vocabularies/byType/${type}`);
   }
 
   getNestedVocabulariesByType(type: string) {
@@ -140,16 +140,16 @@ export class ResourceService {
     if (id) {
       let params = new HttpParams();
       params = params.append('value', id);
-      return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`, {params});
+      return this.http.post<Map<string, Object[]>>(this.base + `/services/search`, {type: id});
     } else {
-      return this.http.get<Map<string, Object[]>>(this.base + `/ui/services/by/extra/${type}`);
+      return this.http.post<Map<string, Object[]>>(this.base + `/services/search`, {type: ""});
     }
   }
 
   getServicesByIndexedField(field: string, vocabularyType: string) {
       let params = new HttpParams();
       params = params.append('vocabularyType', vocabularyType);
-      return this.http.get<PortfolioMap>(this.base + `/ui/services/names/by/indexed/${field}`, {params});
+      return this.http.get<PortfolioMap>(this.base + `/services/by/${field}?`, {params});
   }
 
   getSubcategoriesIdsFromSuperCategory(parent: string, type: string) {
