@@ -1,1 +1,5 @@
-<app-survey [answer]="" [survey]="model" [tabsHeader]=""></app-survey>
+<div *ngIf="model" class="uk-section-default uk-section uk-section-small uk-padding-remove-bottom" style="min-height: 90vh;">
+  <div class="uk-container uk-container-expand uk-margin-left uk-margin-right uk-margin-top">
+    <app-survey  [answer]="" [model]="model" [tabsHeader]="" (submit)="submitForm($event)"></app-survey>
+  </div>
+</div>

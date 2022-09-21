@@ -501,10 +501,9 @@ export class ResourceService {
     return places;
   }
 
-  uploadService(service: Service, shouldPut: boolean) {
-    // console.log(JSON.stringify(service));
-    // console.log(`knocking on: ${this.base}/service`);
-    return this.http[shouldPut ? 'put' : 'post']<Service>(this.base + '/service', service, this.options);
+  postService(service: object) {
+
+    return this.http.post<Service>(this.base + '/services', service[Object.keys(service)[0]], this.options);
   }
 
   uploadServiceWithMeasurements(service: Service, measurements: Measurement[]) {

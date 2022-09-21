@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Model} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
+import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
+import {ResourceService} from '../../services/resource.service';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-form',
@@ -10,10 +13,12 @@ import {FormControlService} from '../../../catalogue-ui/services/form-control.se
 
 export class FormsComponent implements OnInit{
 
+  @ViewChild(SurveyComponent) child: SurveyComponent;
+
   tabsHeader: string = null;
   model: Model = null;
 
-  constructor(private formService: FormControlService) {
+  constructor(private formService: FormControlService, private resourceService: ResourceService) {
   }
 
   ngOnInit() {
@@ -21,4 +26,12 @@ export class FormsComponent implements OnInit{
       next =>{ this.model = next}
     );
   }
+
+  submitForm(form: FormGroup) {
+    this.resourceService.postService(form.getRawValue()).subscribe(
+      next => {},
+      error => {console.log(error);}
+    );
+  }
+
 }
