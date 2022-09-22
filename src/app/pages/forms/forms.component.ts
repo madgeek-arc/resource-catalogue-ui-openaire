@@ -4,6 +4,8 @@ import {FormControlService} from '../../../catalogue-ui/services/form-control.se
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
 import {FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {zip} from 'rxjs/internal/observable/zip';
 
 @Component({
   selector: 'app-form',
@@ -17,13 +19,39 @@ export class FormsComponent implements OnInit{
 
   tabsHeader: string = null;
   model: Model = null;
+  resourceId: string = null;
+  payloadAnswer: object = {'answer': {'Service': {}}}; // Find a way to do this better
+  ready: Boolean = false
 
-  constructor(private formService: FormControlService, private resourceService: ResourceService) {
+  constructor(private formService: FormControlService, private resourceService: ResourceService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.formService.getFormModelById('m-rEmtKuZd').subscribe(
-      next =>{ this.model = next}
+    this.ready = false;
+    this.route.params.subscribe(
+      params => {
+        this.resourceId = params['resourceId']
+        if (this.resourceId) {
+          zip(
+            this.resourceService.getResource(this.resourceId),
+            this.formService.getFormModelById('m-rEmtKuZd')).subscribe(
+            next => {
+              this.payloadAnswer['answer'].Service = next[0];
+              this.model = next[1];
+            },
+            error => {console.log(error)},
+            () => {this.ready = true}
+          );
+        } else {
+          this.formService.getFormModelById('m-rEmtKuZd').subscribe(
+            next => {this.model = next;},
+            error => {console.log(error);},
+            () => {this.ready = true;}
+          );
+        }
+
+      },
+      error => {console.log(error)}
     );
   }
 

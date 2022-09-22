@@ -40,16 +40,14 @@ const appRoutes: Routes = [
       breadcrumb: 'forms'
     }
   },
-  //
-  // {
-  //   path: 'edit/:id',
-  //   component: DynamicFormEditComponent,
-  //   canActivate: [CanActivateViaAuthGuard],
-  //   data: {
-  //     breadcrumb: 'edit'
-  //   }
-  // },
-
+  {
+    path: 'edit/:resourceId',
+    component: FormsComponent,
+    // canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'edit'
+    }
+  },
   {
     path: 'portfolios/:id',
     component: PortfolioItemComponent,

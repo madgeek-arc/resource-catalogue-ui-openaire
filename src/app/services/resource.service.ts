@@ -27,12 +27,10 @@ declare var UIkit: any;
 @Injectable()
 export class ResourceService {
 
-  constructor(public http: HttpClient, public authenticationService: AuthenticationService) {
-  }
   base = environment.API_ENDPOINT;
   private options = {withCredentials: true};
-  ACCESS_TYPES;
-  ORDER_TYPE;
+
+  constructor(public http: HttpClient, public authenticationService: AuthenticationService) {}
 
   static removeNulls(obj) {
     const isArray = obj instanceof Array;
@@ -85,8 +83,8 @@ export class ResourceService {
     return this.http.get(this.base + `/ui/services/snippets/ids/${ids.toString()}`);
   }
 
-  get(resourceType: string, id: string) {
-    return this.http.get(this.base + `/${resourceType}/${id}/`, this.options);
+  getResource(resourceId: string) {
+    return this.http.get(this.base + `/services/${resourceId}`, this.options);
   }
 
   search(urlParameters: URLParameter[]) {
@@ -326,10 +324,6 @@ export class ResourceService {
     } else {
       return this.http.get(this.base + `/stats/provider/ratings/${provider}`);
     }
-  }
-
-  getVisitationPercentageForProvider(provider: string) {
-    return this.get('stats/provider/visitation', provider);
   }
 
   getPlacesForProvider(provider: string) {
