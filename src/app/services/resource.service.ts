@@ -123,7 +123,7 @@ export class ResourceService {
   }
 
   getAllVocabulariesByType() {
-    return this.http.get<Map<Type, Vocabulary[]>>(this.base + `/vocabulary/byType`);
+    return this.http.get<Map<Type, Vocabulary[]>>(this.base + `/vocabularies/byType`);
   }
 
   getNewVocabulariesByType(type: string) {
