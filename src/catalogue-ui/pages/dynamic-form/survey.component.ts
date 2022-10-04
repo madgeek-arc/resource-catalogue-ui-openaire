@@ -33,7 +33,9 @@ export class SurveyComponent implements OnInit, OnChanges {
   @Input() answer: any = null; // cant import specific project class in lib file
   @Input() model: Model = null;
   @Input() vocabulariesMap: Map<string, object[]> = null;
-  @Input() tabsHeader : string = null;
+  @Input() tabsHeader: string = null;
+  @Input() mandatoryFieldsText: string = null;
+  @Input() downloadPDF: boolean = false;
   @Output() valid = new EventEmitter<boolean>();
   @Output() submit = new EventEmitter<FormGroup>();
 
@@ -42,7 +44,7 @@ export class SurveyComponent implements OnInit, OnChanges {
   currentChapter: Section = null;
   chapterForSubmission: Section = null;
   sortedSurveyAnswers: Object = {};
-  vocabularies: Map<string, string[]>;
+  vocabularies: Map<string, object[]>;
   subVocabularies: UiVocabulary[] = [];
   editMode = false;
   bitset: Tabs = new Tabs;
@@ -192,7 +194,7 @@ export class SurveyComponent implements OnInit, OnChanges {
     this.submit.emit(this.form);
   }
 
-  onSubmit(e: any) { // FIXME
+  onSubmit() { // FIXME
     window.scrollTo(0, 0);
     // this.showLoader = true;
     // this.formControlService.postItem(this.surveyAnswers.id, this.form.get(this.chapterForSubmission.name).value, this.editMode).subscribe(
