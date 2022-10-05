@@ -14,7 +14,7 @@ import {
   Type, Snippet
 } from '../entities/eic-model';
 import {BrowseResults} from '../entities/browse-results';
-import {Paging} from '../entities/paging';
+import {Paging, SpringPaging} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -110,7 +110,7 @@ export class ResourceService {
       }
     }
     searchQuery.delete('to');
-    return this.http.get<Paging<Snippet>>(this.base + `/ui/services/snippets?order=asc&orderField=name${'&' + searchQuery.toString()}`, this.options);
+    return this.http.post<SpringPaging<Snippet>>(this.base + `/services/snippets/search?${searchQuery.toString()}`, {}, this.options);
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {

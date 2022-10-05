@@ -37,7 +37,7 @@
           <div class="uk-margin-medium-top">
 
             <ng-template ngFor let-facet [ngForOf]="searchResultsSnippets.facets">
-              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
+              <div *ngIf="facet.field === 'lifeCycleStatus' || facet.field === 'trl' || facet.field === 'users'
                         || facet.field === 'portfolios'" class="uk-margin-medium-top">
                 <read-more [maxHeight]="235">
                   <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
@@ -78,7 +78,7 @@
             <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>
           </div>
 
-          <div *ngIf="searchResultsSnippets.results != null && searchResultsSnippets.results.length > 0">
+          <div *ngIf="searchResultsSnippets.page?.content?.length > 0">
 
             <!--<div class="uk-flex uk-flex-middle uk-flex-between">-->
               <!--<div>-->
@@ -103,7 +103,7 @@
                 <div class="uk-flex uk-flex-between uk-flex-middle">
 
                   <p class="big-text uk-margin-remove">
-                    <span class="uk-text-bold">{{searchResultsSnippets.total}}</span> Services, Page <span class="uk-text-bold">{{currentPage}}</span> of {{totalPages}}
+                    <span class="uk-text-bold">{{searchResultsSnippets.page.totalElements}}</span> Services, Page <span class="uk-text-bold">{{currentPage}}</span> of {{totalPages}}
                   </p>
 
                   <ul class="uk-pagination uk-visible@m">
@@ -123,7 +123,7 @@
 
             <div *ngIf="listViewActive" class="uk-grid-margin-small">
 
-              <ng-container *ngFor="let resourceInfo of searchResultsSnippets.results; let i = index">
+              <ng-container *ngFor="let resourceInfo of searchResultsSnippets.page.content; let i = index">
 
                 <a [routerLink]="['/service/' + resourceInfo.id]" class="serviceDetails">
                   <div class="uk-card uk-card-default uk-card-hover uk-margin-bottom">

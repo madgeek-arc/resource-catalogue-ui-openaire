@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Provider, Snippet} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
-import {Paging} from '../../entities/paging';
+import {Paging, SpringPaging} from '../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
@@ -22,7 +22,7 @@ export class SearchAireComponent implements OnInit {
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
-  searchResultsSnippets: Paging<Snippet>;
+  searchResultsSnippets: SpringPaging<Snippet>;
   private sortFacets = new PremiumSortFacetsPipe();
   advanced = false;
   listViewActive = true;
@@ -100,7 +100,7 @@ export class SearchAireComponent implements OnInit {
     }
   }
 
-  updateSearchResultsSnippets(searchResults: Paging<Snippet>) {
+  updateSearchResultsSnippets(searchResults: SpringPaging<Snippet>) {
 
     // INITIALISATIONS
 
@@ -111,7 +111,7 @@ export class SearchAireComponent implements OnInit {
     this.isPreviousPageDisabled = false;
     this.isLastPageDisabled = false;
     this.isNextPageDisabled = false;
-    if (this.searchResultsSnippets.results.length === 0) {
+    if (this.searchResultsSnippets.page.content.length === 0) {
       this.foundResults = false;
     } else {
       this.sortFacets.transform(this.searchResultsSnippets.facets,['Portfolios', 'Users', 'TRL', 'Life Cycle Status'])
@@ -141,8 +141,8 @@ export class SearchAireComponent implements OnInit {
       }
     }
     this.updatePagingURLParametersQuantity(this.pageSize);
-    this.currentPage = (searchResults.from / this.pageSize) + 1;
-    this.totalPages = Math.ceil(searchResults.total / this.pageSize);
+    this.currentPage = this.searchResultsSnippets.page.pageable.pageNumber + 1;
+    this.totalPages = Math.ceil(searchResults.page.totalElements / this.pageSize);
     if (this.currentPage === 1) {
       this.isFirstPageDisabled = true;
       this.isPreviousPageDisabled = true;
@@ -157,8 +157,8 @@ export class SearchAireComponent implements OnInit {
     let addToEndCounter = 0;
     let addToStartCounter = 0;
     this.pages = [];
-    this.currentPage = (this.searchResultsSnippets.from / this.pageSize) + 1;
-    this.pageTotal = Math.ceil(this.searchResultsSnippets.total / this.pageSize);
+    this.currentPage = this.searchResultsSnippets.page.pageable.pageNumber + 1;
+    this.pageTotal = this.searchResultsSnippets.page.totalElements;
     for ( let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
       if ( i < 1 ) { addToEndCounter++; }
       if ( i > this.pageTotal ) { addToStartCounter++; }
@@ -234,7 +234,7 @@ export class SearchAireComponent implements OnInit {
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      let from: number = this.searchResultsSnippets.from;
+      let from: number = this.currentPage * this.pageSize;
       from -= this.pageSize;
       this.updatePagingURLParameters(from);
       return this.navigateUsingParameters();
@@ -244,7 +244,7 @@ export class SearchAireComponent implements OnInit {
   nextPage() {
     if (this.currentPage < this.pageTotal) {
       this.currentPage++;
-      let from: number = this.searchResultsSnippets.from;
+      let from: number = this.currentPage * this.pageSize;
       from += this.pageSize;
       this.updatePagingURLParameters(from);
       return this.navigateUsingParameters();
