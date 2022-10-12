@@ -11,7 +11,7 @@ import {SafePipe} from './pipes/safe.pipe';
 import {ValuesPipe} from './pipes/getValues.pipe';
 // import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 // import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
-// import { EmailModalComponent } from './email-modal/email-modal.component';
+import { EmailModalComponent } from './email-modal/email-modal.component';
 // import {BreadcrumbsComponent} from './breadcrumbs/breadcrumbs.component';
 // import {PendingServicesComponent} from '../pages/provider/dashboard/pendingservices/pending-services.component';
 // import {PreviewResourceComponent} from '../pages/previewresource/preview-resource.component';
@@ -34,7 +34,7 @@ import {ValuesPipe} from './pipes/getValues.pipe';
     ValuesPipe,
     // ForbiddenPageComponent,
     // NotFoundPageComponent,
-    // EmailModalComponent,
+    EmailModalComponent,
     // BreadcrumbsComponent,
     // PendingServicesComponent,
     // PreviewResourceComponent
@@ -48,7 +48,7 @@ import {ValuesPipe} from './pipes/getValues.pipe';
     PremiumSortFacetValuesPipe,
     SafePipe,
     ValuesPipe,
-    // EmailModalComponent,
+    EmailModalComponent,
     // BreadcrumbsComponent,
     // PendingServicesComponent,
     // PreviewResourceComponent
