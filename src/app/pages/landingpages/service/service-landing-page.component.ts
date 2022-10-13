@@ -2,14 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Provider} from '../../../entities/eic-model';
-import {AuthenticationService} from '../../../services/authentication.service';
 import {ResourceService} from '../../../services/resource.service';
-import {ServiceProviderService} from '../../../services/service-provider.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {zip} from 'rxjs/internal/observable/zip';
 import {environment} from 'src/environments/environment';
-import {MatomoTracker} from 'ngx-matomo';
-// import {FormControlService} from '../../../pages/provider-resources/dynamic-service-form/form-control.service';
 import {Fields, FormModel, UiVocabulary} from '../../../entities/dynamic-form-model';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
@@ -20,37 +15,44 @@ import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
-  public projectName = environment.projectName;
-  serviceORresource = environment.serviceORresource;
-  public errorMessage: string;
-  public serviceId;
+  private subscriptions: Subscription[] = [];
+  projectName = environment.projectName;
   vocabularies: Map<string, UiVocabulary[]>;
   model: FormModel[] = null;
   form: FormGroup = this.fb.group({service: this.fb.group({}), extras: this.fb.group({})}, Validators.required);
   id: string;
-  loading = true;
-  premiumSort = new PremiumSortPipe();
+  ready = false;
 
-  private sub: Subscription;
+  premiumSort = new PremiumSortPipe();
   path: string;
   myProviders:  Provider[] = [];
   canAddOrEditService = false;
 
-  showForm = false;
   relatedServices: Object = null;
+  resourcePayload: Object = null;
 
-  constructor(public route: ActivatedRoute,
-              public router: Router,
-              public authenticationService: AuthenticationService,
-              public resourceService: ResourceService,
-              private providerService: ServiceProviderService,
-              // private formService: FormControlService,
-              private fb: FormBuilder,
-              private matomoTracker: MatomoTracker) {
+  constructor(public route: ActivatedRoute, public resourceService: ResourceService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    this.loading = true;
+    this.ready = false;
+
+    this.subscriptions.push(
+      this.route.params.subscribe(
+        params => {
+
+          this.id = params['id'];
+          console.log(this.id)
+          this.subscriptions.push(
+            this.resourceService.getResource(this.id).subscribe(
+              next => {this.resourcePayload = next;},
+              error => {console.log(error);},
+            () => {this.ready = true}
+            )
+          );
+        }
+      )
+    );
 
     // this.sub = this.route.params.subscribe(params => {
     //   zip(
@@ -104,7 +106,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    for (let i = 0; i < this.subscriptions.length; i++) {
+      this.subscriptions[i].unsubscribe();
+    }
   }
 
   timeOut(ms) {
@@ -112,7 +116,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   onOutletLoaded(component) {
-    if (this.loading) {
+    if (!this.ready) {
       this.timeOut(300).then(() => this.onOutletLoaded(component));
       return;
     } else {

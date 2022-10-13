@@ -1,26 +1,34 @@
 <!--SERVICE MENU-->
-<div class="uk-visible@m">
+<div *ngIf="ready" class="uk-visible@m">
   <div class=" tm-header uk-visible@m tm-header-transparent service-menu">
     <div class="uk-navbar-container uk-sticky uk-navbar-transparent" uk-sticky="top:0" media="768"
     cls-active="uk-active uk-navbar-sticky" style="" animation="uk-animation-slide-top"
     top=".tm-header + [class*=&quot;uk-section&quot;]" cls-inactive="uk-navbar-transparent">
     <!--<div class="uk-navbar-container uk-navbar-transparent">-->
       <div class="uk-container uk-container-large">
-        <nav class="uk-navbar" uk-navbar="{&quot;align&quot;:&quot;left&quot;}">
+        <nav class="uk-navbar" uk-navbar="">
 
-          <div *ngIf="!loading" class="uk-navbar-left" style="padding-top: 20px; padding-bottom: 20px;">
-            <img src="{{form.get('service.logo').value}}" style="max-width: 210px; height: 70px;">
+          <div class="" style="padding-top: 20px; padding-bottom: 20px;">
+            <img src="{{resourcePayload.logo}}" alt="logo" style="max-width: 210px; height: 70px;">
           </div>
 
-          <div *ngIf="!loading" class="uk-navbar-right">
+          <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
               <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-              <li *ngIf="form.get('extras.paymentCategories')?.controls[0]?.get('paymentTitle').value !== ''" [ngClass]="{'uk-active': path === 'pricing'}"><a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a></li>
-              <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}"><a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a></li>
-              <li *ngIf="form.get('extras.documentation').value !== ''"><a href="{{form.get('extras.documentation').value}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
-              <li *ngIf="form.get('extras.roadmap').value !== ''"><a href="{{form.get('extras.roadmap').value}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
+              <li *ngIf="resourcePayload['extras']?.paymentCategories[0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
+                <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
+              </li>
+              <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
+                <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
+              </li>
+              <li *ngIf="resourcePayload['extras']?.documentation !== ''">
+                <a href="{{resourcePayload['extras']?.documentation}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a>
+              </li>
+              <li *ngIf="resourcePayload['extras']?.roadmap !== ''">
+                <a href="{{resourcePayload['extras']?.roadmap}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
+              </li>
               <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
-              <li class="uk-flex uk-flex-middle"><button (click)="goto(form.get('service.webpage').value)" class="uk-button uk-button-blue">Go to service</button></li>
+              <li class="uk-flex uk-flex-middle"><button (click)="resourcePayload['webpage']" class="uk-button uk-button-blue">Go to service</button></li>
             </ul>
           </div>
         </nav>
@@ -30,16 +38,24 @@
   </div>
 </div>
 
-<div *ngIf="!loading" class="uk-hidden@m" uk-sticky="offset: 90">
+<div *ngIf="ready" class="uk-hidden@m" uk-sticky="offset: 90">
   <!--MOBILE & PAD PORTRAIT-->
   <ul class="uk-tab service-tabs" data-uk-tab="{connect:'#team_tabbed',animation: 'slide-bottom'}">
     <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-    <li *ngIf="form.get('extras.paymentCategories')?.controls[0]?.get('paymentTitle').value !== ''" [ngClass]="{'uk-active': path === 'pricing'}"><a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a></li>
-    <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}"><a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a></li>
-    <li *ngIf="form.get('extras.documentation').value !== ''"><a href="{{form.get('extras.documentation').value}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
-    <li *ngIf="form.get('extras.roadmap').value !== ''"><a href="{{form.get('extras.roadmap').value}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a></li>
-    <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Miscellaneous</a></li>
-    <!--<li class="uk-tab-responsive uk-active uk-hidden" aria-haspopup="true" aria-expanded="false"><a>Developers</a><div class="uk-dropdown uk-dropdown-small" aria-hidden="true"><ul class="uk-nav uk-nav-dropdown"></ul><div></div></div></li>-->
+    <li *ngIf="resourcePayload['extras']?.paymentCategories[0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
+      <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
+    </li>
+    <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
+      <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
+    </li>
+    <li *ngIf="resourcePayload['extras']?.documentation !== ''">
+      <a href="{{resourcePayload['extras']?.documentation}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a>
+    </li>
+    <li *ngIf="resourcePayload['extras']?.roadmap !== ''">
+      <a href="{{resourcePayload['extras']?.roadmap}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
+    </li>
+    <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
+    <li class="uk-flex uk-flex-middle"><button (click)="resourcePayload['webpage']" class="uk-button uk-button-blue">Go to service</button></li>
   </ul>
 </div>
 
@@ -55,5 +71,7 @@
     <!--</span>-->
   </a>
 </div>
+
+<pre *ngIf="resourcePayload"> {{resourcePayload | json}} </pre>
 
 <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
