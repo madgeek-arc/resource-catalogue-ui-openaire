@@ -86,17 +86,27 @@
                 <div class="uk-flex uk-flex-between uk-flex-middle">
 
                   <p class="big-text uk-margin-remove">
-                    <span class="uk-text-bold">{{searchResultsSnippets.page.totalElements}}</span> Services, Page <span class="uk-text-bold">{{currentPage}}</span> of {{totalPages}}
+                    <span class="uk-text-bold">{{searchResultsSnippets.page.totalElements}}</span> Services, Page <span class="uk-text-bold">{{this.searchResultsSnippets.page.number+1}}</span> of {{this.searchResultsSnippets.page.totalPages}}
                   </p>
 
                   <ul class="uk-pagination uk-visible@m">
-                    <li *ngIf="currentPage>2 && pageTotal>5"><a (click)="goToPage(1)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a></li>
-                    <li *ngIf="currentPage!==1"><a (click)="previousPage()"><span uk-pagination-previous></span></a></li>
-                    <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active': ''">
-                      <a (click)="goToPage(i)">{{i}}</a>
+                    <li *ngIf="searchResultsSnippets.page.number>2 && searchResultsSnippets.page.totalPages>5">
+                      <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
                     </li>
-                    <li *ngIf="currentPage!==pageTotal"><a (click)="nextPage()"><span uk-pagination-next></span></a></li>
-                    <li *ngIf="currentPage<pageTotal-1 && pageTotal>5"><a (click)="goToPage(pageTotal)"><span uk-pagination-next></span><span uk-pagination-next></span></a></li>
+                    <li *ngIf="searchResultsSnippets.page.number > 0">
+                      <a (click)="previousPage()"><span uk-pagination-previous></span></a>
+                    </li>
+                    <li *ngFor="let i of pages" [ngClass]="i === searchResultsSnippets.page.number + 1 ? 'uk-active uk-animation-fade': ''">
+                      <a (click)="goToPage(i - 1)">{{i}}</a>
+                    </li>
+                    <li *ngIf="searchResultsSnippets.page.number!==searchResultsSnippets.page.totalPages-1">
+                      <a (click)="nextPage()"><span uk-pagination-next></span></a>
+                    </li>
+                    <li *ngIf="searchResultsSnippets.page.number < searchResultsSnippets.page.totalPages-1 && searchResultsSnippets.page.totalPages>5">
+                      <a (click)="goToPage(searchResultsSnippets.page.totalPages-1)">
+                        <span uk-pagination-next></span><span uk-pagination-next></span>
+                      </a>
+                    </li>
                   </ul>
 
                 </div>
@@ -142,13 +152,13 @@
                               {{resourceInfo.pitch}}
                             </div>
 
-                            <div *ngIf="!(resourceInfo.users === null || resourceInfo.users[0]?.name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                            <div *ngIf="resourceInfo.extras?.users[0]" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label">Users: </span>
-                              <span *ngFor="let user of resourceInfo.users" class="field-value uk-margin-small-left">{{user.name}}</span>
+                              <span *ngFor="let user of resourceInfo.extras.users" class="field-value uk-margin-small-left">{{user}}</span>
                             </div>
-                            <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
+                            <div *ngIf="resourceInfo.extras?.paymentCategories[0]?.paymentTitle"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
-                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.paymentTitle}}</span>
+                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras.paymentCategories[0].paymentTitle}}</span>
                             </div>
 
                           </div>
@@ -163,53 +173,53 @@
                     </div>
 
                     <!--MOBILE & PAD PORTRAIT-->
-                    <div class="service-details-card-content uk-hidden@m">
+<!--                    <div class="service-details-card-content uk-hidden@m">-->
 
-                      <div class="uk-padding-remove service-image">
-                        <img src="{{resourceInfo.image}}" >
-                      </div>
+<!--                      <div class="uk-padding-remove service-image">-->
+<!--                        <img src="{{resourceInfo.image}}" >-->
+<!--                      </div>-->
 
-                      <div class="">
-                        <!--<div class="uk-grid" uk-grid="">-->
-                        <div>
+<!--                      <div class="">-->
+<!--                        &lt;!&ndash;<div class="uk-grid" uk-grid="">&ndash;&gt;-->
+<!--                        <div>-->
 
-                          <div class="uk-card-body">
-                            <div>
-                              <h5 class="uk-margin-remove uk-text-left uk-scrollspy-inview uk-animation-fade uk-inline"
-                                  uk-scrollspy-class="" style="">
-                                {{resourceInfo.name || "Not Available"}}
-                              </h5>
-                            </div>
-                            <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">
-                              "{{resourceInfo.tagline}}"
-                            </p>
-                            <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
-                                 uk-scrollspy-class="" style="">
-                              {{resourceInfo.pitch}}
-                            </div>
+<!--                          <div class="uk-card-body">-->
+<!--                            <div>-->
+<!--                              <h5 class="uk-margin-remove uk-text-left uk-scrollspy-inview uk-animation-fade uk-inline"-->
+<!--                                  uk-scrollspy-class="" style="">-->
+<!--                                {{resourceInfo.name || "Not Available"}}-->
+<!--                              </h5>-->
+<!--                            </div>-->
+<!--                            <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">-->
+<!--                              "{{resourceInfo.tagline}}"-->
+<!--                            </p>-->
+<!--                            <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"-->
+<!--                                 uk-scrollspy-class="" style="">-->
+<!--                              {{resourceInfo.pitch}}-->
+<!--                            </div>-->
 
-                            <div *ngIf="!(resourceInfo.users === null || resourceInfo.users[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
-                              <span class="field-label">Users: </span>
-                              <span *ngFor="let user of resourceInfo.users" class="field-value uk-margin-small-left">{{user.name}}</span>
-                            </div>
-                            <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
-                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.paymentTitle}}</span>
-                            </div>
+<!--                            <div *ngIf="!(resourceInfo.users === null || resourceInfo.users[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">-->
+<!--                              <span class="field-label">Users: </span>-->
+<!--                              <span *ngFor="let user of resourceInfo.users" class="field-value uk-margin-small-left">{{user.name}}</span>-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!(resourceInfo.paymentTitle === null || resourceInfo.paymentTitle[0] === '')"-->
+<!--                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">-->
+<!--                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.paymentTitle}}</span>-->
+<!--                            </div>-->
 
-                          </div>
+<!--                          </div>-->
 
-                        </div>
-                      </div>
+<!--                        </div>-->
+<!--                      </div>-->
 
-                      <div *ngIf="resourceInfo.portfolios?.length>0" class="portfolioSection">
-                        <ng-container *ngFor="let portfolio of resourceInfo.portfolios; let i = index">
-                          <ng-container *ngIf="i!=0">, </ng-container>
-                          {{portfolio.name}}
-                        </ng-container>
-                      </div>
+<!--                      <div *ngIf="resourceInfo.portfolios?.length>0" class="portfolioSection">-->
+<!--                        <ng-container *ngFor="let portfolio of resourceInfo.portfolios; let i = index">-->
+<!--                          <ng-container *ngIf="i!=0">, </ng-container>-->
+<!--                          {{portfolio.name}}-->
+<!--                        </ng-container>-->
+<!--                      </div>-->
 
-                    </div>
+<!--                    </div>-->
 
                   </div>
                 </a>
@@ -225,13 +235,23 @@
             </div>
 
             <ul class="uk-pagination uk-flex-right uk-margin">
-              <li *ngIf="currentPage>2 && pageTotal>5"><a (click)="goToPage(1)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a></li>
-              <li *ngIf="currentPage!==1"><a (click)="previousPage()"><span uk-pagination-previous></span></a></li>
-              <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active': ''">
-                <a (click)="goToPage(i)">{{i}}</a>
+              <li *ngIf="searchResultsSnippets.page.number>2 && searchResultsSnippets.page.totalPages>5">
+                <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
               </li>
-              <li *ngIf="currentPage!==pageTotal"><a (click)="nextPage()"><span uk-pagination-next></span></a></li>
-              <li *ngIf="currentPage<pageTotal-1 && pageTotal>5"><a (click)="goToPage(pageTotal)"><span uk-pagination-next></span><span uk-pagination-next></span></a></li>
+              <li *ngIf="searchResultsSnippets.page.number > 0">
+                <a (click)="previousPage()"><span uk-pagination-previous></span></a>
+              </li>
+              <li *ngFor="let i of pages" [ngClass]="i === searchResultsSnippets.page.number + 1 ? 'uk-active': ''">
+                <a (click)="goToPage(i-1)">{{i}}</a>
+              </li>
+              <li *ngIf="searchResultsSnippets.page.number!==searchResultsSnippets.page.totalPages-1">
+                <a (click)="nextPage()"><span uk-pagination-next></span></a>
+              </li>
+              <li *ngIf="searchResultsSnippets.page.number < searchResultsSnippets.page.totalPages-1 && searchResultsSnippets.page.totalPages>5">
+                <a (click)="goToPage(searchResultsSnippets.page.totalPages-1)">
+                  <span uk-pagination-next></span><span uk-pagination-next></span>
+                </a>
+              </li>
             </ul>
 
           </ng-template>

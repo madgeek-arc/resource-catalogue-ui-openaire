@@ -191,6 +191,7 @@ export class Snippet {
   pitch: string;
   label: string;
   users: UiVocabulary[];
+  extras: any;
 }
 
 export class ServiceProviderDomain {

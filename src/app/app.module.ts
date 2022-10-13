@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
+import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
@@ -100,6 +100,7 @@ declare var require: any;
   exports: [
     AireFooterComponent,
     AireTopMenuComponent,
+    LowerCasePipe
   ],
   bootstrap: [AppComponent]
 })
