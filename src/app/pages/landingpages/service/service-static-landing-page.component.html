@@ -8,27 +8,27 @@
       <div class="uk-container uk-container-large">
         <nav class="uk-navbar" uk-navbar="">
 
-          <div class="" style="padding-top: 20px; padding-bottom: 20px;">
-            <img src="{{resourcePayload.logo}}" alt="logo" style="max-width: 210px; height: 70px;">
-          </div>
+<!--          <div class="" style="padding-top: 20px; padding-bottom: 20px;">-->
+<!--            <img src="{{resourcePayload['logo']}}" alt="logo" style="max-width: 210px; height: 70px;">-->
+<!--          </div>-->
 
           <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
               <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-              <li *ngIf="resourcePayload['extras']?.paymentCategories[0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
+              <li *ngIf="resourcePayload['extras']?.paymentCategories[0]?.paymentTitle" [ngClass]="{'uk-active': path === 'pricing'}">
                 <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
               </li>
               <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
                 <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
               </li>
-              <li *ngIf="resourcePayload['extras']?.documentation !== ''">
+              <li *ngIf="resourcePayload['extras']?.documentation">
                 <a href="{{resourcePayload['extras']?.documentation}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a>
               </li>
-              <li *ngIf="resourcePayload['extras']?.roadmap !== ''">
+              <li *ngIf="resourcePayload['extras']?.roadmap">
                 <a href="{{resourcePayload['extras']?.roadmap}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
               </li>
               <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
-              <li class="uk-flex uk-flex-middle"><button (click)="resourcePayload['webpage']" class="uk-button uk-button-blue">Go to service</button></li>
+              <li class="uk-flex uk-flex-middle"><button (click)="goto(resourcePayload['webpage'])" class="uk-button uk-button-blue">Go to service</button></li>
             </ul>
           </div>
         </nav>
@@ -55,12 +55,11 @@
       <a href="{{resourcePayload['extras']?.roadmap}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
     </li>
     <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
-    <li class="uk-flex uk-flex-middle"><button (click)="resourcePayload['webpage']" class="uk-button uk-button-blue">Go to service</button></li>
   </ul>
 </div>
 
 <div class="uk-hidden@m uk-float-right" style="z-index: 100; bottom: 30px; position: fixed; right: 30px;">
-  <button (click)="goto(form.get('service.webpage').value)" class="uk-button uk-button-blue">Go to service</button>
+  <button (click)="goto(resourcePayload['webpage'])" class="uk-button uk-button-blue">Go to service</button>
 </div>
 
 <div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService" class="uk-float-right" style="z-index: 100; top: 300px; position: fixed; right: 0px;">
@@ -72,6 +71,5 @@
   </a>
 </div>
 
-<pre *ngIf="resourcePayload"> {{resourcePayload | json}} </pre>
 
 <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>

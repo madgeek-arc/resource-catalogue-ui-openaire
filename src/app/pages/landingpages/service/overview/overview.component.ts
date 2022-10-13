@@ -13,10 +13,10 @@ import {Router} from '@angular/router';
 })
 export class OverviewComponent {
 
-  @Input() form: FormGroup = null;
   @Input() model: FormModel[] = null;
   @Input() vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Object[] = null;
+  @Input() resourcePayload: Object = null;
 
   mdOptions: MdEditorOption = {showBorder: false};
 
@@ -26,24 +26,7 @@ export class OverviewComponent {
   slideMobile = 0;
   benefitSlideMobile = 0;
 
-  constructor(private router: Router) {
-  }
-
-  getServiceArray(field: string) {
-    return this.form.get('service.' + field) as FormArray;
-  }
-
-  getServiceField(field: string) {
-    return this.form.get('service.' + field) as FormControl;
-  }
-
-  getExtrasArray(field: string) {
-    return this.form.get('extras.' + field) as FormArray;
-  }
-
-  getExtrasField(field: string) {
-    return this.form.get('extras.' + field) as FormControl;
-  }
+  constructor(private router: Router) {}
 
   getVocabularyName(field: string, name: string): string {
     let vocType;
