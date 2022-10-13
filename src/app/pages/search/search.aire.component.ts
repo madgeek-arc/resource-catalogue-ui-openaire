@@ -22,7 +22,7 @@ export class SearchAireComponent implements OnInit {
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
-  searchResultsSnippets: SpringPaging<Snippet>;
+  searchResultsSnippets: SpringPaging<Snippet> = new SpringPaging<Snippet>();
   private sortFacets = new PremiumSortFacetsPipe();
   advanced = false;
   listViewActive = true;
@@ -59,9 +59,8 @@ export class SearchAireComponent implements OnInit {
   }
 
   ngOnInit() {
-    // super.ngOnInit();
     this.listViewActive = true;
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.queryParams.subscribe(params => {
       this.urlParameters.splice(0, this.urlParameters.length);
       this.foundResults = true;
       for (const obj in params) {
@@ -106,7 +105,6 @@ export class SearchAireComponent implements OnInit {
 
     this.errorMessage = null;
     this.searchResultsSnippets = searchResults;
-    this.searchResultsSnippets.facets.sort();
     this.isFirstPageDisabled = false;
     this.isPreviousPageDisabled = false;
     this.isLastPageDisabled = false;
@@ -114,7 +112,7 @@ export class SearchAireComponent implements OnInit {
     if (this.searchResultsSnippets.page.content.length === 0) {
       this.foundResults = false;
     } else {
-      this.sortFacets.transform(this.searchResultsSnippets.facets,['Portfolios', 'Users', 'TRL', 'Life Cycle Status'])
+      this.sortFacets.transform(this.searchResultsSnippets.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus'])
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {

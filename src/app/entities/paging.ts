@@ -13,6 +13,10 @@ export class Paging<T> {
 export class SpringPaging<T> { // Spring paging with facets
   page: Page<T>;
   facets: Facet[];
+
+  constructor() {
+    this.page = new Page<T>();
+  }
 }
 
 export class Page<T> {
