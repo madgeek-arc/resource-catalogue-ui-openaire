@@ -31,7 +31,7 @@ export class AireTopMenuComponent implements OnInit {
     this.dataSharingService.refreshRequired.subscribe( value => {
       this.refresh = value;
       if (this.refresh) {
-        this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
+        this.resourceService.getServicesByIndexedField('extras.portfolios', 'Portfolios').subscribe(
           res => {this.services = res; },
           error => {console.log(error); },
           () => {this.dataSharingService.refreshRequired.next(false); }

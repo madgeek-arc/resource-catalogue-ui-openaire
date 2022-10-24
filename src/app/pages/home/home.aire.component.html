@@ -196,20 +196,21 @@
                   <div class="uk-grid uk-child-width-1-2 uk-grid-match uk-grid-large">
 
                     <div class="uk-margin-large-bottom" *ngFor="let service of services[portfolio.name] | slice:0:3;">
+                      <pre>{{service.id}}</pre>
+                      {{service.logo}}
+                      {{service['name']}}
                       <div class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
                         <div class="uk-inline-clip">
-
-                          <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{service.image}}">
-
+                          <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{service['extras']['image']}}">
                           <div class="uk-position-bottom uk-overlay-default">
                             <div class="uk-overlay uk-padding-small uk-margin-remove-first-child">
 
-                              <div class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom">{{service.name}}</div>
-                              <div class="el-meta uk-margin-top">{{service.tagline}}</div>
+                              <div class="el-title uk-h3 uk-font-primary uk-margin-top uk-margin-remove-bottom">{{service['name']}}</div>
+                              <div class="el-meta uk-margin-top">{{service['tagline']}}</div>
 <!--                              <div class="el-content uk-panel uk-margin-top"><p>hello</p></div>-->
 
                               <div class="uk-margin-top">
-                                <a [routerLink]="['/service', service.id, 'overview']" class="el-link uk-button uk-button-text uk-button-large">View</a>
+                                <a [routerLink]="['/service', service['id'], 'overview']" class="el-link uk-button uk-button-text uk-button-large">View</a>
                               </div>
                             </div>
                           </div>

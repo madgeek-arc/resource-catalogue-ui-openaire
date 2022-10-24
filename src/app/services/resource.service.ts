@@ -109,8 +109,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    searchQuery.delete('to');
-    return this.http.post<SpringPaging<Snippet>>(this.base + `/services/snippets/search?${searchQuery.toString()}`, {}, this.options);
+    return this.http.get<SpringPaging<Snippet>>(this.base + `/services/snippets/search?${searchQuery.toString()}`, this.options);
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {
@@ -469,7 +468,7 @@ export class ResourceService {
   }
 
   getMyServiceProviders() {
-    return this.http.get<Provider[]>(this.base + '/provider/getMyServiceProviders');
+    return this.http.get<Provider[]>(this.base + '/providers/my');
   }
 
   getEU() {

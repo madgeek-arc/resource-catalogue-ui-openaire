@@ -58,7 +58,7 @@ export class HomeAireComponent implements OnInit {
       }
     );
 
-    this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
+    this.resourceService.getServicesByIndexedField('extras.portfolios', 'Portfolios').subscribe(
       res => {this.services = res; },
       error => {console.log(error); }
     );
