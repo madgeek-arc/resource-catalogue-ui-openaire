@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Provider} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {environment} from 'src/environments/environment';
-import {Fields, FormModel, UiVocabulary} from '../../../entities/dynamic-form-model';
+import {FormModel, UiVocabulary} from '../../../entities/dynamic-form-model';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
 @Component({

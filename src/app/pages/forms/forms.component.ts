@@ -21,6 +21,7 @@ export class FormsComponent implements OnInit{
   tabsHeader: string = null;
   model: Model = null;
   vocabulariesMap: Map<string, Vocabulary[]> = null
+  subVocabulariesMap: Map<string, Vocabulary[]> = null
   resourceId: string = null;
   payloadAnswer: object = {'answer': {'Service': {}}}; // Find a way to do this better
   ready: Boolean = false
@@ -42,10 +43,14 @@ export class FormsComponent implements OnInit{
               this.payloadAnswer['answer'].Service = next[0];
               this.model = next[1];
               this.vocabulariesMap = next[2];
-              console.log(this.vocabulariesMap);
             },
             error => {console.log(error)},
-            () => {this.ready = true}
+            () => {
+              let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
+              this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
+              console.log(this.subVocabulariesMap);
+              this.ready = true;
+            }
           );
         } else {
           zip(
@@ -56,7 +61,12 @@ export class FormsComponent implements OnInit{
               this.vocabulariesMap = next[1];
             },
             error => {console.log(error)},
-            () => {this.ready = true}
+            () => {
+              let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
+              this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
+              console.log(this.subVocabulariesMap);
+              this.ready = true;
+            }
           );
         }
 
@@ -70,6 +80,15 @@ export class FormsComponent implements OnInit{
       next => {},
       error => {console.log(error);}
     );
+  }
+
+  groupByKey(array, key) {
+    return array.reduce((hash, obj) => {
+      if (obj[key] === undefined) {
+        return hash;
+      }
+      return Object.assign(hash, {[obj[key]]: (hash[obj[key]] || []).concat(obj)});
+    }, {});
   }
 
 }
