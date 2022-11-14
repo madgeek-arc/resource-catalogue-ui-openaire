@@ -211,6 +211,7 @@ export class ServiceCategory {
 
 export class Service implements Identifiable {
   id: string;
+  abbreviation: string;
   name: string;
   resourceOrganisation: string;
   resourceProviders: string[];
@@ -218,12 +219,10 @@ export class Service implements Identifiable {
   description: string;
   tagline: string;
   logo: URL;
-  multimedia: URL[];
-  useCases: URL[];
+  multimedia: MultimediaPair[];
+  useCases: UseCasesPair[];
   scientificDomains: ServiceProviderDomain[];
-  // scientificSubdomains: string[];
-  categories: ServiceCategory[];  // anchor
-  // subcategories: string[];
+  categories: ServiceCategory[];
   targetUsers: string[];
   accessTypes: string[];
   accessModes: string[];
@@ -246,6 +245,7 @@ export class Service implements Identifiable {
   requiredResources: string[];
   relatedResources: string[];
   relatedPlatforms: string[];
+  catalogueId: string;
   fundingBody: string[];
   fundingPrograms: string[];
   grantProjectNames: string[];
@@ -254,7 +254,7 @@ export class Service implements Identifiable {
   termsOfUse: URL;
   privacyPolicy: URL;
   accessPolicy: URL;
-  serviceLevel: URL;
+  resourceLevel: URL;
   trainingInformation: URL;
   statusMonitoring: URL;
   maintenance: URL;
@@ -262,6 +262,17 @@ export class Service implements Identifiable {
   order: URL;
   paymentModel: URL;
   pricing: URL;
+  extras: object;
+}
+
+export class MultimediaPair {
+  multimediaURL: URL;
+  multimediaName: string;
+}
+
+export class UseCasesPair {
+  useCaseURL: URL;
+  useCaseName: string;
 }
 
 export class ServiceHistory extends Metadata {

@@ -46,19 +46,19 @@ export class HomeAireComponent implements OnInit {
   ngOnInit() {
     // fetch categories, check size, skip unpopulated ones here
 
-    this.resourceService.getNewVocabulariesByType('PORTFOLIOS').subscribe(
+    this.resourceService.getNewVocabulariesByType('Portfolios').subscribe(
       suc => {
         this.portfolios = suc;
       }
     );
 
-    this.resourceService.getNewVocabulariesByType('USERS').subscribe(
+    this.resourceService.getNewVocabulariesByType('Users').subscribe(
       suc => {
         this.users = suc;
       }
     );
 
-    this.resourceService.getServicesByIndexedField('extras.portfolios', 'Portfolios').subscribe(
+    this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
       res => {this.services = res; },
       error => {console.log(error); }
     );

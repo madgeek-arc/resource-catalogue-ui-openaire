@@ -1,15 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {Provider, Snippet} from '../../entities/eic-model';
+import {Provider, Service} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
-import {Paging, SpringPaging} from '../../entities/paging';
+import {Paging} from '../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ComparisonService} from '../../services/comparison.service';
-import {Subscription} from 'rxjs';
 import {environment} from '../../../environments/environment';
 
 
@@ -22,7 +20,7 @@ export class SearchAireComponent implements OnInit {
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
-  searchResultsSnippets: SpringPaging<Snippet> = new SpringPaging<Snippet>();
+  searchResults: Paging<Service> = null;
   private sortFacets = new PremiumSortFacetsPipe();
   advanced = false;
   listViewActive = true;
@@ -33,6 +31,9 @@ export class SearchAireComponent implements OnInit {
   // Paging
   pages: number[] = [];
   offset = 2;
+  pageSize = 10;
+  totalPages = 0;
+  currentPage = 0;
 
   public searchForm: FormGroup;
   errorMessage: string;
@@ -66,10 +67,10 @@ export class SearchAireComponent implements OnInit {
         searchResults => {
           this.updateSearchResultsSnippets(searchResults);
         },
-        error => {},
-        () => {
-          this.paginationInit();
-          this.loading = false;
+      error => {},
+      () => {
+        this.paginationInit();
+        this.loading = false;
         }
       );
     });
@@ -87,13 +88,13 @@ export class SearchAireComponent implements OnInit {
     }
   }
 
-  updateSearchResultsSnippets(searchResults: SpringPaging<Snippet>) {
+  updateSearchResultsSnippets(searchResults: Paging<Service>) {
     // INITIALISATIONS
     this.errorMessage = null;
-    this.searchResultsSnippets = searchResults;
+    this.searchResults = searchResults;
 
-    if (!this.searchResultsSnippets.page.empty ) {
-      this.sortFacets.transform(this.searchResultsSnippets.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus'])
+    if (this.searchResults.results.length > 0 ) {
+      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus'])
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {
@@ -105,7 +106,7 @@ export class SearchAireComponent implements OnInit {
       } else if (urlParameter.key === 'advanced') {
         this.advanced = urlParameter.values[0] === 'true';
       } else {
-        for (const facet of this.searchResultsSnippets.facets) {
+        for (const facet of this.searchResults.facets) {
           if (facet.field === urlParameter.key) {
             for (const parameterValue of urlParameter.values) {
               for (const facetValue of facet.values) {
@@ -118,22 +119,24 @@ export class SearchAireComponent implements OnInit {
         }
       }
     }
-    this.updateURLParameters('size', this.searchResultsSnippets.page.size);
+    // this.updateURLParameters('quantity', this.pageSize);
   }
 
   paginationInit() {
     let addToEndCounter = 0;
     let addToStartCounter = 0;
+    this.totalPages = Math.ceil(this.searchResults.total/this.pageSize);
+    this.currentPage = Math.ceil(this.searchResults.from/this.pageSize) + 1;
     this.pages = [];
-    for ( let i = (+this.searchResultsSnippets.page.number + 1 - this.offset); i < (+this.searchResultsSnippets.page.number + 2 + this.offset); ++i ) {
+    for (let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
       if ( i < 1 ) { addToEndCounter++; }
-      if ( i > this.searchResultsSnippets.page.totalPages ) { addToStartCounter++; }
-      if ((i >= 1) && (i <= this.searchResultsSnippets.page.totalPages)) {
+      if ( i > this.totalPages ) { addToStartCounter++; }
+      if ((i >= 1) && (i <= this.totalPages)) {
         this.pages.push(i);
       }
     }
     for ( let i = 0; i < addToEndCounter; ++i ) {
-      if (this.pages.length < this.searchResultsSnippets.page.totalPages) {
+      if (this.pages.length < this.totalPages) {
         this.pages.push(this.pages.length + 1);
       }
     }
@@ -164,20 +167,22 @@ export class SearchAireComponent implements OnInit {
 
 
   goToPage(page: number) {
-    this.updateURLParameters('page', page);
+    this.updateURLParameters('from', (page) * this.pageSize);
     return this.navigateUsingParameters();
   }
 
   previousPage() {
-    if (this.searchResultsSnippets.page.number > 0) {
-      this.updateURLParameters('page', this.searchResultsSnippets.page.number - 1);
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
       this.navigateUsingParameters();
     }
   }
 
   nextPage() {
-    if (this.searchResultsSnippets.page.number + 1 < this.searchResultsSnippets.page.totalPages) {
-      this.updateURLParameters('page', this.searchResultsSnippets.page.number + 1);
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
       this.navigateUsingParameters();
     }
   }
@@ -229,12 +234,12 @@ export class SearchAireComponent implements OnInit {
         const valueIndex = urlParameter.values.indexOf(value, 0);
         if (valueIndex < 0) {
           urlParameter.values.push(value);
-          this.updateURLParameters('page', 0);
+          this.updateURLParameters('from', 0);
         }
       }
     }
     if (!foundCategory) {
-      this.updateURLParameters('page', 0);
+      this.updateURLParameters('from', 0);
       const newParameter: URLParameter = {
         key: category,
         values: [value]

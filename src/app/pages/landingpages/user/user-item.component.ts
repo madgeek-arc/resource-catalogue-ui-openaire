@@ -27,7 +27,7 @@ export class UserItemComponent implements OnInit {
     zip(
       this.resourceService.getVocabularyById(this.userVocId),
       this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocId),
-      this.resourceService.getNewVocabulariesByType('PORTFOLIOS')
+      this.resourceService.getNewVocabulariesByType('Portfolios')
     ).subscribe(
       res => {
         this.userVoc = res[0];

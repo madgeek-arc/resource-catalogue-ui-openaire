@@ -14,10 +14,9 @@ import {
   Type, Snippet
 } from '../entities/eic-model';
 import {BrowseResults} from '../entities/browse-results';
-import {Paging, SpringPaging} from '../entities/paging';
+import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 import {Info} from '../entities/info';
 import {PortfolioMap} from '../../app/entities/portfolioMap';
 
@@ -94,7 +93,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<SpringPaging<Snippet>>(this.base + `/services?${searchQuery.toString()}`, this.options);
+    return this.http.get<Paging<Service>>(this.base + `/services?${searchQuery.toString()}`, this.options);
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {

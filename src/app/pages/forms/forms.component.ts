@@ -48,7 +48,6 @@ export class FormsComponent implements OnInit{
             () => {
               let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
               this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
-              console.log(this.subVocabulariesMap);
               this.ready = true;
             }
           );
