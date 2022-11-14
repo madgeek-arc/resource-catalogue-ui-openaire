@@ -92,7 +92,7 @@
                     <li *ngIf="currentPage > 2 && totalPages > 5">
                       <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
                     </li>
-                    <li *ngIf="currentPage > 0">
+                    <li *ngIf="currentPage > 1">
                       <a (click)="previousPage()"><span uk-pagination-previous></span></a>
                     </li>
                     <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
@@ -235,7 +235,7 @@
               <li *ngIf="currentPage > 2 && totalPages > 5">
                 <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
               </li>
-              <li *ngIf="currentPage > 0">
+              <li *ngIf="currentPage > 1">
                 <a (click)="previousPage()"><span uk-pagination-previous></span></a>
               </li>
               <li *ngFor="let i of pages" [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
