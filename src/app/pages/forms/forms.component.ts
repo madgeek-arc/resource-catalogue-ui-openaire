@@ -20,8 +20,8 @@ export class FormsComponent implements OnInit{
 
   tabsHeader: string = null;
   model: Model = null;
-  vocabulariesMap: Map<string, Vocabulary[]> = null
-  subVocabulariesMap: Map<string, Vocabulary[]> = null
+  vocabulariesMap: Map<string, object[]> = null
+  subVocabulariesMap: Map<string, object[]> = null
   resourceId: string = null;
   payloadAnswer: object = {'answer': {'Service': {}}}; // Find a way to do this better
   ready: Boolean = false
@@ -38,7 +38,7 @@ export class FormsComponent implements OnInit{
           zip(
             this.resourceService.getResource(this.resourceId),
             this.formService.getFormModelById('m-rEmtKuZd'),
-            this.resourceService.getAllVocabulariesByType()).subscribe(
+            this.resourceService.getUiVocabularies()).subscribe(
             next => {
               this.payloadAnswer['answer'].Service = next[0];
               this.model = next[1];
@@ -55,7 +55,7 @@ export class FormsComponent implements OnInit{
         } else {
           zip(
             this.formService.getFormModelById('m-rEmtKuZd'),
-            this.resourceService.getAllVocabulariesByType()).subscribe(
+            this.resourceService.getUiVocabularies()).subscribe(
             next => {
               this.model = next[0];
               this.vocabulariesMap = next[1];

@@ -11,5 +11,7 @@
 /* project specific scss */
 @import 'assets/css/theme.css';
 @import 'assets/css/theme.update.css';
-
 @import 'assets/css/openaire-custom.css';
+
+/* ng-select theme */
+@import "~@ng-select/ng-select/themes/default.theme.css";

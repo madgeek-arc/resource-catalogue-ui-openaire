@@ -94,22 +94,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    searchQuery.delete('to');
-    /*return this.http.get(`/service/all${questionMark}${searchQuery.toString()}`).map(res => <SearchResults<Service>> <any> res);*/
-    // const questionMark = urlParameters.length > 0 ? '?' : '';
-    // return this.http.get<SearchResults<RichService>>(this.base + `/service/rich/all${questionMark}${searchQuery.toString()}`, this.options)
-    return this.http.get<Paging<RichService>>(
-      this.base + `/service/rich/all?orderField=name&order=asc&${searchQuery.toString()}`, this.options);
-  }
-
-  searchSnippets(urlParameters: URLParameter[]) {
-    let searchQuery = new HttpParams();
-    for (const urlParameter of urlParameters) {
-      for (const value of urlParameter.values) {
-        searchQuery = searchQuery.append(urlParameter.key, value);
-      }
-    }
-    return this.http.get<SpringPaging<Snippet>>(this.base + `/services/snippets/search?${searchQuery.toString()}`, this.options);
+    return this.http.get<SpringPaging<Snippet>>(this.base + `/services?${searchQuery.toString()}`, this.options);
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {
@@ -127,6 +112,10 @@ export class ResourceService {
 
   getNewVocabulariesByType(type: string) {
     return this.http.get<Vocabulary[]>(this.base + `/vocabularies/byType/${type}`);
+  }
+
+  getUiVocabularies() {
+    return this.http.get<Map<string, object[]>>(this.base + `/vocabularies/mappings`);
   }
 
   getNestedVocabulariesByType(type: string) {
@@ -182,12 +171,6 @@ export class ResourceService {
 
   getServicesByCategories() {
     return this.http.get<BrowseResults>(this.base + '/service/by/category/');
-  }
-
-  getServicesOfferedByProvider(id: string): Observable<RichService[]> {
-    return this.search([{key: 'quantity', values: ['100']}, {key: 'provider', values: [id]}]).pipe(
-      map(res => Object.values(res.results))
-    );
   }
 
   deleteService(id: string) {
@@ -323,10 +306,6 @@ export class ResourceService {
     } else {
       return this.http.get(this.base + `/stats/provider/ratings/${provider}`);
     }
-  }
-
-  getPlacesForProvider(provider: string) {
-    return this.getServicesOfferedByProvider(provider);
   }
 
   getVisitsForService(service: string, period?: string) {

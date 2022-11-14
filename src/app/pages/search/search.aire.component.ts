@@ -15,9 +15,9 @@ import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.aire.component.html',
-  // styleUrls: ['../../../lib/pages/search/search.component.css']
+  templateUrl: './search.aire.component.html'
 })
+
 export class SearchAireComponent implements OnInit {
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
@@ -62,7 +62,7 @@ export class SearchAireComponent implements OnInit {
       }
 
       this.loading = true; // Uncomment for spinner
-      this.resourceService.searchSnippets(this.urlParameters).subscribe(
+      this.resourceService.search(this.urlParameters).subscribe(
         searchResults => {
           this.updateSearchResultsSnippets(searchResults);
         },

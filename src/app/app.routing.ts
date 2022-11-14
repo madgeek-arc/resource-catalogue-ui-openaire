@@ -5,8 +5,6 @@ import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CanActivateViaAuthGuard} from './services/can-activate-auth-guard.service';
 import {ForbiddenPageComponent} from './shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from './shared/not-found-page/not-found-page.component';
-// import {DynamicFormEditComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form-edit.component';
-// import {DynamicFormComponent} from '../lib/pages/provider-resources/dynamic-service-form/dynamic-form.component';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';

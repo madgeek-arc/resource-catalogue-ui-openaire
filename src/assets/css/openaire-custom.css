@@ -708,8 +708,15 @@ a.service-menu-item:hover {
 }
 
 .ng-select {
-  background-color: #fff;
-  border: 1px solid var(--default-element-bg);
+  height: 46px !important;
+}
+
+.ng-select .ng-select-container {
+  height: 46px !important;
+}
+
+.ng-select .ng-select-single .ng-select-container {
+  height: 46px !important;
 }
 
 /* ========================================================================
