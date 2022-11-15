@@ -4,6 +4,7 @@ import {FormModel, UiVocabulary} from '../../../../entities/dynamic-form-model';
 import * as uikit from 'uikit';
 import {MdEditorOption} from 'ngx-markdown-editor';
 import {Router} from '@angular/router';
+import {Service} from '../../../../entities/eic-model';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class OverviewComponent {
   @Input() model: FormModel[] = null;
   @Input() vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Object[] = null;
-  @Input() resourcePayload: Object = null;
+  @Input() resourcePayload: Service = null;
 
   mdOptions: MdEditorOption = {showBorder: false};
 

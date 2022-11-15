@@ -4,15 +4,15 @@
     <div class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
 
       <div class="uk-flex-last@m uk-flex-last@l uk-text-right"
-           style="background-image: url({{resourcePayload['extras']['longImage']}}); background-repeat: no-repeat; background-position: bottom right; background-size: contain">
+           style="background-image: url({{resourcePayload.extras['longImage']}}); background-repeat: no-repeat; background-position: bottom right; background-size: contain">
         <!--<img src="{{getExtrasField('longImage').value}}">-->
       </div>
 
       <div class="uk-first-column">
         <div class="uk-padding-large uk-margin-large-left@m uk-margin-large-left@l uk-margin-large-top">
-          <p *ngIf="resourcePayload['extras']['name']" class="big-text uk-text-primary">{{resourcePayload['name']}}</p>
-          <h1 *ngIf="resourcePayload['tagline']">{{resourcePayload['tagline']}} </h1>
-          <p *ngIf="resourcePayload['pitch']" class="regular-text uk-margin-medium-top">{{resourcePayload['pitch']}}</p>
+          <p *ngIf="resourcePayload.extras['name']" class="big-text uk-text-primary">{{resourcePayload.extras['name']}}</p>
+          <h1 *ngIf="resourcePayload.tagline">{{resourcePayload.tagline}} </h1>
+          <p *ngIf="resourcePayload.extras['pitch']" class="regular-text uk-margin-medium-top">{{resourcePayload.extras['pitch']}}</p>
         </div>
       </div>
 
@@ -35,28 +35,28 @@
       <div class="uk-panel uk-width-1-1">
         <ul class="uk-list uk-list-collapse uk-column-1-2@s uk-column-divider uk-text-small uk-scrollspy-inview "
             id="page#1-1-1-0" uk-scrollspy-class="uk-animation-slide-bottom-medium" style="">
-          <li *ngIf="resourcePayload['targetUsers'][0]" class="el-item">
+          <li *ngIf="resourcePayload.targetUsers[0]" class="el-item">
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
                 <div class="el-title uk-margin-remove uk-text-bold">For</div>
               </div>
               <div>
                 <div class="el-content uk-panel">
-                  <span class="" *ngFor="let targetUser of resourcePayload['targetUsers']; let i = index">
+                  <span class="" *ngFor="let targetUser of resourcePayload.targetUsers; let i = index">
                     <span *ngIf="i > 0">| </span>{{ getVocabularyName('targetUsers',targetUser) }}
                   </span>
                 </div>
               </div>
             </div>
           </li>
-          <li *ngIf="getServiceField('trl').value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.trl" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
                 <div class="el-title uk-margin-remove uk-text-bold">TRL</div>
               </div>
               <div>
-                <div class="el-content uk-panel">{{getVocabularyName('trl', getServiceField('trl').value)}}</div>
+                <div class="el-content uk-panel">{{getVocabularyName('Technology readiness level', resourcePayload.trl)}}</div>
               </div>
             </div>
 

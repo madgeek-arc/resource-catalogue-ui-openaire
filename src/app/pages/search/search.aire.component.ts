@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Provider, Service} from '../../entities/eic-model';
+import {Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
@@ -9,6 +9,7 @@ import {ResourceService} from '../../services/resource.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {environment} from '../../../environments/environment';
+import {zip} from 'rxjs/internal/observable/zip';
 
 
 @Component({
@@ -27,6 +28,8 @@ export class SearchAireComponent implements OnInit {
   public showSearchFieldDropDown = true;
   public searchFields: string[] = ['name', 'description', 'tagline', 'user value', 'user base', 'use cases'];
   public serviceIdsArray: string[] = [];
+  vocabularies: Vocabulary[] = null;
+  // portfoliosVocabulary: object[] = null;
 
   // Paging
   pages: number[] = [];
@@ -62,7 +65,17 @@ export class SearchAireComponent implements OnInit {
         }
       }
 
-      this.loading = true; // Uncomment for spinner
+      this.loading = true;
+      zip(
+        this.resourceService.getNewVocabulariesByType('Users'),
+        this.resourceService.getNewVocabulariesByType('Portfolios')).subscribe(
+          value => {
+            this.vocabularies = value[0].concat(value[1]);
+            this.loading = false;
+          },
+          error => {console.log(error);}
+      );
+
       this.resourceService.search(this.urlParameters).subscribe(
         searchResults => {
           this.updateSearchResultsSnippets(searchResults);
@@ -70,7 +83,6 @@ export class SearchAireComponent implements OnInit {
       error => {},
       () => {
         this.paginationInit();
-        this.loading = false;
         }
       );
     });
@@ -192,7 +204,6 @@ export class SearchAireComponent implements OnInit {
   }
 
 
-
   clearSelections(e, category: string) {
     let categoryIndex = 0;
     for (const urlParameter of this.urlParameters) {
@@ -245,6 +256,14 @@ export class SearchAireComponent implements OnInit {
         values: [value]
       };
       this.urlParameters.push(newParameter);
+    }
+  }
+
+  getVocabularyName(id: string) {
+    for (const vocabulary of this.vocabularies) {
+      if (vocabulary.id === id) {
+        return vocabulary.name;
+      }
     }
   }
 

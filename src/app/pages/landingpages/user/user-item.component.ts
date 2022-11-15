@@ -26,7 +26,7 @@ export class UserItemComponent implements OnInit {
     this.userVocId = this.route.snapshot.paramMap.get('id');
     zip(
       this.resourceService.getVocabularyById(this.userVocId),
-      this.resourceService.getServicesByVocabularyTypeAndId('Users', this.userVocId),
+      this.resourceService.getServicesByVocabularyTypeAndId('users', this.userVocId),
       this.resourceService.getNewVocabulariesByType('Portfolios')
     ).subscribe(
       res => {

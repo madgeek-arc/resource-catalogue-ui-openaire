@@ -37,7 +37,7 @@
           <div class="uk-margin-medium-top">
 
             <ng-template ngFor let-facet [ngForOf]="searchResults.facets">
-              <div *ngIf="facet.field === 'lifeCycleStatus' || facet.field === 'trl' || facet.field === 'users'
+              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
                         || facet.field === 'portfolios'" class="uk-margin-medium-top">
                 <read-more [maxHeight]="235">
                   <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
@@ -121,11 +121,12 @@
                     <!--LAPTOP & PAD LANDSCAPE-->
                     <div class="service-details-card-content uk-visible@m uk-flex">
 
-                      <div *ngIf="resourceInfo.extras.portfolios?.length>0" class="portfolioSection">
+                      <div *ngIf="resourceInfo.extras.portfolios?.length>0 && !loading" class="portfolioSection">
                         <div>
+<!--                          {{resourceInfo.extras.portfolios}}-->
                           <span *ngFor="let portfolio of resourceInfo.extras.portfolios; let i = index">
                             <ng-container *ngIf="i!=0">, </ng-container>
-                            {{portfolio.name}}
+                            {{getVocabularyName(portfolio)}}
                           </span>
                         </div>
                       </div>
@@ -150,8 +151,11 @@
                             </div>
 
                             <div *ngIf="resourceInfo.extras?.users[0]" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
-                              <span class="field-label">Users: </span>
-                              <span *ngFor="let user of resourceInfo.extras.users" class="field-value uk-margin-small-left">{{user}}</span>
+                              <span class="field-label uk-margin-small-right">Users: </span>
+                              <span *ngFor="let user of resourceInfo.extras.users; let i = index" class="field-value">
+                                <ng-container *ngIf="i!==0">, </ng-container>
+                                {{getVocabularyName(user)}}
+                              </span>
                             </div>
                             <div *ngIf="resourceInfo.extras?.paymentCategories[0]?.paymentTitle"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
@@ -196,8 +200,11 @@
                             </div>
 
                             <div *ngIf="!(resourceInfo.extras.users === null || resourceInfo.extras.users[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
-                              <span class="field-label">Users: </span>
-                              <span *ngFor="let user of resourceInfo.extras.users" class="field-value uk-margin-small-left">{{user.name}}</span>
+                              <span class="field-label  uk-margin-small-right">Users: </span>
+                              <span *ngFor="let user of resourceInfo.extras.users; let i = index" class="field-value">
+                                <ng-container *ngIf="i!=0">, </ng-container>
+                                {{getVocabularyName(user)}}
+                              </span>
                             </div>
                             <div *ngIf="!(resourceInfo.extras?.paymentCategories[0]?.paymentTitle === null || resourceInfo.extras?.paymentCategories[0]?.paymentTitle === '')"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
@@ -212,7 +219,7 @@
                       <div *ngIf="resourceInfo.extras.portfolios?.length>0" class="portfolioSection">
                         <ng-container *ngFor="let portfolio of resourceInfo.extras.portfolios; let i = index">
                           <ng-container *ngIf="i!=0">, </ng-container>
-                          {{portfolio.name}}
+                          {{getVocabularyName(portfolio)}}
                         </ng-container>
                       </div>
 

@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Provider} from '../../../entities/eic-model';
+import {Provider, Service, URL} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {environment} from 'src/environments/environment';
-import {FormModel, UiVocabulary} from '../../../entities/dynamic-form-model';
+import {FormModel} from '../../../entities/dynamic-form-model';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
+import {zip} from 'rxjs/internal/observable/zip';
 
 @Component({
   selector: 'app-service-landing-page',
@@ -17,7 +18,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
   projectName = environment.projectName;
-  vocabularies: Map<string, UiVocabulary[]>;
+  vocabularies: Map<string, object[]>;
   model: FormModel[] = null;
   form: FormGroup = this.fb.group({service: this.fb.group({}), extras: this.fb.group({})}, Validators.required);
   id: string;
@@ -29,7 +30,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   canAddOrEditService = false;
 
   relatedServices: Object = null;
-  resourcePayload: Object = null;
+  resourcePayload: Service = null;
 
   constructor(public route: ActivatedRoute, public resourceService: ResourceService, private fb: FormBuilder) {
   }
@@ -42,10 +43,14 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         params => {
           this.id = params['id'];
           this.subscriptions.push(
-            this.resourceService.getResource(this.id).subscribe(
-              next => {this.resourcePayload = next;},
+            zip(this.resourceService.getResource(this.id),
+              this.resourceService.getUiVocabularies()).subscribe(
+              next => {
+                  this.resourcePayload = next[0];
+                  this.vocabularies = next[1];
+                },
               error => {console.log(error);},
-            () => {this.ready = true}
+              () => {this.ready = true}
             )
           );
         }
@@ -86,8 +91,8 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     return;
   }
 
-  goto(url: string) {
-    window.open(url, '_blank');
+  goto(url: URL) {
+    window.open(url.toString(), '_blank');
   }
 
 }
