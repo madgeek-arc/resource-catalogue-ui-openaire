@@ -30,12 +30,12 @@
     </div>
   </div>
 
-  <div *ngIf="resourcePayload" class="uk-grid-item-match uk-width-3-5@m">
+  <div *ngIf="resourcePayload && vocabularies" class="uk-grid-item-match uk-width-3-5@m">
     <div class="uk-tile-muted uk-tile uk-tile-small uk-flex uk-flex-middle">
       <div class="uk-panel uk-width-1-1">
         <ul class="uk-list uk-list-collapse uk-column-1-2@s uk-column-divider uk-text-small uk-scrollspy-inview "
             id="page#1-1-1-0" uk-scrollspy-class="uk-animation-slide-bottom-medium" style="">
-          <li *ngIf="resourcePayload.targetUsers[0]" class="el-item">
+          <li *ngIf="resourcePayload.targetUsers" class="el-item">
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
                 <div class="el-title uk-margin-remove uk-text-bold">For</div>
@@ -43,7 +43,7 @@
               <div>
                 <div class="el-content uk-panel">
                   <span class="" *ngFor="let targetUser of resourcePayload.targetUsers; let i = index">
-                    <span *ngIf="i > 0">| </span>{{ getVocabularyName('targetUsers',targetUser) }}
+                    <span *ngIf="i > 0">| </span>{{ getVocabularyName('Target user', targetUser) }}
                   </span>
                 </div>
               </div>
@@ -61,7 +61,7 @@
             </div>
 
           </li>
-          <li *ngIf="getServiceArray('accessTypes').controls[0].value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.accessTypes" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
@@ -69,15 +69,15 @@
               </div>
               <div>
                 <div class="el-content uk-panel">
-                  <span *ngFor="let accessType of getServiceArray('accessTypes').value; let i = index">
-                    <span *ngIf="i > 0">| </span>{{getVocabularyName('accessTypes', accessType)}}
+                  <span *ngFor="let accessType of resourcePayload.accessTypes; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('Access type', accessType)}}
                   </span>
                 </div>
               </div>
             </div>
 
           </li>
-          <li *ngIf="getServiceArray('accessModes').controls[0].value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.accessModes" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
@@ -85,27 +85,27 @@
               </div>
               <div>
                 <div class="el-content uk-panel">
-                  <span *ngFor="let accessMode of getServiceArray('accessModes').value; let i = index">
-                    <span *ngIf="i > 0">| </span>{{getVocabularyName('accessModes', accessMode)}}
+                  <span *ngFor="let accessMode of resourcePayload.accessModes; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('Access mode', accessMode)}}
                   </span>
                 </div>
               </div>
             </div>
 
           </li>
-          <li *ngIf="getServiceField('resourceOrganisation')?.value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.resourceOrganisation" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
                 <div class="el-title uk-margin-remove uk-text-bold">Owned by</div>
               </div>
               <div>
-                <div class="el-content uk-panel">{{getVocabularyName('resourceOrganisation', getServiceField('resourceOrganisation').value)}}</div>
+                <div class="el-content uk-panel">{{getVocabularyName('Provider', resourcePayload.resourceOrganisation)}}</div>
               </div>
             </div>
 
           </li>
-          <li *ngIf="getServiceArray('resourceProviders').controls[0].value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.resourceProviders" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
@@ -113,7 +113,7 @@
               </div>
               <div>
                 <div class="el-content uk-panel">
-                  <span class="" *ngFor="let provider of getServiceArray('resourceProviders').value; let i = index">
+                  <span class="" *ngFor="let provider of resourcePayload.resourceProviders; let i = index">
                     <span *ngIf="i > 0">| </span>{{getVocabularyName('resourceProviders', provider)}}
                   </span>
                 </div>
@@ -121,7 +121,7 @@
             </div>
 
           </li>
-          <li *ngIf="getServiceArray('fundingPrograms').controls[0].value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.fundingPrograms" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
@@ -129,15 +129,15 @@
               </div>
               <div>
                 <div class="el-content uk-panel">
-                  <span *ngFor="let funder of getServiceArray('fundingBody').value; let i = index">
-                    <span *ngIf="i > 0">| </span>{{getVocabularyName('fundingBody', funder)}}
+                  <span *ngFor="let funder of resourcePayload.fundingPrograms; let i = index">
+                    <span *ngIf="i > 0">| </span>{{getVocabularyName('Funding program', funder)}}
                   </span>
                 </div>
               </div>
             </div>
 
           </li>
-          <li *ngIf="getServiceField('termsOfUse')?.value !== ''" class="el-item">
+          <li *ngIf="resourcePayload.termsOfUse" class="el-item">
 
             <div class="uk-child-width-expand uk-grid-row-small uk-grid" uk-grid="">
               <div class="uk-width-small uk-text-break uk-first-column">
@@ -145,7 +145,7 @@
               </div>
               <div>
                 <div class="el-content uk-panel">
-                  <a class="uk-margin-remove-last-child" href="{{getServiceField('termsOfUse').value}}" target="_blank">
+                  <a class="uk-margin-remove-last-child" href="{{resourcePayload.termsOfUse}}" target="_blank">
                     <p>View</p>
                   </a>
                 </div>
@@ -178,7 +178,7 @@
 <!--            [(ngModel)]="getServiceField('description').value"-->
 <!--            [options]=mdOptions>-->
 <!--          </md-editor>-->
-          <p [innerHTML]="getServiceField('description').value"></p>
+          <p [innerHTML]="resourcePayload.description"></p>
 
         </div>
       </div>
@@ -210,7 +210,7 @@
           style="z-index: 1;">
           <div class="uk-child-width-1-1 uk-child-width-1-2@s uk-grid-large uk-grid-match uk-grid" uk-grid="">
 
-            <div *ngFor="let benefit of getExtrasArray('benefits').value">
+            <div *ngFor="let benefit of resourcePayload.extras['benefits']">
               <div class="el-item uk-panel uk-margin-remove-first-child">
                 <h6 class="uk-margin-top uk-margin-remove-bottom">{{benefit.benefitsTitle}}</h6>
                 <div class="el-content uk-panel uk-margin-small-top">{{benefit.benefitsText}}</div>

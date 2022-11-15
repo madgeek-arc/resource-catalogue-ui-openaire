@@ -77,8 +77,8 @@ export class ResourceService {
   }
 
   getServicesByVocabularyTypeAndId(type: string, id?: string) {
-    console.log(type);
-    console.log(id);
+    // console.log(type);
+    // console.log(id);
     if (id) {
       let params = new HttpParams();
       params = params.append(type, id);

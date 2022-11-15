@@ -24,19 +24,19 @@ export class PortfolioItemComponent implements OnInit{
     this.portfolioId = this.route.snapshot.paramMap.get('id');
     zip(
       this.resourceService.getVocabularyById(this.portfolioId),
-      this.resourceService.getServicesByVocabularyTypeAndId('Portfolios', this.portfolioId)
+      this.resourceService.getServicesByVocabularyTypeAndId('portfolios', this.portfolioId)
     ).subscribe(
       res => {
         this.portfolioVoc = res[0];
         this.response = res[1];
         for (const [key, value] of Object.entries(res[1])) {
-          console.log(`${key}: ${value}`);
+          // console.log(`${key}: ${value}`);
           this.services = value;
         }
       },
       error => {console.log(error)},
       () => {
-        console.log(this.services);
+        // console.log(this.services);
         this.ready = true
       }
     );
