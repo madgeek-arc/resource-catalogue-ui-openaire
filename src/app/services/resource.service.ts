@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Type, Snippet} from '../entities/eic-model';
@@ -77,15 +77,20 @@ export class ResourceService {
   }
 
   getServicesByVocabularyTypeAndId(type: string, id?: string) {
-    // console.log(type);
-    // console.log(id);
     if (id) {
       let params = new HttpParams();
       params = params.append(type, id);
-      return this.http.get<Map<string, Object[]>>(this.base + `/services`, {params});
+      params = params.append('quantity','100');
+      return this.http.get<Paging<Service>>(this.base + `/services`, {params});
     } else {
-      return this.http.get<Map<string, Object[]>>(this.base + `/services`);
+      return this.http.get<Paging<Service>>(this.base + `/services`);
     }
+  }
+
+  getServicesByIdArray(idArray: string[]) {
+    let params = new HttpParams();
+    params = params.append('quantity','100');
+    return this.http.get<Service[]>(this.base + `/services/ids/${idArray}`)
   }
 
   getServicesByIndexedField(field: string, vocabularyType: string) {

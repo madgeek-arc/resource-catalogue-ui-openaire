@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ResourceService} from '../../../services/resource.service';
 import {ActivatedRoute} from '@angular/router';
-import {Vocabulary} from '../../../entities/eic-model';
+import {Service, Vocabulary} from '../../../entities/eic-model';
 import {zip} from 'rxjs/internal/observable/zip';
+import {Paging} from '../../../entities/paging';
 
 
 @Component({
@@ -11,8 +12,7 @@ import {zip} from 'rxjs/internal/observable/zip';
 })
 export class PortfolioItemComponent implements OnInit{
 
-  response: Map<string, Object[]>;
-  services: Map<string, Object[]>;
+  response: Paging<Service>;
   portfolioVoc: Vocabulary;
   portfolioId: string;
   ready = false;
@@ -29,10 +29,6 @@ export class PortfolioItemComponent implements OnInit{
       res => {
         this.portfolioVoc = res[0];
         this.response = res[1];
-        for (const [key, value] of Object.entries(res[1])) {
-          // console.log(`${key}: ${value}`);
-          this.services = value;
-        }
       },
       error => {console.log(error)},
       () => {

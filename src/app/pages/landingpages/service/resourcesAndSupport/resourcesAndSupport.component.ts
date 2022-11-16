@@ -1,36 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {Component, Input} from '@angular/core';
+import {Service, URL} from '../../../../entities/eic-model';
 
 @Component({
   selector: 'app-service-landing-page-resources-and-support',
   templateUrl: 'resourcesAndSupport.component.html',
   // styleUrls: ['../../landing-page.component.css']
 })
-export class ResourcesAndSupportComponent implements OnInit {
+export class ResourcesAndSupportComponent {
 
-  @Input() form: FormGroup;
+  @Input() resourcePayload: Service = null;
 
-  ngOnInit() {
-  }
-
-  getServiceArray(field: string) {
-    return this.form.get('service.' + field) as FormArray;
-  }
-
-  getServiceField(field: string) {
-    return this.form.get('service.' + field) as FormControl;
-  }
-
-  getExtrasArray(field: string) {
-    return this.form.get('extras.' + field) as FormArray;
-  }
-
-  getExtrasField(field: string) {
-    return this.form.get('extras.' + field) as FormControl;
-  }
-
-  goto(url: string) {
-    window.open(url, '_blank');
+  goto(url: string | URL) {
+    window.open(url.toString(), '_blank');
   }
 
 }

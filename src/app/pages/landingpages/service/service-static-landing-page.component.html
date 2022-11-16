@@ -1,4 +1,7 @@
 <!--SERVICE MENU-->
+<div *ngIf="!ready" class="uk-margin-large-top" style="height: 400px">
+  <div class="loader-big"></div>
+</div>
 <div *ngIf="ready" class="uk-visible@m">
   <div class=" tm-header uk-visible@m tm-header-transparent service-menu">
     <div class="uk-navbar-container uk-sticky uk-navbar-transparent" uk-sticky="top:0" media="768"

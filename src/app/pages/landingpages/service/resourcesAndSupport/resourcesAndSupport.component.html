@@ -1,5 +1,5 @@
 <!--GENERAL INFO-->
-<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
+<div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container uk-container-large uk-margin-large-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
@@ -13,7 +13,7 @@
         <div class="uk-margin-medium-top uk-margin-medium-bottom uk-child-width-1-1@s uk-child-width-1-2@m
         uk-child-width-1-2@l uk-grid-row-large uk-grid-match uk-grid" uk-grid="">
 
-          <div *ngIf="getServiceField('helpdeskEmail')?.value !== ''" class="uk-grid-margin uk-text-center">
+          <div *ngIf="resourcePayload.helpdeskEmail" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -58,21 +58,17 @@
                 </style>
 
                 <rect class="uk-preserve" x="0" y="0" width="110" height="110" rx="60" fill="#f7f8fc"></rect>
-                <!--<img src="../../../../../assets/images/icons/Asset%2012@2x.png">-->
-                <!--<rect class="uk-preserve" x="35" y="35" width="60" height="60"-->
-                <!--fill="url(../../../../../assets/images/icons/Asset%2012@2x.png)"-->
-                <!--mask="url(../../../../../assets/images/icons/Asset%2012@2x.png)"></rect>-->
                 <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/Helpdesk%20Email@2x.png" clip-path="url(#myCircle)" />
 
               </svg>
 
               <div>
-                <button (click)="goto('mailto:' + getServiceField('helpdeskEmail').value)" class="uk-button uk-button-text">Helpdesk email</button>
+                <button (click)="goto('mailto:' + resourcePayload.helpdeskEmail)" class="uk-button uk-button-text">Helpdesk email</button>
               </div>
             </div>
           </div>
 
-          <div *ngIf="getServiceField('helpdeskPage')?.value !== ''" class="uk-grid-margin uk-text-center">
+          <div *ngIf="resourcePayload.helpdeskPage" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -122,12 +118,12 @@
               </svg>
 
               <div>
-                <button (click)="goto(getServiceField('helpdeskPage').value)" class="uk-button uk-button-text">Helpdesk page<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+                <button (click)="goto(resourcePayload.helpdeskPage)" class="uk-button uk-button-text">Helpdesk page<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
               </div>
             </div>
           </div>
 
-          <div *ngIf="getServiceField('version')?.value !== ''" class="uk-grid-margin uk-text-center">
+          <div *ngIf="resourcePayload.version" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -176,11 +172,11 @@
 
               </svg>
 
-              <p class="uk-margin-medium top">Version: {{getServiceField('version').value}}</p>
+              <p class="uk-margin-medium top">Version: {{resourcePayload.version}}</p>
             </div>
           </div>
 
-          <div *ngIf="getServiceField('lastUpdate')?.value !== ''" class="uk-grid-margin uk-text-center">
+          <div *ngIf="resourcePayload.lastUpdate" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -229,7 +225,7 @@
 
               </svg>
 
-              <p class="uk-margin-medium top">Last Update: {{getServiceField('lastUpdate').value | date}}</p>
+              <p class="uk-margin-medium top">Last Update: {{resourcePayload.lastUpdate.toString() | date}}</p>
             </div>
           </div>
 
@@ -246,8 +242,8 @@
 
           <h5 class="uk-margin-medium-bottom">Change Log</h5>
 
-          <ng-container *ngIf="getServiceArray('changeLog')?.controls[0].value !== ''; else noChangeLog">
-            <p *ngFor="let log of getServiceArray('changeLog').value">{{log}}</p>
+          <ng-container *ngIf="resourcePayload.changeLog?.[0] !== ''; else noChangeLog">
+            <p *ngFor="let log of resourcePayload.changeLog">{{log}}</p>
           </ng-container>
           <ng-template #noChangeLog>
             <p>Nothing available</p>
@@ -263,8 +259,8 @@
 </div>
 
 <!--CODING MATERIAL-->
-<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="getExtrasArray('git').value[0] !== '' || getExtrasArray('datasets').value !== ''" class="uk-container uk-container-large uk-margin-top uk-margin-bottom">
+<div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
+  <div *ngIf="resourcePayload.extras?.['git']?.[0] !== '' || resourcePayload.extras?.['datasets'] !== ''" class="uk-container uk-container-large uk-margin-top uk-margin-bottom">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <h2>Coding material</h2>
@@ -272,7 +268,7 @@
 
     <div class="tm-grid-expand uk-grid-column-small uk-grid-row-large uk-margin-large uk-grid uk-child-width-1-1@s
     uk-child-width-1-3@m uk-child-width-1-3@l uk-flex-center" uk-grid="">
-      <div *ngIf="getExtrasArray('git').value[0] !== ''" class="uk-grid-item-match uk-flex-middle uk-flex-first@m uk-first-column">
+      <div *ngIf="resourcePayload.extras['git']?.[0] !== ''" class="uk-grid-item-match uk-flex-middle uk-flex-first@m uk-first-column">
 
         <div class="uk-panel uk-width-1-1">
 
@@ -286,7 +282,7 @@
 
               <p class="regular-text uk-margin-top">Access the service open source resources available on cloud development platforms</p>
 
-              <button *ngFor="let link of getExtrasArray('git').value" (click)="goto(link)" class="uk-button uk-button-text">MOVE TO SOURCE CODE<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+              <button *ngFor="let link of resourcePayload.extras['git']" (click)="goto(link)" class="uk-button uk-button-text">MOVE TO SOURCE CODE<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
             </div>
           </div>
 
@@ -323,7 +319,7 @@
         </div>
       </div>
 
-      <div *ngIf="getExtrasArray('datasets').value !== ''" class="uk-grid-item-match uk-flex-middle">
+      <div *ngIf="resourcePayload.extras?.['datasets'] !== ''" class="uk-grid-item-match uk-flex-middle">
         <div class="uk-panel uk-width-1-1">
 
           <div class="uk-margin uk-width-medium uk-margin-auto uk-text-center">
@@ -336,7 +332,7 @@
 
               <p class="regular-text uk-margin-top">A collection of open access datasets related to the service</p>
 
-              <button (click)="goto(getExtrasArray('datasets').value[0])" class="uk-button uk-button-primary uk-margin-top">DATASETS<i class="fa fa-external-link uk-margin-small-left"></i></button>
+              <button (click)="goto(resourcePayload.extras['datasets'])" class="uk-button uk-button-primary uk-margin-top">DATASETS<i class="fa fa-external-link uk-margin-small-left"></i></button>
             </div>
           </div>
 
@@ -349,9 +345,9 @@
 </div>
 
 <!--TRAINING-->
-<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="getExtrasField('communityCalls').value !== '' || getExtrasField('webinars').value !== ''
-              || getExtrasField('tutorials').value !== ''" class="uk-container uk-container-large uk-margin-top">
+<div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
+  <div *ngIf="resourcePayload.extras['communityCalls'] !== '' || resourcePayload.extras['webinars'] !== ''
+              || resourcePayload.extras['tutorials'] !== ''" class="uk-container uk-container-large uk-margin-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <h2>Supporting material</h2>
@@ -359,7 +355,7 @@
 
     <div class="uk-margin-large-top uk-child-width-1-1@s uk-child-width-1-3@m uk-child-width-1-3@l uk-grid-row-large uk-grid-match uk-grid uk-flex-center" uk-grid="">
 
-      <div *ngIf="getExtrasField('communityCalls').value !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['communityCalls'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -404,10 +400,6 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <!--<img src="../../../../../assets/images/icons/Asset%2012@2x.png">-->
-            <!--<rect class="uk-preserve" x="35" y="35" width="60" height="60"-->
-                  <!--fill="url(../../../../../assets/images/icons/Asset%2012@2x.png)"-->
-                  <!--mask="url(../../../../../assets/images/icons/Asset%2012@2x.png)"></rect>-->
             <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/Asset%2012@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
@@ -417,11 +409,13 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Follow OpenAIRE’s series of community calls, stay
             up-to-date with all the latest information on the service and have your questions answered.</p>
 
-          <button (click)="goto(getExtrasField('communityCalls').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+          <button (click)="goto(resourcePayload.extras['communityCalls'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
         </div>
       </div>
 
-      <div *ngIf="getExtrasField('webinars').value !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['webinars'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -475,11 +469,11 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Register to the service’s webinars and interact live
             with the service managers.</p>
 
-          <button (click)="goto(getExtrasField('webinars').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+          <button (click)="goto(resourcePayload.extras['webinars'])" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
         </div>
       </div>
 
-      <div *ngIf="getExtrasField('tutorials').value !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['tutorials'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -532,11 +526,13 @@
 
           <p class="el-content uk-panel uk-margin-top regular-text">Get familiar with the service at your own pace.</p>
 
-          <button (click)="goto(getExtrasField('tutorials').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+          <button (click)="goto(resourcePayload.extras['tutorials'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
         </div>
       </div>
 
-      <div *ngIf="getExtrasField('glossary').value !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['glossary'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -590,11 +586,13 @@
           <p class="el-content uk-panel uk-margin-top regular-text">View the full list of useful terms related to the
             service.</p>
 
-          <button (click)="goto(getExtrasField('glossary').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+          <button (click)="goto(resourcePayload.extras['glossary'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
         </div>
       </div>
 
-      <div *ngIf="getExtrasField('faqs').value !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['faqs'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -648,11 +646,13 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Get answers to common questions about the
             service.</p>
 
-          <button (click)="goto(getExtrasField('faqs').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+          <button (click)="goto(resourcePayload.extras['faqs'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
         </div>
       </div>
 
-      <div *ngIf="getExtrasField('guides').value !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['guides'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -705,7 +705,9 @@
 
           <p class="el-content uk-panel uk-margin-top regular-text">Understand how to make the best use of the service.</p>
 
-          <button (click)="goto(getExtrasField('guides').value)" class="uk-button uk-button-text">View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></button>
+          <button (click)="goto(resourcePayload.extras['guides'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
         </div>
       </div>
 
@@ -715,8 +717,8 @@
 </div>
 
 <!--FACTSHEETS-->
-<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="getExtrasArray('factsheets').value[0] !== ''" class="uk-container uk-container-large uk-margin-top">
+<div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
+  <div *ngIf="resourcePayload.extras['factsheets']?.[0] !== ''" class="uk-container uk-container-large uk-margin-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <h2>Factsheets</h2>
@@ -729,15 +731,15 @@
 
       <div class="uk-visible@m">
         <p class="big-text">Download and read an overview of the service</p>
-        <button (click)="goto(getExtrasArray('factsheets').value[0])" class="uk-button uk-button-primary uk-margin-medium-top">View all
-          <i class="fa fa-external-link uk-margin-small-left"></i>
+        <button (click)="goto(resourcePayload.extras['factsheets'][0])" class="uk-button uk-button-primary uk-margin-medium-top">
+          View all<i class="fa fa-external-link uk-margin-small-left"></i>
         </button>
       </div>
 
       <div class="uk-hidden@m uk-text-center uk-margin-medium-top">
         <p class="big-text">Download and read an overview of the service</p>
-        <button (click)="goto(getExtrasArray('factsheets').value[0])" class="uk-button uk-button-primary uk-margin-medium-top">View all
-          <i class="fa fa-external-link uk-margin-small-left"></i>
+        <button (click)="goto(resourcePayload.extras['factsheets']?.[0])" class="uk-button uk-button-primary uk-margin-medium-top">
+          View all<i class="fa fa-external-link uk-margin-small-left"></i>
         </button>
       </div>
 
@@ -747,20 +749,18 @@
 </div>
 
 <!--LATEST NEWS-->
-<div *ngIf="form" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="getExtrasField('latestNews').value !== ''" class="uk-container uk-container-large uk-margin-top">
+<div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
+  <div *ngIf="resourcePayload.extras['latestNews'] !== ''" class="uk-container uk-container-large uk-margin-top">
     <div class="text-center">
       <h2>Latest News</h2>
     </div>
 
     <div class="text-center">
       <p class="big-text">Stay informed about the news and developments!</p>
-      <button (click)="goto(getExtrasField('latestNews').value)" class="uk-button uk-button-primary uk-margin-medium-top">View all
+      <button (click)="goto(resourcePayload.extras['latestNews'])" class="uk-button uk-button-primary uk-margin-medium-top">View all
         <i class="fa fa-external-link uk-margin-small-left"></i>
       </button>
     </div>
 
   </div>
 </div>
-
-<!--<pre *ngIf="form">{{form.getRawValue() | json}}</pre>-->

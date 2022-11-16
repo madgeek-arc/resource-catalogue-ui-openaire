@@ -3,7 +3,6 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Provider, Service, URL} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {environment} from 'src/environments/environment';
 import {FormModel} from '../../../entities/dynamic-form-model';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
@@ -20,7 +19,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   projectName = environment.projectName;
   vocabularies: Map<string, object[]>;
   model: FormModel[] = null;
-  form: FormGroup = this.fb.group({service: this.fb.group({}), extras: this.fb.group({})}, Validators.required);
   id: string;
   ready = false;
 
@@ -29,10 +27,10 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   myProviders:  Provider[] = [];
   canAddOrEditService = false;
 
-  relatedServices: Object = null;
+  relatedServices: Service[] = null;
   resourcePayload: Service = null;
 
-  constructor(public route: ActivatedRoute, public resourceService: ResourceService, private fb: FormBuilder) {
+  constructor(public route: ActivatedRoute, public resourceService: ResourceService) {
   }
 
   ngOnInit() {
@@ -48,9 +46,14 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               next => {
                   this.resourcePayload = next[0];
                   this.vocabularies = next[1];
+                  this.resourceService.getServicesByIdArray(this.resourcePayload.relatedResources).subscribe(
+                    next => {this.relatedServices = next},
+                    error => {console.log(error)},
+                    () => {this.ready = true}
+                  );
                 },
               error => {console.log(error);},
-              () => {this.ready = true}
+              () => {}
             )
           );
         }
@@ -74,7 +77,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
       return;
     } else {
       component.resourcePayload = this.resourcePayload;
-      component.model = this.model;
       component.vocabularies = this.vocabularies;
       component.relatedServices = this.relatedServices;
     }

@@ -1,10 +1,8 @@
 import {Component, Input} from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
-import {FormModel, UiVocabulary} from '../../../../entities/dynamic-form-model';
-import * as uikit from 'uikit';
-import {MdEditorOption} from 'ngx-markdown-editor';
 import {Router} from '@angular/router';
+import {UiVocabulary} from '../../../../entities/dynamic-form-model';
 import {Service} from '../../../../entities/eic-model';
+import * as uikit from 'uikit';
 
 
 @Component({
@@ -14,12 +12,10 @@ import {Service} from '../../../../entities/eic-model';
 })
 export class OverviewComponent {
 
-  @Input() model: FormModel[] = null;
   @Input() vocabularies: Map<string, UiVocabulary[]>;
-  @Input() relatedServices: Object[] = null;
+  @Input() relatedServices: Service[] = null;
   @Input() resourcePayload: Service = null;
 
-  mdOptions: MdEditorOption = {showBorder: false};
 
   slide = 0;
   benefitSlide = 0;
@@ -35,19 +31,6 @@ export class OverviewComponent {
       if (vocabulary.id === id)
         return vocabulary.name;
     }
-    // let vocType;
-    // for (let i = 0; i < this.model.length; i++) {
-    //   for (let j = 0; j < this.model[i].fields.length; j++) {
-    //     if (this.model[i].fields[j].field.name === field && this.model[i].fields[j].field.type === 'vocabulary') {
-    //       vocType = this.model[i].fields[j].field.form.vocabulary;
-    //       for (let k = 0; k < this.vocabularies[vocType].length; k++) {
-    //         if (this.vocabularies[vocType][k].id === name) {
-    //           return (this.vocabularies[vocType][k].name);
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   dragSlide(id: string) {

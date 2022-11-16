@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ResourceService} from '../../../services/resource.service';
-import {Vocabulary} from '../../../entities/eic-model';
 import {ActivatedRoute} from '@angular/router';
+import {ResourceService} from '../../../services/resource.service';
+import {Service, Vocabulary} from '../../../entities/eic-model';
+import {Paging} from '../../../entities/paging';
 import {zip} from 'rxjs/internal/observable/zip';
-
 
 @Component({
   selector: 'app-user-item',
@@ -11,11 +11,11 @@ import {zip} from 'rxjs/internal/observable/zip';
 })
 export class UserItemComponent implements OnInit {
 
-  response: Map<string, Object[]>;
+  response: Paging<Service>;
   services: Map<string, Object[]>;
   userVoc: Vocabulary;
   portfolios: Vocabulary[];
-  portfoliosMap: Map<string, Object[]>;
+  portfoliosMap: Map<string, Service[]>;
   userVocId: string;
   ready = false;
 
@@ -36,7 +36,7 @@ export class UserItemComponent implements OnInit {
           this.services = value;
         }
         this.portfolios = res[2];
-        this.portfoliosMap = new Map<string, Object[]>();
+        this.portfoliosMap = new Map<string, Service[]>();
         this.resourceService.getServicesSnippetByUserContentAndPortfolioType(this.userVocId.replace('&', '%26')).subscribe(
           next => {
             this.portfoliosMap.set('all', next.results);

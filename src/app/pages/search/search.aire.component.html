@@ -121,10 +121,10 @@
                     <!--LAPTOP & PAD LANDSCAPE-->
                     <div class="service-details-card-content uk-visible@m uk-flex">
 
-                      <div *ngIf="resourceInfo.extras.portfolios?.length>0 && !loading" class="portfolioSection">
+                      <div *ngIf="resourceInfo.extras?.['portfolios']?.length > 0" class="portfolioSection">
                         <div>
 <!--                          {{resourceInfo.extras.portfolios}}-->
-                          <span *ngFor="let portfolio of resourceInfo.extras.portfolios; let i = index">
+                          <span *ngFor="let portfolio of resourceInfo.extras['portfolios']; let i = index">
                             <ng-container *ngIf="i!=0">, </ng-container>
                             {{getVocabularyName(portfolio)}}
                           </span>
@@ -150,14 +150,14 @@
                               {{resourceInfo.extras?.pitch}}
                             </div>
 
-                            <div *ngIf="resourceInfo.extras?.users[0]" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                            <div *ngIf="resourceInfo.extras?.['users'][0]" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label uk-margin-small-right">Users: </span>
-                              <span *ngFor="let user of resourceInfo.extras.users; let i = index" class="field-value">
+                              <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">
                                 <ng-container *ngIf="i!==0">, </ng-container>
                                 {{getVocabularyName(user)}}
                               </span>
                             </div>
-                            <div *ngIf="resourceInfo.extras?.paymentCategories[0]?.paymentTitle"
+                            <div *ngIf="resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
                               <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras.paymentCategories[0].paymentTitle}}</span>
                             </div>
@@ -199,16 +199,20 @@
                               {{resourceInfo.extras.pitch}}
                             </div>
 
-                            <div *ngIf="!(resourceInfo.extras.users === null || resourceInfo.extras.users[0].name === '')" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                            <div *ngIf="!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0].name === '')"
+                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label  uk-margin-small-right">Users: </span>
-                              <span *ngFor="let user of resourceInfo.extras.users; let i = index" class="field-value">
+                              <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">
                                 <ng-container *ngIf="i!=0">, </ng-container>
                                 {{getVocabularyName(user)}}
                               </span>
                             </div>
-                            <div *ngIf="!(resourceInfo.extras?.paymentCategories[0]?.paymentTitle === null || resourceInfo.extras?.paymentCategories[0]?.paymentTitle === '')"
+                            <div *ngIf="!(resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === null || resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === '')"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
-                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras?.paymentCategories[0]?.paymentTitle}}</span>
+                              <span class="field-label">Pricing: </span>
+                              <span class="field-value uk-margin-small-left">
+                                {{resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle}}
+                              </span>
                             </div>
 
                           </div>
@@ -216,8 +220,8 @@
                         </div>
                       </div>
 
-                      <div *ngIf="resourceInfo.extras.portfolios?.length>0" class="portfolioSection">
-                        <ng-container *ngFor="let portfolio of resourceInfo.extras.portfolios; let i = index">
+                      <div *ngIf="resourceInfo.extras?.['portfolios']?.length>0" class="portfolioSection">
+                        <ng-container *ngFor="let portfolio of resourceInfo.extras['portfolios']; let i = index">
                           <ng-container *ngIf="i!=0">, </ng-container>
                           {{getVocabularyName(portfolio)}}
                         </ng-container>
