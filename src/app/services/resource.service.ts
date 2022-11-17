@@ -90,7 +90,7 @@ export class ResourceService {
   getServicesByIdArray(idArray: string[]) {
     let params = new HttpParams();
     params = params.append('quantity','100');
-    return this.http.get<Service[]>(this.base + `/services/ids/${idArray}`)
+    return this.http.get<Service[]>(this.base + `/services/ids/${idArray}`, {params});
   }
 
   getServicesByIndexedField(field: string, vocabularyType: string) {

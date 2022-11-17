@@ -298,7 +298,7 @@
 </div>
 
 <!--Related services-->
-<div *ngIf="relatedServices" class="uk-section-muted uk-section uk-flex uk-flex-middle" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(80vh);">
+<div *ngIf="relatedServices?.length > 0" class="uk-section-muted uk-section uk-flex uk-flex-middle" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(80vh);">
 
   <div class="uk-width-1-1">
     <div class="uk-container">
@@ -341,7 +341,8 @@
 
     <h1 class="uk-margin-medium-bottom">Use Cases</h1>
 
-    <div id="slideShowMobile" class="uk-position-relative" uk-slideshow="ratio: 12:4; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;" (beforeitemshow)="dragSlideMobile('slideShowMobile')">
+    <div id="slideShowMobile" class="uk-position-relative" (beforeitemshow)="dragSlideMobile('slideShowMobile')"
+         uk-slideshow="ratio: 12:4; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
 
       <ul class="uk-slideshow-items">
         <li *ngFor="let useCase of resourcePayload.extras['useCasesExtras']" class="">

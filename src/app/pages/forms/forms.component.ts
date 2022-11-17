@@ -7,6 +7,7 @@ import {FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {zip} from 'rxjs/internal/observable/zip';
 import {Vocabulary} from '../../entities/eic-model';
+import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 
 @Component({
   selector: 'app-form',
@@ -20,8 +21,9 @@ export class FormsComponent implements OnInit{
 
   tabsHeader: string = null;
   model: Model = null;
-  vocabulariesMap: Map<string, object[]> = null
+  vocabulariesMap: Map<string, object[]> = new Map<string, object[]>();
   subVocabulariesMap: Map<string, object[]> = null
+  premiumSort = new PremiumSortPipe();
   resourceId: string = null;
   payloadAnswer: object = {'answer': {'Service': {}}}; // Find a way to do this better
   ready: Boolean = false
@@ -46,8 +48,7 @@ export class FormsComponent implements OnInit{
             },
             error => {console.log(error)},
             () => {
-              let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
-              this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
+              this.prepareVocabularies();
               this.ready = true;
             }
           );
@@ -61,9 +62,7 @@ export class FormsComponent implements OnInit{
             },
             error => {console.log(error)},
             () => {
-              let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
-              this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
-              console.log(this.subVocabulariesMap);
+              this.prepareVocabularies();
               this.ready = true;
             }
           );
@@ -75,10 +74,18 @@ export class FormsComponent implements OnInit{
   }
 
   submitForm(form: FormGroup) {
-    this.resourceService.postService(form.getRawValue()).subscribe(
+    console.log(form.valid);
+    this.resourceService.postService(form.value).subscribe(
       next => {},
       error => {console.log(error);}
     );
+  }
+
+  prepareVocabularies() {
+    let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
+    this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
+    this.vocabulariesMap['RegionOrCountry'] = this.vocabulariesMap['Country'].concat(this.vocabulariesMap['Region']);
+    this.premiumSort.transform(this.vocabulariesMap['RegionOrCountry'], ['Europe', 'Worldwide']);
   }
 
   groupByKey(array, key) {

@@ -5,7 +5,6 @@ import {Provider, Service, URL} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from 'src/environments/environment';
 import {FormModel} from '../../../entities/dynamic-form-model';
-import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 import {zip} from 'rxjs/internal/observable/zip';
 
 @Component({
@@ -22,7 +21,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   id: string;
   ready = false;
 
-  premiumSort = new PremiumSortPipe();
   path: string;
   myProviders:  Provider[] = [];
   canAddOrEditService = false;
