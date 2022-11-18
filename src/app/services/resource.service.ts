@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type, Snippet} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Type} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
-import {PortfolioMap} from '../../app/entities/portfolioMap';
+import {PortfolioMap} from '../entities/portfolioMap';
 
 
 @Injectable()
@@ -171,6 +171,10 @@ export class ResourceService {
 
   postService(service: object) {
     return this.http.post<Service>(this.base + '/services', service[Object.keys(service)[0]], this.options);
+  }
+
+  editService(service: object) {
+    return this.http.put<Service>(this.base + `/services/${service[Object.keys(service)[0]].id}`, service[Object.keys(service)[0]], this.options);
   }
 
   getServiceHistory(serviceId: string) {

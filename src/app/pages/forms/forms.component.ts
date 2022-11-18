@@ -73,12 +73,21 @@ export class FormsComponent implements OnInit{
     );
   }
 
-  submitForm(form: FormGroup) {
-    console.log(form.valid);
-    this.resourceService.postService(form.value).subscribe(
-      next => {},
-      error => {console.log(error);}
-    );
+  submitForm(value) {
+    for (const element in value[0].get('Service').controls) {
+      console.log(element+' is '+ value[0].get('Service').get(element).valid);
+    }
+    if (value[1]) {
+      this.resourceService.editService(value[0].value).subscribe(
+        next => {},
+        error => {console.log(error);}
+      );
+    } else {
+      this.resourceService.postService(value[0].value).subscribe(
+        next => {},
+        error => {console.log(error);}
+      );
+    }
   }
 
   prepareVocabularies() {
