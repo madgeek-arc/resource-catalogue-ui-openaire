@@ -241,8 +241,7 @@
           </div>
 
           <h5 class="uk-margin-medium-bottom">Change Log</h5>
-
-          <ng-container *ngIf="resourcePayload.changeLog?.[0] !== ''; else noChangeLog">
+          <ng-container *ngIf="resourcePayload.changeLog?.length > 0 && resourcePayload.changeLog[0] != ''; else noChangeLog">
             <p *ngFor="let log of resourcePayload.changeLog">{{log}}</p>
           </ng-container>
           <ng-template #noChangeLog>

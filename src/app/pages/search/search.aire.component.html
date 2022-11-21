@@ -8,20 +8,13 @@
 
     <div class="uk-grid uk-margin-medium-bottom uk-margin-medium-top">
       <div class="uk-width-1-1">
-        <form class="uk-flex uk-flex-center" [formGroup]="searchForm"
-              (ngSubmit)="onSubmit(searchForm.controls['query'].value)">
-          <div class="uk-visible@m uk-margin-right">
-            <select *ngIf="showSearchFieldDropDown" class="uk-select menuSearchFields"
-                    (change)="updateSearchField($event)" formControlName="searchFields">
-              <option value="">--Search field--</option>
-              <option *ngFor="let field of searchFields" value="{{field}}">{{field}}</option>
-            </select>
+        <div class="uk-flex uk-flex-center">
+          <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: search"></span>
+            <input type="text" #searchInput class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..."
+                   [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}">
           </div>
-          <div class="">
-            <input type="text" class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..." name="keyword"
-                   formControlName="query">
-          </div>
-        </form>
+        </div>
       </div>
     </div>
 
@@ -43,8 +36,7 @@
                   <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
                                                                       (click)="clearSelections($event, facet.field)">Clear</a>
                   <div class="refineOption" *ngFor="let facetValue of facet.values">
-                    <input type="checkbox" class=""
-                           (change)="this.onSelection($event, facet.field, facetValue.value)"
+                    <input type="checkbox" class="" (change)="this.onSelection($event, facet.field, facetValue.value)"
                            [checked]="facetValue.isChecked">
                     {{facetValue.label}}
                     <span>({{facetValue.count}})</span>
@@ -147,7 +139,7 @@
                             </p>
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
                                  uk-scrollspy-class="" style="">
-                              {{resourceInfo.extras?.pitch}}
+                              <p [innerHTML]="resourceInfo.extras['pitch']"></p>
                             </div>
 
                             <div *ngIf="resourceInfo.extras?.['users'][0]" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
@@ -159,13 +151,13 @@
                             </div>
                             <div *ngIf="resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
-                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras.paymentCategories[0].paymentTitle}}</span>
+                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras['paymentCategories'][0]?.paymentTitle}}</span>
                             </div>
 
                           </div>
 
                           <div class="uk-width-1-4@m uk-padding-remove uk-position-bottom-right uk-overlay uk-overlay-default service-image uk-flex uk-flex-bottom">
-                            <img src="{{resourceInfo.extras.image}}" style="border-radius: 0 6px 6px 0;">
+                            <img src="{{resourceInfo.extras.image}}" style="border-radius: 0 6px 6px 0;" alt="resource image">
                           </div>
 
                         </div>
@@ -196,7 +188,7 @@
                             </p>
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
                                  uk-scrollspy-class="" style="">
-                              {{resourceInfo.extras.pitch}}
+                              <p [innerHTML]="resourceInfo.extras['pitch']"></p>
                             </div>
 
                             <div *ngIf="!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0].name === '')"
@@ -315,13 +307,9 @@
   </a>
 </div>
 
-<div class="uk-float-right uk-hidden@m"
-     style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
-  <a href="#offcanvas-filters" uk-toggle style="padding: 20px;"
-     class="uk-icon-button uk-button-blue">
+<div class="uk-float-right uk-hidden@m" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
+  <a href="#offcanvas-filters" uk-toggle style="padding: 20px;" class="uk-icon-button uk-button-blue">
     <i class="fa fa-2x fa-filter"></i>
-    <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
-    <!--</span>-->
   </a>
 </div>
 
@@ -350,7 +338,6 @@
         </div>
       </ng-template>
     </div>
-
 
   </div>
 </div>

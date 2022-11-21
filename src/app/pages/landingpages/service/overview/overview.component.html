@@ -12,7 +12,7 @@
         <div class="uk-padding-large uk-margin-large-left@m uk-margin-large-left@l uk-margin-large-top">
           <p *ngIf="resourcePayload.extras['name']" class="big-text uk-text-primary">{{resourcePayload.extras['name']}}</p>
           <h1 *ngIf="resourcePayload.tagline">{{resourcePayload.tagline}} </h1>
-          <p *ngIf="resourcePayload.extras['pitch']" class="regular-text uk-margin-medium-top">{{resourcePayload.extras['pitch']}}</p>
+          <p *ngIf="resourcePayload.extras['pitch']" class="regular-text uk-margin-medium-top" [innerHTML]="resourcePayload.extras['pitch']"></p>
         </div>
       </div>
 
@@ -317,7 +317,7 @@
                   <div>
                     <div class="h5-subheader">{{service.name}}</div>
                     <h5 class="">{{service.tagline}}</h5>
-                    <p>{{service.extras['pitch']}}</p>
+                    <p [innerHTML]="service.extras['pitch']"></p>
                   </div>
                   <div class="">
                     <a (click)="reloadOnSamePage('/service/'+service.id)" [routerLink]="[]" class="uk-button uk-button-text">Learn more</a>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
@@ -9,7 +9,9 @@ import {ResourceService} from '../../services/resource.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {environment} from '../../../environments/environment';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {zip} from 'rxjs/internal/observable/zip';
+import {fromEvent} from 'rxjs';
 
 
 @Component({
@@ -18,6 +20,9 @@ import {zip} from 'rxjs/internal/observable/zip';
 })
 
 export class SearchAireComponent implements OnInit {
+
+  @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
@@ -29,7 +34,7 @@ export class SearchAireComponent implements OnInit {
   public searchFields: string[] = ['name', 'description', 'tagline', 'user value', 'user base', 'use cases'];
   public serviceIdsArray: string[] = [];
   vocabularies: Vocabulary[] = null;
-  // portfoliosVocabulary: object[] = null;
+  searchQuery: string = null;
 
   // Paging
   pages: number[] = [];
@@ -81,11 +86,22 @@ export class SearchAireComponent implements OnInit {
           this.updateSearchResultsSnippets(searchResults);
         },
       error => {},
-      () => {
-        this.paginationInit();
-        }
+      () => {this.paginationInit();}
       );
     });
+
+    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+      map((event: any) => { // get value
+        return event.target.value;
+      })
+      // , filter(res => res.length > 2) // if character length greater then 2
+      , debounceTime(500) // Time in milliseconds between key events
+      , distinctUntilChanged() // If previous query is different from current
+    ).subscribe((text: string) => {
+        this.updateURLParameters('query', text);
+        this.navigateUsingParameters();
+      }
+    );
 
     this.canAddOrEditService = false;
     console.log('is logged in: ' + this.authenticationService.isLoggedIn());

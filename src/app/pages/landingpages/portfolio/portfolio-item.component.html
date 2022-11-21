@@ -40,7 +40,7 @@
             <div>
               <div class="h5-subheader">{{service.name}}</div>
               <h5 class="">{{service.tagline}}</h5>
-              <p>{{service.extras['pitch']}}</p>
+              <p [innerHTML]="service.extras['pitch']"></p>
             </div>
             <div class=""><a [routerLink]="['/service/', service.id]" class="uk-button uk-button-text">Learn more</a></div>
           </div>
