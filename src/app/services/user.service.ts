@@ -22,16 +22,16 @@ export class UserService {
               ) {
   }
 
-  addFavourite(serviceID: string, value: boolean): Observable<EicEvent> {
-    if (this.authenticationService.isLoggedIn()) {
-      /*return this.http.put(`/event/favourite/service/${serviceID}`,{});*/
-      this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + serviceID, 'favorite', value ? 3 : -3);
-      // new addFavourite method
-      return this.http.post<EicEvent>(this.base + `/event/favourite/service/${serviceID}?value=${value ? 1 : 0}`, {}, this.options);
-    } else {
-      this.authenticationService.login();
-    }
-  }
+  // addFavourite(serviceID: string, value: boolean): Observable<EicEvent> {
+  //   if (this.authenticationService.isLoggedIn()) {
+  //     /*return this.http.put(`/event/favourite/service/${serviceID}`,{});*/
+  //     this.matomoTracker.trackEvent('Recommendations', this.authenticationService.getUserEmail() + ' ' + serviceID, 'favorite', value ? 3 : -3);
+  //     // new addFavourite method
+  //     return this.http.post<EicEvent>(this.base + `/event/favourite/service/${serviceID}?value=${value ? 1 : 0}`, {}, this.options);
+  //   } else {
+  //     this.authenticationService.login();
+  //   }
+  // }
 
   public getFavouritesOfUser() {
     if (this.authenticationService.isLoggedIn()) {
@@ -55,12 +55,6 @@ export class UserService {
 
   registerUser(user: User): Observable<any> {
     return this.http.post('/user/register', user);
-  }
-
-  public canEditService(service: Service) {
-    /*return this.authenticationService.isLoggedIn() && service.providers && service.providers.length > 0 &&
-        service.providers.indexOf(this.authenticationService.getUser()) > -1;*/
-    return false;
   }
 
   public rateService(serviceID: string, rating: number): Observable<EicEvent> {

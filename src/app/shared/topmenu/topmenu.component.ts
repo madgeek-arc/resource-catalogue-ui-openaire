@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../services/authentication.service';
 import {Router} from '@angular/router';
-import {FormBuilder} from '@angular/forms';
-import {NavigationService} from '../../services/navigation.service';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {PortfolioMap} from '../../entities/portfolioMap';
@@ -22,8 +20,7 @@ export class AireTopMenuComponent implements OnInit {
 
   public portfolioItemActive: string = null;
 
-  constructor(public authenticationService: AuthenticationService, public router: Router, public fb: FormBuilder,
-              public navigationService: NavigationService, public resourceService: ResourceService,
+  constructor(public authenticationService: AuthenticationService, public router: Router, public resourceService: ResourceService,
               private dataSharingService: DataSharingService) {}
 
   ngOnInit() {
@@ -47,7 +44,16 @@ export class AireTopMenuComponent implements OnInit {
       this.router.navigate([url]));
   }
 
+
   portfolioActive(portfolioItem: string) {
     this.portfolioItemActive = portfolioItem;
+  }
+
+  login() {
+    this.authenticationService.tryLogin();
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 }

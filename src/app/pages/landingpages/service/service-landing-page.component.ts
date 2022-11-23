@@ -6,6 +6,7 @@ import {ResourceService} from '../../../services/resource.service';
 import {environment} from 'src/environments/environment';
 import {FormModel} from '../../../entities/dynamic-form-model';
 import {zip} from 'rxjs/internal/observable/zip';
+import {AuthenticationService} from '../../../services/authentication.service';
 
 @Component({
   selector: 'app-service-landing-page',
@@ -28,7 +29,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   relatedServices: Service[] = null;
   resourcePayload: Service = null;
 
-  constructor(public route: ActivatedRoute, public resourceService: ResourceService) {
+  constructor(public route: ActivatedRoute, public resourceService: ResourceService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
@@ -57,6 +58,21 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         }
       )
     );
+
+    this.canAddOrEditService = false;
+    console.log('is logged in: ' + this.authenticationService.isLoggedIn());
+    if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
+      console.log('for edit button');
+      this.myProviders = [];
+      this.resourceService.getMyServiceProviders().subscribe(
+        res => this.myProviders = res,
+        error => console.log(error),
+        () => {
+          this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+          console.log(this.canAddOrEditService);
+        }
+      );
+    }
   }
 
   ngOnDestroy(): void {

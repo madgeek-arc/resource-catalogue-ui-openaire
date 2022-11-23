@@ -104,14 +104,14 @@ export class SearchAireComponent implements OnInit {
     );
 
     this.canAddOrEditService = false;
-    console.log('is logged in: ' + this.authenticationService.isLoggedIn());
     if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
-      console.log('for edit button');
       this.myProviders = [];
       this.resourceService.getMyServiceProviders().subscribe(
         res => this.myProviders = res,
         error => console.log(error),
-        () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
+        () => {
+          this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+        }
       );
     }
   }

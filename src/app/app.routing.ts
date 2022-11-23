@@ -30,7 +30,14 @@ const appRoutes: Routes = [
       breadcrumb: 'Search'
     }
   },
-
+  {
+    path: 'provider/:providerId/resource/add',
+    component: FormsComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'forms'
+    }
+  },
   {
     path: 'form',
     component: FormsComponent,
@@ -41,7 +48,7 @@ const appRoutes: Routes = [
   {
     path: 'edit/:resourceId',
     component: FormsComponent,
-    // canActivate: [CanActivateViaAuthGuard],
+    canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'edit'
     }
@@ -77,10 +84,6 @@ const appRoutes: Routes = [
   {
     path: 'service',
     loadChildren: () => import('../app/pages/landingpages/service/service-landing-page.module').then(m => m.ServiceLandingPageModule),
-  },
-  {
-    path: 'assets/files/:fileName',
-    children: [ ]
   },
   {
     path: 'forbidden',

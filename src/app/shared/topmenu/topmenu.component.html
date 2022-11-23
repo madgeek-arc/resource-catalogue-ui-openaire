@@ -145,9 +145,14 @@
               </ul>
             </div>
           </div>
-          <div class="uk-navbar-right">
-            <a class="uk-navbar-item">Login</a>
+          <div *ngIf="authenticationService.isLoggedIn(); else loginButton" class="uk-navbar-right">
+            <a class="uk-navbar-item" (click)="logout()">Logout</a>
           </div>
+          <ng-template #loginButton>
+            <div class="uk-navbar-right">
+              <a class="uk-navbar-item" (click)="this.login()">Login</a>
+            </div>
+          </ng-template>
         </nav>
       </div>
     </div>

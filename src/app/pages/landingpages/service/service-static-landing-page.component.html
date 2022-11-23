@@ -65,9 +65,9 @@
   <button (click)="goto(resourcePayload.webpage)" class="uk-button uk-button-blue">Go to service</button>
 </div>
 
-<div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService" class="uk-float-right" style="z-index: 100; top: 300px; position: fixed; right: 0px;">
-  <a [routerLink]="['/edit/', id]" style="padding: 10px;"
-     class="uk-icon-button uk-button-primary">
+<div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService"
+     class="uk-float-right" style="z-index: 100; top: 300px; position: fixed; right: 5px;">
+  <a [routerLink]="['/edit/', id]" style="padding: 10px;" class="uk-icon-button uk-button-primary">
     <i class="fa fa-pencil-square-o"></i>
     <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
     <!--</span>-->

@@ -4,7 +4,7 @@ import * as sd from '../../entities/services.description';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ServiceProviderService} from '../../services/service-provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {urlAsyncValidator, URLValidator} from '../../shared/validators/generic.validator';
+import {URLValidator} from '../../shared/validators/generic.validator';
 import {Vocabulary, Type, Provider} from '../../entities/eic-model';
 import {ResourceService} from '../../services/resource.service';
 import BitSet from 'bitset/bitset';
@@ -152,12 +152,12 @@ export class ServiceProviderFormComponent implements OnInit {
     id: [''],
     name: ['', Validators.required],
     abbreviation: ['', Validators.required],
-    website: ['', Validators.compose([Validators.required, URLValidator]), urlAsyncValidator(this.serviceProviderService)],
+    website: ['', Validators.compose([Validators.required, URLValidator])],
     legalEntity: [''],
     legalStatus: [''],
     description: ['', Validators.required],
-    logo: ['', Validators.compose([Validators.required, URLValidator]), urlAsyncValidator(this.serviceProviderService)],
-    multimedia: this.fb.array([this.fb.control('', URLValidator, urlAsyncValidator(this.serviceProviderService))]),
+    logo: ['', Validators.compose([Validators.required, URLValidator])],
+    multimedia: this.fb.array([this.fb.control('', URLValidator)]),
     scientificDomains: this.fb.array([]),
     // scientificDomain: this.fb.array([]),
     // scientificSubdomains: this.fb.array([]),
@@ -281,7 +281,7 @@ export class ServiceProviderFormComponent implements OnInit {
       }
     }
 
-    this.isPortalAdmin = this.authService.isAdmin();
+    // this.isPortalAdmin = this.authService.isAdmin();
 
     this.initUserBitSets(); // Admin + mainContact
 
@@ -358,7 +358,7 @@ export class ServiceProviderFormComponent implements OnInit {
             if (environment.projectName === 'OpenAIRE Catalogue')
               this.authService.login();
             else {
-              this.authService.redirectURL = '/provider/my';
+              // this.authService.redirectURL = '/provider/my';
               this.authService.login();
             }
           }
@@ -579,12 +579,12 @@ export class ServiceProviderFormComponent implements OnInit {
   push(field: string, required: boolean, url?: boolean) {
     if (required) {
       if (url) {
-        this.getFieldAsFormArray(field).push(this.fb.control('', Validators.compose([Validators.required, URLValidator]), urlAsyncValidator(this.serviceProviderService)));
+        this.getFieldAsFormArray(field).push(this.fb.control('', Validators.compose([Validators.required, URLValidator])));
       } else {
         this.getFieldAsFormArray(field).push(this.fb.control('', Validators.required));
       }
     } else if (url) {
-      this.getFieldAsFormArray(field).push(this.fb.control('', URLValidator, urlAsyncValidator(this.serviceProviderService)));
+      this.getFieldAsFormArray(field).push(this.fb.control('', URLValidator ));
     } else {
       this.getFieldAsFormArray(field).push(this.fb.control(''));
     }
@@ -645,9 +645,9 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   addDefaultUser() {
-    this.userInfo.given_name = this.authService.getUserProperty('given_name');
-    this.userInfo.family_name = this.authService.getUserProperty('family_name');
-    this.userInfo.email = this.authService.getUserProperty('email');
+    // this.userInfo.given_name = this.authService.getUserProperty('given_name');
+    // this.userInfo.family_name = this.authService.getUserProperty('family_name');
+    // this.userInfo.email = this.authService.getUserProperty('email');
     this.usersArray.controls[0].get('name').setValue(this.userInfo.given_name);
     this.usersArray.controls[0].get('surname').setValue(this.userInfo.family_name);
     this.usersArray.controls[0].get('email').setValue(this.userInfo.email);

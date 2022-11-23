@@ -15,13 +15,8 @@ export class AppComponent implements OnInit {
 
   breadcrumbs: string[] = [];
 
-  constructor(public router: Router, private smoothScroll: SmoothScroll) {
-    if (sessionStorage.getItem('state.location') !== null) {
-      const url = sessionStorage.getItem('state.location');
-      sessionStorage.removeItem('state.location');
-      console.log('navigating to: ' + url);
-      this.router.navigate([url]);
-    }
+  constructor(public router: Router, private auth: AuthenticationService) {
+    this.auth.redirect();
   }
 
   ngOnInit() {

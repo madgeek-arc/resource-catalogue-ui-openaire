@@ -70,7 +70,7 @@ export class ServiceProviderService {
   }
 
   getServiceProviderById(id: string) {
-    return this.http.get<Provider>(this.base + `/provider/${id}`, this.options);
+    return this.http.get<Provider>(this.base + `/providers/${id}`, this.options);
   }
 
   getPendingProviderById(id: string) {
@@ -119,7 +119,7 @@ export class ServiceProviderService {
     if (pendingProvider) {
       return this.http.get<boolean>(this.base + `/pendingProvider/hasAdminAcceptedTerms?providerId=${id}`);
     }
-    return this.http.get<boolean>(this.base + `/provider/hasAdminAcceptedTerms?providerId=${id}`);
+    return this.http.get<boolean>(this.base + `/providers/hasAdminAcceptedTerms?providerId=${id}`);
   }
 
   adminAcceptedTerms(id: string, pendingProvider: boolean) {
