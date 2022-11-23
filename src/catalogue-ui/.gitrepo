@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:madgeek-arc/catalogue-ui.git
 	branch = v4.0
-	commit = c7804e571536cd19b25c6be416f1ea3d97267140
-	parent = ab10b2cef81467c912166ebc2d628b37802ae0d5
+	commit = 44de978a71ebd52d90a193344d78f9de4d74f93e
+	parent = 2d773bc56668f583b48f10d87349fe60a1708f17
 	method = merge
 	cmdver = 0.4.3
