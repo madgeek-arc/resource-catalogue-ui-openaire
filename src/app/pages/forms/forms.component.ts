@@ -1,13 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Model} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
-import {FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
 import {zip} from 'rxjs/internal/observable/zip';
 import {Vocabulary} from '../../entities/eic-model';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
+
+import * as uikit from 'uikit';
 
 @Component({
   selector: 'app-form',
@@ -25,11 +26,12 @@ export class FormsComponent implements OnInit{
   subVocabulariesMap: Map<string, object[]> = null
   premiumSort = new PremiumSortPipe();
   resourceId: string = null;
-  payloadAnswer: object = {'answer': {'Service': {}}}; // Find a way to do this better
-  ready: Boolean = false
+  payloadAnswer: object = null; // Find a way to do this better
+  ready: boolean = false
+  errorMessage: string = null;
 
-  constructor(private formService: FormControlService, private resourceService: ResourceService, private route: ActivatedRoute) {
-  }
+  constructor(private formService: FormControlService, private resourceService: ResourceService,
+              private route: ActivatedRoute, private router: Router ) {}
 
   ngOnInit() {
     this.ready = false;
@@ -42,6 +44,7 @@ export class FormsComponent implements OnInit{
             this.formService.getFormModelById('m-rEmtKuZd'),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
+              this.payloadAnswer = {'answer': {'Service': {}}};
               this.payloadAnswer['answer'].Service = next[0];
               this.model = next[1];
               this.vocabulariesMap = next[2];
@@ -74,18 +77,31 @@ export class FormsComponent implements OnInit{
   }
 
   submitForm(value) {
-    for (const element in value[0].get('Service').controls) {
-      console.log(element+' is '+ value[0].get('Service').get(element).valid);
-    }
+    this.ready = false;
+    // for (const element in value[0].get('Service').controls) {
+    //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
+    // }
     if (value[1]) {
       this.resourceService.editService(value[0].value).subscribe(
-        next => {},
-        error => {console.log(error);}
+        next => {
+          this.router.navigate([`/service/${next.id}/overview`]);
+        },
+        error => {
+          console.log(error);
+          this.errorMessage = error.error.message;
+          this.ready = true;
+        }
       );
     } else {
       this.resourceService.postService(value[0].value).subscribe(
-        next => {},
-        error => {console.log(error);}
+        next => {
+          this.router.navigate([`/service/${next.id}/overview`]);
+        },
+        error => {
+          console.log(error);
+          this.errorMessage = error.error.message;
+          this.ready = true;
+        }
       );
     }
   }
@@ -97,6 +113,7 @@ export class FormsComponent implements OnInit{
     this.premiumSort.transform(this.vocabulariesMap['RegionOrCountry'], ['Europe', 'Worldwide']);
   }
 
+  /** Other stuff **/
   groupByKey(array, key) {
     return array.reduce((hash, obj) => {
       if (obj[key] === undefined) {

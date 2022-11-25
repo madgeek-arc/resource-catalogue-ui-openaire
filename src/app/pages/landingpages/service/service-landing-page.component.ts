@@ -45,11 +45,17 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               next => {
                   this.resourcePayload = next[0];
                   this.vocabularies = next[1];
-                  this.resourceService.getServicesByIdArray(this.resourcePayload.relatedResources).subscribe(
-                    next => {this.relatedServices = next},
-                    error => {console.log(error)},
-                    () => {this.ready = true}
-                  );
+                  if(this.resourcePayload.relatedResources.length === 1 && this.resourcePayload.relatedResources[0] === null) {
+                    this.relatedServices = [];
+                    this.ready = true;
+                  }
+                  else {
+                    this.resourceService.getServicesByIdArray(this.resourcePayload.relatedResources).subscribe(
+                      next => {this.relatedServices = next},
+                      error => {console.log(error)},
+                      () => {this.ready = true}
+                    );
+                  }
                 },
               error => {console.log(error);},
               () => {}
@@ -60,16 +66,14 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     );
 
     this.canAddOrEditService = false;
-    console.log('is logged in: ' + this.authenticationService.isLoggedIn());
+    // console.log('is logged in: ' + this.authenticationService.isLoggedIn());
     if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
-      console.log('for edit button');
       this.myProviders = [];
       this.resourceService.getMyServiceProviders().subscribe(
         res => this.myProviders = res,
-        error => console.log(error),
+        error => console.log(error.error),
         () => {
           this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-          console.log(this.canAddOrEditService);
         }
       );
     }

@@ -190,8 +190,8 @@
                                  uk-scrollspy-class="" style="">
                               <p [innerHTML]="resourceInfo.extras['pitch']"></p>
                             </div>
-
-                            <div *ngIf="!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0].name === '')"
+                            {{resourceInfo.extras?.['users']}}
+                            <div *ngIf="!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0]?.name === '')"
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label  uk-margin-small-right">Users: </span>
                               <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">
