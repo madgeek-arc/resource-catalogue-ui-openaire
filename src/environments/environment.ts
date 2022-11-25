@@ -5,15 +5,18 @@
 export const environment = {
   production: false,
   beta: false,
-  MATOMO_HOST: '',
+  MATOMO_URL: 'https://analytics.openaire.eu/',
   MATOMO_SITE: -1,
   FAQ_ENDPOINT: 'https://dl105.madgik.di.uoa.gr/faq/api',
-  API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
+  // API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
+  API_ENDPOINT: '/openaire', // to change the end point go to proxy.conf.json file
+  STATS_ENDPOINT: 'https://providers.eosc-portal.eu/stats-api/',
   API_TOKEN_ENDPOINT: '',
   projectName: 'OpenAIRE Catalogue',
   projectMail: 'example@oac.eu',
   serviceORresource: 'Resource',
   hasUserConsent: true,
+  showHelpContent: false,
   privacyPolicyURL: '',
   marketplaceBaseURL: ''
 };
@@ -25,4 +28,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

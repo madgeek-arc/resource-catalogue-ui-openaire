@@ -1,20 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {environment} from '../environments/environment';
-import {MatomoInjector} from 'ngx-matomo';
+import {SmoothScroll} from './services/smooth-scroll';
+import {AuthenticationService} from './services/authentication.service';
+import {NavigationService} from './services/navigation.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [AuthenticationService, NavigationService]
 })
 export class AppComponent implements OnInit {
   isLoginOrRegister = false;
 
   breadcrumbs: string[] = [];
 
-  constructor(public router: Router, private matomoInjector: MatomoInjector) {
-    this.matomoInjector.init(environment.MATOMO_HOST, environment.MATOMO_SITE);
+  constructor(public router: Router, private auth: AuthenticationService) {
+    this.auth.redirect();
   }
 
   ngOnInit() {
@@ -37,6 +39,6 @@ export class AppComponent implements OnInit {
 
   isDashboardRoute() {
     // console.log('Is home route? Route is: ' + this.router.url);
-    return (this.router.url.includes('dashboard'));
+    return (this.router.url.includes('/dashboard'));
   }
 }

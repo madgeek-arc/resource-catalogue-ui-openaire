@@ -1,8 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Service} from 'src/lib/domain/eic-model';
-import {SearchQuery} from 'src/lib/domain/search-query';
-import {NavigationService} from 'src/lib/services/navigation.service';
+import {Vocabulary} from '../../entities/eic-model';
+import {SearchQuery} from '../../entities/search-query';
+import {NavigationService} from '../../services/navigation.service';
+import {ResourceService} from '../../services/resource.service';
+import {DataSharingService} from '../../services/data-sharing.service';
+import {PortfolioMap} from '../../entities/portfolioMap';
+import * as uikit from 'uikit';
 
 @Component({
   selector: 'app-home',
@@ -27,18 +31,64 @@ export class HomeAireComponent implements OnInit {
     {value: 'Data registration', icon: 'cloud_server.svg', hover: 'cloud_server_hover.svg'},
     {value: 'Data storage', icon: 'database_security.svg', hover: 'database_security_hover.svg'}
   ];
-  private services: Service[];
 
-  constructor(public fb: FormBuilder, public router: NavigationService) {
+  services: PortfolioMap;
+  public portfolios: Vocabulary[] = null;
+  public users: Vocabulary[] = null;
+  public slide = 0;
+  public slideMobile = 0;
+
+  constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService,
+              private dataSharingService: DataSharingService) {
     this.searchForm = fb.group({'query': ['']});
   }
 
   ngOnInit() {
     // fetch categories, check size, skip unpopulated ones here
+
+    this.resourceService.getNewVocabulariesByType('Portfolios').subscribe(
+      suc => {
+        this.portfolios = suc;
+      }
+    );
+
+    this.resourceService.getNewVocabulariesByType('Users').subscribe(
+      suc => {
+        this.users = suc;
+      }
+    );
+
+    this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
+      res => {this.services = res; },
+      error => {console.log(error); }
+    );
+
   }
 
   onSubmit(searchValue: SearchQuery) {
     return this.router.search({query: searchValue.query});
+  }
+
+  dragSlide() {
+    this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  }
+
+  showSlide(index: number) {
+    uikit.slideshow('#slideShow').show(index);
+    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
+    this.slide = index;
+
+  }
+
+  dragSlideMobile() {
+    this.slideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  }
+
+  showSlideMobile(index: number) {
+    uikit.slideshow('#slideShowMobile').show(index);
+    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
+    this.slideMobile = index;
+
   }
 }
 

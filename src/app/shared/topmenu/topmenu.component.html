@@ -1,369 +1,161 @@
 <!--MOBILE-->
-<div class="tm-header-mobile uk-hidden@m">
-  <nav class="uk-navbar-container uk-navbar" uk-navbar="">
-    <div class="uk-navbar-left">
-      <a class="uk-navbar-toggle" href="#tm-mobile" uk-toggle="">
-        <div uk-navbar-toggle-icon="" class="uk-navbar-toggle-icon uk-icon"></div>
-      </a>
-    </div>
-    <div class="uk-navbar-center">
-      <a class="uk-navbar-item uk-logo" [routerLink]="['/search']">
-        <img src="../../../assets/images/Logo_Horizontal.png" class="uk-responsive-height" alt="OpenAIRE">
-      </a>
-    </div>
-  </nav>
-  <div id="tm-mobile" uk-offcanvas="" mode="slide" overlay="" class="uk-offcanvas">
-    <div class="uk-offcanvas-bar">
-      <button class="uk-offcanvas-close uk-close uk-icon" type="button" uk-close=""></button>
-      <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
-        <div>
-          <div class="uk-panel" id="module-0">
-            <ul class="uk-nav uk-nav-default">
-              <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">Catalogue
-                <ul class="uk-nav-sub">
-                  <li><a href="/search;query=Researchers">Researchers</a></li>
-                  <li><a href="/search;query=Content Providers">Content Providers</a></li>
-                  <li><a href="/search;query=Research Managers">Research Managers</a></li>
-                  <li><a href="/search;query=Funders">Funders</a></li>
-                  <li><a href="/search;query=Research Communities">Research Communities</a></li>
-                  <li><a href="/search;query=Innovators">Innovators</a></li>
-                  <li class="uk-nav-divider"></li>
-                  <li class="emphasized_menu">
-                    <a href="/search">Full Service Catalogue</a>
-                  </li>
-                </ul>
-              </li>
+<div class="tm-header-mobile uk-hidden@l">
 
-              <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">
-                <span *ngIf="authenticationService.isLoggedIn()">
-                  <span> {{authenticationService.user.name}} {{authenticationService.user.surname}}
-                    <span class="uk-margin-small-right uk-icon">
-                      <svg width="20" height="20"
-                           viewBox="0 0 20 20"
-                           xmlns="http://www.w3.org/2000/svg"
-                           ratio="1"><circle fill="none"
-                                             stroke="#000"
-                                             stroke-width="1.1"
-                                             cx="9.9" cy="6.4"
-                                             r="4.4"></circle><path
-                        fill="none" stroke="#000" stroke-width="1.1"
-                        d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2"></path>
-                      </svg>
-                    </span>
-                  </span>
-                </span>
-                <span *ngIf="!authenticationService.isLoggedIn()">
-                  <span style="color: rgb(255, 255, 255); border: medium none rgb(255, 255, 255);"
-                        class="btl-dropdown">
-                      <a class="loginLink" (click)="authenticationService.login()"> Log In   </a>
-                  </span>
-                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-                       ratio="1"><circle fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4"
-                                         r="4.4"></circle>
-                    <path fill="none" stroke="#000" stroke-width="1.1"
-                          d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">
-                    </path>
-                  </svg>
-                </span>
-                <ul *ngIf="authenticationService.isLoggedIn()" class="uk-nav-sub">
-                  <li><a routerLink="/home" (click)="authenticationService.logout()">Log out</a></li>
-                </ul>
-              </li>
-            </ul>
+  <div uk-sticky="" cls-active="uk-navbar-sticky" sel-target=".uk-navbar-container" class="uk-sticky uk-sticky-fixed" style="position: fixed; top: 0px; width: 375px;">
+
+    <div class="uk-navbar-container">
+      <nav uk-navbar="container: .tm-header-mobile" class="uk-navbar">
+
+        <div class="uk-navbar-left">
+
+          <a class="uk-navbar-toggle" uk-toggle="target: #tm-mobile; animation: uk-animation-slide-top" aria-expanded="false">
+            <div uk-navbar-toggle-icon="" class="uk-icon uk-navbar-toggle-icon"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect y="9" width="20" height="2"></rect><rect y="3" width="20" height="2"></rect><rect y="15" width="20" height="2"></rect></svg></div>
+          </a>
+
+        </div>
+
+        <div class="uk-navbar-center">
+          <a routerLink="/home" class="uk-navbar-item uk-logo"><img alt="OpenAIRE" src="../../../assets/images/logo.png" style="width: 200px"></a>
+        </div>
+
+      </nav>
+    </div>
+    <div class="uk-position-relative tm-header-mobile-slide">
+
+      <div id="tm-mobile" class="uk-position-top" style="" hidden="">
+
+        <div class="">
+          <div class="uk-background-default uk-padding">
+
+            <div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+
+              <div class="uk-first-column">
+
+                <div class="uk-panel" id="module-menu-mobile">
+
+                  <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
+                    <h5 class="uk-text-center">Services</h5>
+
+                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of services | keyvalue">
+                      <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
+                      <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
+                    </div>
+                  </div>
+
+<!--                  <ng-container *ngFor="let portfolio of services | keyvalue">-->
+<!--                    <div style="display: none" [ngClass]="portfolioItemActive===portfolio.key?'uk-display-block':'uk-display-none'">-->
+
+<!--                      <div class="uk-flex uk-flex-middle">-->
+<!--                        <a (click)="portfolioActive(null)"><i class="fa fa-2x fa-angle-left"></i></a>-->
+<!--                        <h5 class="uk-text-center uk-margin-remove" style="width: 100%">{{portfolio.key}}</h5>-->
+<!--                      </div>-->
+
+<!--                      <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-margin-medium-top">-->
+<!--                        <a (click)="redirectTo('/service/' + service.id)">-->
+<!--                          <h6 class="uk-text-normal">{{service.name}}</h6>-->
+<!--                        </a>-->
+<!--                      </div>-->
+
+<!--                    </div>-->
+<!--                  </ng-container>-->
+
+                  <div class="uk-flex uk-flex-center">
+                    <button class="uk-margin-medium-top uk-margin-bottom uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="help-section">
+            <div class="uk-padding" style="background: #F9F9F9 0% 0% no-repeat padding-box;">
+              <div class="uk-margin-top">
+                <p>Didn't find what you are looking for? <a href="mailto:info@openaire.eu">Contact us</a></p>
+                <p>Need service advices? <a href="https://www.openaire.eu/contact-noads" target="_blank">Contact NOADs</a></p>
+                <p><a href="https://www.openaire.eu/support/helpdesk" target="_blank">Help Desk</a></p>
+              </div>
+
+            </div>
           </div>
         </div>
+
       </div>
+
     </div>
+
+
   </div>
+  <div class="uk-sticky-placeholder" style="height: 91px; margin: 0px;"></div>
+
+
 </div>
 
-
 <!--NO MOBILE-->
-<!--<div class="tm-header uk-visible@m tm-header-transparent" uk-header="">-->
-<!--<div class="uk-navbar-container uk-sticky uk-navbar-transparent" uk-sticky="top:0" media="768"-->
-<!--cls-active="uk-active uk-navbar-sticky" style="" animation="uk-animation-slide-top"-->
-<!--top=".tm-header + [class*=&quot;uk-section&quot;]" cls-inactive="uk-navbar-transparent">-->
-<div id="header_main">
+<div id="">
   <div class="main-menu tm-header uk-visible@m tm-header-transparent">
-    <div class="uk-navbar-container uk-sticky uk-navbar-transparent" style="background-color: rgb(255, 255, 255);">
-      <div class="uk-container uk-container-expand">
-        <nav class="uk-navbar" uk-navbar="{&quot;align&quot;:&quot;left&quot;}">
+    <div class="uk-navbar-container uk-navbar-transparent" style="background-color: rgb(255, 255, 255);">
+      <div class="uk-container uk-container-xlarge">
+        <nav id="topNavBar" class="uk-navbar" uk-navbar="dropbar: true; mode: click; delay-hide: 0;">
           <div class="uk-navbar-left">
-            <a routerLink="/search" class="uk-navbar-item uk-logo">
-              <img src="../../../assets/images/Logo_Horizontal.png"
-                   class="uk-responsive-height" alt="OpenAIRE" style="width: 250px">
+            <a routerLink="/home" class="uk-navbar-item uk-logo">
+              <img src="../../../assets/images/logo.png" class="uk-responsive-height" alt="OpenAIRE Catalogue" style="width: 250px">
             </a>
           </div>
-          <div class="uk-navbar-right">
-            <ul class="uk-navbar-nav">
-              <li class="uk-parent" [routerLinkActive]="['uk-active']">
-                <a href="#" class="" aria-expanded="false">
-                  Catalogue <img class="uk-margin-small-left" src="../../../assets/images/icons/ic_arrow_down.svg">
-                </a>
-                <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="top: 80px; left: 106.55px;" id="support" (click)="onClick('support')">
-                  <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
-                    <div class="uk-first-column">
-                      <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="/search;query=Researchers">Researchers</a></li>
-                        <li><a href="/search;query=Content Providers">Content Providers</a></li>
-                        <li><a href="/search;query=Research Managers">Research Managers</a></li>
-                        <li><a href="/search;query=Funders">Funders</a></li>
-                        <li><a href="/search;query=Research Communities">Research Communities</a></li>
-                        <li><a href="/search;query=Innovators">Innovators</a></li>
-                        <li class="uk-nav-divider"></li>
-                        <li class="emphasized_menu">
-                          <a href="/search">Full Service Catalogue</a>
-                        </li>
-                      </ul>
+          <div class="uk-grid uk-navbar-center">
+            <div class="uk-flex-row">
+              <ul class="uk-navbar-nav">
+                <li>
+                  <a class="default-menu-item">Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i></a>
+                  <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
+
+                    <div class="uk-grid uk-grid-column-medium uk-margin-medium-bottom">
+                      <div class="uk-width-3-4 services">
+                        <div class="uk-flex uk-flex-between">
+                          <h5 class="uk-flex-left uk-margin-bottom">Services</h5>
+                          <div class="uk-flex-right uk-flex">
+                            <button class="uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
+                          <div class="" *ngFor="let portfolio of services | keyvalue">
+                            <h6>{{portfolio.key}}</h6>
+<!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
+                            <div *ngFor="let service of portfolio.value" class=" uk-navbar-dropdown-close">
+                              <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="uk-width-1-4 help-section">
+                        <div class="uk-padding" style="background: #F9F9F9 0% 0% no-repeat padding-box;">
+                          <div>
+                            <p>Didn't find what you are looking for? <br><a href="mailto:info@openaire.eu">Contact us</a></p>
+                            <p>Need service advices? <br><a href="https://www.openaire.eu/contact-noads" target="_blank">Contact National Open Access Desks</a></p>
+                            <p><a href="https://www.openaire.eu/support/helpdesk" target="_blank">Help Desk</a></p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
                   </div>
-                </div>
-              </li>
-              <li *ngIf="authenticationService.isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">
-                <a href="#" class="" aria-expanded="false">
-                <span> {{authenticationService.getUserName()}} {{authenticationService.getUserSurname()}}
-                  <span class="uk-margin-small-right uk-icon">
-                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" ratio="1"><circle
-                      fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4" r="4.4"></circle>
-                      <path fill="none"
-                            stroke="#000"
-                            stroke-width="1.1"
-                            d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">
-                      </path>
-                    </svg>
-                  </span>
-                </span>
-                </a>
-                <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="top: 80px; left: 106.55px;" id="user" (click)="onClick('support')">
-                  <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
-                    <div class="uk-first-column">
-                      <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a routerLink="/home" (click)="this.authenticationService.logout()">Log out</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li *ngIf="!authenticationService.isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">
-                <a class="loginLink" (click)="authenticationService.login()">Log In</a>
-              </li>
-              <!--<li *ngIf="router.url != '/home' && router.url != '/'">-->
-              <!--<form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm.controls['query'].value)">-->
-              <!--<input type="text" class="uk-input menuSearch" placeholder="Search" name="keyword" formControlName="query">-->
-              <!--</form>-->
-              <!--</li>-->
-            </ul>
+                </li>
+              </ul>
+            </div>
           </div>
+          <div *ngIf="authenticationService.isLoggedIn(); else loginButton" class="uk-navbar-right">
+            <a class="uk-navbar-item" (click)="logout()">Logout</a>
+          </div>
+          <ng-template #loginButton>
+            <div class="uk-navbar-right">
+              <a class="uk-navbar-item" (click)="this.login()">Login</a>
+            </div>
+          </ng-template>
         </nav>
       </div>
     </div>
     <div class="uk-sticky-placeholder" style="height: 80px; margin: 0px;" hidden="hidden"></div>
   </div>
 </div>
-
-
-
-<!--&lt;!&ndash;MOBILE&ndash;&gt;-->
-<!--<div class="tm-header-mobile uk-hidden@m">-->
-  <!--<nav class="uk-navbar-container uk-navbar" uk-navbar="">-->
-    <!--<div class="uk-navbar-left">-->
-      <!--<a class="uk-navbar-toggle" href="#tm-mobile" uk-toggle="">-->
-        <!--<div uk-navbar-toggle-icon="" class="uk-navbar-toggle-icon uk-icon"></div>-->
-      <!--</a>-->
-    <!--</div>-->
-    <!--<div class="uk-navbar-left">-->
-      <!--<a class="uk-navbar-item uk-logo" href="https://www.openaire.eu">-->
-        <!--<img src="../../../assets/images/Logo_Horizontal.png" alt="OpenAIRE"-->
-             <!--class="uk-responsive-height"> </a>-->
-    <!--</div>-->
-  <!--</nav>-->
-  <!--<div id="tm-mobile" uk-offcanvas="" mode="slide" overlay="" class="uk-offcanvas">-->
-    <!--<div class="uk-offcanvas-bar">-->
-      <!--<button class="uk-offcanvas-close uk-close uk-icon" type="button" uk-close=""></button>-->
-      <!--<div class="uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">-->
-        <!--<div>-->
-          <!--<div class="uk-panel" id="module-0">-->
-            <!--<ul class="uk-nav uk-nav-default">-->
-              <!--<li class="uk-nav-header" [routerLinkActive]="['uk-active']">-->
-                <!--<a [routerLink]="['/search']" routerLinkActive="uk-active" class="uk-offcanvas-close offcanvas-close">Catalogue</a>-->
-                <!--<ul class="uk-nav-sub">-->
-                  <!--<li><a href="/search;query=Researchers">Researchers</a></li>-->
-                  <!--<li><a href="/search;query=Content Providers">Content Providers</a></li>-->
-                  <!--<li><a href="/search;query=Research Managers">Research Managers</a></li>-->
-                  <!--<li><a href="/search;query=Funders">Funders</a></li>-->
-                  <!--<li><a href="/search;query=Research Communities">Research Communities</a></li>-->
-                  <!--<li><a href="/search;query=Innovators">Innovators</a></li>-->
-                  <!--<li class="emphasized_menu">-->
-                    <!--<a href="/search">Browse all</a>-->
-                  <!--</li>-->
-                <!--</ul>-->
-              <!--</li>-->
-              <!--&lt;!&ndash;<li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">Dashboard&ndash;&gt;-->
-              <!--&lt;!&ndash;<ul class="uk-nav-sub">&ndash;&gt;-->
-              <!--&lt;!&ndash;<li *ngIf="isLoggedIn() && (isProvider() || isAdmin())">&ndash;&gt;-->
-              <!--&lt;!&ndash;<a [routerLink]="['/myServiceProviders']" routerLinkActive="uk-active"&ndash;&gt;-->
-              <!--&lt;!&ndash;class="uk-offcanvas-close offcanvas-close">Providers</a>&ndash;&gt;-->
-              <!--&lt;!&ndash;</li>&ndash;&gt;-->
-              <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-              <!--&lt;!&ndash;</li>&ndash;&gt;-->
-
-              <!--<li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">-->
-                <!--<span *ngIf="authenticationService.isLoggedIn()">-->
-                  <!--<span> {{authenticationService.user.name}} {{authenticationService.user.surname}}-->
-                    <!--<span class="uk-margin-small-right uk-icon">-->
-                      <!--<svg width="20" height="20"-->
-                           <!--viewBox="0 0 20 20"-->
-                           <!--xmlns="http://www.w3.org/2000/svg"-->
-                           <!--ratio="1"><circle fill="none"-->
-                                             <!--stroke="#000"-->
-                                             <!--stroke-width="1.1"-->
-                                             <!--cx="9.9" cy="6.4"-->
-                                             <!--r="4.4"></circle><path-->
-                        <!--fill="none" stroke="#000" stroke-width="1.1"-->
-                        <!--d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2"></path>-->
-                      <!--</svg>-->
-                    <!--</span>-->
-                  <!--</span>-->
-                <!--</span>-->
-                <!--<span *ngIf="!authenticationService.isLoggedIn()">-->
-                  <!--<span style="color: rgb(255, 255, 255); border: medium none rgb(255, 255, 255);"-->
-                        <!--class="btl-dropdown">-->
-                      <!--<a class="loginLink" (click)="authenticationService.login()"> Log In   </a>-->
-                  <!--</span>-->
-                  <!--<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"-->
-                       <!--ratio="1"><circle fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4"-->
-                                         <!--r="4.4"></circle>-->
-                    <!--<path fill="none" stroke="#000" stroke-width="1.1"-->
-                          <!--d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">-->
-                    <!--</path>-->
-                  <!--</svg>-->
-                <!--</span>-->
-                <!--<ul *ngIf="authenticationService.isLoggedIn()" class="uk-nav-sub">-->
-                  <!--<li><a routerLink="/home" (click)="authenticationService.logout()">Log out</a></li>-->
-                <!--</ul>-->
-              <!--</li>-->
-            <!--</ul>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
-
-
-<!--&lt;!&ndash;NO MOBILE&ndash;&gt;-->
-<!--<div id="header_main">-->
-  <!--<div class="tm-toolbar uk-visible@m">-->
-    <!--<div class="uk-container uk-flex uk-flex-middle uk-container-expand">-->
-
-
-      <!--<div class="uk-margin-auto-left">-->
-        <!--<div class="uk-grid-medium uk-child-width-auto uk-flex-middle uk-grid uk-grid-stack"-->
-             <!--uk-grid="margin: uk-margin-small-top">-->
-          <!--<div class="uk-first-column">-->
-            <!--<div class="uk-panel inner" id="module-119">-->
-              <!--<ul class="uk-subnav uk-subnav-line">-->
-                <!--<li class="uk-active"><a class="home-icon" href="https://www.openaire.eu">-->
-                                              <!--<span class="uk-responsive-height">-->
-                                                <!--<svg xml:space="preserve"  enable-background="new 0 0 20 20" height="20px" id="Layer_1" version="1.1" viewBox="0 0 48 48" width="20px" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M44.715,23.711c-0.381,0.382-1,0.382-1.381,0l-8.939-8.938 c-0.064-0.051-0.119-0.106-0.17-0.171l-3.83-3.829c-0.064-0.051-0.119-0.106-0.17-0.171L24,4.377L4.667,23.711 c-0.381,0.382-1,0.382-1.381,0c-0.381-0.381-0.381-1,0-1.381L23.191,2.425c0.031-0.047,0.053-0.101,0.094-0.144 C23.482,2.085,23.742,1.994,24,2c0.258-0.006,0.518,0.084,0.715,0.281c0.043,0.042,0.062,0.096,0.096,0.144L30,7.616V4.997 c0,0,0,0,0,0c0-0.552,0.447-1,1-1h4c0.277,0,0.527,0.112,0.707,0.293C35.889,4.471,36,4.721,36,4.997v8.619l8.715,8.714 C45.096,22.711,45.096,23.33,44.715,23.711z M34,5.997h-2v3.619l2,2V5.997z M10,21.997c0.552,0,1,0.448,1,1v19c0,1.105,0.896,2,2,2 h6l0,0v-13c0-0.553,0.447-1,1-1h8c0.553,0,1,0.447,1,1v13l0,0h6c1.105,0,2-0.895,2-2v-19c0-0.552,0.447-1,1-1s1,0.448,1,1v19 c0,2.209-1.791,4-4,4H13c-2.209,0-4-1.791-4-4v-19C9,22.444,9.448,21.997,10,21.997z M27,43.996v-12h-6v12l0,0H27L27,43.996z" fill="#fff" fill-rule="evenodd" id="home"></path></svg>-->
-                                              <!--</span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--&lt;!&ndash;<li class="uk-active"><a&ndash;&gt;-->
-                <!--&lt;!&ndash;href="/index.php?option=com_content&amp;view=article&amp;id=292&amp;Itemid=1860"><img&ndash;&gt;-->
-                <!--&lt;!&ndash;class="uk-responsive-height"&ndash;&gt;-->
-                <!--&lt;!&ndash;src="http://dl119.madgik.di.uoa.gr/images/site_images/Home-icon.png"&ndash;&gt;-->
-                <!--&lt;!&ndash;alt="home"></a></li>&ndash;&gt;-->
-                <!--<li uk-tooltip="title: Search in OA. Link your research; pos: bottom-left; cls: uk-active tooltipStyling uk-width-auto">-->
-                  <!--<a href="https://explore.openaire.eu" target="_blank">Explore</a>-->
-                <!--</li>-->
-                <!--<li uk-tooltip="title: Content Provider Dashboard; pos: bottom-left; cls: uk-active tooltipStyling uk-width-auto" class="custom-provide-li">-->
-                  <!--<a href="https://provide.openaire.eu" target="_blank">Provide</a>-->
-                <!--</li>-->
-                <!--<li uk-tooltip="title: Research Community Dashboard; pos: bottom-left; cls: uk-active tooltipStyling uk-width-auto">-->
-                  <!--<a href="https://connect.openaire.eu" target="_blank">Connect</a>-->
-                <!--</li>-->
-                <!--<li uk-tooltip="title: Monitoring Dashboard; pos: bottom-left; cls: uk-active tooltipStyling uk-width-auto">-->
-                  <!--<a href="https://monitor.openaire.eu" target="_blank">Monitor</a>-->
-                <!--</li>-->
-                <!--<li uk-tooltip="title: APIs; pos: bottom-left; cls: uk-active tooltipStyling uk-width-auto">-->
-                  <!--<a href="https://develop.openaire.eu" target="_blank">Develop</a>-->
-                <!--</li>-->
-              <!--</ul>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-
-    <!--</div>-->
-  <!--</div>-->
-
-<!--&lt;!&ndash;<div class="tm-header uk-visible@m tm-header-transparent" uk-header="">&ndash;&gt;-->
-<!--&lt;!&ndash;<div class="uk-navbar-container uk-sticky uk-navbar-transparent" uk-sticky="top:0" media="768"&ndash;&gt;-->
-<!--&lt;!&ndash;cls-active="uk-active uk-navbar-sticky" style="" animation="uk-animation-slide-top"&ndash;&gt;-->
-<!--&lt;!&ndash;top=".tm-header + [class*=&quot;uk-section&quot;]" cls-inactive="uk-navbar-transparent">&ndash;&gt;-->
-
-  <!--<div class="main-menu tm-header uk-visible@m tm-header-transparent">-->
-    <!--<div class="uk-navbar-container uk-sticky uk-navbar-transparent" style="background-color: rgb(255, 255, 255);">-->
-      <!--<div class="uk-container uk-container-expand">-->
-        <!--<nav class="uk-navbar" uk-navbar="{&quot;align&quot;:&quot;left&quot;}">-->
-          <!--<div class="uk-navbar-left">-->
-            <!--<a class="uk-navbar-item uk-logo" href="https://www.openaire.eu">-->
-              <!--<img src="../../../assets/images/Logo_Horizontal.png" alt="OpenAIRE"-->
-                   <!--class="uk-responsive-height"> </a>-->
-          <!--</div>-->
-          <!--<div class="uk-navbar-right">-->
-            <!--<ul class="uk-navbar-nav">-->
-              <!--<li class="uk-active uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">-->
-                <!--<a routerLink="/search" routerLinkActive="uk-active">Catalogue</a>-->
-                <!--<ul class="uk-nav uk-navbar-dropdown-nav">-->
-                  <!--<li><a href="/search;query=Researchers">Researchers</a></li>-->
-                  <!--<li><a href="/search;query=Content Providers">Content Providers</a></li>-->
-                  <!--<li><a href="/search;query=Research Managers">Research Managers</a></li>-->
-                  <!--<li><a href="/search;query=Funders">Funders</a></li>-->
-                  <!--<li><a href="/search;query=Research Communities">Research Communities</a></li>-->
-                  <!--<li><a href="/search;query=Innovators">Innovators</a></li>-->
-                  <!--<li class="emphasized_menu">-->
-                    <!--<a href="/search">Browse all</a>-->
-                  <!--</li>-->
-                <!--</ul>-->
-              <!--</li>-->
-
-              <!--<li *ngIf="authenticationService.isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">-->
-                <!--<a href="#" class="" aria-expanded="false">-->
-                <!--<span> {{authenticationService.getUserName()}} {{authenticationService.getUserSurname()}}-->
-                  <!--<span class="uk-margin-small-right uk-icon">-->
-                    <!--<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" ratio="1"><circle-->
-                      <!--fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4" r="4.4"></circle>-->
-                      <!--<path fill="none"-->
-                            <!--stroke="#000"-->
-                            <!--stroke-width="1.1"-->
-                            <!--d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">-->
-                      <!--</path>-->
-                    <!--</svg>-->
-                  <!--</span>-->
-                <!--</span>-->
-                <!--</a>-->
-                <!--<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="top: 80px; left: 106.55px;" id="user" (click)="onClick('support')">-->
-                  <!--<div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">-->
-                    <!--<div class="uk-first-column">-->
-                      <!--<ul class="uk-nav uk-navbar-dropdown-nav">-->
-                        <!--<li><a routerLink="/home" (click)="this.authenticationService.logout()">Log out</a></li>-->
-                      <!--</ul>-->
-                    <!--</div>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</li>-->
-
-              <!--<li *ngIf="!authenticationService.isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">-->
-                <!--<a class="loginLink" (click)="authenticationService.login()">Log In</a>-->
-              <!--</li>-->
-
-            <!--</ul>-->
-          <!--</div>-->
-        <!--</nav>-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="uk-sticky-placeholder" style="height: 80px; margin: 0px;" hidden="hidden"></div>-->
-  <!--</div>-->
-<!--</div>-->

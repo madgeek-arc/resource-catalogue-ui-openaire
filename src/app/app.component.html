@@ -1,11 +1,5 @@
 <div class="uk-offcanvas-content">
   <app-top-menu-aire *ngIf="!isLoginOrRegister"></app-top-menu-aire>
-  <div style="margin-top: 132px;"></div>
-  <!--<div style="margin-top: 159px;"></div>-->
-  <!--<app-breadcrumbs *ngIf="router.url != '/home' && router.url != '/' && !isDashboardRoute()"></app-breadcrumbs>-->
-  <!--<div style="min-height: 80px">-->
-    <!--<router-outlet></router-outlet>-->
-  <!--</div>-->
   <router-outlet></router-outlet>
 <!--  <app-feedback></app-feedback>-->
   <ng-container *ngIf="!isDashboardRoute(); else dashboard">
