@@ -1,8 +1,12 @@
 <div *ngIf="datasource; else elseBLock" class="uk-container uk-margin-top">
-  <hi class="uk-flex uk-flex-center uk-margin">{{datasource.officialname}}</hi>
+  <h1 class="uk-flex uk-flex-center uk-margin">{{datasource.officialname}}</h1>
 
-  <div class="uk-margin">
+  <div *ngIf="datasource.description" class="uk-margin-bottom">
     <p>{{datasource.description}}</p>
+  </div>
+
+  <div *ngIf="datasource.websiteurl" class="uk-margin-bottom">
+    <a href="{{datasource.websiteurl}}">{{datasource.websiteurl}}</a>
   </div>
 
 </div>
