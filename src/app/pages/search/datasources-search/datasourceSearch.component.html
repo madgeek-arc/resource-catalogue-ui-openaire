@@ -23,28 +23,46 @@
       <!--FILTERS LAPTOP & PAD LANDSCAPE-->
       <aside id="tm-sidebar" class="tm-sidebar uk-width-1-4@m uk-visible@m">
 
-        <div *ngIf="searchResults.facets.length > 0" class="sidemenu refines">
+        <div *ngIf="datasourceTypes?.terms.length > 0 && searchResults" class="sidemenu refines">
 
           <p class="big-text-header">Filters</p>
-
           <div class="uk-margin-medium-top">
+            <p class="big-text uk-inline">Types</p>
 
-            <ng-template ngFor let-facet [ngForOf]="searchResults.facets">
-              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
-                        || facet.field === 'portfolios'" class="uk-margin-medium-top">
-                <read-more [maxHeight]="235">
-                  <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
-                                                                      (click)="clearSelections($event, facet.field)">Clear</a>
-                  <div class="refineOption" *ngFor="let facetValue of facet.values">
-                    <input type="checkbox" class="" (change)="this.onSelection($event, facet.field, facetValue.value)"
-                           [checked]="facetValue.isChecked">
-                    {{facetValue.label}}
-                    <span>({{facetValue.count}})</span>
-                  </div>
-                </read-more>
-              </div>
-            </ng-template>
+            <div class="uk-margin-small-bottom">
+              <label>
+                <input class="uk-margin-small-right uk-radio" type="radio" name="type" value=""
+                       [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType)">
+                All
+              </label>
+            </div>
+            <div *ngFor="let type of datasourceTypes.terms" class="uk-margin-small-bottom">
+              <label>
+                <input class="uk-margin-small-right uk-radio" type="radio" name="type" value="{{type.code}}"
+                       [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType)">
+                {{type.englishName}}
+              </label>
+            </div>
           </div>
+
+<!--          <div class="uk-margin-medium-top">-->
+
+<!--            <ng-template ngFor let-facet [ngForOf]="searchResults.facets">-->
+<!--              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'-->
+<!--                        || facet.field === 'portfolios'" class="uk-margin-medium-top">-->
+<!--                <read-more [maxHeight]="235">-->
+<!--                  <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"-->
+<!--                                                                      (click)="clearSelections($event, facet.field)">Clear</a>-->
+<!--                  <div class="refineOption" *ngFor="let facetValue of facet.values">-->
+<!--                    <input type="checkbox" class="" (change)="this.onSelection($event, facet.field, facetValue.value)"-->
+<!--                           [checked]="facetValue.isChecked">-->
+<!--                    {{facetValue.label}}-->
+<!--                    <span>({{facetValue.count}})</span>-->
+<!--                  </div>-->
+<!--                </read-more>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </div>-->
 
         </div>
 

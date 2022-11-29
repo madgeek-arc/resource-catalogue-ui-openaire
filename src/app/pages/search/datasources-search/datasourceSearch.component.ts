@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DatasourceDetails} from '../../../entities/datasource';
+import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
 import {Paging} from '../../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../../shared/pipes/premium-sort.pipe';
@@ -23,8 +23,10 @@ export class DatasourceSearchComponent implements OnInit {
 
   public projectName = environment.projectName;
   searchResults: Paging<DatasourceDetails> = null;
+  datasourceTypes: DatasourceTypes = null
   private sortFacets = new PremiumSortFacetsPipe();
   searchQuery: string = null;
+  eoscDatasourceType: string = '';
   orderField: string = 'registrationdate';
   order: string = 'desc';
 
@@ -67,6 +69,11 @@ export class DatasourceSearchComponent implements OnInit {
       );
     });
 
+    this.datasourceService.getDatasourceTypes().subscribe(
+      res => {this.datasourceTypes = res},
+      error => {console.log(error)}
+    );
+
     fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
       map((event: any) => { // get value
         return event.target.value;
@@ -91,6 +98,9 @@ export class DatasourceSearchComponent implements OnInit {
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {
+      if (urlParameter.key === 'eoscDatasourceType') {
+        this.eoscDatasourceType = urlParameter.values[0];
+      }
       if (urlParameter.key === 'orderField') {
         this.orderField = urlParameter.values[0];
       }

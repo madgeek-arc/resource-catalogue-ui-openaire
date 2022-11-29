@@ -49,3 +49,19 @@ export class IdentitiesDetails {
   pid: string;
   issuertype: string;
 }
+
+export class DatasourceTypes {
+  id: string;
+  name: string;
+  description: string;
+  code: string;
+  terms: Term[];
+}
+
+export class Term {
+  englishName: string;
+  nativeName: string;
+  encoding: string;
+  code: string;
+  synonyms: string
+}
