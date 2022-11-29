@@ -1,0 +1,15 @@
+<div *ngIf="datasource; else elseBLock" class="uk-container uk-margin-top">
+  <hi class="uk-flex uk-flex-center uk-margin">{{datasource.officialname}}</hi>
+
+  <div class="uk-margin">
+    <p>{{datasource.description}}</p>
+  </div>
+
+</div>
+<ng-template #elseBLock class="uk-container uk-margin-top uk-flex uk-flex-center">
+  <div class="uk-card uk-text-warning">
+    We can't find the datasource you are looking for.
+  </div>
+</ng-template>
+
+<pre>{{datasource | json}}</pre>

@@ -34,7 +34,8 @@ import {DataSharingService} from './services/data-sharing.service';
 import {AuthenticationInterceptor} from './services/authentication-interceptor';
 import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
-import {DynamicFormModule} from '../catalogue-ui/pages/dynamic-form/dynamic-form.module';
+import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
+import {Datasource} from './pages/landingpages/datasource/datasource';
 
 
 declare var require: any;
@@ -44,6 +45,8 @@ declare var require: any;
     AppComponent,
     HomeAireComponent,
     SearchAireComponent,
+    DatasourceSearchComponent,
+    Datasource,
     PortfolioItemComponent,
     UserItemComponent,
     // ServiceLandingPageComponent,
