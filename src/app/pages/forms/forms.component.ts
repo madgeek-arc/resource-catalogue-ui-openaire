@@ -41,12 +41,12 @@ export class FormsComponent implements OnInit{
         if (this.resourceId) {
           zip(
             this.resourceService.getResource(this.resourceId),
-            this.formService.getFormModelById('m-rEmtKuZd'),
+            this.formService.getFormModelByName('OpenAIRE service'),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
               this.payloadAnswer = {'answer': {'Service': {}}};
               this.payloadAnswer['answer'].Service = next[0];
-              this.model = next[1];
+              this.model = next[1].results[0];
               this.vocabulariesMap = next[2];
             },
             error => {console.log(error)},
