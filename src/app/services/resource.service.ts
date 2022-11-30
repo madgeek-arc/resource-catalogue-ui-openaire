@@ -88,9 +88,7 @@ export class ResourceService {
   }
 
   getServicesByIdArray(idArray: string[]) {
-    let params = new HttpParams();
-    params = params.append('quantity','100');
-    return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`, {params});
+    return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`);
   }
 
   getServicesByIndexedField(field: string, vocabularyType: string) {

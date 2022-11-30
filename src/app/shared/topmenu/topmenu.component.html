@@ -107,7 +107,9 @@
             <div class="uk-flex-row">
               <ul class="uk-navbar-nav">
                 <li>
-                  <a class="default-menu-item">Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i></a>
+                  <a [routerLink]="['/search']" class="default-menu-item">
+                    Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i>
+                  </a>
                   <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
 
                     <div class="uk-grid uk-grid-column-medium uk-margin-medium-bottom">
@@ -141,6 +143,9 @@
                     </div>
 
                   </div>
+                </li>
+                <li>
+                  <a [routerLink]="['/datasources/search']" class="default-menu-item">Datasources</a>
                 </li>
               </ul>
             </div>
