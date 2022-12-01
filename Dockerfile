@@ -1,5 +1,5 @@
 ### Install and Build ###
-FROM node:lts AS build
+FROM node:14 AS build
 
 WORKDIR /usr/src/app
 
@@ -13,10 +13,10 @@ RUN npm run build:prod
 ### Create Container ###
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/nginx.conf.tmpl
-COPY env_variables.sh /usr/share/nginx/
+COPY nginx.conf.txt /etc/nginx/nginx.conf.txt
+COPY init.sh /
 COPY --from=build /usr/src/app/dist/resource-catalogue-ui /usr/share/nginx/html
 
 RUN apk update && apk add bash
-ENTRYPOINT ["/bin/bash", "/usr/share/nginx/env_variables.sh"]
+ENTRYPOINT ["/bin/bash", "/init.sh"]
 EXPOSE 80
