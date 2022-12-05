@@ -6,7 +6,7 @@
 
     <div *ngIf="errorMessage" id="errorAlert" class="uk-alert-danger" uk-alert>
       <a class="uk-alert-close" uk-close></a>
-      <p>{{errorMessage}}</p>
+      <pre class="uk-alert-danger">{{errorMessage}}</pre>
     </div>
 
     <app-survey [answer]="payloadAnswer" [model]="model" [vocabulariesMap]="vocabulariesMap" [tabsHeader]=""

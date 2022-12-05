@@ -5,7 +5,7 @@ import {FormControlService} from '../../../catalogue-ui/services/form-control.se
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
 import {zip} from 'rxjs/internal/observable/zip';
-import {Vocabulary} from '../../entities/eic-model';
+import {Service, Vocabulary} from '../../entities/eic-model';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 
 import * as uikit from 'uikit';
@@ -78,9 +78,18 @@ export class FormsComponent implements OnInit{
 
   submitForm(value) {
     this.ready = false;
+    // console.log(value[0].get('Service').value);
+    let service: Service = value[0].get('Service').value;
     // for (const element in value[0].get('Service').controls) {
     //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
+    //   console.log(value[0].get('Service').get(element).value);
     // }
+    if (!!service.multimedia[0].multimediaURL) {
+      service.multimedia[0] = null;
+    }
+    if (!!service.useCases[0].useCaseURL) {
+      service.useCases[0] = null;
+    }
     if (value[1]) {
       this.resourceService.editService(value[0].value).subscribe(
         next => {
@@ -88,7 +97,7 @@ export class FormsComponent implements OnInit{
         },
         error => {
           console.log(error);
-          this.errorMessage = error.error.message;
+          this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
           this.ready = true;
         }
       );
@@ -99,7 +108,7 @@ export class FormsComponent implements OnInit{
         },
         error => {
           console.log(error);
-          this.errorMessage = error.error.message;
+          this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
           this.ready = true;
         }
       );

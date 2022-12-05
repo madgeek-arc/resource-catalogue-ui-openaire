@@ -50,6 +50,7 @@ const appRoutes: Routes = [
   {
     path: 'form',
     component: FormsComponent,
+    // canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'forms'
     }
