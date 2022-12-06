@@ -167,12 +167,12 @@ export class ResourceService {
     return places;
   }
 
-  postService(service: object) {
-    return this.http.post<Service>(this.base + '/services', service[Object.keys(service)[0]], this.options);
+  postService(service: Service) {
+    return this.http.post<Service>(this.base + '/services', service, this.options);
   }
 
-  editService(service: object) {
-    return this.http.put<Service>(this.base + `/services/${service[Object.keys(service)[0]].id}`, service[Object.keys(service)[0]], this.options);
+  editService(service: Service) {
+    return this.http.put<Service>(this.base + `/services/${service.id}`, service, this.options);
   }
 
   getServiceHistory(serviceId: string) {

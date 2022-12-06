@@ -79,19 +79,21 @@ export class FormsComponent implements OnInit{
   submitForm(value) {
     this.ready = false;
     // console.log(value[0].get('Service').value);
-    let service: Service = value[0].get('Service').value;
+    let service: Service = {...value[0].get('Service').value};
     // for (const element in value[0].get('Service').controls) {
     //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
     //   console.log(value[0].get('Service').get(element).value);
     // }
-    if (!!service.multimedia[0].multimediaURL) {
-      service.multimedia[0] = null;
+    if (!service.multimedia[0].multimediaURL) {
+      service.multimedia = null;
     }
-    if (!!service.useCases[0].useCaseURL) {
-      service.useCases[0] = null;
+    if (!service.useCases[0].useCaseURL) {
+      service.useCases = null;
     }
+    console.log(value[0].get('Service').value);
+    console.log(service);
     if (value[1]) {
-      this.resourceService.editService(value[0].value).subscribe(
+      this.resourceService.editService(service).subscribe(
         next => {
           this.router.navigate([`/service/${next.id}/overview`]);
         },
@@ -102,7 +104,7 @@ export class FormsComponent implements OnInit{
         }
       );
     } else {
-      this.resourceService.postService(value[0].value).subscribe(
+      this.resourceService.postService(service).subscribe(
         next => {
           this.router.navigate([`/service/${next.id}/overview`]);
         },
