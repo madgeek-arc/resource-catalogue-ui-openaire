@@ -193,6 +193,14 @@ export class ResourceService {
     return this.http.put<Service>(this.base + `/services/${service.id}`, service, this.options);
   }
 
+  postDatasource(datasource: Datasource) {
+    return this.http.post<Datasource>(this.base + '/services', datasource, this.options);
+  }
+
+  editDatasource(datasource: Datasource) {
+    return this.http.put<Datasource>(this.base + `/datasources/${datasource.id}`, datasource, this.options);
+  }
+
   getServiceHistory(serviceId: string) {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
   }

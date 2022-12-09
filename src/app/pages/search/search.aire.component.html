@@ -302,9 +302,29 @@
 
 
 <div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService" class="uk-float-right" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
-  <a [routerLink]="['/provider/openaire/resource/add']" class="uk-icon-button uk-button-secondary" style="padding: 30px;" >
+  <a href="#modal" uk-toggle class="uk-icon-button uk-button-secondary" style="padding: 30px;" >
     <i class="fa fa-2x fa-plus"></i>
   </a>
+</div>
+
+<!-- Choose service or datasource -->
+<div id="modal" class="uk-flex-top" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+<!--    <h2 class="uk-modal-title">Headline</h2>-->
+    <p class="uk-text-center">Do you want to add an new <span class="uk-text-italic">Service</span> or <span class="uk-text-italic">Datasource</span>?</p>
+    <div class="uk-grid">
+    <div class="uk-width-1-2 uk-flex uk-flex-center">
+      <button class="uk-button uk-button-primary uk-modal-close" [routerLink]="['/provider/openaire/datasource/add']" type="button">
+        Datasource
+      </button>
+    </div>
+    <div class="uk-width-1-2 uk-flex uk-flex-center">
+      <button class="uk-button uk-button-primary uk-modal-close" [routerLink]="['/provider/openaire/service/add']" type="button">
+        Service
+      </button>
+    </div>
+    </div>
+  </div>
 </div>
 
 <div class="uk-float-right uk-hidden@m" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">

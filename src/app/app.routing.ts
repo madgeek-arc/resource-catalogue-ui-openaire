@@ -40,7 +40,7 @@ const appRoutes: Routes = [
     }
   },
   {
-    path: 'provider/:providerId/resource/add',
+    path: 'provider/:providerId/:resourceType/add',
     component: FormsComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
