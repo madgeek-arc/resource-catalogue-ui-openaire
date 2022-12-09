@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Provider, Service, Vocabulary} from '../../entities/eic-model';
+import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
@@ -26,7 +26,7 @@ export class SearchAireComponent implements OnInit {
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
   myProviders:  Provider[] = [];
-  searchResults: Paging<Service> = null;
+  searchResults: Paging<Service | Datasource> = null;
   private sortFacets = new PremiumSortFacetsPipe();
   advanced = false;
   listViewActive = true;
@@ -81,7 +81,7 @@ export class SearchAireComponent implements OnInit {
           error => {console.log(error);}
       );
 
-      this.resourceService.search(this.urlParameters).subscribe(
+      this.resourceService.searchWithDatasource(this.urlParameters).subscribe(
         searchResults => {
           this.updateSearchResultsSnippets(searchResults);
         },
@@ -116,7 +116,7 @@ export class SearchAireComponent implements OnInit {
     }
   }
 
-  updateSearchResultsSnippets(searchResults: Paging<Service>) {
+  updateSearchResultsSnippets(searchResults: Paging<Service | Datasource>) {
     // INITIALISATIONS
     this.errorMessage = null;
     this.searchResults = searchResults;

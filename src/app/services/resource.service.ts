@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap} from '../entities/portfolioMap';
@@ -45,6 +45,10 @@ export class ResourceService {
     return this.http.get<Service>(this.base + `/services/${resourceId}`, this.options);
   }
 
+  getServiceOrDatasource(resourceId: string) {
+    return this.http.get<Service | Datasource>(this.base + `/catalogue-resources/${resourceId}`, this.options);
+  }
+
   search(urlParameters: URLParameter[]) {
     let searchQuery = new HttpParams();
     for (const urlParameter of urlParameters) {
@@ -53,6 +57,20 @@ export class ResourceService {
       }
     }
     return this.http.get<Paging<Service>>(this.base + `/services?${searchQuery.toString()}`, this.options);
+  }
+
+  getResourceTypeById(id: string) {
+    return this.http.get(this.base + `/catalogue-resources/${id}/resourceType`);
+  }
+
+  searchWithDatasource(urlParameters: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
+    }
+    return this.http.get<Paging<Service | Datasource>>(this.base + `/catalogue-resources`, {params: searchQuery});
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {

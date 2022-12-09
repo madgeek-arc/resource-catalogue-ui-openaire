@@ -117,7 +117,9 @@
                         <div class="uk-flex uk-flex-between">
                           <h5 class="uk-flex-left uk-margin-bottom">Services</h5>
                           <div class="uk-flex-right uk-flex">
-                            <button class="uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                            <button class="uk-button uk-button-secondary" [routerLink]="['/search']" (click)="hideDrop()">
+                              Explore all
+                            </button>
                           </div>
                         </div>
                         <hr>

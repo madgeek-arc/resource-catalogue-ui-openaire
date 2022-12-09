@@ -26,6 +26,7 @@ export class FormsComponent implements OnInit{
   subVocabulariesMap: Map<string, object[]> = null
   premiumSort = new PremiumSortPipe();
   resourceId: string = null;
+  resourceType: string = null;
   payloadAnswer: object = null; // Find a way to do this better
   ready: boolean = false
   errorMessage: string = null;
@@ -39,28 +40,33 @@ export class FormsComponent implements OnInit{
       params => {
         this.resourceId = params['resourceId']
         if (this.resourceId) {
-          zip(
-            this.resourceService.getResource(this.resourceId),
-            this.formService.getFormModelByName('OpenAIRE service'),
-            this.resourceService.getUiVocabularies()).subscribe(
-            next => {
-              this.payloadAnswer = {'answer': {'Service': {}}};
-              this.payloadAnswer['answer'].Service = next[0];
-              this.model = next[1].results[0];
-              this.vocabulariesMap = next[2];
-            },
-            error => {console.log(error)},
-            () => {
-              this.prepareVocabularies();
-              this.ready = true;
+          this.resourceService.getResourceTypeById(this.resourceId).subscribe(
+            res => {
+              this.resourceType = res['resourceType'];
+              zip(
+                this.resourceService.getServiceOrDatasource(this.resourceId),
+                this.formService.getFormModelByType(this.resourceType),
+                this.resourceService.getUiVocabularies()).subscribe(
+                next => {
+                  this.payloadAnswer = {'answer': {'Service': {}}};
+                  this.payloadAnswer['answer'].Service = next[0];
+                  this.model = next[1].results[0];
+                  this.vocabulariesMap = next[2];
+                },
+                error => {console.log(error)},
+                () => {
+                  this.prepareVocabularies();
+                  this.ready = true;
+                }
+              );
             }
-          );
+          )
         } else {
-          zip(
-            this.formService.getFormModelById('m-rEmtKuZd'),
+          zip( // FIXME
+            this.formService.getFormModelByType('service'), // It is not always service!
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
-              this.model = next[0];
+              this.model = next[0].results[0];
               this.vocabulariesMap = next[1];
             },
             error => {console.log(error)},

@@ -7,7 +7,6 @@ import {ReusableComponentsModule} from '../../shared/reusablecomponents/reusable
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {UpdateServiceProviderComponent} from './update-service-provider.component';
 import {NgSelectModule} from '@ng-select/ng-select';
-import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 
 
 @NgModule({
@@ -15,7 +14,6 @@ import {LMarkdownEditorModule} from 'ngx-markdown-editor';
     SharedModule,
     CommonModule,
     FormsModule,
-    LMarkdownEditorModule,
     ReactiveFormsModule,
     ProviderRouting,
     ReusableComponentsModule,

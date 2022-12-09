@@ -18,18 +18,14 @@ import {UserService} from './services/user.service';
 import {ComparisonService} from './services/comparison.service';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
-import {TreeviewModule} from 'ngx-treeview';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from './pages/provider/provider.module';
-import {MarkdownModule} from 'ngx-markdown';
-import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MatomoModule} from 'ngx-matomo';
 import {HighchartsChartModule} from 'highcharts-angular';
 import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
-import {ServiceLandingPageComponent} from './pages/landingpages/service/service-landing-page.component';
 import {DataSharingService} from './services/data-sharing.service';
 import {AuthenticationInterceptor} from './services/authentication-interceptor';
 import {FormsComponent} from './pages/forms/forms.component';
@@ -61,7 +57,6 @@ declare var require: any;
     ReactiveFormsModule,
     ReusableComponentsModule,
     SharedModule,
-    TreeviewModule.forRoot(),
     ProviderModule,
     HighchartsChartModule,
     CookieLawModule,
@@ -78,8 +73,6 @@ declare var require: any;
         enable: true
       }
     }),
-    LMarkdownEditorModule,
-    MarkdownModule.forRoot(),
     CatalogueUiModule,
     AppRoutingModule,
   ],

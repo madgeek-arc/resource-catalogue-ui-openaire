@@ -44,6 +44,9 @@ export class AireTopMenuComponent implements OnInit {
       this.router.navigate([url]));
   }
 
+  hideDrop() {
+    UIkit.drop('#ukDrop').hide(false);
+  }
 
   portfolioActive(portfolioItem: string) {
     this.portfolioItemActive = portfolioItem;

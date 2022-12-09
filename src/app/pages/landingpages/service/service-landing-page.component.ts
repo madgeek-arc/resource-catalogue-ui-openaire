@@ -2,11 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Provider, Service, URL} from '../../../entities/eic-model';
+import {AuthenticationService} from '../../../services/authentication.service';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from 'src/environments/environment';
-import {FormModel} from '../../../entities/dynamic-form-model';
 import {zip} from 'rxjs/internal/observable/zip';
-import {AuthenticationService} from '../../../services/authentication.service';
 
 @Component({
   selector: 'app-service-landing-page',
@@ -18,7 +17,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   projectName = environment.projectName;
   vocabularies: Map<string, object[]>;
-  model: FormModel[] = null;
   id: string;
   ready = false;
 
@@ -40,7 +38,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
         params => {
           this.id = params['id'];
           this.subscriptions.push(
-            zip(this.resourceService.getResource(this.id),
+            zip(this.resourceService.getServiceOrDatasource(this.id),
               this.resourceService.getUiVocabularies()).subscribe(
               next => {
                   this.resourcePayload = next[0];
