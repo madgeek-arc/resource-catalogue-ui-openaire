@@ -105,7 +105,7 @@ export class FormsComponent implements OnInit{
           },
           error => {
             console.log(error);
-            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
+            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId;
             this.ready = true;
           }
         );
@@ -116,7 +116,7 @@ export class FormsComponent implements OnInit{
           },
           error => {
             console.log(error);
-            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
+            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId;
             this.ready = true;
           }
         );
