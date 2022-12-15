@@ -9,7 +9,7 @@
       <pre class="uk-alert-danger">{{errorMessage}}</pre>
     </div>
 
-    <app-survey [answer]="payloadAnswer" [model]="model" [vocabulariesMap]="vocabulariesMap" [tabsHeader]=""
+    <app-survey [payload]="payloadAnswer" [model]="model" [vocabulariesMap]="vocabulariesMap" [tabsHeader]=""
                 [subVocabularies]="subVocabulariesMap" (submit)="submitForm($event)">
     </app-survey>
   </div>
