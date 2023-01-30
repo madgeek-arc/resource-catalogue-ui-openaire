@@ -13,6 +13,11 @@
           <p *ngIf="resourcePayload.extras['name']" class="big-text uk-text-primary">{{resourcePayload.extras['name']}}</p>
           <h1 *ngIf="resourcePayload.tagline">{{resourcePayload.tagline}} </h1>
           <p *ngIf="resourcePayload.extras['pitch']" class="regular-text uk-margin-medium-top" [innerHTML]="resourcePayload.extras['pitch']"></p>
+<!--          <div class="d-flex justify-content-center align-content-center">-->
+            <button *ngIf="resourcePayload.extras['ebook']" class="uk-button uk-button-primary" (click)="goto(resourcePayload.extras['ebook'])">
+              eBook <i class="fa fa-external-link"></i>
+            </button>
+<!--          </div>-->
         </div>
       </div>
 

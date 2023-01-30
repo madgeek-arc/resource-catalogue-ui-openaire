@@ -14,4 +14,19 @@ export class ResourcesAndSupportComponent {
     window.open(url.toString(), '_blank');
   }
 
+  badgeColor(status: string) {
+    switch (status) {
+      case 'Add':
+        return 'rgb(76, 137, 242)';
+      case 'Added':
+        return 'rgb(20, 179, 119)';
+      case 'Fixed':
+        return 'rgb(240, 80, 110)';
+      case 'Changed':
+        return 'rgb(76, 137, 242)';
+      case 'Removed':
+        return 'rgb(250, 160, 90)';
+    }
+  }
+
 }

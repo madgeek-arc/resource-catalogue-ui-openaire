@@ -241,8 +241,25 @@
           </div>
 
           <h5 class="uk-margin-medium-bottom">Change Log</h5>
-          <ng-container *ngIf="resourcePayload.changeLog?.length > 0 && resourcePayload.changeLog[0] != ''; else noChangeLog">
-            <p *ngFor="let log of resourcePayload.changeLog">{{log}}</p>
+          <ng-container *ngIf="resourcePayload.extras['openAireChangeLog']?.length > 0; else noChangeLog">
+            <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog']">
+              <div class="uk-child-width-1-1" uk-grid>
+                <div class="uk-margin-medium-top">
+                  <span class="fs-4">{{changeLog.changeLogVersion}}</span>
+                  <span class="fs-5 text-black-50"> ({{changeLog.changeDate | date}})</span>
+                </div>
+                <div *ngFor="let changes of changeLog.logs" class="uk-child-width-1-1 uk-margin-remove-top" uk-grid>
+                  <div class="uk-margin-small-top uk-width-1-1" uk-grid>
+                    <div class="uk-width-auto uk-margin-small-right">
+                      <div class="badge-success uk-text-center" style="width: 100px" [ngStyle]="{'background-color': badgeColor(changes.type)}">
+                        {{changes.type}}
+                      </div>
+                    </div>
+                    <div class="uk-width-expand text-black-50 uk-padding-remove-left">{{changes.value}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </ng-container>
           <ng-template #noChangeLog>
             <p>Nothing available</p>
@@ -343,7 +360,7 @@
   </div>
 </div>
 
-<!--TRAINING-->
+<!--SUPPORTING MATERIAL-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
   <div *ngIf="resourcePayload.extras['communityCalls'] !== '' || resourcePayload.extras['webinars'] !== ''
               || resourcePayload.extras['tutorials'] !== ''" class="uk-container uk-container-large uk-margin-top">
@@ -705,6 +722,186 @@
           <p class="el-content uk-panel uk-margin-top regular-text">Understand how to make the best use of the service.</p>
 
           <button (click)="goto(resourcePayload.extras['guides'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="resourcePayload.extras['ebook'] !== ''" class="uk-grid-margin uk-text-center">
+        <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
+
+          <img class="el-image uk-text-primary" alt="" uk-svg=""
+               uk-img="dataSrc:/demo/devstack/images/squared-icon-project-management.svg"
+               src="https://demo.yootheme.com/demo/devstack/images/squared-icon-project-management.svg" width="115"
+               hidden="">
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="115" viewBox="0 0 130 130"
+               class="el-image uk-text-primary uk-svg">
+
+            <defs>
+              <linearGradient id="svg-defs-gradient-squared-icon-project-management" x1="35" y1="95" x2="95" y2="35"
+                              gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#7141F1"></stop>
+                <stop offset="0.7" stop-color="#4D6BD8"></stop>
+                <stop offset="1" stop-color="#3183E2"></stop>
+              </linearGradient>
+              <mask id="svg-defs-mask-squared-icon-project-management">
+                <path class="uk-preserve"
+                      d="M76.26,60.08c-1.9.51.36,2.58-3.19,3.88-4.21,1.55-2.89-3-6.19,0s1.36,2.09-.52,6.16-4.18-.09-4.36,4.39,2.44.52,4,4.72-3,2.89,0,6.19,2.09-1.36,6.16.52-.09,4.18,4.39,4.36.52-2.44,4.72-4,2.89,3,6.19,0-1.36-2.09.52-6.16,4.18.09,4.36-4.39-2.44-.52-4-4.73,3-2.89,0-6.19-2.09,1.36-6.16-.52.09-4.17-4.39-4.36a5.69,5.69,0,0,0-1.54.11"
+                      fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="2"></path>
+                <circle class="uk-preserve" cx="77.17" cy="75.15" r="7.08" fill="none" stroke="#fff"
+                        stroke-linejoin="round" stroke-width="2"></circle>
+                <polyline class="uk-preserve" points="61.61 82.06 37.64 82.06 37.64 43.35 86.49 43.35 86.49 59.94"
+                          fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"></polyline>
+                <line class="uk-preserve" x1="37.64" y1="50.72" x2="86.49" y2="50.72" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                <line class="uk-preserve" x1="46.86" y1="39.66" x2="46.86" y2="46.12" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                <line class="uk-preserve" x1="77.28" y1="39.66" x2="77.28" y2="46.12" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+              </mask>
+            </defs>
+
+            <style>
+
+              img[src*="squared-icon-project-management.svg"] + svg {
+                filter: drop-shadow(20px 20px 20px rgba(60, 65, 124, 0.12)) drop-shadow(-20px -20px 20px rgba(255, 255, 255, 0.9));
+                will-change: filter;
+              }
+
+            </style>
+
+            <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
+            <image width="67" height="48" x=32 y=42 xlink:href="assets/images/icons/ebook%20icon.svg" clip-path="url(#myCircle)" />
+
+          </svg>
+
+          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">eBook</h5>
+
+          <p class="el-content uk-panel uk-margin-top regular-text">A downloadable magazine style document, with a brief introduction of the service, team, problem statement, solutions it offers, examples of good practices, and contact information to join the community.</p>
+
+          <button (click)="goto(resourcePayload.extras['ebook'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="resourcePayload.extras['pitchdeckPpt'] !== ''" class="uk-grid-margin uk-text-center">
+        <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
+
+          <img class="el-image uk-text-primary" alt="" uk-svg=""
+               uk-img="dataSrc:/demo/devstack/images/squared-icon-project-management.svg"
+               src="https://demo.yootheme.com/demo/devstack/images/squared-icon-project-management.svg" width="115"
+               hidden="">
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="115" viewBox="0 0 130 130"
+               class="el-image uk-text-primary uk-svg">
+
+            <defs>
+              <linearGradient id="svg-defs-gradient-squared-icon-project-management" x1="35" y1="95" x2="95" y2="35"
+                              gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#7141F1"></stop>
+                <stop offset="0.7" stop-color="#4D6BD8"></stop>
+                <stop offset="1" stop-color="#3183E2"></stop>
+              </linearGradient>
+              <mask id="svg-defs-mask-squared-icon-project-management">
+                <path class="uk-preserve"
+                      d="M76.26,60.08c-1.9.51.36,2.58-3.19,3.88-4.21,1.55-2.89-3-6.19,0s1.36,2.09-.52,6.16-4.18-.09-4.36,4.39,2.44.52,4,4.72-3,2.89,0,6.19,2.09-1.36,6.16.52-.09,4.18,4.39,4.36.52-2.44,4.72-4,2.89,3,6.19,0-1.36-2.09.52-6.16,4.18.09,4.36-4.39-2.44-.52-4-4.73,3-2.89,0-6.19-2.09,1.36-6.16-.52.09-4.17-4.39-4.36a5.69,5.69,0,0,0-1.54.11"
+                      fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="2"></path>
+                <circle class="uk-preserve" cx="77.17" cy="75.15" r="7.08" fill="none" stroke="#fff"
+                        stroke-linejoin="round" stroke-width="2"></circle>
+                <polyline class="uk-preserve" points="61.61 82.06 37.64 82.06 37.64 43.35 86.49 43.35 86.49 59.94"
+                          fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"></polyline>
+                <line class="uk-preserve" x1="37.64" y1="50.72" x2="86.49" y2="50.72" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                <line class="uk-preserve" x1="46.86" y1="39.66" x2="46.86" y2="46.12" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                <line class="uk-preserve" x1="77.28" y1="39.66" x2="77.28" y2="46.12" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+              </mask>
+            </defs>
+
+            <style>
+
+              img[src*="squared-icon-project-management.svg"] + svg {
+                filter: drop-shadow(20px 20px 20px rgba(60, 65, 124, 0.12)) drop-shadow(-20px -20px 20px rgba(255, 255, 255, 0.9));
+                will-change: filter;
+              }
+
+            </style>
+
+            <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
+            <image width="67" height="48" x=32 y=42 xlink:href="assets/images/icons/pitch_deck_icon.svg" clip-path="url(#myCircle)" />
+
+          </svg>
+
+          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">Pitch Deck</h5>
+
+          <p class="el-content uk-panel uk-margin-top regular-text">A downloadable presentation of the service value to users, ecosystem, solutions to problems, real life examples, how to start, the process and costs.</p>
+
+          <button (click)="goto(resourcePayload.extras['pitchdeckPpt'])" class="uk-button uk-button-text">
+            View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="resourcePayload.extras['mediakit'] !== ''" class="uk-grid-margin uk-text-center">
+        <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
+
+          <img class="el-image uk-text-primary" alt="" uk-svg=""
+               uk-img="dataSrc:/demo/devstack/images/squared-icon-project-management.svg"
+               src="https://demo.yootheme.com/demo/devstack/images/squared-icon-project-management.svg" width="115"
+               hidden="">
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="115" viewBox="0 0 130 130"
+               class="el-image uk-text-primary uk-svg">
+
+            <defs>
+              <linearGradient id="svg-defs-gradient-squared-icon-project-management" x1="35" y1="95" x2="95" y2="35"
+                              gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#7141F1"></stop>
+                <stop offset="0.7" stop-color="#4D6BD8"></stop>
+                <stop offset="1" stop-color="#3183E2"></stop>
+              </linearGradient>
+              <mask id="svg-defs-mask-squared-icon-project-management">
+                <path class="uk-preserve"
+                      d="M76.26,60.08c-1.9.51.36,2.58-3.19,3.88-4.21,1.55-2.89-3-6.19,0s1.36,2.09-.52,6.16-4.18-.09-4.36,4.39,2.44.52,4,4.72-3,2.89,0,6.19,2.09-1.36,6.16.52-.09,4.18,4.39,4.36.52-2.44,4.72-4,2.89,3,6.19,0-1.36-2.09.52-6.16,4.18.09,4.36-4.39-2.44-.52-4-4.73,3-2.89,0-6.19-2.09,1.36-6.16-.52.09-4.17-4.39-4.36a5.69,5.69,0,0,0-1.54.11"
+                      fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="2"></path>
+                <circle class="uk-preserve" cx="77.17" cy="75.15" r="7.08" fill="none" stroke="#fff"
+                        stroke-linejoin="round" stroke-width="2"></circle>
+                <polyline class="uk-preserve" points="61.61 82.06 37.64 82.06 37.64 43.35 86.49 43.35 86.49 59.94"
+                          fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"></polyline>
+                <line class="uk-preserve" x1="37.64" y1="50.72" x2="86.49" y2="50.72" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                <line class="uk-preserve" x1="46.86" y1="39.66" x2="46.86" y2="46.12" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                <line class="uk-preserve" x1="77.28" y1="39.66" x2="77.28" y2="46.12" fill="none" stroke="#fff"
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+              </mask>
+            </defs>
+
+            <style>
+
+              img[src*="squared-icon-project-management.svg"] + svg {
+                filter: drop-shadow(20px 20px 20px rgba(60, 65, 124, 0.12)) drop-shadow(-20px -20px 20px rgba(255, 255, 255, 0.9));
+                will-change: filter;
+              }
+
+            </style>
+
+            <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
+            <image width="67" height="48" x=32 y=42 xlink:href="assets/images/icons/media_kit_icon.svg" clip-path="url(#myCircle)" />
+
+          </svg>
+
+          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">Media kit</h5>
+
+          <p class="el-content uk-panel uk-margin-top regular-text">Downloadable promotional material about a service.</p>
+
+          <button (click)="goto(resourcePayload.extras['mediakit'])" class="uk-button uk-button-text">
             View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
           </button>
         </div>
