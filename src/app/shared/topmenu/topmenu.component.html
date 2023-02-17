@@ -36,7 +36,7 @@
                   <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
                     <h5 class="uk-text-center">Services</h5>
 
-                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of services | keyvalue">
+                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of resources | keyvalue">
                       <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
                       <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
                     </div>
@@ -124,12 +124,14 @@
                         </div>
                         <hr>
                         <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
-                          <div class="" *ngFor="let portfolio of services | keyvalue">
-                            <h6>{{portfolio.key}}</h6>
-<!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
-                            <div *ngFor="let service of portfolio.value" class=" uk-navbar-dropdown-close">
-                              <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
-                            </div>
+                          <div class="" *ngFor="let portfolio of resources | keyvalue">
+                            <ng-container *ngIf="portfolio.value.length > 0">
+                              <h6>{{portfolio.key}}</h6>
+  <!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
+                              <div *ngFor="let service of portfolio.value" class=" uk-navbar-dropdown-close">
+                                <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
+                              </div>
+                            </ng-container>
                           </div>
                         </div>
                       </div>

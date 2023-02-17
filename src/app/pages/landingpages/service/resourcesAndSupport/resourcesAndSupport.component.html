@@ -242,7 +242,7 @@
 
           <h5 class="uk-margin-medium-bottom">Change Log</h5>
           <ng-container *ngIf="resourcePayload.extras['openAireChangeLog']?.length > 0; else noChangeLog">
-            <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog']">
+            <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog'] | slice:0:2">
               <div class="uk-child-width-1-1" uk-grid>
                 <div class="uk-margin-medium-top">
                   <span class="fs-4">{{changeLog.changeLogVersion}}</span>
@@ -259,6 +259,9 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div *ngIf="resourcePayload.extras['openAireChangeLog'].length > 2" class="uk-flex uk-flex-center uk-margin-medium-top">
+              <a class="uk-link" [routerLink]="['../changeLog']">More logs <span uk-icon="icon: forward"></span></a>
             </div>
           </ng-container>
           <ng-template #noChangeLog>

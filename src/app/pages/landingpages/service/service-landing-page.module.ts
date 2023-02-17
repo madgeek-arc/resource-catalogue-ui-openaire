@@ -7,6 +7,7 @@ import {OverviewComponent} from './overview/overview.component';
 import {PricingComponent} from './pricing/pricing.component';
 import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSupport.component';
 import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
+import {ChangeLogComponent} from './resourcesAndSupport/changeLog/change-log.component';
 import {ReusableComponentsModule} from '../../../shared/reusablecomponents/reusable-components.module';
 
 @NgModule({
@@ -15,7 +16,8 @@ import {ReusableComponentsModule} from '../../../shared/reusablecomponents/reusa
     OverviewComponent,
     PricingComponent,
     ResourcesAndSupportComponent,
-    MiscellaneousComponent
+    MiscellaneousComponent,
+    ChangeLogComponent
   ],
   imports: [
     CommonModule,

@@ -5,7 +5,7 @@ import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
-import {PortfolioMap} from '../entities/portfolioMap';
+import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
 
 
 @Injectable()
@@ -109,15 +109,13 @@ export class ResourceService {
     return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`);
   }
 
-  getServicesByIndexedField(field: string, vocabularyType: string) {
-      let params = new HttpParams();
-      params = params.append('vocabularyType', vocabularyType);
-      return this.http.get<PortfolioMap>(this.base + `/services/by/${field}?`, {params});
-  }
-
   getService(id: string, version?: string) {
     // if version becomes optional this should be reconsidered
     return this.http.get<Service>(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`, this.options);
+  }
+
+  getResourcesGroupedByField(field: string) {
+    return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}`);
   }
 
   /** STATS **/
