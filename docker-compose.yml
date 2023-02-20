@@ -2,28 +2,45 @@ version: "3"
 
 services:
   platform:
-    image: resource-catalogue-ui                         # edit image name
+    image: openaire-catalogue-ui:latest                  # edit image name
 
     environment:
-    - PLATFORM_API_ENDPOINT=http://example.com  # edit api endpoint
-    - FAQ_API_ENDPOINT=http://example.com       # edit faq endpoint
-    - MATOMO_HOST=http://example.com/matomo     # edit matomo host
-    - MATOMO_SITE_ID=1                          # edit matomo site id
+      - ENABLE_SSL=TRUE                                  # set to FALSE if you don't want to install ssl certificate
+      - SSL_EMAIL=                                       # email associated with ssl certificate
+      - SERVER_NAME=example.org                          # edit server name
+      - PLATFORM_API_ENDPOINT=http://example.com/api     # edit api endpoint
+      - FAQ_API_ENDPOINT=http://example.com/faq          # edit faq endpoint
+      - MATOMO_HOST=http://example.com/matomo            # edit matomo host
+      - MATOMO_SITE_ID=1                                 # edit matomo site id
 
     ports:
-    - "80:80"
+      - "80:80"
+      - "443:443"
+
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
     networks:
-    - eic-net
+      - eic-net
 
     volumes:
-      - <my/images/dir>:/images
+      - ./data/nginx/conf.d:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
 
     deploy:
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 20
+
+  certbot:
+    image: certbot/certbot
+
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   eic-net:
