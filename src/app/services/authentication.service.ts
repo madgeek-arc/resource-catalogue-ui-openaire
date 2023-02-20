@@ -23,13 +23,13 @@ export class AuthenticationService {
   }
 
   login() {
-    window.location.href = this.base + '/login';
+    window.location.href = this.base + environment.AAI_LOGIN;
   }
 
   logout() {
     sessionStorage.clear();
     deleteCookie(this.cookieName);
-    window.location.href = this.base + '/logout';
+    window.location.href = `${environment.AAI_LOGOUT + window.location.origin + this.base}/logout`;
   }
 
   public isLoggedIn(): boolean {
