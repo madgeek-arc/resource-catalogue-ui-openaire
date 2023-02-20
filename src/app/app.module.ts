@@ -32,6 +32,7 @@ import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 declare var require: any;
@@ -75,6 +76,12 @@ declare var require: any;
     }),
     CatalogueUiModule,
     AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     AuthenticationService,
