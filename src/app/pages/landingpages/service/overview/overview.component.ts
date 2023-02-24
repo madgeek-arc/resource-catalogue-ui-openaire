@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {UiVocabulary} from '../../../../entities/dynamic-form-model';
-import {Service} from '../../../../entities/eic-model';
+import {Service, URL} from '../../../../entities/eic-model';
 import * as uikit from 'uikit';
 
 
@@ -74,6 +74,10 @@ export class OverviewComponent {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then( () => {
       this.router.navigate([url]);
     });
+  }
+
+  goto(url: string | URL) {
+    window.open(url.toString(), '_blank');
   }
 
 }

@@ -5,6 +5,7 @@ import {OverviewComponent} from './overview/overview.component';
 import {PricingComponent} from './pricing/pricing.component';
 import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSupport.component';
 import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
+import {ChangeLogComponent} from './resourcesAndSupport/changeLog/change-log.component';
 
 const serviceLandingPageRoutes: Routes = [
   {
@@ -34,6 +35,10 @@ const serviceLandingPageRoutes: Routes = [
       {
         path: 'miscellaneous',
         component: MiscellaneousComponent,
+      },
+      {
+        path: 'changeLog',
+        component: ChangeLogComponent,
       }
     ],
     runGuardsAndResolvers: 'always'

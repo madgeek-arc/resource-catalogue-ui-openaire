@@ -24,8 +24,8 @@ export class FormControlService implements OnInit{
     return this.http.get<Model>(this.base + `/forms/models/${id}`);
   }
 
-  getFormModelByType(type: string) {
-    return this.http.get<Paging<Model>>(this.base + `/forms/models?type=${type}`);
+  getFormModelByResourceType(type: string) {
+    return this.http.get<Paging<Model>>(this.base + `/forms/models?resourceType=${type}`);
   }
 
   getFormModelByName(name: string) {
@@ -33,7 +33,7 @@ export class FormControlService implements OnInit{
   }
 
   postItem(surveyId: string, item: any, edit:boolean) {
-    return this.http[edit ? 'put' : 'post'](this.base + `/answers/${surveyId}?chapterAnswerId=${item.id}`, item, this.options);
+    return this.http[edit ? 'put' : 'post'](this.base + `/answers/${surveyId}/answer`, item, this.options);
   }
 
   postGenericItem(resourceType: string, item, edit: boolean) {

@@ -1,18 +1,14 @@
 import {Component, Input} from '@angular/core';
-import {Service, URL} from '../../../../entities/eic-model';
+import {Service} from '../../../../../entities/eic-model';
 
 @Component({
-  selector: 'app-service-landing-page-resources-and-support',
-  templateUrl: 'resourcesAndSupport.component.html',
-  // styleUrls: ['../../landing-page.component.css']
+  selector: 'app-change-log',
+  templateUrl: 'change-log.component.html'
 })
-export class ResourcesAndSupportComponent {
+
+export class ChangeLogComponent {
 
   @Input() resourcePayload: Service = null;
-
-  goto(url: string | URL) {
-    window.open(url.toString(), '_blank');
-  }
 
   badgeColor(status: string) {
     switch (status) {

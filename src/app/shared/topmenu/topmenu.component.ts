@@ -5,6 +5,7 @@ import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {PortfolioMap} from '../../entities/portfolioMap';
 import * as UIkit from 'uikit';
+import {Datasource, Service} from '../../entities/eic-model';
 
 
 @Component({
@@ -15,7 +16,7 @@ import * as UIkit from 'uikit';
 
 export class AireTopMenuComponent implements OnInit {
 
-  services: PortfolioMap = null;
+  resources: Map<string, Service[] | Datasource[]> = null;
   refresh = false;
 
   public portfolioItemActive: string = null;
@@ -28,8 +29,9 @@ export class AireTopMenuComponent implements OnInit {
     this.dataSharingService.refreshRequired.subscribe( value => {
       this.refresh = value;
       if (this.refresh) {
-        this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
-          res => {this.services = res; },
+        // this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
+        this.resourceService.getResourcesGroupedByField('portfolios').subscribe(
+          res => {this.resources = res; },
           error => {console.log(error); },
           () => {this.dataSharingService.refreshRequired.next(false); }
         );
@@ -44,6 +46,9 @@ export class AireTopMenuComponent implements OnInit {
       this.router.navigate([url]));
   }
 
+  hideDrop() {
+    UIkit.drop('#ukDrop').hide(false);
+  }
 
   portfolioActive(portfolioItem: string) {
     this.portfolioItemActive = portfolioItem;

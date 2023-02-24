@@ -123,7 +123,7 @@
 
 <!--PORTFOLIO SECTIONS-->
 
-<div class="uk-section-default uk-preserve-color uk-section uk-section-large" *ngIf="portfolios && services">
+<div class="uk-section-default uk-preserve-color uk-section uk-section-large" *ngIf="portfolios && resources">
 
   <div class="uk-container uk-container-large">
 
@@ -164,7 +164,7 @@
 
                   <div class="uk-grid uk-child-width-1-2 uk-grid-match uk-grid-large">
 
-                    <div class="uk-margin-large-bottom" *ngFor="let service of services[portfolio.name] | slice:0:3;">
+                    <div class="uk-margin-large-bottom" *ngFor="let service of resources[portfolio.name] | slice:0:3;">
                       <div class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
                         <div class="uk-inline-clip">
                           <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{service['extras']['image']}}">

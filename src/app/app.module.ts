@@ -18,23 +18,21 @@ import {UserService} from './services/user.service';
 import {ComparisonService} from './services/comparison.service';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
-import {TreeviewModule} from 'ngx-treeview';
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from './pages/provider/provider.module';
-import {MarkdownModule} from 'ngx-markdown';
-import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MatomoModule} from 'ngx-matomo';
 import {HighchartsChartModule} from 'highcharts-angular';
 import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
-import {ServiceLandingPageComponent} from './pages/landingpages/service/service-landing-page.component';
 import {DataSharingService} from './services/data-sharing.service';
 import {AuthenticationInterceptor} from './services/authentication-interceptor';
 import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
-import {DynamicFormModule} from '../catalogue-ui/pages/dynamic-form/dynamic-form.module';
+import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
+import {Datasource} from './pages/landingpages/datasource/datasource';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 declare var require: any;
@@ -44,6 +42,8 @@ declare var require: any;
     AppComponent,
     HomeAireComponent,
     SearchAireComponent,
+    DatasourceSearchComponent,
+    Datasource,
     PortfolioItemComponent,
     UserItemComponent,
     // ServiceLandingPageComponent,
@@ -58,7 +58,6 @@ declare var require: any;
     ReactiveFormsModule,
     ReusableComponentsModule,
     SharedModule,
-    TreeviewModule.forRoot(),
     ProviderModule,
     HighchartsChartModule,
     CookieLawModule,
@@ -75,10 +74,14 @@ declare var require: any;
         enable: true
       }
     }),
-    LMarkdownEditorModule,
-    MarkdownModule.forRoot(),
     CatalogueUiModule,
     AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     AuthenticationService,

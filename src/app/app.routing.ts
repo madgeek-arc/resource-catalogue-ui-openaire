@@ -9,6 +9,8 @@ import {HomeAireComponent} from './pages/home/home.aire.component';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {FormsComponent} from './pages/forms/forms.component';
+import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
+import {Datasource} from './pages/landingpages/datasource/datasource';
 
 const appRoutes: Routes = [
   {
@@ -31,7 +33,14 @@ const appRoutes: Routes = [
     }
   },
   {
-    path: 'provider/:providerId/resource/add',
+    path: 'datasources/search',
+    component: DatasourceSearchComponent,
+    data: {
+      breadcrumb: 'Datasources'
+    }
+  },
+  {
+    path: 'provider/:providerId/:resourceType/add',
     component: FormsComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
@@ -41,6 +50,7 @@ const appRoutes: Routes = [
   {
     path: 'form',
     component: FormsComponent,
+    // canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'forms'
     }
@@ -60,12 +70,18 @@ const appRoutes: Routes = [
       breadcrumb: 'portfolio'
     }
   },
-
   {
     path: 'users/:id',
     component: UserItemComponent,
     data: {
       breadcrumb: 'Users'
+    }
+  },
+  {
+    path: 'datasource/:datasourceId',
+    component: Datasource,
+    data: {
+      breadcrumb: 'Datasource'
     }
   },
 

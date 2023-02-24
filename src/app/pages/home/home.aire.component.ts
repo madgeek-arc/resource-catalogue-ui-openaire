@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Vocabulary} from '../../entities/eic-model';
+import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {SearchQuery} from '../../entities/search-query';
 import {NavigationService} from '../../services/navigation.service';
 import {ResourceService} from '../../services/resource.service';
@@ -32,7 +32,7 @@ export class HomeAireComponent implements OnInit {
     {value: 'Data storage', icon: 'database_security.svg', hover: 'database_security_hover.svg'}
   ];
 
-  services: PortfolioMap;
+  resources: Map<string, Service[] | Datasource[]> = null;
   public portfolios: Vocabulary[] = null;
   public users: Vocabulary[] = null;
   public slide = 0;
@@ -58,8 +58,8 @@ export class HomeAireComponent implements OnInit {
       }
     );
 
-    this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
-      res => {this.services = res; },
+    this.resourceService.getResourcesGroupedByField('portfolios').subscribe(
+      res => {this.resources = res; },
       error => {console.log(error); }
     );
 

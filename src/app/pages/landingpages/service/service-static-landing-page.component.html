@@ -45,17 +45,17 @@
   <!--MOBILE & PAD PORTRAIT-->
   <ul class="uk-tab service-tabs" data-uk-tab="{connect:'#team_tabbed',animation: 'slide-bottom'}">
     <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-    <li *ngIf="resourcePayload.extras?.paymentCategories[0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
+    <li *ngIf="resourcePayload.extras?.['paymentCategories'][0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
       <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
     </li>
     <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
       <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
     </li>
-    <li *ngIf="resourcePayload.extras?.documentation !== ''">
-      <a href="{{resourcePayload.extras?.documentation}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a>
+    <li *ngIf="resourcePayload.extras?.['documentation'] !== ''">
+      <a href="{{resourcePayload.extras?.['documentation']}}" target="_blank" class="service-menu-item">Documentation <i class="fa fa-external-link uk-margin-small-left"></i></a>
     </li>
-    <li *ngIf="resourcePayload.extras?.roadmap !== ''">
-      <a href="{{resourcePayload.extras?.roadmap}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
+    <li *ngIf="resourcePayload.extras?.['roadmap'] !== ''">
+      <a href="{{resourcePayload.extras?.['roadmap']}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
     </li>
     <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
   </ul>

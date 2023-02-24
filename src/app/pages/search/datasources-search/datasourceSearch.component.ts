@@ -1,63 +1,53 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
-import {URLParameter} from '../../entities/url-parameter';
-import {Paging} from '../../entities/paging';
-import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
-import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ResourceService} from '../../services/resource.service';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ComparisonService} from '../../services/comparison.service';
-import {environment} from '../../../environments/environment';
+import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
+import {URLParameter} from '../../../entities/url-parameter';
+import {Paging} from '../../../entities/paging';
+import {PremiumSortFacetsPipe} from '../../../shared/pipes/premium-sort.pipe';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {DatasourceService} from '../../../services/datasource.service';
+import {environment} from '../../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {zip} from 'rxjs/internal/observable/zip';
 import {fromEvent} from 'rxjs';
 
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.aire.component.html'
+  templateUrl: './datasourceSearch.component.html',
+  providers: [DatasourceService]
 })
 
-export class SearchAireComponent implements OnInit {
+export class DatasourceSearchComponent implements OnInit {
 
   @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
 
   public projectName = environment.projectName;
-  canAddOrEditService: boolean;
-  myProviders:  Provider[] = [];
-  searchResults: Paging<Service | Datasource> = null;
+  searchResults: Paging<DatasourceDetails> = null;
+  datasourceTypes: DatasourceTypes = null
   private sortFacets = new PremiumSortFacetsPipe();
-  advanced = false;
-  listViewActive = true;
-  public showSearchFieldDropDown = true;
-  public searchFields: string[] = ['name', 'description', 'tagline', 'user value', 'user base', 'use cases'];
-  public serviceIdsArray: string[] = [];
-  vocabularies: Vocabulary[] = null;
   searchQuery: string = null;
+  eoscDatasourceType: string = '';
+  orderField: string = 'registrationdate';
+  order: string = 'desc';
 
   // Paging
   pages: number[] = [];
   offset = 2;
-  pageSize = 10;
+  pageSize = 20;
   totalPages = 0;
   currentPage = 0;
 
-  public searchForm: FormGroup;
   errorMessage: string;
   filtersMobileShown = false;
   urlParameters: URLParameter[] = [];
   loading = false;
 
 
-  constructor(public fb: FormBuilder, public router: Router, public route: ActivatedRoute,
-              public resourceService: ResourceService, public authenticationService: AuthenticationService,
-              public comparisonService: ComparisonService) {
-    this.searchForm = fb.group({'query': [''], 'searchFields': ['']});
+  constructor(public router: Router, public route: ActivatedRoute, public datasourceService: DatasourceService,
+              public authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
-    this.listViewActive = true;
     this.route.queryParams.subscribe(params => {
       this.urlParameters.splice(0, this.urlParameters.length);
       for (const obj in params) {
@@ -70,18 +60,7 @@ export class SearchAireComponent implements OnInit {
         }
       }
 
-      this.loading = true;
-      zip(
-        this.resourceService.getNewVocabulariesByType('Users'),
-        this.resourceService.getNewVocabulariesByType('Portfolios')).subscribe(
-          value => {
-            this.vocabularies = value[0].concat(value[1]);
-            this.loading = false;
-          },
-          error => {console.log(error);}
-      );
-
-      this.resourceService.searchWithDatasource(this.urlParameters).subscribe(
+      this.datasourceService.getDatasources(this.urlParameters).subscribe(
         searchResults => {
           this.updateSearchResultsSnippets(searchResults);
         },
@@ -89,6 +68,11 @@ export class SearchAireComponent implements OnInit {
       () => {this.paginationInit();}
       );
     });
+
+    this.datasourceService.getDatasourceTypes().subscribe(
+      res => {this.datasourceTypes = res},
+      error => {console.log(error)}
+    );
 
     fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
       map((event: any) => { // get value
@@ -102,21 +86,9 @@ export class SearchAireComponent implements OnInit {
         this.navigateUsingParameters();
       }
     );
-
-    this.canAddOrEditService = false;
-    if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
-      this.myProviders = [];
-      this.resourceService.getMyServiceProviders().subscribe(
-        res => this.myProviders = res,
-        error => console.log(error),
-        () => {
-          this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-        }
-      );
-    }
   }
 
-  updateSearchResultsSnippets(searchResults: Paging<Service | Datasource>) {
+  updateSearchResultsSnippets(searchResults: Paging<DatasourceDetails>) {
     // INITIALISATIONS
     this.errorMessage = null;
     this.searchResults = searchResults;
@@ -126,13 +98,17 @@ export class SearchAireComponent implements OnInit {
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === 'searchFields') {
-        this.searchForm.get('searchFields').setValue(urlParameter.values[0]);
+      if (urlParameter.key === 'eoscDatasourceType') {
+        this.eoscDatasourceType = urlParameter.values[0];
+      }
+      if (urlParameter.key === 'orderField') {
+        this.orderField = urlParameter.values[0];
+      }
+      if (urlParameter.key === 'order') {
+        this.order = urlParameter.values[0];
       }
       if (urlParameter.key === 'query') {
-        this.searchForm.get('query').setValue(urlParameter.values[0]);
-      } else if (urlParameter.key === 'advanced') {
-        this.advanced = urlParameter.values[0] === 'true';
+        this.searchQuery = urlParameter.values[0];
       } else {
         for (const facet of this.searchResults.facets) {
           if (facet.field === urlParameter.key) {
@@ -190,7 +166,7 @@ export class SearchAireComponent implements OnInit {
     for (const urlParameter of this.urlParameters) {
       map[urlParameter.key] = urlParameter.values.join(',');
     }
-    return this.router.navigate([`/search/`], {queryParams: map});
+    return this.router.navigate([`/datasources/search`], {queryParams: map});
   }
 
 
@@ -219,6 +195,12 @@ export class SearchAireComponent implements OnInit {
     this.filtersMobileShown = show;
   }
 
+  onSelect(key: string, value: string) {
+    console.log(key);
+    console.log(value);
+    this.updateURLParameters(key, value);
+    return this.navigateUsingParameters();
+  }
 
   clearSelections(e, category: string) {
     let categoryIndex = 0;
@@ -271,14 +253,6 @@ export class SearchAireComponent implements OnInit {
         values: [value]
       };
       this.urlParameters.push(newParameter);
-    }
-  }
-
-  getVocabularyName(id: string) {
-    for (const vocabulary of this.vocabularies) {
-      if (vocabulary.id === id) {
-        return vocabulary.name;
-      }
     }
   }
 

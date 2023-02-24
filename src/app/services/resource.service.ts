@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
-import {PortfolioMap} from '../entities/portfolioMap';
+import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
 
 
 @Injectable()
@@ -45,6 +45,10 @@ export class ResourceService {
     return this.http.get<Service>(this.base + `/services/${resourceId}`, this.options);
   }
 
+  getServiceOrDatasource(resourceId: string) {
+    return this.http.get<Service | Datasource>(this.base + `/catalogue-resources/${resourceId}`, this.options);
+  }
+
   search(urlParameters: URLParameter[]) {
     let searchQuery = new HttpParams();
     for (const urlParameter of urlParameters) {
@@ -53,6 +57,20 @@ export class ResourceService {
       }
     }
     return this.http.get<Paging<Service>>(this.base + `/services?${searchQuery.toString()}`, this.options);
+  }
+
+  getResourceTypeById(id: string) {
+    return this.http.get(this.base + `/catalogue-resources/${id}/resourceType`);
+  }
+
+  searchWithDatasource(urlParameters: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
+    }
+    return this.http.get<Paging<Service | Datasource>>(this.base + `/catalogue-resources`, {params: searchQuery});
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {
@@ -88,20 +106,16 @@ export class ResourceService {
   }
 
   getServicesByIdArray(idArray: string[]) {
-    let params = new HttpParams();
-    params = params.append('quantity','100');
-    return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`, {params});
-  }
-
-  getServicesByIndexedField(field: string, vocabularyType: string) {
-      let params = new HttpParams();
-      params = params.append('vocabularyType', vocabularyType);
-      return this.http.get<PortfolioMap>(this.base + `/services/by/${field}?`, {params});
+    return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`);
   }
 
   getService(id: string, version?: string) {
     // if version becomes optional this should be reconsidered
     return this.http.get<Service>(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`, this.options);
+  }
+
+  getResourcesGroupedByField(field: string) {
+    return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}`);
   }
 
   /** STATS **/
@@ -169,12 +183,20 @@ export class ResourceService {
     return places;
   }
 
-  postService(service: object) {
-    return this.http.post<Service>(this.base + '/services', service[Object.keys(service)[0]], this.options);
+  postService(service: Service) {
+    return this.http.post<Service>(this.base + '/services', service, this.options);
   }
 
-  editService(service: object) {
-    return this.http.put<Service>(this.base + `/services/${service[Object.keys(service)[0]].id}`, service[Object.keys(service)[0]], this.options);
+  editService(service: Service) {
+    return this.http.put<Service>(this.base + `/services/${service.id}`, service, this.options);
+  }
+
+  postDatasource(datasource: Datasource) {
+    return this.http.post<Datasource>(this.base + '/services', datasource, this.options);
+  }
+
+  editDatasource(datasource: Datasource) {
+    return this.http.put<Datasource>(this.base + `/datasources/${datasource.id}`, datasource, this.options);
   }
 
   getServiceHistory(serviceId: string) {

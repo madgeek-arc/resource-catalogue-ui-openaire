@@ -23,28 +23,46 @@
       <!--FILTERS LAPTOP & PAD LANDSCAPE-->
       <aside id="tm-sidebar" class="tm-sidebar uk-width-1-4@m uk-visible@m">
 
-        <div *ngIf="searchResults != null" class="sidemenu refines">
+        <div *ngIf="datasourceTypes?.terms.length > 0 && searchResults" class="sidemenu refines">
 
           <p class="big-text-header">Filters</p>
-
           <div class="uk-margin-medium-top">
+            <p class="big-text uk-inline">Types</p>
 
-            <ng-template ngFor let-facet [ngForOf]="searchResults.facets">
-              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
-                        || facet.field === 'portfolios'" class="uk-margin-medium-top">
-                <read-more [maxHeight]="235">
-                  <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
-                                                                      (click)="clearSelections($event, facet.field)">Clear</a>
-                  <div class="refineOption" *ngFor="let facetValue of facet.values">
-                    <input type="checkbox" class="" (change)="this.onSelection($event, facet.field, facetValue.value)"
-                           [checked]="facetValue.isChecked">
-                    {{facetValue.label}}
-                    <span>({{facetValue.count}})</span>
-                  </div>
-                </read-more>
-              </div>
-            </ng-template>
+            <div class="uk-margin-small-bottom">
+              <label>
+                <input class="uk-margin-small-right uk-radio" type="radio" name="type" value=""
+                       [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType)">
+                All
+              </label>
+            </div>
+            <div *ngFor="let type of datasourceTypes.terms" class="uk-margin-small-bottom">
+              <label>
+                <input class="uk-margin-small-right uk-radio" type="radio" name="type" value="{{type.code}}"
+                       [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType)">
+                {{type.englishName}}
+              </label>
+            </div>
           </div>
+
+<!--          <div class="uk-margin-medium-top">-->
+
+<!--            <ng-template ngFor let-facet [ngForOf]="searchResults.facets">-->
+<!--              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'-->
+<!--                        || facet.field === 'portfolios'" class="uk-margin-medium-top">-->
+<!--                <read-more [maxHeight]="235">-->
+<!--                  <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"-->
+<!--                                                                      (click)="clearSelections($event, facet.field)">Clear</a>-->
+<!--                  <div class="refineOption" *ngFor="let facetValue of facet.values">-->
+<!--                    <input type="checkbox" class="" (change)="this.onSelection($event, facet.field, facetValue.value)"-->
+<!--                           [checked]="facetValue.isChecked">-->
+<!--                    {{facetValue.label}}-->
+<!--                    <span>({{facetValue.count}})</span>-->
+<!--                  </div>-->
+<!--                </read-more>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </div>-->
 
         </div>
 
@@ -77,7 +95,8 @@
                 <div class="uk-flex uk-flex-between uk-flex-middle">
 
                   <p class="big-text uk-margin-remove">
-                    <span class="uk-text-bold">{{searchResults.total}}</span> Services, Page <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
+                    <span class="uk-text-bold">{{searchResults?.total}}</span> Datasources, Page
+                    <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
                   </p>
 
                   <ul class="uk-pagination uk-visible@m">
@@ -103,61 +122,70 @@
 
             </div>
 
-            <div *ngIf="listViewActive" class="uk-grid-margin-small">
+            <div class="uk-grid-margin-small">
 
-              <ng-container *ngFor="let resourceInfo of searchResults.results ; let i = index">
+              <div class="uk-inline">
+<!--                <div class="uk-flex uk-flex-center">-->
+                <div class="uk-inline uk-margin-right">
+                  <label class="uk-margin-small-right" for="orderBy">Order by: </label>
+                  <div class="uk-inline">
+                    <select id="orderBy" [(ngModel)]="orderField" [ngModelOptions]="{standalone: true}"
+                            (change)="onSelect('orderField', orderField)">
+                      <option value="registrationdate" selected="selected">Date</option>
+                      <option value="officialname">Name</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="uk-inline">
+                  <label class="uk-margin-small-right" for="sortBy">Sort by: </label>
+                  <div class="uk-inline">
+                    <select id="sortBy" [(ngModel)]="order" [ngModelOptions]="{standalone: true}"
+                            (change)="onSelect('order', order)">
+                      <option value="desc" selected>Descending</option>
+                      <option value="asc">Ascending</option>
+                    </select>
+                  </div>
+                </div>
+<!--                </div>-->
+              </div>
 
-                <a [routerLink]="['/service/' + resourceInfo.id]" class="serviceDetails">
+              <ng-container *ngFor="let datasource of searchResults.results ; let i = index">
+
+                <a [routerLink]="['/datasource/' + datasource.id]" class="serviceDetails">
                   <div class="uk-card uk-card-default uk-card-hover uk-margin-bottom">
 
                     <!--LAPTOP & PAD LANDSCAPE-->
                     <div class="service-details-card-content uk-visible@m uk-flex">
 
-                      <div *ngIf="resourceInfo.extras?.['portfolios']?.length > 0" class="portfolioSection">
+                      <div *ngIf="datasource.eoscDatasourceType" class="portfolioSection">
                         <div>
-<!--                          {{resourceInfo.extras.portfolios}}-->
-                          <span *ngFor="let portfolio of resourceInfo.extras['portfolios']; let i = index">
-                            <ng-container *ngIf="i!=0">, </ng-container>
-                            {{getVocabularyName(portfolio)}}
-                          </span>
+                          <span>{{datasource.eoscDatasourceType}}</span>
                         </div>
                       </div>
 
                       <div class="">
-                        <!--<div class="uk-grid" uk-grid="">-->
                         <div class="uk-flex">
 
                           <div class="uk-width-3-4@m uk-card-body">
                             <div>
                               <h5 class="uk-margin-remove uk-text-left@m uk-text-center uk-scrollspy-inview uk-animation-fade uk-inline"
                                 uk-scrollspy-class="" style="">
-                                {{resourceInfo.name || "Not Available"}}
+                                {{datasource.officialname || "Not Available"}}
                               </h5>
                             </div>
-                            <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">
-                              "{{resourceInfo.tagline}}"
-                            </p>
+                            <div *ngIf="datasource.websiteurl" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing"
+                                 uk-scrollspy-class="">
+                              <span class="field-label">Website URL: </span>
+                              <span class="field-value uk-margin-small-left">{{datasource.websiteurl}}</span>
+                            </div>
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
-                                 uk-scrollspy-class="" style="">
-                              <p [innerHTML]="resourceInfo.extras['pitch']"></p>
+                                 uk-scrollspy-class="">
+                              <p [innerHTML]="datasource.description"></p>
                             </div>
-
-                            <div *ngIf="resourceInfo.extras?.['users'][0]" class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
-                              <span class="field-label uk-margin-small-right">Users: </span>
-                              <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">
-                                <ng-container *ngIf="i!==0">, </ng-container>
-                                {{getVocabularyName(user)}}
-                              </span>
-                            </div>
-                            <div *ngIf="resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle"
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
-                              <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras['paymentCategories'][0]?.paymentTitle}}</span>
-                            </div>
-
                           </div>
 
                           <div class="uk-width-1-4@m uk-padding-remove uk-position-bottom-right uk-overlay uk-overlay-default service-image uk-flex uk-flex-bottom">
-                            <img src="{{resourceInfo.extras.image}}" style="border-radius: 0 6px 6px 0;" alt="resource image">
+                            <img src="{{datasource.logourl}}" style="border-radius: 0 6px 6px 0;" alt="resource image">
                           </div>
 
                         </div>
@@ -169,7 +197,7 @@
                     <div class="service-details-card-content uk-hidden@m">
 
                       <div class="uk-padding-remove service-image">
-                        <img src="{{resourceInfo.extras.image}}" >
+                        <img src="{{datasource.logourl}}" >
                       </div>
 
                       <div class="">
@@ -180,31 +208,12 @@
                             <div>
                               <h5 class="uk-margin-remove uk-text-left uk-scrollspy-inview uk-animation-fade uk-inline"
                                   uk-scrollspy-class="" style="">
-                                {{resourceInfo.name || "Not Available"}}
+                                {{datasource.officialname || "Not Available"}}
                               </h5>
                             </div>
-                            <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">
-                              "{{resourceInfo.tagline}}"
-                            </p>
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
                                  uk-scrollspy-class="" style="">
-                              <p [innerHTML]="resourceInfo.extras['pitch']"></p>
-                            </div>
-                            {{resourceInfo.extras?.['users']}}
-                            <div *ngIf="!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0]?.name === '')"
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
-                              <span class="field-label  uk-margin-small-right">Users: </span>
-                              <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">
-                                <ng-container *ngIf="i!=0">, </ng-container>
-                                {{getVocabularyName(user)}}
-                              </span>
-                            </div>
-                            <div *ngIf="!(resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === null || resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === '')"
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
-                              <span class="field-label">Pricing: </span>
-                              <span class="field-value uk-margin-small-left">
-                                {{resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle}}
-                              </span>
+                              <p [innerHTML]="datasource.description"></p>
                             </div>
 
                           </div>
@@ -212,11 +221,8 @@
                         </div>
                       </div>
 
-                      <div *ngIf="resourceInfo.extras?.['portfolios']?.length>0" class="portfolioSection">
-                        <ng-container *ngFor="let portfolio of resourceInfo.extras['portfolios']; let i = index">
-                          <ng-container *ngIf="i!=0">, </ng-container>
-                          {{getVocabularyName(portfolio)}}
-                        </ng-container>
+                      <div *ngIf="datasource.eoscDatasourceType" class="portfolioSection">
+                        {{datasource.eoscDatasourceType}}
                       </div>
 
                     </div>
@@ -226,12 +232,6 @@
 
               </ng-container>
 
-            </div>
-
-            <div *ngIf="serviceIdsArray.length > 0" class="uk-float-right uk-animation-scale-up"
-                 style="z-index: 100; bottom: 40px; position: fixed; right: 30px;">
-              <button class="uk-button butn theme" href="#email-modal" uk-toggle>Ask for info
-                <i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>
             </div>
 
             <ul class="uk-pagination uk-flex-right uk-margin">
@@ -272,60 +272,6 @@
   </div>
 </div>
 
-<div *ngIf="this.comparisonService.servicesToCompare && this.comparisonService.servicesToCompare.length > 0"
-     class="compareWrapper">
-  <div class="uk-grid uk-margin-top uk-margin-medium-left">
-    <div *ngFor="let serviceToCompare of this.comparisonService.servicesToCompare"
-         class="uk-width-1-5 serviceToCompareCard uk-margin-right">
-      <div class="">
-        <div class="uk-text-right">
-          <a (click)="this.comparisonService.addOrRemove(serviceToCompare)">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </a>
-        </div>
-        <div class="uk-margin-small-bottom">{{serviceToCompare.name}}</div>
-        <div>
-          {{serviceToCompare.tagline}}
-        </div>
-      </div>
-    </div>
-    <div class="actions uk-float-right">
-      <a (click)="comparisonService.clearAll()" class="clearAllLink uk-margin-right">Clear all</a>
-      <button (click)="this.comparisonService.go()" class="uk-button uk-button-white">Compare</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- FIXME: #email-modal id is inside the component, it should be changed -->
-<app-email-modal [serviceIdsArray]="this.serviceIdsArray"></app-email-modal>
-
-
-<div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService" class="uk-float-right" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
-  <a href="#modal" uk-toggle class="uk-icon-button uk-button-secondary" style="padding: 30px;" >
-    <i class="fa fa-2x fa-plus"></i>
-  </a>
-</div>
-
-<!-- Choose service or datasource -->
-<div id="modal" class="uk-flex-top" uk-modal>
-  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-<!--    <h2 class="uk-modal-title">Headline</h2>-->
-    <p class="uk-text-center">Do you want to add an new <span class="uk-text-italic">Service</span> or <span class="uk-text-italic">Datasource</span>?</p>
-    <div class="uk-grid">
-    <div class="uk-width-1-2 uk-flex uk-flex-center">
-      <button class="uk-button uk-button-primary uk-modal-close" [routerLink]="['/provider/openaire/datasource/add']" type="button">
-        Datasource
-      </button>
-    </div>
-    <div class="uk-width-1-2 uk-flex uk-flex-center">
-      <button class="uk-button uk-button-primary uk-modal-close" [routerLink]="['/provider/openaire/service/add']" type="button">
-        Service
-      </button>
-    </div>
-    </div>
-  </div>
-</div>
 
 <div class="uk-float-right uk-hidden@m" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
   <a href="#offcanvas-filters" uk-toggle style="padding: 20px;" class="uk-icon-button uk-button-blue">

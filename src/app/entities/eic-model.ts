@@ -265,6 +265,21 @@ export class Service implements Identifiable {
   extras: object;
 }
 
+export class Datasource extends Service implements Identifiable {
+  submissionPolicyURL: URL;
+  preservationPolicyURL: URL;
+  versionControl: boolean;
+  persistentIdentitySystems: PersistentIdentitySystem[];
+  jurisdiction: string;
+  datasourceClassification: string;
+  researchEntityTypes: string[];
+  thematic: boolean;
+  researchProductLicensings: ResearchProductLicensing[];
+  researchProductAccessPolicies: string[];
+  researchProductMetadataLicensing: ResearchProductMetadataLicensing;
+  researchProductMetadataAccessPolicies: string[];
+}
+
 export class MultimediaPair {
   multimediaURL: URL;
   multimediaName: string;
@@ -273,6 +288,21 @@ export class MultimediaPair {
 export class UseCasesPair {
   useCaseURL: URL;
   useCaseName: string;
+}
+
+export class PersistentIdentitySystem {
+  persistentIdentityEntityType: string;
+  persistentIdentityEntityTypeSchemes: string[];
+}
+
+export class ResearchProductLicensing {
+  researchProductLicenseName: string;
+  researchProductLicenseURL: URL;
+}
+
+export class ResearchProductMetadataLicensing {
+  researchProductMetadataLicenseName: string;
+  researchProductMetadataLicenseURL: URL;
 }
 
 export class ServiceHistory extends Metadata {

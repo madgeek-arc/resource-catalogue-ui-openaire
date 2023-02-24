@@ -34,9 +34,9 @@
                 <div class="uk-panel" id="module-menu-mobile">
 
                   <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
-                    <h5 class="uk-text-center">Services</h5>
+                    <h5 class="uk-text-center">Browse Services</h5>
 
-                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of services | keyvalue">
+                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of resources | keyvalue">
                       <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
                       <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
                     </div>
@@ -107,25 +107,31 @@
             <div class="uk-flex-row">
               <ul class="uk-navbar-nav">
                 <li>
-                  <a class="default-menu-item">Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i></a>
+                  <a [routerLink]="['/search']" class="default-menu-item">
+                    Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i>
+                  </a>
                   <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
 
                     <div class="uk-grid uk-grid-column-medium uk-margin-medium-bottom">
                       <div class="uk-width-3-4 services">
                         <div class="uk-flex uk-flex-between">
-                          <h5 class="uk-flex-left uk-margin-bottom">Services</h5>
+                          <h5 class="uk-flex-left uk-margin-bottom">Services & Portfolios</h5>
                           <div class="uk-flex-right uk-flex">
-                            <button class="uk-button uk-button-secondary" [routerLink]="['/search']">Explore all</button>
+                            <button class="uk-button uk-button-secondary" [routerLink]="['/search']" (click)="hideDrop()">
+                              Explore all
+                            </button>
                           </div>
                         </div>
                         <hr>
                         <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
-                          <div class="" *ngFor="let portfolio of services | keyvalue">
-                            <h6>{{portfolio.key}}</h6>
-<!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
-                            <div *ngFor="let service of portfolio.value" class=" uk-navbar-dropdown-close">
-                              <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
-                            </div>
+                          <div class="" *ngFor="let portfolio of resources | keyvalue">
+                            <ng-container *ngIf="portfolio.value.length > 0">
+                              <h6>{{portfolio.key}}</h6>
+  <!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
+                              <div *ngFor="let service of portfolio.value" class=" uk-navbar-dropdown-close">
+                                <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
+                              </div>
+                            </ng-container>
                           </div>
                         </div>
                       </div>
@@ -142,6 +148,9 @@
 
                   </div>
                 </li>
+<!--                <li>-->
+<!--                  <a [routerLink]="['/datasources/search']" class="default-menu-item">Datasources</a>-->
+<!--                </li>-->
               </ul>
             </div>
           </div>

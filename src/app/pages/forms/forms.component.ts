@@ -5,7 +5,7 @@ import {FormControlService} from '../../../catalogue-ui/services/form-control.se
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
 import {zip} from 'rxjs/internal/observable/zip';
-import {Vocabulary} from '../../entities/eic-model';
+import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 
 import * as uikit from 'uikit';
@@ -26,6 +26,7 @@ export class FormsComponent implements OnInit{
   subVocabulariesMap: Map<string, object[]> = null
   premiumSort = new PremiumSortPipe();
   resourceId: string = null;
+  resourceType: string = null;
   payloadAnswer: object = null; // Find a way to do this better
   ready: boolean = false
   errorMessage: string = null;
@@ -38,29 +39,35 @@ export class FormsComponent implements OnInit{
     this.route.params.subscribe(
       params => {
         this.resourceId = params['resourceId']
-        if (this.resourceId) {
-          zip(
-            this.resourceService.getResource(this.resourceId),
-            this.formService.getFormModelByName('OpenAIRE service'),
-            this.resourceService.getUiVocabularies()).subscribe(
-            next => {
-              this.payloadAnswer = {'answer': {'Service': {}}};
-              this.payloadAnswer['answer'].Service = next[0];
-              this.model = next[1].results[0];
-              this.vocabulariesMap = next[2];
-            },
-            error => {console.log(error)},
-            () => {
-              this.prepareVocabularies();
-              this.ready = true;
+        if (this.resourceId) { // edit resource
+          this.resourceService.getResourceTypeById(this.resourceId).subscribe(
+            res => {
+              this.resourceType = res['resourceType'];
+              zip(
+                this.resourceService.getServiceOrDatasource(this.resourceId),
+                this.formService.getFormModelByResourceType(this.resourceType),
+                this.resourceService.getUiVocabularies()).subscribe(
+                next => {
+                  this.payloadAnswer = {'answer': {'Service': {}}};
+                  this.payloadAnswer['answer'].Service = next[0];
+                  this.model = next[1].results[0];
+                  this.vocabulariesMap = next[2];
+                },
+                error => {console.log(error)},
+                () => {
+                  this.prepareVocabularies();
+                  this.ready = true;
+                }
+              );
             }
-          );
-        } else {
+          )
+        } else { // add new resource
+          this.resourceType = params['resourceType'];
           zip(
-            this.formService.getFormModelById('m-rEmtKuZd'),
+            this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
-              this.model = next[0];
+              this.model = next[0].results[0];
               this.vocabulariesMap = next[1];
             },
             error => {console.log(error)},
@@ -78,31 +85,74 @@ export class FormsComponent implements OnInit{
 
   submitForm(value) {
     this.ready = false;
+    // console.log(value[0].get('Service').value);
+    let service: Service = {...value[0].get('Service').value};
     // for (const element in value[0].get('Service').controls) {
     //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
+    //   console.log(value[0].get('Service').get(element).value);
     // }
-    if (value[1]) {
-      this.resourceService.editService(value[0].value).subscribe(
-        next => {
-          this.router.navigate([`/service/${next.id}/overview`]);
-        },
-        error => {
-          console.log(error);
-          this.errorMessage = error.error.message;
-          this.ready = true;
-        }
-      );
-    } else {
-      this.resourceService.postService(value[0].value).subscribe(
-        next => {
-          this.router.navigate([`/service/${next.id}/overview`]);
-        },
-        error => {
-          console.log(error);
-          this.errorMessage = error.error.message;
-          this.ready = true;
-        }
-      );
+    if (!service.multimedia[0].multimediaURL) {
+      service.multimedia = null;
+    }
+    if (!service.useCases[0].useCaseURL) {
+      service.useCases = null;
+    }
+    if (this.resourceType === 'service') {
+      if (value[1]) {
+        this.resourceService.editService(service).subscribe(
+          next => {
+            this.router.navigate([`/service/${next.id}/overview`]);
+          },
+          error => {
+            console.log(error);
+            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId;
+            this.ready = true;
+          }
+        );
+      } else {
+        this.resourceService.postService(service).subscribe(
+          next => {
+            this.router.navigate([`/service/${next.id}/overview`]);
+          },
+          error => {
+            console.log(error);
+            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId;
+            this.ready = true;
+          }
+        );
+      }
+    }
+    if (this.resourceType === 'datasource') {
+      let datasource: Datasource = {...value[0].get('Service').value};
+      if (!datasource.multimedia[0].multimediaURL) {
+        datasource.multimedia = null;
+      }
+      if (!datasource.useCases[0].useCaseURL) {
+        datasource.useCases = null;
+      }
+      if (value[1]) {
+        this.resourceService.editDatasource(datasource).subscribe(
+          next => {
+            this.router.navigate([`/service/${next.id}/overview`]);
+          },
+          error => {
+            console.log(error);
+            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
+            this.ready = true;
+          }
+        );
+      } else {
+        this.resourceService.postDatasource(datasource).subscribe(
+          next => {
+            this.router.navigate([`/service/${next.id}/overview`]);
+          },
+          error => {
+            console.log(error);
+            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
+            this.ready = true;
+          }
+        );
+      }
     }
   }
 
