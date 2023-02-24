@@ -34,7 +34,7 @@
                 <div class="uk-panel" id="module-menu-mobile">
 
                   <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
-                    <h5 class="uk-text-center">Services & Portfolios</h5>
+                    <h5 class="uk-text-center">Browse Services</h5>
 
                     <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of resources | keyvalue">
                       <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
@@ -108,7 +108,7 @@
               <ul class="uk-navbar-nav">
                 <li>
                   <a [routerLink]="['/search']" class="default-menu-item">
-                    Services & Portfolios<i class="fa fa-angle-down uk-margin-small-left"></i>
+                    Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i>
                   </a>
                   <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify;">
 
