@@ -8,6 +8,9 @@ FILE=/etc/nginx/conf.d/nginx.conf
 EMAIL_ARG="--register-unsafely-without-email"
 ADD_SERVER_NAME=""
 
+if [ $ENABLE_SSL == "TRUE" ]; then
+    apk add certbot-nginx
+fi
 if [ -f "$FILE" ]; then
     echo "Nginx configuration already exists: $FILE "
 else
@@ -29,7 +32,7 @@ else
           EMAIL_ARG="-m $SSL_EMAIL"
       fi
 
-      apk add certbot-nginx && certbot install --cert-name $SERVER_NAME || certbot --nginx -d $SERVER_NAME --non-interactive --agree-tos $EMAIL_ARG
+      certbot install --cert-name $SERVER_NAME || certbot --nginx -d $SERVER_NAME --non-interactive --agree-tos $EMAIL_ARG
 
       nginx -t
       cat /etc/nginx/conf.d/nginx.conf
@@ -38,3 +41,8 @@ else
 fi
 
 nginx -g "daemon off;"
+
+# renew SSL loop
+if [ $ENABLE_SSL == "TRUE" ]; then
+    trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;
+fi
