@@ -40,6 +40,8 @@ else
 fi
 
 nginx -g "daemon off;"
+
+# renew SSL loop
 if [ $ENABLE_SSL == "TRUE" ]; then
     trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;
 fi
