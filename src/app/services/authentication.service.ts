@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {deleteCookie, getCookie} from '../entities/utils';
 import {environment} from '../../environments/environment';
+import {BehaviorSubject} from 'rxjs';
 
 
 @Injectable()
@@ -9,8 +10,11 @@ export class AuthenticationService {
 
   base = environment.API_ENDPOINT;
   cookieName = 'AccessToken';
+  userLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    this.isLoggedIn();
+  }
 
   tryLogin() {
     if (getCookie(this.cookieName) === null) {
@@ -33,6 +37,7 @@ export class AuthenticationService {
   }
 
   public isLoggedIn(): boolean {
+    this.userLoggedIn.next(getCookie(this.cookieName) !== null);
     return getCookie(this.cookieName) !== null;
   }
 

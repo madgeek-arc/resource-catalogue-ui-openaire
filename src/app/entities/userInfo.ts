@@ -3,9 +3,9 @@
  */
 export class UserInfo {
   sub: string;
-  firstName: string;
-  lastName: string;
-  fullName: string;
+  name: string;
+  surname: string;
+  fullname: string;
   email: string;
   roles: [string];
 }

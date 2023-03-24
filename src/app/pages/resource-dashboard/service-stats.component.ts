@@ -5,7 +5,6 @@ import {Service, ServiceHistory} from '../../entities/eic-model';
 import {AuthenticationService} from '../../services/authentication.service';
 import {NavigationService} from '../../services/navigation.service';
 import {ResourceService} from '../../services/resource.service';
-import {UserService} from '../../services/user.service';
 import {Paging} from '../../entities/paging';
 import {ServiceProviderService} from '../../services/service-provider.service';
 import {map} from 'rxjs/operators';
@@ -41,7 +40,7 @@ export class ServiceStatsComponent implements OnInit, OnDestroy {
   statisticPeriod: string;
 
   constructor(private route: ActivatedRoute, private router: NavigationService, private resourceService: ResourceService,
-              private authenticationService: AuthenticationService, private userService: UserService,
+              private authenticationService: AuthenticationService,
               private providerService: ServiceProviderService) {
   }
 
