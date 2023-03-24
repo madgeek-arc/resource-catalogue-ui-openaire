@@ -2,13 +2,10 @@
 
 # Create Nginx configuration
 CONF_TMPL=/etc/nginx/nginx.conf.txt
-FILE=/etc/nginx/conf.d/nginx.conf
+FILE=/etc/nginx/conf.d/site.conf
 EMAIL_ARG="--register-unsafely-without-email"
 ADD_SERVER_NAME=""
 
-if [ $ENABLE_SSL == "TRUE" ]; then
-    apk add certbot-nginx
-fi
 if [ -f "$FILE" ]; then
     echo "Nginx configuration already exists: $FILE "
 else
@@ -21,27 +18,6 @@ else
     nginx -t
     cat $FILE
     nginx -s reload
-
-    if [ ! "$ENABLE_SSL" == "TRUE" ]; then
-      echo "Simple Configuration"
-    else
-      echo "Using SSL Configuration"
-
-      if [ ! -z ${SSL_EMAIL+x} ]; then
-          EMAIL_ARG="-m $SSL_EMAIL"
-      fi
-
-      certbot install --cert-name $SERVER_NAME || certbot --nginx -d $SERVER_NAME --non-interactive --agree-tos $EMAIL_ARG
-
-      nginx -t
-      cat $FILE
-      nginx -s reload
-    fi
 fi
 
 nginx -g "daemon off;"
-
-# renew SSL loop
-if [ $ENABLE_SSL == "TRUE" ]; then
-    trap exit TERM; while :; do certbot renew; sleep 12h & wait ${!}; done;
-fi
