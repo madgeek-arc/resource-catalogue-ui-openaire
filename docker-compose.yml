@@ -2,11 +2,11 @@ version: "3"
 
 services:
   platform:
-    image: openaire-catalogue-ui:latest                  # edit image name
+    image: docker.openminted.eu/openaire-catalogue-ui:latest                  # edit image name
 
     environment:
       - ENABLE_SSL=TRUE                                  # set to FALSE if you don't want to install ssl certificate
-      - SSL_EMAIL=                                       # email associated with ssl certificate
+      - SSL_EMAIL=user@email.mm                          # email associated with ssl certificate
       - SERVER_NAME=example.org                          # edit server name
       - PLATFORM_API_ENDPOINT=http://example.com/api     # edit api endpoint
       - FAQ_API_ENDPOINT=http://example.com/faq          # edit faq endpoint
@@ -17,31 +17,17 @@ services:
       - "80:80"
       - "443:443"
 
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-    networks:
-      - eic-net
-
     volumes:
       - ./data/nginx/conf.d:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      - ./data/images:/images
+      - ./data/files:/files
 
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 20
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
-  certbot:
-    image: certbot/certbot
-
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - openaire-net
 
 networks:
-  eic-net:
-    external: true
+  openaire-net:
