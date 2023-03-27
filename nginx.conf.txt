@@ -11,7 +11,7 @@ server {
         add_header Access-Control-Allow-Origin *;
     }
 
-    ${PROXY_API}
+    ${ADD_PROXY_API}
 
     location ^~ /images/ {
         root /;
