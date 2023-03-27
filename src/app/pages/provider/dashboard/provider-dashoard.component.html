@@ -1,0 +1,65 @@
+<div class="dashboard">
+  <div class="sidebar_main_swipe sidebar_main_active">
+    <aside id="sidebar_main">
+      <div class="menu_section uk-margin-medium-top">
+        <div class="sidebar_heading">MONITOR</div>
+        <ul>
+          <li class="current_section ">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none">
+              <span class="material-icons uk-margin-small-right">history</span>Update History
+            </a>
+          </li>
+          <li class="">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none">
+              <span class="material-icons uk-margin-small-right">info</span>Info
+            </a>
+          </li>
+          <li class="">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none">
+              <span class="material-icons uk-margin-small-right">reorder</span>Services
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="menu_section border_top">
+        <div class="sidebar_heading">ACTIONS</div>
+        <ul>
+          <li class="">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none" href="#modal" uk-toggle>
+              <span class="material-icons uk-margin-small-right">add_circle_outline</span>Add new Service
+            </a>
+          </li>
+          <li class="">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none" [routerLink]="['../update']">
+              <span class="material-icons uk-margin-small-right">update</span>Update Provider
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+    <div id="page_content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+<!-- Choose service or datasource -->
+<div id="modal" class="uk-flex-top" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+    <!--    <h2 class="uk-modal-title">Headline</h2>-->
+    <p class="uk-text-center">Do you want to add an new <span class="uk-text-italic">Service</span> or <span class="uk-text-italic">Datasource</span>?</p>
+    <div class="uk-grid">
+      <div class="uk-width-1-2 uk-flex uk-flex-center">
+        <button class="uk-button uk-button-primary uk-modal-close" [routerLink]="['/provider', providerId, 'datasource', 'add']" type="button">
+          Datasource
+        </button>
+      </div>
+      <div class="uk-width-1-2 uk-flex uk-flex-center">
+        <button class="uk-button uk-button-primary uk-modal-close" [routerLink]="['/provider', providerId, 'service', 'add']" type="button">
+          Service
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

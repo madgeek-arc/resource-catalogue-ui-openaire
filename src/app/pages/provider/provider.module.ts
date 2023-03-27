@@ -7,6 +7,7 @@ import {ReusableComponentsModule} from '../../shared/reusablecomponents/reusable
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {UpdateServiceProviderComponent} from './update-service-provider.component';
 import {NgSelectModule} from '@ng-select/ng-select';
+import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
   declarations: [
     ServiceProviderFormComponent,
     UpdateServiceProviderComponent,
+    ProviderDashboardComponent
   ]
 })
 

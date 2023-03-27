@@ -14,7 +14,6 @@ import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {ReusableComponentsModule} from './shared/reusablecomponents/reusable-components.module';
 import {ServiceProviderService} from './services/service-provider.service';
-import {UserService} from './services/user.service';
 import {ComparisonService} from './services/comparison.service';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
@@ -33,6 +32,7 @@ import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import {UserService} from './services/user.service';
 
 
 declare var require: any;

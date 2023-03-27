@@ -3,9 +3,10 @@ import {AuthenticationService} from '../../services/authentication.service';
 import {Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
-import {PortfolioMap} from '../../entities/portfolioMap';
+import {Datasource, Provider, Service} from '../../entities/eic-model';
+import {UserInfo} from '../../entities/userInfo';
+import {UserService} from '../../services/user.service';
 import * as UIkit from 'uikit';
-import {Datasource, Service} from '../../entities/eic-model';
 
 
 @Component({
@@ -18,11 +19,14 @@ export class AireTopMenuComponent implements OnInit {
 
   resources: Map<string, Service[] | Datasource[]> = null;
   refresh = false;
+  user: UserInfo = null;
+  myProviders: Provider[] = [];
+  isLoggedIn: boolean = false;
 
   public portfolioItemActive: string = null;
 
   constructor(public authenticationService: AuthenticationService, public router: Router, public resourceService: ResourceService,
-              private dataSharingService: DataSharingService) {}
+              private dataSharingService: DataSharingService, private userService: UserService) {}
 
   ngOnInit() {
 
@@ -38,6 +42,24 @@ export class AireTopMenuComponent implements OnInit {
       }
     });
 
+    this.authenticationService.userLoggedIn.subscribe(
+      next => {
+        this.isLoggedIn = next;
+        if (this.isLoggedIn) {
+          this.userService.getUserInfo().subscribe(
+            res => {this.user = res},
+            error => {console.error(error)}
+          )
+          this.userService.getMyProviders().subscribe(
+            res => {this.myProviders = res},
+            error => {console.error(error)}
+          )
+        } else {
+          this.user = null;
+        }
+      }
+    );
+
   }
 
   redirectTo(url: string) {
@@ -46,8 +68,8 @@ export class AireTopMenuComponent implements OnInit {
       this.router.navigate([url]));
   }
 
-  hideDrop() {
-    UIkit.drop('#ukDrop').hide(false);
+  hideDrop(elementId) {
+    UIkit.drop(elementId).hide(false);
   }
 
   portfolioActive(portfolioItem: string) {
@@ -60,5 +82,9 @@ export class AireTopMenuComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
+  }
+
+  getInitials(fullName: string) {
+    return fullName.split(" ").map((n)=>n[0]).join("")
   }
 }
