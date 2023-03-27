@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Provider, Type} from '../../entities/eic-model';
+import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
-import {ResourceService} from '../../services/resource.service';
+import {ResourceService} from '../../../services/resource.service';
 import {FormBuilder} from '@angular/forms';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ServiceProviderService} from '../../services/service-provider.service';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {ServiceProviderService} from '../../../services/service-provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 declare var UIkit: any;
@@ -39,26 +39,28 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
       sessionStorage.removeItem('service');
     } else {
       if (this.vocabularies === null) {
-        this.resourceService.getAllVocabulariesByType().subscribe(
-          res => {
-            this.vocabularies = res;
-            this.placesVocabulary = this.vocabularies[Type.COUNTRY];
-            this.providerTypeVocabulary = this.vocabularies[Type.PROVIDER_STRUCTURE_TYPE];
-            this.providerLCSVocabulary = this.vocabularies[Type.PROVIDER_LIFE_CYCLE_STATUS];
-            this.domainsVocabulary =  this.vocabularies[Type.SCIENTIFIC_DOMAIN];
-            this.categoriesVocabulary =  this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN];
-            this.esfriDomainVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_DOMAIN];
-            this.legalStatusVocabulary =  this.vocabularies[Type.PROVIDER_LEGAL_STATUS];
-            this.esfriVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_TYPE];
-            this.areasOfActivityVocabulary =  this.vocabularies[Type.PROVIDER_AREA_OF_ACTIVITY];
-            this.networksVocabulary =  this.vocabularies[Type.PROVIDER_NETWORK];
-            this.societalGrandChallengesVocabulary =  this.vocabularies[Type.PROVIDER_SOCIETAL_GRAND_CHALLENGE];
-          },
-          error => console.log(error),
-          () => {
-            this.getProvider();
-          }
-        );
+        // this.resourceService.getAllVocabulariesByType().subscribe(
+        //   res => {
+        //     this.vocabularies = res;
+        //     this.placesVocabulary = this.vocabularies[Type.COUNTRY];
+        //     this.providerTypeVocabulary = this.vocabularies[Type.PROVIDER_STRUCTURE_TYPE];
+        //     this.providerLCSVocabulary = this.vocabularies[Type.PROVIDER_LIFE_CYCLE_STATUS];
+        //     this.domainsVocabulary =  this.vocabularies[Type.SCIENTIFIC_DOMAIN];
+        //     this.categoriesVocabulary =  this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN];
+        //     this.esfriDomainVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_DOMAIN];
+        //     this.legalStatusVocabulary =  this.vocabularies[Type.PROVIDER_LEGAL_STATUS];
+        //     this.esfriVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_TYPE];
+        //     this.areasOfActivityVocabulary =  this.vocabularies[Type.PROVIDER_AREA_OF_ACTIVITY];
+        //     this.networksVocabulary =  this.vocabularies[Type.PROVIDER_NETWORK];
+        //     this.societalGrandChallengesVocabulary =  this.vocabularies[Type.PROVIDER_SOCIETAL_GRAND_CHALLENGE];
+        //   },
+        //   error => console.log(error),
+        //   () => {
+        //     this.getProvider();
+        //   }
+        // );
+        this.setVocabularies();
+        this.getProvider();
       } else {
         this.getProvider();
       }

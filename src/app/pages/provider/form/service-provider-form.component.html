@@ -21,21 +21,6 @@
           </div>
         </div>
 
-        <!--TODO where to put logoURL and modal to add id-->
-        <!--<h1 class="uk-h3">-->
-          <!--<a (click)="showLogoUrlModal()" title="Click to add the url with the {{serviceORresource}} Provider Logo">-->
-            <!--<img class="el-image uk-border-rounded"-->
-                 <!--src="{{(newProviderForm && newProviderForm.get('logo').value) ? newProviderForm.get('logo').value-->
-                 <!--: 'src/lib/assets/images/broken_image-black-48dp.svg'}}"-->
-                 <!--width="70">-->
-          <!--</a>{{disable ? ' ' : edit ? ' Update' : ' Add New'}} {{serviceORresource}} Provider {{disable ? 'Info' : ''}}-->
-        <!--</h1>-->
-
-<!--        &lt;!&ndash; TOP HELP CONTENT &ndash;&gt;-->
-<!--        <app-help-content #topHelperContent [position]="'top'"-->
-<!--                          [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">-->
-<!--        </app-help-content>-->
-
         <div class="uk-margin-medium-bottom">
           <div class="uk-grid">
 
@@ -60,8 +45,8 @@
                 <div *ngIf="errorMessage" class="uk-alert uk-alert-danger">{{errorMessage}}</div>
 
                 <div class="requiredFields">Fields with (*) are mandatory and must be completed in order to save this form. Leaving
-                  optional fields blank will remove the relevant heading from the published resource/provider
-                  profile.</div>
+                  optional fields blank will remove the relevant heading from the published resource/provider profile.
+                </div>
 
                 <div class="uk-margin-bottom uk-flex uk-flex-right">
                   <div>
@@ -252,12 +237,11 @@
                                 </label>
                               </div>
                             </div>
-                            <div class="uk-margin-large-bottom">
+                            <div *ngIf="legalStatusVocabulary" class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="legalStatus">
                                 {{ legalStatusDesc.label + (legalStatusDesc.mandatory ? ' (*)' : '')}}
                               </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{legalStatusDesc.desc}}</div>
+                              <div class="uk-form-description uk-margin-top uk-width-9-10">{{legalStatusDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <ng-select class="uk-width-9-10" id="legalStatus"
                                            [ngClass]="{'uk-disabled': this.newProviderForm.get('legalEntity').value == false, 'uk-form-danger': checkFormValidity('legalStatus', this.edit)}"
@@ -293,18 +277,13 @@
                               <label class="uk-form-label uk-text-right" for="description">
                                 {{ providerDescriptionDesc.label + (providerDescriptionDesc.mandatory ? ' (*)' : '')}}
                               </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{providerDescriptionDesc.desc}}</div>
+                              <div class="uk-form-description uk-margin-top uk-width-9-10">{{providerDescriptionDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top uk-width-9-10">
-                                <md-editor  id="description"
-                                            [ngClass]="{'uk-form-danger': checkFormValidity('description', this.edit)}"
-                                            [height]="'250px'"
-                                            [mode]="'editor'"
-                                            [options]="{markedjsOpt: { breaks: true }, showPreviewPanel: true, resizable: true, enablePreviewContentClick: true}"
-                                            (ngModelChange)="handleBitSets(1, 3, 'description')"
-                                            formControlName="description"
-                                            required>
-                                </md-editor>
+                                <ckeditor id="description" [editor]="editor"
+                                          (change)="handleBitSets(1, 3, 'description')"
+                                          [ngClass]="{'uk-form-danger': checkFormValidity('description', this.edit)}"
+                                          formControlName="description">
+                                </ckeditor>
                               </div>
                               <i><small>Suggested length is 1000 characters</small></i>
                             </div>

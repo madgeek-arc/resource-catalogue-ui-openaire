@@ -4,10 +4,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {ProviderRouting} from './provider.routing';
 import {ReusableComponentsModule} from '../../shared/reusablecomponents/reusable-components.module';
-import {ServiceProviderFormComponent} from './service-provider-form.component';
-import {UpdateServiceProviderComponent} from './update-service-provider.component';
+import {ServiceProviderFormComponent} from './form/service-provider-form.component';
+import {UpdateServiceProviderComponent} from './form/update-service-provider.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
+import {ProviderInfoComponent} from './dashboard/providerInfo/provider-info.component';
 
 
 @NgModule({
@@ -19,12 +21,14 @@ import {ProviderDashboardComponent} from './dashboard/provider-dashboard.compone
     ProviderRouting,
     ReusableComponentsModule,
     NgSelectModule,
+    CKEditorModule,
 
   ],
   declarations: [
     ServiceProviderFormComponent,
     UpdateServiceProviderComponent,
-    ProviderDashboardComponent
+    ProviderDashboardComponent,
+    ProviderInfoComponent
   ]
 })
 

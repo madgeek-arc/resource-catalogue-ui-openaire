@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {ServiceProviderService} from '../../../services/service-provider.service';
-import {Provider} from '../../../entities/eic-model';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Provider} from '../../../../entities/eic-model';
+import {ServiceProviderService} from '../../../../services/service-provider.service';
 
 @Component({
-  selector: 'app-provider-dashboard',
-  templateUrl: 'provider-dashoard.component.html'
+  selector: 'app-provider-info',
+  templateUrl: 'provider-info.component.html'
 })
 
-export class ProviderDashboardComponent implements OnInit {
+export class ProviderInfoComponent implements OnInit {
 
   providerId: string = null;
   provider: Provider = null;
@@ -17,7 +17,7 @@ export class ProviderDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(
+    this.route.parent.params.subscribe(
       params => {
         this.providerId = params['providerId'];
         if (this.providerId) {
@@ -27,5 +27,6 @@ export class ProviderDashboardComponent implements OnInit {
         }
       }
     );
+
   }
 }

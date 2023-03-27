@@ -1,8 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CanActivateViaAuthGuard} from '../../services/can-activate-auth-guard.service';
-import {UpdateServiceProviderComponent} from './update-service-provider.component';
+import {UpdateServiceProviderComponent} from './form/update-service-provider.component';
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
+import {ProviderInfoComponent} from './dashboard/providerInfo/provider-info.component';
 
 const providerRoutes: Routes = [
   {
@@ -15,7 +16,14 @@ const providerRoutes: Routes = [
       },
       {
         path: 'dashboard',
-        component: ProviderDashboardComponent
+        component: ProviderDashboardComponent,
+        children: [
+          {
+            path: 'info',
+            component: ProviderInfoComponent,
+            canActivate: [CanActivateViaAuthGuard]
+          }
+        ]
       },
       {
         path: 'update',
@@ -24,7 +32,7 @@ const providerRoutes: Routes = [
         data: {
           breadcrumb: 'Update Provider'
         }
-      }
+      },
     ]
   }
 ];

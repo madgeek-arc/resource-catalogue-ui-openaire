@@ -45,30 +45,6 @@ export class ServiceProviderService {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 
-  verifyServiceProvider(id: string, active: boolean, status: string) {
-    return this.http.patch(this.base + `/provider/verifyProvider/${id}?active=${active}&status=${status}`, {}, this.options);
-  }
-
-  requestProviderDeletion(id: string) {
-    return this.http.get(this.base + `/provider/requestProviderDeletion?providerId=${id}`, this.options);
-  }
-
-  deleteServiceProvider(id: string) {
-    return this.http.delete(this.base + `/provider/${id}`, this.options);
-  }
-
-  getMyPendingProviders() {
-    return this.http.get<ProviderBundle[]>(this.base + '/pendingProvider/getMyPendingProviders', this.options);
-  }
-
-  getMyServiceProviders() {
-    return this.http.get<ProviderBundle[]>(this.base + '/provider/getMyServiceProviders', this.options);
-  }
-
-  getServiceProviderBundleById(id: string) {
-    return this.http.get<ProviderBundle>(this.base + `/provider/bundle/${id}`, this.options);
-  }
-
   getServiceProviderById(id: string) {
     return this.http.get<Provider>(this.base + `/providers/${id}`, this.options);
   }
@@ -87,32 +63,12 @@ export class ServiceProviderService {
       `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&active=${active}&query=${query}`);
   }
 
-  getPendingServicesOfProvider(id: string) {
-    return this.http.get<Service[]>(this.base + `/provider/services/pending/${id}`);
-  }
-
-  getPendingServicesByProvider(id: string, from: string, quantity: string, order: string, orderField: string) {
-    return this.http.get<Paging<InfraService>>(this.base +
-      `/pendingService/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}`);
-  }
-
-  publishService(id: string, version: string, active: boolean) {
-    if (version === null) {
-      return this.http.patch(this.base + `/service/publish/${id}?active=${active}`, this.options);
-    }
-    return this.http.patch(this.base + `/service/publish/${id}?active=${active}&version=${version}`, this.options);
-  }
-
   temporarySaveProvider(provider: Provider, providerExists: boolean) {
     // console.log('providerExists ', providerExists);
     if (providerExists) {
       return this.http.put<Provider>(this.base + '/pendingProvider/provider', provider, this.options);
     }
     return this.http.put<Provider>(this.base + '/pendingProvider/pending', provider, this.options);
-  }
-
-  getProviderRequests(id: string) {
-    return this.http.get<ProviderRequest[]>(this.base + `/request/allProviderRequests?providerId=${id}`);
   }
 
   hasAdminAcceptedTerms(id: string, pendingProvider: boolean) {
@@ -143,38 +99,6 @@ export class ServiceProviderService {
     } else {
       return this.http.post(this.base + `/vocabularyCuration/addFront?entryValueName=${entryValueName}&vocabulary=${vocabulary}&parent=${parent}&resourceType=${resourceType}`, this.options);
     }
-  }
-
-  getVocabularyCuration(status: string, from: string, quantity: string, order: string, orderField: string, vocabulary?: string, query?: string) {
-    let params = new HttpParams();
-    params = params.append('status', status);
-    params = params.append('from', from);
-    params = params.append('quantity', quantity);
-    params = params.append('order', order);
-    params = params.append('orderField', orderField);
-    if (query && query !== '') {
-      params = params.append('query', query);
-    }
-    if (vocabulary && vocabulary.length > 0) {
-      for (const voc of vocabulary) {
-        params = params.append('vocabulary', voc);
-      }
-    }
-    return this.http.get<VocabularyCuration[]>(this.base + `/vocabularyCuration/vocabularyCurationRequests/all`, {params});
-  }
-
-  approveVocabularyEntry(curation: VocabularyCuration, approve: boolean, rejectionReason?: string): Observable<VocabularyCuration> {
-    if (!rejectionReason) {
-      rejectionReason = 'Not provided';
-    }
-    if (approve) {
-      return this.http.put<VocabularyCuration>(this.base + `/vocabularyCuration/approveOrRejectVocabularyCuration?approved=true`, curation, this.options);
-    }
-    return this.http.put<VocabularyCuration>(this.base + `/vocabularyCuration/approveOrRejectVocabularyCuration?approved=false&rejectionReason=${rejectionReason}`, curation, this.options);
-  }
-
-  getProviderHistory(providerId: string) {
-    return this.http.get<Paging<ServiceHistory>>(this.base + `/provider/history/${providerId}/`);
   }
 
 }

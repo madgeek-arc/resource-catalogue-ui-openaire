@@ -1,15 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import * as sd from '../../entities/services.description';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ServiceProviderService} from '../../services/service-provider.service';
+import * as sd from '../../../entities/services.description';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {ServiceProviderService} from '../../../services/service-provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {URLValidator} from '../../shared/validators/generic.validator';
-import {Vocabulary, Type, Provider} from '../../entities/eic-model';
-import {ResourceService} from '../../services/resource.service';
+import {URLValidator} from '../../../shared/validators/generic.validator';
+import {Vocabulary, Provider} from '../../../entities/eic-model';
+import {ResourceService} from '../../../services/resource.service';
 import BitSet from 'bitset/bitset';
-import {environment} from '../../../environments/environment';
-import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
+import {environment} from '../../../../environments/environment';
+import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
+
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 declare var UIkit: any;
 
@@ -21,6 +23,8 @@ declare var UIkit: any;
 export class ServiceProviderFormComponent implements OnInit {
 
   private _hasUserConsent = environment.hasUserConsent;
+
+  public editor = ClassicEditor;
 
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
@@ -488,20 +492,19 @@ export class ServiceProviderFormComponent implements OnInit {
     this.resourceService.getAllVocabulariesByType().subscribe(
       res => {
         this.vocabularies = res;
-        this.placesVocabulary = this.vocabularies[Type.COUNTRY];
-        this.providerTypeVocabulary = this.vocabularies[Type.PROVIDER_STRUCTURE_TYPE];
-        this.providerLCSVocabulary = this.vocabularies[Type.PROVIDER_LIFE_CYCLE_STATUS];
-        this.domainsVocabulary = this.vocabularies[Type.SCIENTIFIC_DOMAIN];
-        this.categoriesVocabulary = this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN];
-        this.merilDomainsVocabulary = this.vocabularies[Type.PROVIDER_MERIL_SCIENTIFIC_DOMAIN];
-        this.merilCategoriesVocabulary = this.vocabularies[Type.PROVIDER_MERIL_SCIENTIFIC_SUBDOMAIN];
-        this.esfriDomainVocabulary = this.vocabularies[Type.PROVIDER_ESFRI_DOMAIN];
-        this.legalStatusVocabulary = this.vocabularies[Type.PROVIDER_LEGAL_STATUS];
-        this.esfriVocabulary = this.vocabularies[Type.PROVIDER_ESFRI_TYPE];
-        this.areasOfActivityVocabulary = this.vocabularies[Type.PROVIDER_AREA_OF_ACTIVITY];
-        this.networksVocabulary = this.vocabularies[Type.PROVIDER_NETWORK];
-        this.societalGrandChallengesVocabulary = this.vocabularies[Type.PROVIDER_SOCIETAL_GRAND_CHALLENGE];
-        return this.vocabularies;
+        this.placesVocabulary = this.vocabularies['Country'];
+        this.providerTypeVocabulary = this.vocabularies['Provider structure type'];
+        this.providerLCSVocabulary = this.vocabularies['Life cycle status'];
+        this.domainsVocabulary = this.vocabularies['Scientific domain'];
+        this.categoriesVocabulary = this.vocabularies['Scientific subdomain'];
+        this.merilDomainsVocabulary = this.vocabularies['Provider meril scientific domain'];
+        this.merilCategoriesVocabulary = this.vocabularies['Provider meril scientific subdomain'];
+        this.esfriDomainVocabulary = this.vocabularies['Provider esfri domain'];
+        this.legalStatusVocabulary = this.vocabularies['Provider legal status'];
+        this.esfriVocabulary = this.vocabularies['Provider esfri type'];
+        this.areasOfActivityVocabulary = this.vocabularies['Provider area of activity'];
+        this.networksVocabulary = this.vocabularies['Provider network'];
+        this.societalGrandChallengesVocabulary = this.vocabularies['Provider societal grand challenge'];
       },
       error => console.log(JSON.stringify(error.error)),
       () => {
