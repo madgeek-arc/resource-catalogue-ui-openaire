@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {ServiceProviderService} from '../../../services/service-provider.service';
-import {Provider, ProviderBundle} from '../../../entities/eic-model';
+import {ProviderBundle} from '../../../entities/eic-model';
+
 
 @Component({
   selector: 'app-provider-dashboard',
@@ -12,8 +13,19 @@ export class ProviderDashboardComponent implements OnInit {
 
   providerId: string = null;
   providerBundle: ProviderBundle = null;
+  path: string = null;
 
-  constructor(private route: ActivatedRoute, private serviceProviderService: ServiceProviderService) {
+  constructor(private route: ActivatedRoute, private router: Router, private serviceProviderService: ServiceProviderService) {
+    this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          if (event.url.includes('info')) {
+            this.path = 'info';
+          } else if (event.url.includes('updateHistory')) {
+            this.path = 'updateHistory';
+          }
+        }
+      }
+    );
   }
 
   ngOnInit() {
@@ -31,8 +43,6 @@ export class ProviderDashboardComponent implements OnInit {
   }
 
   onActivate(componentReference) {
-    console.log('set provider');
-    console.log(this.providerBundle);
     componentReference.providerBundle = this.providerBundle;
   }
 

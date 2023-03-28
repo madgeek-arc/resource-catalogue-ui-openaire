@@ -4,12 +4,12 @@
       <div class="menu_section uk-margin-medium-top">
         <div class="sidebar_heading">MONITOR</div>
         <ul>
-          <li class="current_section ">
+          <li [ngClass]="{'current_section': path === 'updateHistory'}">
             <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none" [routerLink]="['updateHistory']">
               <span class="material-icons uk-margin-small-right">history</span>Update History
             </a>
           </li>
-          <li class="">
+          <li [ngClass]="{'current_section': path === 'info'}">
             <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none" [routerLink]="['info']">
               <span class="material-icons uk-margin-small-right">info</span>Info
             </a>
