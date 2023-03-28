@@ -5,7 +5,7 @@
         <div class="sidebar_heading">MONITOR</div>
         <ul>
           <li class="current_section ">
-            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none" [routerLink]="['updateHistory']">
               <span class="material-icons uk-margin-small-right">history</span>Update History
             </a>
           </li>
@@ -38,7 +38,21 @@
       </div>
     </aside>
     <div id="page_content">
-      <router-outlet></router-outlet>
+      <div *ngIf="providerBundle !== null" class="uk-section uk-section-xsmall">
+        <div class="uk-container uk-container-expand">
+          <div class="services-provider-container">
+            <div class="uk-flex">
+              <div>
+                <img style="max-width: 200px;" src="{{providerBundle.provider.logo}}">
+              </div>
+              <div class="uk-margin-medium-left"><h3 class="uk-margin-remove">{{providerBundle.provider.name}}</h3>
+                <div><span class="status-label">Status: </span>{{providerBundle.status}}</div>
+              </div>
+            </div>
+          </div>
+          <router-outlet (activate)="onActivate($event)"></router-outlet>
+        </div>
+      </div>
     </div>
   </div>
 </div>

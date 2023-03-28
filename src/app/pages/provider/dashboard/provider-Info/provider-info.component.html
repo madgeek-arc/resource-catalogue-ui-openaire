@@ -1,32 +1,21 @@
-<div *ngIf="provider" class="uk-section uk-section-xsmall">
-  <div class="uk-container uk-container-expand">
-    <div class="services-provider-container">
-      <div class="uk-flex ng-star-inserted">
-        <div>
-          <img style="max-width: 200px;" src="{{provider.logo}}">
-        </div>
-        <div class="uk-margin-medium-left"><h3 class="uk-margin-remove">{{provider.name}}</h3>
-          <div><span class="status-label">Status: </span>Get Status</div>
-        </div>
-      </div>
-    </div>
-    <div class="uk-margin-large-top">
-      <ul uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade"
-          class="uk-width-1-1 uk-margin-remove uk-tab form-tabs">
-        <li class="uk-active"><a href="#" aria-expanded="true"><span>Basic</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Marketing</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Classification</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Location</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Contact</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Maturity</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Dependencies</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Other</span></a></li>
-        <li class=""><a href="#" aria-expanded="false"><span>Admins</span></a></li>
-      </ul>
-    </div>
-    <div class="uk-card uk-card-body uk-card-default ng-star-inserted">
+<div>
+  <div class="uk-margin-large-top">
+    <ul uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade"
+        class="uk-width-1-1 uk-margin-remove uk-tab form-tabs">
+      <li class="uk-active"><a href="#" aria-expanded="true"><span>Basic</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Marketing</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Classification</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Location</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Contact</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Maturity</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Dependencies</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Other</span></a></li>
+      <li class=""><a href="#" aria-expanded="false"><span>Admins</span></a></li>
+    </ul>
+  </div>
+  <div class="uk-card uk-card-body uk-card-default">
       <ul id="top-navigation-tabs" class="uk-switcher uk-margin-top uk-margin-bottom" style="touch-action: pan-y pinch-zoom;">
-        <li class="uk-active" style="">
+        <li class="uk-active">
           <ul class="uk-list uk-width-1-1">
             <li>
               <div class="uk-grid">
@@ -66,7 +55,7 @@
             </li>
           </ul>
         </li>
-        <li class="" style="">
+        <li>
           <ul class="uk-list uk-width-1-1">
             <li>
               <div class="uk-grid">
@@ -84,7 +73,7 @@
                 </div>
               </div>
             </li>
-            <h5 *ngIf="provider.multimedia.length > 0" class="uk-margin-medium-top ng-star-inserted">Multimedia</h5>
+            <h5 *ngIf="provider.multimedia.length > 0" class="uk-margin-medium-top">Multimedia</h5>
             <li *ngFor="let multimedia of provider.multimedia">
               <div class="uk-grid">
                 <div class="uk-width-1-4">Multimedia URL</div>
@@ -97,11 +86,11 @@
             </li>
           </ul>
         </li>
-        <li class="" style="">
+        <li>
           <ul class="uk-list uk-width-1-1">
             <li>
-              <div class="uk-grid uk-margin-remove-top ng-star-inserted">
-                <div class="uk-width-1-4"><span class="ng-star-inserted">Tags</span></div>
+              <div class="uk-grid uk-margin-remove-top">
+                <div class="uk-width-1-4"><span>Tags</span></div>
                 <div class="uk-width-3-4">
                   <span *ngFor="let tag of provider.tags; let i=index">{{i !== 0 ? ', ':'' + tag}}</span>
                 </div>
@@ -143,34 +132,34 @@
             </li>
           </ul>
         </li>
-        <li class="" style="">
-          <ul class="uk-list uk-width-1-1 uk-margin-medium-bottom ng-star-inserted">
-            <h5 class="ng-star-inserted">Main Contact</h5>
-            <li class="ng-star-inserted">
+        <li>
+          <ul class="uk-list uk-width-1-1 uk-margin-medium-bottom">
+            <h5>Main Contact</h5>
+            <li>
               <div class="uk-grid">
                 <div class="uk-width-1-4">First Name</div>
                 <div class="uk-width-3-4">{{provider.mainContact.firstName}}</div>
               </div>
             </li>
-            <li class="ng-star-inserted">
+            <li>
               <div class="uk-grid">
                 <div class="uk-width-1-4">Last Name</div>
                 <div class="uk-width-3-4">{{provider.mainContact.lastName}}</div>
               </div>
             </li>
-            <li class="ng-star-inserted">
+            <li>
               <div class="uk-grid">
                 <div class="uk-width-1-4">Email</div>
                 <div class="uk-width-3-4">{{provider.mainContact.email}}</div>
               </div>
             </li>
-            <li class="ng-star-inserted">
+            <li>
               <div class="uk-grid">
                 <div class="uk-width-1-4">Phone</div>
                 <div class="uk-width-3-4">{{provider.mainContact.phone}}</div>
               </div>
             </li>
-            <li class="ng-star-inserted">
+            <li>
               <div class="uk-grid">
                 <div class="uk-width-1-4">Position</div>
                 <div class="uk-width-3-4">{{provider.mainContact.position}}</div>
@@ -211,7 +200,7 @@
             </div>
           </ul>
         </li>
-        <li class="" style="">
+        <li>
           <ul class="uk-list uk-width-1-1">
             <li>
               <div class="uk-grid">
@@ -220,26 +209,26 @@
               </div>
             </li>
             <li>
-              <div class="uk-grid uk-margin-remove-top ng-star-inserted">
-                <div class="uk-width-1-4"><span class="ng-star-inserted">Certifications</span></div>
+              <div class="uk-grid uk-margin-remove-top">
+                <div class="uk-width-1-4"><span>Certifications</span></div>
                 <div class="uk-width-3-4">{{provider.certifications}}</div>
               </div>
             </li>
           </ul>
         </li>
-        <li class="" style="">
+        <li>
           <ul class="uk-list uk-width-1-1">
             <li>
-              <div class="uk-grid uk-margin-remove-top ng-star-inserted">
-                <div class="uk-width-1-4"><span class="ng-star-inserted">Affiliations</span></div>
+              <div class="uk-grid uk-margin-remove-top">
+                <div class="uk-width-1-4"><span>Affiliations</span></div>
                 <div class="uk-width-3-4">
                   <span *ngFor="let affiliation of provider.affiliations; let i=index">{{i !== 0 ? ', ':'' + affiliation}}</span>
                 </div>
               </div>
             </li>
             <li>
-              <div class="uk-grid uk-margin-remove-top ng-star-inserted">
-                <div class="uk-width-1-4"><span class="ng-star-inserted">Networks</span></div>
+              <div class="uk-grid uk-margin-remove-top">
+                <div class="uk-width-1-4"><span>Networks</span></div>
                 <div class="uk-width-3-4">
                   <span *ngFor="let network of provider.networks; let i=index">{{i !== 0 ? ', ':'' + network}}</span>
                 </div>
@@ -253,7 +242,7 @@
             </li>
           </ul>
         </li>
-        <li class="" style="">
+        <li>
           <ul class="uk-list uk-width-1-1">
             <li>
               <div class="uk-grid">
@@ -261,8 +250,8 @@
                 <div class="uk-width-3-4">{{provider.esfriType}}</div>
               </div>
             </li>
-            <h5 class="uk-margin-medium-top ng-star-inserted">MERIL Scientific Categorisation</h5>
-            <li class="ng-star-inserted">
+            <h5 class="uk-margin-medium-top">MERIL Scientific Categorisation</h5>
+            <li>
               <div class="uk-grid">
                 <div class="uk-width-1-4">MERIL Scientific Domain</div>
                 <div class="uk-width-3-4">
@@ -270,7 +259,7 @@
                 </div>
               </div>
             </li>
-            <li class="uk-margin-medium-bottom ng-star-inserted">
+            <li class="uk-margin-medium-bottom">
               <div class="uk-grid">
                 <div class="uk-width-1-4">MERIL Scientific Subdomain</div>
                 <div class="uk-width-3-4">
@@ -279,7 +268,7 @@
               </div>
             </li>
             <li>
-              <div class="uk-grid uk-margin-remove-top ng-star-inserted">
+              <div class="uk-grid uk-margin-remove-top">
                 <div class="uk-width-1-4"><span>National Roadmaps</span></div>
                 <div class="uk-width-3-4">
                   <span *ngFor="let nationalRoadmap of provider.nationalRoadmaps; let i=index">{{i !== 0 ? ', ':'' + nationalRoadmap}}</span>
@@ -288,7 +277,7 @@
             </li>
           </ul>
         </li>
-        <li class="" style="">
+        <li>
           <ul *ngFor="let user of provider.users" class="uk-list uk-width-1-1 uk-margin-medium-bottom">
             <li>
               <div class="uk-grid">
@@ -312,8 +301,6 @@
         </li>
       </ul>
     </div>
-  </div>
 </div>
-
 
 <!--<pre>{{provider | json}}</pre>-->

@@ -3,7 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {CanActivateViaAuthGuard} from '../../services/can-activate-auth-guard.service';
 import {UpdateServiceProviderComponent} from './form/update-service-provider.component';
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
-import {ProviderInfoComponent} from './dashboard/providerInfo/provider-info.component';
+import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.component';
+import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
 
 const providerRoutes: Routes = [
   {
@@ -19,8 +20,18 @@ const providerRoutes: Routes = [
         component: ProviderDashboardComponent,
         children: [
           {
+            path: '',
+            redirectTo: 'updateHistory',
+            pathMatch: 'full'
+          },
+          {
             path: 'info',
             component: ProviderInfoComponent,
+            canActivate: [CanActivateViaAuthGuard]
+          },
+          {
+            path: 'updateHistory',
+            component: ProviderUpdateHistoryComponent,
             canActivate: [CanActivateViaAuthGuard]
           }
         ]

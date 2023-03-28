@@ -2,13 +2,28 @@
 /* eslint-disable */
 // Generated using typescript-generator version 2.16.538 on 2020-06-10 11:50:49.
 
-import {UiVocabulary} from './dynamic-form-model';
-
 export class Bundle<T> implements Identifiable {
   id: string;
   metadata: Metadata;
   active: boolean;
+  suspended: boolean;
+  identifiers
+  migrationStatus
+  loggingInfo: LoggingInfo[];
+  latestAuditInfo: LoggingInfo;
+  latestOnboardingInfo: LoggingInfo;
+  latestUpdateInfo: LoggingInfo;
   status: string;
+}
+
+export class LoggingInfo {
+  date: string;
+  userEmail: string;
+  userFullName: string;
+  userRole: string;
+  type: string;
+  comment: string;
+  actionType: string;
 }
 
 export class EmailMessage {
@@ -81,7 +96,6 @@ export class Metadata {
   originalId: string;
 }
 export class ProviderBundle extends Bundle<Provider> {
-  status: string;
   templateStatus: string;
   provider: Provider;
 }

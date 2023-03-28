@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
-import {InfraService, Provider, ProviderBundle, ProviderRequest, Service, ServiceHistory, VocabularyCuration} from '../entities/eic-model';
+import {InfraService, Provider, ProviderBundle} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Paging} from '../entities/paging';
@@ -47,6 +47,9 @@ export class ServiceProviderService {
 
   getServiceProviderById(id: string) {
     return this.http.get<Provider>(this.base + `/providers/${id}`, this.options);
+  }
+  getProviderBundle(id: string) {
+    return this.http.get<ProviderBundle>(this.base + `/bundles/providers/${id}`, this.options);
   }
 
   getPendingProviderById(id: string) {

@@ -9,7 +9,8 @@ import {UpdateServiceProviderComponent} from './form/update-service-provider.com
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
-import {ProviderInfoComponent} from './dashboard/providerInfo/provider-info.component';
+import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.component';
+import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
 
 
 @NgModule({
@@ -22,13 +23,13 @@ import {ProviderInfoComponent} from './dashboard/providerInfo/provider-info.comp
     ReusableComponentsModule,
     NgSelectModule,
     CKEditorModule,
-
   ],
   declarations: [
     ServiceProviderFormComponent,
     UpdateServiceProviderComponent,
     ProviderDashboardComponent,
-    ProviderInfoComponent
+    ProviderInfoComponent,
+    ProviderUpdateHistoryComponent
   ]
 })
 
