@@ -14,8 +14,8 @@
               <span class="material-icons uk-margin-small-right">info</span>Info
             </a>
           </li>
-          <li class="">
-            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none">
+          <li [ngClass]="{'current_section': path === 'services'}">
+            <a class="uk-flex uk-align-center uk-flex-middle text-decoration-none" [routerLink]="['services']">
               <span class="material-icons uk-margin-small-right">reorder</span>Services
             </a>
           </li>

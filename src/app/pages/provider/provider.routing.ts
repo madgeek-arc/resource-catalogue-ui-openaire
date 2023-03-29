@@ -5,6 +5,7 @@ import {UpdateServiceProviderComponent} from './form/update-service-provider.com
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
 import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.component';
 import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
+import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
 
 const providerRoutes: Routes = [
   {
@@ -32,6 +33,11 @@ const providerRoutes: Routes = [
           {
             path: 'updateHistory',
             component: ProviderUpdateHistoryComponent,
+            canActivate: [CanActivateViaAuthGuard]
+          },
+          {
+            path: 'services',
+            component: ProviderServicesComponent,
             canActivate: [CanActivateViaAuthGuard]
           }
         ]

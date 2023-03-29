@@ -1,7 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ProviderBundle} from '../../../../entities/eic-model';
-import {ServiceProviderService} from '../../../../services/service-provider.service';
-import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-provider-update-history',
@@ -10,24 +8,13 @@ import {ActivatedRoute} from '@angular/router';
 
 export class ProviderUpdateHistoryComponent implements OnInit {
 
-  providerId: string = null;
-  providerBundle: ProviderBundle = null
+  @Input() providerBundle: ProviderBundle = null
 
-  constructor(private route: ActivatedRoute, private providerService: ServiceProviderService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.route.parent.params.subscribe(
-      params => {
-        this.providerId = params['providerId'];
-        if (this.providerId) {
-          this.providerService.getProviderBundle(this.providerId).subscribe(
-            res => {this.providerBundle = res},
-            error => {console.error(error)}
-          )
-        }
-      }
-    );
+    // console.log(this.providerBundle);
   }
 
 }

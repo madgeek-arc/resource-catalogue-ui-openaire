@@ -174,7 +174,7 @@
                 </li>
                 <hr *ngIf="myProviders.length > 0">
                 <li class="groups" *ngFor="let provider of myProviders" (click)="hideDrop('#userActions')">
-                  <a [routerLink]="['/provider', provider.id]" class="text-black">
+                  <a [routerLink]="['/provider', provider.id, 'dashboard', 'updateHistory']" class="text-black">
                     <span class="material-icons uk-margin-right">group</span>{{provider.name}}
                   </a>
                 </li>

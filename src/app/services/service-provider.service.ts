@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
-import {InfraService, Provider, ProviderBundle} from '../entities/eic-model';
+import {Datasource, InfraService, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Paging} from '../entities/paging';
+import {URLParameter} from '../entities/url-parameter';
 
 @Injectable()
 export class ServiceProviderService {
@@ -56,14 +57,15 @@ export class ServiceProviderService {
     return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
   }
 
-  getServicesOfProvider(id: string, from: string, quantity: string, order: string, orderField: string, active: string, query?: string) {
-    if (!query) { query = ''; }
-    if (active === 'statusAll') {
-      return this.http.get<Paging<InfraService>>(this.base +
-        `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&query=${query}`);
+  getServicesOfProvider(resourceOrganisation: string, urlParameters?: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    searchQuery = searchQuery.append('resource_organisation', resourceOrganisation);
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
     }
-    return this.http.get<Paging<InfraService>>(this.base +
-      `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&active=${active}&query=${query}`);
+    return this.http.get<Paging<Service | Datasource>>(this.base + '/catalogue-resources', {params: searchQuery});
   }
 
   temporarySaveProvider(provider: Provider, providerExists: boolean) {

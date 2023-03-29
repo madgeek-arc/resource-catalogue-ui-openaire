@@ -22,7 +22,10 @@ export class ProviderDashboardComponent implements OnInit {
             this.path = 'info';
           } else if (event.url.includes('updateHistory')) {
             this.path = 'updateHistory';
+          } else if (event.url.includes('services')) {
+            this.path = 'services';
           }
+          console.log(this.path);
         }
       }
     );
