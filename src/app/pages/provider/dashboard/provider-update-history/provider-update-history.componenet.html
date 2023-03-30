@@ -1,4 +1,4 @@
-<div class="uk-container uk-margin-medium-top uk-margin-medium-bottom">
+`<div class="uk-container uk-margin-medium-top uk-margin-medium-bottom">
   <div class="uk-grid">
     <div class=" uk-width-expand@m">
 
@@ -24,12 +24,14 @@
                         <div class="al_timeline_image uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-scale-up"></div>
                         <div class="al_timeline_content uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-slide-right">
                           <div class="">
-                            <div>
-                              <div class="uk-card-badge uk-label uk-label-gray">
-                                <span class="">{{history.type | titlecase}}</span></div>
+                            <div class="uk-position-top">
+                              <div class="uk-card-badge uk-label uk-float-left" style="height: auto; top: 0; right: unset;">
+                                <span class="">{{history.type | titlecase}}</span>
+                              </div>
                             </div>
                             <div class="uk-position-top-right uk-margin-small uk-padding-small uk-padding-remove-top uk-padding-remove-bottom date-comment">
-                              {{history.date | date:'dd/MM/yyyy'}}
+<!--                              {{history.date | date:'dd/MM/yyyy'}}-->
+                              {{history.date}}
                             </div>
 
                             <div class="uk-margin-medium uk-text-left">
@@ -77,3 +79,4 @@
 </div>
 
 <!--<pre>{{providerBundle.loggingInfo | json }}</pre>-->
+`
