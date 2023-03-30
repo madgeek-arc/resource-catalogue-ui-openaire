@@ -6,7 +6,7 @@ import {ProviderBundle} from '../../../entities/eic-model';
 
 @Component({
   selector: 'app-provider-dashboard',
-  templateUrl: 'provider-dashoard.component.html'
+  templateUrl: 'provider-dashoard.component.html',
 })
 
 export class ProviderDashboardComponent implements OnInit {
@@ -25,7 +25,6 @@ export class ProviderDashboardComponent implements OnInit {
           } else if (event.url.includes('services')) {
             this.path = 'services';
           }
-          console.log(this.path);
         }
       }
     );
