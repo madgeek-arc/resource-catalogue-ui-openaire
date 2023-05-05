@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
@@ -111,6 +111,9 @@ export class ResourceService {
 
   getService(id: string, version?: string) {
     // if version becomes optional this should be reconsidered
+    console.log(this.base);
+    console.log(id);
+    console.log(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`);
     return this.http.get<Service>(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`, this.options);
   }
 
@@ -203,4 +206,11 @@ export class ResourceService {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
   }
 
+  getServiceBundle(serviceId: string) {
+    return this.http.get<Bundle<Service>>(this.base + `/bundles/services/${serviceId}/`);
+  }
+
+  getDatasourceBundle(serviceId: string) {
+    return this.http.get<Bundle<Service>>(this.base + `/bundles/datasources/${serviceId}/`);
+  }
 }

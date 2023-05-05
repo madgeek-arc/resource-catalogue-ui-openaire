@@ -92,8 +92,8 @@ const appRoutes: Routes = [
   },
 
   {
-    path: 'resource-dashboard',
-    loadChildren: () => import('../app/pages/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
+    path: 'service-dashboard',
+    loadChildren: () => import('./pages/service-dashboard/service-dashboard.module').then(m => m.ServiceDashboardModule),
     canActivate: [CanActivateViaAuthGuard]
   },
 

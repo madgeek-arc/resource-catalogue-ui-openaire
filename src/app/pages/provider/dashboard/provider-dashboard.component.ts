@@ -6,7 +6,7 @@ import {ProviderBundle} from '../../../entities/eic-model';
 
 @Component({
   selector: 'app-provider-dashboard',
-  templateUrl: 'provider-dashoard.component.html',
+  templateUrl: 'provider-dashboard.component.html',
 })
 
 export class ProviderDashboardComponent implements OnInit {
@@ -15,15 +15,28 @@ export class ProviderDashboardComponent implements OnInit {
   providerBundle: ProviderBundle = null;
   path: string = null;
 
+  titleIcon: string = null;
+  title: string = null;
+
   constructor(private route: ActivatedRoute, private router: Router, private serviceProviderService: ServiceProviderService) {
     this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
-          if (event.url.includes('info')) {
+          if (event.url.includes('home')) {
+            this.path = 'home';
+            this.titleIcon = 'home';
+            this.title = 'Home';
+          } else if (event.url.includes('info')) {
             this.path = 'info';
+            this.titleIcon = 'info';
+            this.title = 'Provider\'s profile';
           } else if (event.url.includes('updateHistory')) {
             this.path = 'updateHistory';
+            this.titleIcon = 'history';
+            this.title = 'History of updates';
           } else if (event.url.includes('services')) {
             this.path = 'services';
+            this.titleIcon = 'reorder';
+            this.title = 'Services';
           }
         }
       }
@@ -46,6 +59,21 @@ export class ProviderDashboardComponent implements OnInit {
 
   onActivate(componentReference) {
     componentReference.providerBundle = this.providerBundle;
+  }
+
+  toggleSidebar() {
+    const el: HTMLElement = document.getElementById('sidebar_toggle');
+    if(!el.classList.contains('closed')) {
+      el.classList.add('closed');
+      const el1: HTMLElement = document.getElementById('sidebar_main_content');
+      el1.classList.remove('sidebar_main_active');
+      el1.classList.add('sidebar_main_inactive');
+    } else {
+      el.classList.remove('closed');
+      const el1: HTMLElement = document.getElementById('sidebar_main_content');
+      el1.classList.add('sidebar_main_active');
+      el1.classList.remove('sidebar_main_inactive');
+    }
   }
 
 }

@@ -4,6 +4,7 @@ import {CanActivateViaAuthGuard} from '../../services/can-activate-auth-guard.se
 import {UpdateServiceProviderComponent} from './form/update-service-provider.component';
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
 import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.component';
+import {ProviderHomeComponent} from './dashboard/provider-home/provider-home.component';
 import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
 import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
 
@@ -22,23 +23,43 @@ const providerRoutes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'updateHistory',
-            pathMatch: 'full'
+            redirectTo: 'home',
+            pathMatch: 'full',
+            data: {
+              dashboardMode: true
+            },
+          },
+          {
+            path: 'home',
+            component: ProviderHomeComponent,
+            canActivate: [CanActivateViaAuthGuard],
+            data: {
+              dashboardMode: true
+            },
           },
           {
             path: 'info',
             component: ProviderInfoComponent,
-            canActivate: [CanActivateViaAuthGuard]
+            canActivate: [CanActivateViaAuthGuard],
+            data: {
+              dashboardMode: true
+            },
           },
           {
             path: 'updateHistory',
             component: ProviderUpdateHistoryComponent,
-            canActivate: [CanActivateViaAuthGuard]
+            canActivate: [CanActivateViaAuthGuard],
+            data: {
+              dashboardMode: true
+            },
           },
           {
             path: 'services',
             component: ProviderServicesComponent,
-            canActivate: [CanActivateViaAuthGuard]
+            canActivate: [CanActivateViaAuthGuard],
+            data: {
+              dashboardMode: true
+            },
           }
         ]
       },

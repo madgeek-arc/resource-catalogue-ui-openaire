@@ -3,11 +3,10 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {ReusableComponentsModule} from '../../shared/reusablecomponents/reusable-components.module';
-import {ServiceStatsComponent} from './service-stats.component';
 import {ServiceHistoryComponent} from './service-history.component';
 import {ServiceFullHistoryComponent} from './service-full-history.component';
-import {ResourceDashboardRouting} from './resource-dashboard.routing';
-import {ResourceDashboardComponent} from './resource-dashboard.component';
+import {ServiceDashboardRouting} from './service-dashboard.routing';
+import {ServiceDashboardComponent} from './service-dashboard.component';
 
 @NgModule({
   imports: [
@@ -15,16 +14,15 @@ import {ResourceDashboardComponent} from './resource-dashboard.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ResourceDashboardRouting,
+    ServiceDashboardRouting,
     ReusableComponentsModule,
   ],
   declarations: [
-    ResourceDashboardComponent,
-    ServiceStatsComponent,
+    ServiceDashboardComponent,
     ServiceHistoryComponent,
     ServiceFullHistoryComponent
   ]
 })
 
-export class ResourceDashboardModule {
+export class ServiceDashboardModule {
 }

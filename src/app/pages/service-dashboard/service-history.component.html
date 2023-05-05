@@ -1,7 +1,7 @@
 <div class="uk-section uk-section-small">
   <div class="uk-container uk-container-expand">
 
-    <div *ngIf="providerBundle?.loggingInfo" class="uk-margin-medium-top">
+    <div *ngIf="serviceBundle?.loggingInfo" class="uk-margin-medium-top">
       <div class="uk-container uk-container-center">
         <!--                <div class="uk-flex">-->
         <!--                  <div class="uk-button uk-button-danger uk-disabled uk-margin-small-top uk-flex uk-align-center uk-margin-small-bottom">Today</div>-->
@@ -9,8 +9,8 @@
 
         <div class="al_timeline">
 
-          <ng-container *ngIf="providerBundle?.loggingInfo?.length>0">
-            <ng-container *ngFor="let history of providerBundle.loggingInfo; let i = index">
+          <ng-container *ngIf="serviceBundle?.loggingInfo?.length>0">
+            <ng-container *ngFor="let history of serviceBundle.loggingInfo; let i = index">
               <ng-container *ngIf="i < 10">
 
                 <div class="al_timeline_block update">
@@ -24,7 +24,7 @@
                         {{history.type | titlecase}}
                       </div>
                       <div>
-                        <span class="uk-text-meta">Update: </span>{{history.date}}
+                        <span class="uk-text-meta">Update: </span>{{history.date | date: 'medium'}}
                       </div>
                     </div>
 

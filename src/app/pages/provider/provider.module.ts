@@ -12,6 +12,7 @@ import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.component';
 import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
 import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
+import {ProviderHomeComponent} from './dashboard/provider-home/provider-home.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {ProviderServicesComponent} from './dashboard/provider-services/provider-
     ServiceProviderFormComponent,
     UpdateServiceProviderComponent,
     ProviderDashboardComponent,
+    ProviderHomeComponent,
     ProviderInfoComponent,
     ProviderUpdateHistoryComponent,
     ProviderServicesComponent
