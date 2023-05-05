@@ -206,11 +206,8 @@ export class ResourceService {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
   }
 
-  getServiceBundle(serviceId: string) {
-    return this.http.get<Bundle<Service>>(this.base + `/bundles/services/${serviceId}/`);
+  getServiceOrDatasourceBundle(resourceId: string) {
+    return this.http.get<Bundle<Service | Datasource>>(this.base + `/catalogue-resources/bundles/${resourceId}/`);
   }
 
-  getDatasourceBundle(serviceId: string) {
-    return this.http.get<Bundle<Service>>(this.base + `/bundles/datasources/${serviceId}/`);
-  }
 }

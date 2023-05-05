@@ -3,8 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ResourceService} from '../../services/resource.service';
 import {NavigationService} from '../../services/navigation.service';
-import {environment} from '../../../environments/environment';
-import {Bundle, Service} from '../../entities/eic-model';
+import {Bundle, Datasource, Service} from '../../entities/eic-model';
 import {Subscription} from 'rxjs';
 
 
@@ -14,7 +13,7 @@ import {Subscription} from 'rxjs';
 })
 export class ServiceDashboardComponent implements OnInit {
 
-  public serviceBundle: Bundle<Service>;
+  public serviceBundle: Bundle<Service | Datasource>;
   public service: Service;
   providerId: string;
   serviceId: string;
@@ -42,7 +41,7 @@ export class ServiceDashboardComponent implements OnInit {
           // this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
         }
       );
-      this.resourceService.getServiceBundle(params['resourceId']).subscribe(suc => {
+      this.resourceService.getServiceOrDatasourceBundle(params['resourceId']).subscribe(suc => {
         this.serviceBundle = suc;
           console.log('Service bundle in service-dashboard.component ->', this.serviceBundle);
       },

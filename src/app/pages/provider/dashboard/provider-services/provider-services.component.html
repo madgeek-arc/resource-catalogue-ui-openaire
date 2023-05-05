@@ -44,16 +44,16 @@
               <div>
                 <!--            TODO get real values from bundle-->
                 <div class="uk-flex uk-flex-right">
-                  <div class="uk-label">Status label</div>
+                  <div class="uk-label">{{resourceInfo.status}}</div>
                 </div>
 
                 <div class="uk-margin-top">
-                  <img src="{{resourceInfo.logo}}" width="140px" height="62px">
+                  <img src="{{getPayload(resourceInfo).logo}}" width="140px" height="62px">
                 </div>
 
                 <div class="uk-margin-top">
-                  <a class="uk-link" [routerLink]="['/service-dashboard', providerBundle.provider.id, resourceInfo.id]">
-                    <h6 class="uk-text-blue">{{resourceInfo.name}}</h6>
+                  <a class="uk-link" [routerLink]="['/service-dashboard', providerBundle.provider.id, getPayload(resourceInfo).id]">
+                    <h6 class="uk-text-blue">{{getPayload(resourceInfo).name}}</h6>
                   </a>
                 </div>
 
@@ -61,16 +61,16 @@
                   <!--              TODO get real values from bundle-->
                   <p>
                     <span class="uk-text-italic uk-text-muted uk-margin-small-right">Updated:</span>
-                    <span>Jul 15, 2022</span>
+                    <span>{{resourceInfo.metadata.modifiedAt | date}}</span>
                     <!--                <span class="uk-margin-small-right uk-margin-small-left">.</span>-->
                     <span class="uk-margin-small-right uk-margin-small-left" style="display: inline-block; font-size: 17px; color: #000000;">•</span>
                     <span class="uk-text-italic uk-text-muted uk-margin-small-right">Created:</span>
-                    <span>Feb 9, 2022</span>
+                    <span>{{resourceInfo.metadata.registeredAt | date}}</span>
                   </p>
                 </div>
 
                 <div class="uk-margin-top">
-                  <p [innerHTML]="resourceInfo.extras['pitch']"></p>
+                  <p [innerHTML]="getPayload(resourceInfo).extras['pitch']"></p>
                 </div>
               </div>
 

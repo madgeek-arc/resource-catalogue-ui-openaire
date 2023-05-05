@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
+import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
 import {ServiceProviderService} from '../../../../services/service-provider.service';
 import {Paging} from '../../../../entities/paging';
 import {URLParameter} from '../../../../entities/url-parameter';
@@ -16,7 +16,7 @@ export class ProviderServicesComponent implements OnInit {
 
   @Input() providerBundle: ProviderBundle = null
 
-  services: Paging<Service | Datasource> = null;
+  services: Paging<Bundle<Service | Datasource>> = null;
   vocabularies: Vocabulary[] = null;
   queryParams: URLParameter[] = []
 
@@ -138,5 +138,9 @@ export class ProviderServicesComponent implements OnInit {
         return vocabulary.name;
       }
     }
+  }
+
+  getPayload(bundle : Bundle<Service | Datasource>): Service | Datasource {
+    return bundle.service != null ? bundle.service : bundle.datasource;
   }
 }

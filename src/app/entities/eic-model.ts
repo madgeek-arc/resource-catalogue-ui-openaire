@@ -14,6 +14,8 @@ export class Bundle<T> implements Identifiable {
   latestOnboardingInfo: LoggingInfo;
   latestUpdateInfo: LoggingInfo;
   status: string;
+  service: Service;
+  datasource: Datasource;
 }
 
 export class LoggingInfo {
@@ -215,7 +217,7 @@ export class Service implements Identifiable {
   standards: string[];
   openSourceTechnologies: string[];
   version: string;
-  lastUpdate: XMLGregorianCalendar;
+  lastUpdate: string;
   changeLog: string[];
   requiredResources: string[];
   relatedResources: string[];

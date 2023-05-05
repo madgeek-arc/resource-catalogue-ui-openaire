@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
-import {Datasource, InfraService, Provider, ProviderBundle, Service} from '../entities/eic-model';
+import {Bundle, Datasource, InfraService, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Paging} from '../entities/paging';
@@ -65,7 +65,7 @@ export class ServiceProviderService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Service | Datasource>>(this.base + '/catalogue-resources', {params: searchQuery});
+    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.base + '/catalogue-resources/bundles', {params: searchQuery});
   }
 
   temporarySaveProvider(provider: Provider, providerExists: boolean) {
