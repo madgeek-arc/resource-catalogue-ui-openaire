@@ -1,7 +1,29 @@
 <div class="uk-section uk-section-xsmall filters">
 
   <div class="uk-container uk-container-expand">
-    Insert filters here....
+    <div class="uk-margin-medium-left uk-padding-remove uk-flex uk-flex-middle" uk-grid>
+      <div class="uk-width-1-6 uk-padding-remove">
+        <ng-select id="selectStakeholder" (change)="filterSelection('status', status)"
+                   [items]="[]" [(ngModel)]="status"
+                   placeholder="Approvement status" bindLabel="label" bindValue="value" clearAllText="Clear">
+        </ng-select>
+      </div>
+      <div class="uk-width-1-6 uk-padding-remove">
+        <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus)"
+                   placeholder="Activation Status" [(ngModel)]="activeStatus" clearAllText="Clear">
+          <ng-option [value]="''">All activation statuses</ng-option>
+          <ng-option [value]="'true'">Active</ng-option>
+          <ng-option [value]="'false'">Inactive</ng-option>
+        </ng-select>
+      </div>
+      <div class="uk-width-1-6 uk-padding-remove">
+        <ng-select id="order" [(ngModel)]="order" clearAllText="Clear" placeholder="Modification Order"
+                   (change)="this.updateURLParameters('orderField', 'modifiedAt'); filterSelection('order', order)">
+          <ng-option [value]="'desc'">Most recently modified</ng-option>
+          <ng-option [value]="'asc'">Least recently modified</ng-option>
+        </ng-select>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -42,7 +64,6 @@
 
             <div class="uk-card-body uk-flex uk-flex-column uk-flex-between">
               <div>
-                <!--            TODO get real values from bundle-->
                 <div class="uk-flex uk-flex-right">
                   <div class="uk-label">{{resourceInfo.status}}</div>
                 </div>
@@ -58,14 +79,15 @@
                 </div>
 
                 <div class="uk-margin-small-top">
-                  <!--              TODO get real values from bundle-->
                   <p>
                     <span class="uk-text-italic uk-text-muted uk-margin-small-right">Updated:</span>
                     <span>{{resourceInfo.metadata.modifiedAt | date}}</span>
                     <!--                <span class="uk-margin-small-right uk-margin-small-left">.</span>-->
-                    <span class="uk-margin-small-right uk-margin-small-left" style="display: inline-block; font-size: 17px; color: #000000;">•</span>
-                    <span class="uk-text-italic uk-text-muted uk-margin-small-right">Created:</span>
-                    <span>{{resourceInfo.metadata.registeredAt | date}}</span>
+                    <span *ngIf="resourceInfo.metadata.registeredAt !== '0'">
+                      <span class="uk-margin-small-right uk-margin-small-left" style="display: inline-block; font-size: 17px; color: #000000;">•</span>
+                      <span class="uk-text-italic uk-text-muted uk-margin-small-right">Created:</span>
+                      <span>{{ resourceInfo.metadata.registeredAt | date}}</span>
+                    </span>
                   </p>
                 </div>
 
@@ -75,131 +97,16 @@
               </div>
 
               <div class="uk-flex uk-flex-middle uk-margin-top">
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle"><span class="material-icons">edit</span>Update</a>
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle"><span class="material-icons">hide_source</span>Deactivate</a>
+                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
+                  <span class="material-icons">edit</span>Update
+                </a>
+                <a class="uk-link uk-margin-right uk-flex uk-flex-middle">
+                  <span class="material-icons">hide_source</span>Deactivate
+                </a>
               </div>
 
             </div>
           </div>
-
-<!--          <a [routerLink]="['/service/' + resourceInfo.id]" class="serviceDetails">-->
-<!--            <div class="uk-card uk-card-default uk-card-hover uk-margin-bottom">-->
-
-<!--              &lt;!&ndash;LAPTOP & PAD LANDSCAPE&ndash;&gt;-->
-<!--              <div class="service-details-card-content uk-visible@m uk-flex">-->
-
-<!--                <div *ngIf="resourceInfo.extras?.['portfolios']?.length > 0" class="portfolioSection">-->
-<!--                  <div>-->
-<!--                    <span *ngFor="let portfolio of resourceInfo.extras['portfolios']; let i = index">-->
-<!--                      <ng-container *ngIf="i!=0">, </ng-container>{{getVocabularyName(portfolio)}}-->
-<!--                    </span>-->
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--                <div class="">-->
-<!--                  <div class="uk-flex">-->
-
-<!--                    <div class="uk-width-3-4@m uk-card-body">-->
-<!--                      <div>-->
-<!--                        <h5 class="uk-margin-remove uk-text-left@m uk-text-center uk-scrollspy-inview uk-animation-fade uk-inline"-->
-<!--                            uk-scrollspy-class="">-->
-<!--                          {{resourceInfo.name || "Not Available"}}-->
-<!--                        </h5>-->
-<!--                      </div>-->
-<!--                      <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">-->
-<!--                        "{{resourceInfo.tagline}}"-->
-<!--                      </p>-->
-<!--                      <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"-->
-<!--                           uk-scrollspy-class="">-->
-<!--                        <p [innerHTML]="resourceInfo.extras['pitch']"></p>-->
-<!--                      </div>-->
-
-<!--                      <div *ngIf="resourceInfo.extras?.['users'][0]" uk-scrollspy-class=""-->
-<!--                           class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users">-->
-<!--                        <span class="field-label uk-margin-small-right">Users: </span>-->
-<!--                        <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">-->
-<!--                      <ng-container *ngIf="i!==0">, </ng-container>{{getVocabularyName(user)}}-->
-<!--                    </span>-->
-<!--                      </div>-->
-<!--                      <div *ngIf="resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle" uk-scrollspy-class=""-->
-<!--                           class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing">-->
-<!--                        <span class="field-label">Pricing: </span>-->
-<!--                        <span class="field-value uk-margin-small-left">-->
-<!--                          {{resourceInfo.extras['paymentCategories'][0]?.paymentTitle}}-->
-<!--                        </span>-->
-<!--                      </div>-->
-
-<!--                    </div>-->
-
-<!--                    <div class="uk-width-1-4@m uk-padding-remove uk-overlay uk-overlay-default service-image uk-flex uk-flex-right">-->
-<!--                      <img src="{{resourceInfo.extras.image}}" style="border-radius: 0 6px 6px 0; max-height: 300px" alt="service image">-->
-<!--                    </div>-->
-
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--              </div>-->
-
-<!--              &lt;!&ndash;MOBILE & PAD PORTRAIT&ndash;&gt;-->
-<!--              <div class="service-details-card-content uk-hidden@m">-->
-
-<!--                <div class="uk-padding-remove service-image">-->
-<!--                  <img src="{{resourceInfo.extras.image}}">-->
-<!--                </div>-->
-
-<!--                <div class="">-->
-<!--                  <div>-->
-
-<!--                    <div class="uk-card-body">-->
-<!--                      <div>-->
-<!--                        <h5 class="uk-margin-remove uk-text-left uk-scrollspy-inview uk-animation-fade uk-inline"-->
-<!--                            uk-scrollspy-class="" style="">-->
-<!--                          {{resourceInfo.name || "Not Available"}}-->
-<!--                        </h5>-->
-<!--                      </div>-->
-<!--                      <p *ngIf="resourceInfo.tagline" class="uk-margin-small-top serviceTagLine h5-subheader" style="">-->
-<!--                        "{{resourceInfo.tagline}}"-->
-<!--                      </p>-->
-<!--                      <div-->
-<!--                        class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"-->
-<!--                        uk-scrollspy-class="" style="">-->
-<!--                        <p [innerHTML]="resourceInfo.extras['pitch']"></p>-->
-<!--                      </div>-->
-<!--                      {{resourceInfo.extras?.['users']}}-->
-<!--                      <div-->
-<!--                        *ngIf="!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0]?.name === '')"-->
-<!--                        class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users"-->
-<!--                        uk-scrollspy-class="" style="">-->
-<!--                        <span class="field-label  uk-margin-small-right">Users: </span>-->
-<!--                        <span *ngFor="let user of resourceInfo.extras['users']; let i = index" class="field-value">-->
-<!--                      <ng-container *ngIf="i!=0">, </ng-container>{{getVocabularyName(user)}}-->
-<!--                    </span>-->
-<!--                      </div>-->
-<!--                      <div-->
-<!--                        *ngIf="!(resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === null || resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === '')"-->
-<!--                        class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing"-->
-<!--                        uk-scrollspy-class="" style="">-->
-<!--                        <span class="field-label">Pricing: </span>-->
-<!--                        <span class="field-value uk-margin-small-left">-->
-<!--                      {{resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle}}-->
-<!--                    </span>-->
-<!--                      </div>-->
-
-<!--                    </div>-->
-
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--                <div *ngIf="resourceInfo.extras?.['portfolios']?.length>0" class="portfolioSection">-->
-<!--                  <ng-container *ngFor="let portfolio of resourceInfo.extras['portfolios']; let i = index">-->
-<!--                    <ng-container *ngIf="i!=0">, </ng-container>{{getVocabularyName(portfolio)}}-->
-<!--                  </ng-container>-->
-<!--                </div>-->
-
-<!--              </div>-->
-
-<!--            </div>-->
-<!--          </a>-->
 
         </div>
 

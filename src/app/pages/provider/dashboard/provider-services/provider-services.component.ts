@@ -23,9 +23,14 @@ export class ProviderServicesComponent implements OnInit {
   // Paging
   pages: number[] = [];
   offset = 2;
-  pageSize = 10;
+  pageSize = 9;
   totalPages = 0;
   currentPage = 0;
+
+  // Filter
+  order: string = null;
+  activeStatus: string = '';
+  status: string = '';
 
   constructor(private providerService: ServiceProviderService, private resourceService: ResourceService, private router: Router,
               private route: ActivatedRoute) {
@@ -33,15 +38,21 @@ export class ProviderServicesComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
+      let found = false;
       this.queryParams.splice(0, this.queryParams.length);
       for (const obj in params) {
         if (params.hasOwnProperty(obj)) {
+          if (obj === 'quantity')
+            found = true;
           const urlParameter: URLParameter = {
             key: obj,
             values: params[obj].split(',')
           };
           this.queryParams.push(urlParameter);
         }
+      }
+      if (!found) {
+        this.updateURLParameters('quantity', this.pageSize);
       }
 
       this.providerService.getServicesOfProvider(this.providerBundle.provider.id, this.queryParams).subscribe(
@@ -128,6 +139,12 @@ export class ProviderServicesComponent implements OnInit {
       this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
       this.navigateUsingParameters();
     }
+  }
+
+  filterSelection(key: string, value: string | string[]) {
+    this.updateURLParameters(key, value);
+    this.updateURLParameters('from', '0');
+    return this.navigateUsingParameters();
   }
 
   /** <------------- Pagination and Paging navigation **/
