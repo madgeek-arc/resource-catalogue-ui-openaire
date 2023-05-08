@@ -18,6 +18,7 @@ export class ProviderServicesComponent implements OnInit {
 
   services: Paging<Bundle<Service | Datasource>> = null;
   vocabularies: Vocabulary[] = null;
+  resourceState: Vocabulary[] = null;
   queryParams: URLParameter[] = []
 
   // Paging
@@ -30,7 +31,7 @@ export class ProviderServicesComponent implements OnInit {
   // Filter
   order: string = null;
   activeStatus: string = '';
-  status: string = '';
+  status: string = null;
 
   constructor(private providerService: ServiceProviderService, private resourceService: ResourceService, private router: Router,
               private route: ActivatedRoute) {
@@ -54,6 +55,7 @@ export class ProviderServicesComponent implements OnInit {
       if (!found) {
         this.updateURLParameters('quantity', this.pageSize);
       }
+      this.setFilters();
 
       this.providerService.getServicesOfProvider(this.providerBundle.provider.id, this.queryParams).subscribe(
         res => {this.services = res;},
@@ -65,9 +67,11 @@ export class ProviderServicesComponent implements OnInit {
 
     zip(
       this.resourceService.getNewVocabulariesByType('Users'),
-      this.resourceService.getNewVocabulariesByType('Portfolios')).subscribe(
+      this.resourceService.getNewVocabulariesByType('Portfolios'),
+      this.resourceService.getNewVocabulariesByType('Resource state')).subscribe(
       value => {
         this.vocabularies = value[0].concat(value[1]);
+        this.resourceState = value[2];
         // this.loading = false;
       },
       error => {console.log(error);}
@@ -75,7 +79,11 @@ export class ProviderServicesComponent implements OnInit {
   }
 
   /** Handle query params and navigation ---------------> **/
-  updateURLParameters(key, value) {
+  updateURLParameters(key: string, value) {
+    if (value === null) {
+      this.queryParams = this.queryParams.filter(params => {return params.key != key});
+      return;
+    }
     for (const urlParameter of this.queryParams) {
       if (urlParameter.key === key) {
         urlParameter.values = [value];
@@ -142,12 +150,35 @@ export class ProviderServicesComponent implements OnInit {
   }
 
   filterSelection(key: string, value: string | string[]) {
+    if (key === 'order' && value === null)
+      this.updateURLParameters('orderField', null);
+
     this.updateURLParameters(key, value);
     this.updateURLParameters('from', '0');
     return this.navigateUsingParameters();
   }
 
   /** <------------- Pagination and Paging navigation **/
+
+  /** Set filters -------------> **/
+
+  setFilters() {
+    for (let i = 0; i < this.queryParams.length; i++) {
+      if (this.queryParams[i].key === 'active') {
+        this.activeStatus = this.queryParams[i].values[0];
+        continue;
+      }
+      if (this.queryParams[i].key === 'status') {
+        this.status = this.queryParams[i].values[0];
+        continue;
+      }
+      if (this.queryParams[i].key === 'order') {
+        this.order = this.queryParams[i].values[0];
+      }
+    }
+  }
+
+  /** <------------- Set filters  **/
 
   getVocabularyName(id: string) {
     for (const vocabulary of this.vocabularies) {
