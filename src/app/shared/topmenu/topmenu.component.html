@@ -178,6 +178,14 @@
                     <span class="material-icons uk-margin-right">group</span>{{provider.name}}
                   </a>
                 </li>
+                <ng-container *ngIf="user.roles.includes('ADMIN')">
+                  <hr>
+                  <li class="groups" (click)="hideDrop('#userActions')">
+                    <a class="text-black">
+                      <span class="material-icons uk-margin-right">admin_panel_settings</span>Admin pages
+                    </a>
+                  </li>
+                </ng-container>
                 <hr>
                 <li>
                   <a id="logout" (click)="logout()">Log out</a>
