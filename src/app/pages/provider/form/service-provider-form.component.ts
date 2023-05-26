@@ -30,7 +30,6 @@ export class ServiceProviderFormComponent implements OnInit {
   projectName = environment.projectName;
   projectMail = environment.projectMail;
   privacyPolicyURL = environment.privacyPolicyURL;
-  // catalogueId: string = 'eosc'; // TODO: revisit to check if init causes or prevents any problems
   providerId: string = null;
   providerName = '';
   errorMessage = '';
@@ -139,7 +138,6 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly legalEntityDesc: sd.Description = sd.providerDescMap.get('legalEntityDesc');
   readonly legalStatusDesc: sd.Description = sd.providerDescMap.get('legalStatusDesc');
   readonly networksDesc: sd.Description = sd.providerDescMap.get('networksDesc');
-  // readonly catalogueIdDesc: sd.Description = sd.providerDescMap.get('catalogueIdDesc');
 
   placesVocabulary: Vocabulary[] = null;
   providerTypeVocabulary: Vocabulary[] = null;
@@ -203,7 +201,6 @@ export class ServiceProviderFormComponent implements OnInit {
     participatingCountries: this.fb.array([this.fb.control('')]),
     affiliations: this.fb.array([this.fb.control('')]),
     networks: this.fb.array([this.fb.control('')]),
-    // catalogueId: [''],
     structureTypes: this.fb.array([this.fb.control('')]),
     esfriDomains: this.fb.array([this.fb.control('')]),
     esfriType: [''],
@@ -490,7 +487,6 @@ export class ServiceProviderFormComponent implements OnInit {
     this.tabs[6] = (this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
       || this.checkEveryArrayFieldValidity('affiliations', this.edit)
       || this.checkEveryArrayFieldValidity('networks', this.edit));
-      // || this.checkEveryArrayFieldValidity('catalogueId', this.edit));
     this.tabs[7] = (this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
       || this.checkFormValidity('esfriType', this.edit)
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificDomain')
