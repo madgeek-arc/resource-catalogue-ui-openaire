@@ -101,6 +101,13 @@ const appRoutes: Routes = [
     path: 'service',
     loadChildren: () => import('../app/pages/landingpages/service/service-landing-page.module').then(m => m.ServiceLandingPageModule),
   },
+
+  {
+    path: 'admin',
+    loadChildren: () => import('../app/pages/admin-dashboard/admin.module').then(m => m.AdminModule),
+    canActivate: [CanActivateViaAuthGuard]
+  },
+
   {
     path: 'forbidden',
     component: ForbiddenPageComponent,

@@ -181,7 +181,7 @@
                 <ng-container *ngIf="user.roles.includes('ADMIN')">
                   <hr>
                   <li class="groups" (click)="hideDrop('#userActions')">
-                    <a class="text-black">
+                    <a [routerLink]="['/admin/providers']" class="text-black">
                       <span class="material-icons uk-margin-right">admin_panel_settings</span>Admin pages
                     </a>
                   </li>
