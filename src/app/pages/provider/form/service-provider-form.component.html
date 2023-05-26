@@ -148,12 +148,17 @@
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[6]}" href="#">
-                          <span>7. Other</span>
+                          <span>7. Dependencies</span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[7]}" href="#">
-                          <span>8. Admins *</span>
+                          <span>8. Other</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[8]}" href="#">
+                          <span>9. Admins *</span>
                           <span class="circle-number">
                             <i *ngIf="remainingOnTab7==0" aria-hidden="true" class="fa fa-check"></i>
                             {{remainingOnTab7!=0 ? remainingOnTab7 +'*' : ''}}
@@ -228,8 +233,7 @@
                               </label>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <label>
-                                  <span
-                                    class="uk-form-description uk-margin-small-right">{{legalEntityDesc.desc}}</span>
+                                  <span class="uk-form-description uk-margin-small-right">{{legalEntityDesc.desc}}</span>
                                   <input class="uk-checkbox" type="checkbox" id="legalEntityYes"
                                          formControlName="legalEntity" value="true"
                                          (input)="this.newProviderForm.get('legalStatus').setValue(''); unsavedChangesPrompt()"
@@ -270,6 +274,20 @@
                                 <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
                               </div>
                             </div>
+                            <div class="uk-margin-large-bottom">
+                              <label class="uk-form-label uk-text-right" for="hostingLegalEntity">
+                                {{hostingLegalEntityDesc.label + (hostingLegalEntityDesc.mandatory ? ' (*)' : '')}}
+                              </label>
+                              <div
+                                class="uk-form-description uk-margin-top uk-width-9-10">{{hostingLegalEntityDesc.desc}}</div>
+                              <div class="uk-form-controls uk-margin-medium-top">
+                                <input id="hostingLegalEntity" class="uk-input uk-width-9-10" type="text"
+                                       formControlName="hostingLegalEntity"
+                                       (input)="unsavedChangesPrompt()"
+                                       [ngClass]="{'uk-form-danger': checkFormValidity('hostingLegalEntity', this.edit)}">
+                              </div>
+                              <i><small>Suggested length is 80 characters</small></i>
+                            </div>
                           </li>
                           <!--MARKETING-->
                           <li>
@@ -304,34 +322,52 @@
                               </div>
                               <i><small>{{providerLogoDesc.desc}}</small></i>
                             </div>
-                            <div formArrayName="multimedia" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right" for="multimedia">
-                                {{providerMultimediaDesc.label + (providerMultimediaDesc.mandatory ? ' (*)' : '')}}
-                              </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{providerMultimediaDesc.desc}}</div>
-                              <div class="uk-form-controls uk-margin-medium-top">
-                                <div *ngFor="let media of getFieldAsFormArray('multimedia').controls; let i=index"
-                                     class="uk-margin-bottom">
-                                  <input id="multimedia" class="uk-input uk-width-9-10" type="text"
-                                         [formControlName]="i" placeholder="use http:// or https://"
-                                         (input)="unsavedChangesPrompt()"
-                                         [ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i, this.edit)}">
-                                  <div *ngIf="this.edit && this.isPortalAdmin && this.newProviderForm.get('multimedia').value[i]" class="uk-icon">
-                                    <a href="{{this.newProviderForm.get('multimedia').value[i]}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                            <div class="uk-margin-large-bottom">
+                              <label class="uk-form-label uk-text-right">Multimedia</label>
+                              <div class="uk-form-controls uk-margin-top">
+                                <div formArrayName="multimedia"
+                                     *ngFor="let multi of multimediaArray.controls; let i = index">
+                                  <div [formGroupName]="i"
+                                       class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
+                                    <div class="uk-margin-bottom">
+                                      <label class="uk-form-label uk-text-right" for="multimediaURL">
+                                        {{ multimediaURLDesc.label + (multimediaURLDesc.mandatory ? ' (*)' : '') }}
+                                      </label>
+                                      <div class="uk-form-description uk-margin-top uk-width-9-10">{{multimediaURLDesc.desc}}</div>
+                                      <div class="uk-form-controls uk-margin-medium-top">
+                                        <input id="multimediaURL" class="uk-input uk-width-9-10" type="text" formControlName="multimediaURL" placeholder="use http:// or https://"
+                                               (input)="unsavedChangesPrompt()"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i, this.edit, 'multimediaURL')}">
+                                        <div *ngIf="this.edit && this.isPortalAdmin && this.newProviderForm.get('multimedia').value[i]['multimediaURL']" class="uk-icon">
+                                          <a href="{{this.newProviderForm.get('multimedia').value[i]['multimediaURL']}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="uk-margin-bottom">
+                                      <label class="uk-form-label uk-text-right" for="multimediaName">
+                                        {{ multimediaNameDesc.label + (multimediaNameDesc.mandatory ? ' (*)' : '') }}
+                                      </label>
+                                      <div class="uk-form-description uk-margin-top uk-width-9-10">{{multimediaNameDesc.desc}}</div>
+                                      <div class="uk-form-controls uk-margin-medium-top">
+                                        <input id="multimediaName" class="uk-input uk-width-9-10" type="text" formControlName="multimediaName"
+                                               (input)="unsavedChangesPrompt()">
+                                        <!--[ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i, this.edit, 'multimediaName')}">-->
+                                      </div>
+                                      <i><small>Suggested length is 100 characters</small></i>
+                                    </div>
+
                                   </div>
                                   <a *ngIf="getFieldAsFormArray('multimedia').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('multimedia', i); unsavedChangesPrompt()">
+                                     class="remove-element uk-padding-small uk-display-inline-block"
+                                     (click)="removeMultimedia(i); unsavedChangesPrompt();">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
-                                <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-                                  <a class="add-new-element" (click)="push('multimedia', false, true)">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> Add {{providerMultimediaDesc.label}}
-                                  </a>
-                                </div>
-                                <!--<i><small>{{providerMultimediaDesc.desc}}</small></i>-->
+                              </div>
+                              <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-top">
+                                <a class="add-new-element" (click)="pushMultimedia()">
+                                  <i class="fa fa-plus" aria-hidden="true"></i> Add multimedia
+                                </a>
                               </div>
                             </div>
                           </li>
@@ -461,6 +497,54 @@
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('tags', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{providerTagsDesc.label}}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                            <div formArrayName="structureTypes" class="uk-margin-large-bottom">
+                              <label class="uk-form-label uk-text-right" for="structureTypes">
+                                {{structureTypesDesc.label + (structureTypesDesc.mandatory ? ' (*)' : '')}}
+                              </label>
+                              <div
+                                class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
+                              <div class="uk-form-controls uk-margin-medium-top">
+                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index" class="uk-margin-bottom">
+                                  <ng-select class="uk-width-9-10" id="structureTypes"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i, this.edit)}"
+                                             *ngIf="providerTypeVocabulary"
+                                             [items]="sortVocabulariesByName(providerTypeVocabulary)"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
+                                  <a *ngIf="getFieldAsFormArray('structureTypes').length > 1 && !disable"
+                                     class="remove-element uk-padding-small"
+                                     (click)="remove('structureTypes', i); unsavedChangesPrompt()">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                  </a>
+                                </div>
+                                <div class="uk-margin-small-top">
+                                  <i><small>For suggestions in amending the
+                                    "{{structureTypesDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
+                                </div>
+                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index">
+                                  <div *ngIf="this.newProviderForm.get('structureTypes').value[i] === 'provider_structure_type-other'" class="uk-flex uk-flex-left">
+                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
+                                      <label>
+                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="providerTypeVocabularyEntryValueName">
+                                      </label>
+                                    </form>
+                                    <button class="uk-button uk-button-default" type="submit"
+                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('providerTypeVocabularyEntryValueName').value, 'PROVIDER STRUCTURE TYPE', null)">
+                                      Submit
+                                    </button>
+                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
+                                </div>
+                                <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
+                                  <a class="add-new-element" (click)="push('structureTypes', true)">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
                                   </a>
                                 </div>
                               </div>
@@ -641,7 +725,6 @@
                                     <i><small>Suggested length is 50 characters</small></i>
                                   </div>
 
-
                                 </div>
                               </div>
                             </div>
@@ -805,22 +888,8 @@
                               </div>
                             </div>
                           </li>
-                          <!--OTHER-->
+                          <!--DEPENDENCIES-->
                           <li>
-                            <div class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right" for="hostingLegalEntity">
-                                {{hostingLegalEntityDesc.label + (hostingLegalEntityDesc.mandatory ? ' (*)' : '')}}
-                              </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{hostingLegalEntityDesc.desc}}</div>
-                              <div class="uk-form-controls uk-margin-medium-top">
-                                <input id="hostingLegalEntity" class="uk-input uk-width-9-10" type="text"
-                                       formControlName="hostingLegalEntity"
-                                       (input)="unsavedChangesPrompt()"
-                                       [ngClass]="{'uk-form-danger': checkFormValidity('hostingLegalEntity', this.edit)}">
-                              </div>
-                              <i><small>Suggested length is 80 characters</small></i>
-                            </div>
                             <div formArrayName="participatingCountries" class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="participatingCountries">
                                 {{participatingCountriesDesc.label + (participatingCountriesDesc.mandatory ? ' (*)' : '')}}
@@ -906,15 +975,15 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('networks').controls; let i=index"
                                      [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('networks').controls.length-1 !== i}">
-<!--                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"-->
-<!--                                          (change)="unsavedChangesPrompt()"-->
-<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">-->
-<!--                                    <option value=""></option>-->
-<!--                                    <option *ngFor="let entry of sortVocabulariesByName(networksVocabulary)"-->
-<!--                                            value="{{entry.id}}">-->
-<!--                                      {{entry.name}}-->
-<!--                                    </option>-->
-<!--                                  </select>-->
+                                  <!--                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"-->
+                                  <!--                                          (change)="unsavedChangesPrompt()"-->
+                                  <!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">-->
+                                  <!--                                    <option value=""></option>-->
+                                  <!--                                    <option *ngFor="let entry of sortVocabulariesByName(networksVocabulary)"-->
+                                  <!--                                            value="{{entry.id}}">-->
+                                  <!--                                      {{entry.name}}-->
+                                  <!--                                    </option>-->
+                                  <!--                                  </select>-->
                                   <ng-select class="uk-width-9-10" id="networks"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i, this.edit)}"
                                              [items]="sortVocabulariesByName(networksVocabulary)"
@@ -954,55 +1023,21 @@
                                 </div>
                               </div>
                             </div>
-                            <div formArrayName="structureTypes" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right" for="structureTypes">
-                                {{structureTypesDesc.label + (structureTypesDesc.mandatory ? ' (*)' : '')}}
-                              </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
-                              <div class="uk-form-controls uk-margin-medium-top">
-                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index"
-                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('networks').controls.length-1 !== i}">
-                                  <ng-select class="uk-width-9-10" id="structureTypes"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i, this.edit)}"
-                                             *ngIf="providerTypeVocabulary"
-                                             [items]="sortVocabulariesByName(providerTypeVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('structureTypes').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('structureTypes', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
-                                </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{structureTypesDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('structureTypes').value[i] === 'provider_structure_type-other'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="providerTypeVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('providerTypeVocabularyEntryValueName').value, 'PROVIDER STRUCTURE TYPE', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
-                                </div>
-                                <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-                                  <a class="add-new-element" (click)="push('structureTypes', true)">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
+<!--                            <div class="uk-margin-large-bottom">-->
+<!--                              <label class="uk-form-label uk-text-right" for="catalogueId">-->
+<!--                                {{catalogueIdDesc.label + (catalogueIdDesc.mandatory ? ' (*)' : '')}}-->
+<!--                              </label>-->
+<!--                              <div class="uk-form-description uk-margin-top uk-width-9-10">{{catalogueIdDesc.desc}}</div>-->
+<!--                              <div class="uk-form-controls uk-margin-medium-top">-->
+<!--                                <input id="catalogueId" class="uk-disabled uk-input uk-width-9-10" type="text" placeholder="eosc"-->
+<!--                                       formControlName="catalogueId"-->
+<!--                                       (input)="unsavedChangesPrompt()"-->
+<!--                                       [ngClass]="{'uk-form-danger': checkFormValidity('catalogueId', this.edit)}">-->
+<!--                              </div>-->
+<!--                            </div>-->
+                          </li>
+                          <!--OTHER-->
+                          <li>
                             <div formArrayName="esfriDomains" class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="esfriDomains">
                                 {{ESFRIDomainDesc.label + (ESFRIDomainDesc.mandatory ? ' (*)' : '')}}
@@ -1164,7 +1199,7 @@
                                                     (click)="submitSuggestion(this.vocabularyEntryForm.get('merilCategoriesVocabularyEntryValueName').value, 'PROVIDER MERIL SCIENTIFIC SUBDOMAIN', this.merilDomainArray.controls[i].get('merilScientificDomain').value)">
                                               Submit
                                             </button>
-                                          <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
+                                            <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
                                           </div>
                                         </div>
                                       </div>

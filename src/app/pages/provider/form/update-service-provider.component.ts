@@ -112,7 +112,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         }
         if (this.provider.multimedia && this.provider.multimedia.length > 1) {
           for (let i = 0; i < this.provider.multimedia.length - 1; i++) {
-            this.push('multimedia', this.providerMultimediaDesc.mandatory, true);
+            this.multimediaArray.push(this.newMultimedia());
           }
         }
         if (this.provider.structureTypes && this.provider.structureTypes.length > 1) {

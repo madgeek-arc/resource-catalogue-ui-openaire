@@ -30,6 +30,7 @@ export class ServiceProviderFormComponent implements OnInit {
   projectName = environment.projectName;
   projectMail = environment.projectMail;
   privacyPolicyURL = environment.privacyPolicyURL;
+  // catalogueId: string = 'eosc'; // TODO: revisit to check if init causes or prevents any problems
   providerId: string = null;
   providerName = '';
   errorMessage = '';
@@ -102,7 +103,8 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly websiteDesc: sd.Description = sd.providerDescMap.get('websiteDesc');
   readonly providerDescriptionDesc: sd.Description = sd.providerDescMap.get('providerDescriptionDesc');
   readonly providerLogoDesc: sd.Description = sd.providerDescMap.get('providerLogoDesc');
-  readonly providerMultimediaDesc: sd.Description = sd.providerDescMap.get('providerMultimediaDesc');
+  readonly multimediaURLDesc: sd.Description = sd.providerDescMap.get('multimediaURLDesc');
+  readonly multimediaNameDesc: sd.Description = sd.providerDescMap.get('multimediaNameDesc');
   readonly providerScientificDomainDesc: sd.Description = sd.providerDescMap.get('providerScientificDomainDesc');
   readonly providerScientificSubdomainsDesc: sd.Description = sd.providerDescMap.get('providerScientificSubdomainsDesc');
   readonly structureTypesDesc: sd.Description = sd.providerDescMap.get('structureTypesDesc');
@@ -137,6 +139,7 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly legalEntityDesc: sd.Description = sd.providerDescMap.get('legalEntityDesc');
   readonly legalStatusDesc: sd.Description = sd.providerDescMap.get('legalStatusDesc');
   readonly networksDesc: sd.Description = sd.providerDescMap.get('networksDesc');
+  // readonly catalogueIdDesc: sd.Description = sd.providerDescMap.get('catalogueIdDesc');
 
   placesVocabulary: Vocabulary[] = null;
   providerTypeVocabulary: Vocabulary[] = null;
@@ -161,7 +164,12 @@ export class ServiceProviderFormComponent implements OnInit {
     legalStatus: [''],
     description: ['', Validators.required],
     logo: ['', Validators.compose([Validators.required, URLValidator])],
-    multimedia: this.fb.array([this.fb.control('', URLValidator)]),
+    multimedia: this.fb.array([
+      this.fb.group({
+        multimediaURL: ['', Validators.compose([Validators.required, URLValidator])],
+        multimediaName: ['']
+      })
+    ]),
     scientificDomains: this.fb.array([]),
     // scientificDomain: this.fb.array([]),
     // scientificSubdomains: this.fb.array([]),
@@ -195,6 +203,7 @@ export class ServiceProviderFormComponent implements OnInit {
     participatingCountries: this.fb.array([this.fb.control('')]),
     affiliations: this.fb.array([this.fb.control('')]),
     networks: this.fb.array([this.fb.control('')]),
+    // catalogueId: [''],
     structureTypes: this.fb.array([this.fb.control('')]),
     esfriDomains: this.fb.array([this.fb.control('')]),
     esfriType: [''],
@@ -253,7 +262,7 @@ export class ServiceProviderFormComponent implements OnInit {
               } else if (i === 'structureTypes') {
                 this.push(i, true);
               } else if (i === 'multimedia') {
-                this.push(i, false, true);
+                this.pushMultimedia();
               } else {
                 this.push(i, false);
               }
@@ -311,16 +320,23 @@ export class ServiceProviderFormComponent implements OnInit {
 
     for (let i = 0; i < this.domainArray.length ; i++) {
       if (this.domainArray.controls[i].get('scientificDomain').value === ''
-          || this.domainArray.controls[i].get('scientificDomain').value === null) {
+        || this.domainArray.controls[i].get('scientificDomain').value === null) {
         this.removeDomain(i);
       }
     }
 
     for (let i = 0; i < this.merilDomainArray.length ; i++) {
       if (this.merilDomainArray.controls[i].get('merilScientificDomain').value === ''
-          || this.merilDomainArray.controls[i].get('merilScientificDomain').value === null) {
+        || this.merilDomainArray.controls[i].get('merilScientificDomain').value === null) {
         // console.log(this.merilDomainArray.controls[i]);
         this.removeMerilDomain(i);
+      }
+    }
+
+    for (let i = 0; i < this.multimediaArray.length; i++) {
+      if (this.multimediaArray.controls[i].get('multimediaURL').value === ''
+        || this.multimediaArray.controls[i].get('multimediaURL').value === null) {
+        this.removeMultimedia(i);
       }
     }
 
@@ -444,13 +460,16 @@ export class ServiceProviderFormComponent implements OnInit {
       || this.checkFormValidity('abbreviation', this.edit)
       || this.checkFormValidity('website', this.edit)
       || this.checkEveryArrayFieldValidity('legalEntity', this.edit)
-      || this.checkFormValidity('legalStatus', this.edit));
+      || this.checkFormValidity('legalStatus', this.edit)
+      || this.checkFormValidity('hostingLegalEntity', this.edit));
     this.tabs[1] = (this.checkFormValidity('description', this.edit)
       || this.checkFormValidity('logo', this.edit)
-      || this.checkEveryArrayFieldValidity('multimedia', this.edit));
+      || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaURL')
+      || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaName'));
     this.tabs[2] = (this.checkEveryArrayFieldValidity('tags', this.edit)
       || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificDomain')
-      || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificSubdomain'));
+      || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificSubdomain')
+      || this.checkEveryArrayFieldValidity('structureTypes', this.edit));
     this.tabs[3] = (this.checkFormValidity('location.streetNameAndNumber', this.edit)
       || this.checkFormValidity('location.postalCode', this.edit)
       || this.checkFormValidity('location.city', this.edit)
@@ -468,19 +487,18 @@ export class ServiceProviderFormComponent implements OnInit {
       || this.checkEveryArrayFieldValidity('publicContacts', this.edit, 'position'));
     this.tabs[5] = (this.checkFormValidity('lifeCycleStatus', this.edit)
       || this.checkEveryArrayFieldValidity('certifications', this.edit));
-    this.tabs[6] = (this.checkFormValidity('hostingLegalEntity', this.edit)
-      || this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
+    this.tabs[6] = (this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
       || this.checkEveryArrayFieldValidity('affiliations', this.edit)
-      || this.checkEveryArrayFieldValidity('networks', this.edit)
-      || this.checkEveryArrayFieldValidity('structureTypes', this.edit)
-      || this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
+      || this.checkEveryArrayFieldValidity('networks', this.edit));
+      // || this.checkEveryArrayFieldValidity('catalogueId', this.edit));
+    this.tabs[7] = (this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
       || this.checkFormValidity('esfriType', this.edit)
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificDomain')
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificSubdomain')
       || this.checkEveryArrayFieldValidity('areasOfActivity', this.edit)
       || this.checkEveryArrayFieldValidity('societalGrandChallenges', this.edit)
       || this.checkEveryArrayFieldValidity('nationalRoadmaps', this.edit));
-    this.tabs[6] = (this.checkEveryArrayFieldValidity('users', this.edit, 'name')
+    this.tabs[8] = (this.checkEveryArrayFieldValidity('users', this.edit, 'name')
       || this.checkEveryArrayFieldValidity('users', this.edit, 'surname')
       || this.checkEveryArrayFieldValidity('users', this.edit, 'email'));
   }
@@ -594,6 +612,28 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** <--handle form arrays**/
+
+  /** Multimedia -->**/
+  newMultimedia(): FormGroup {
+    return this.fb.group({
+      multimediaURL: ['', Validators.compose([Validators.required, URLValidator])],
+      multimediaName: ['']
+    });
+  }
+
+  get multimediaArray() {
+    return this.newProviderForm.get('multimedia') as FormArray;
+  }
+
+  pushMultimedia() {
+    this.multimediaArray.push(this.newMultimedia());
+  }
+
+  removeMultimedia(index: number) {
+    this.multimediaArray.removeAt(index);
+  }
+
+  /** <--Multimedia**/
 
   /** Contact Info -->**/
   newContact(): FormGroup {
