@@ -17,14 +17,14 @@ export class AdminDashboardComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {
     this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
-          if (event.url.includes('providers')) {
-            this.path = 'providers';
-            this.titleIcon = 'real_estate_agent';
-            this.title = 'Providers';
-          } else if (event.url.includes('services')) {
+          if (event.url.includes('services')) {
             this.path = 'services';
             this.titleIcon = 'grid_view';
             this.title = 'Services';
+          } else {
+            this.path = 'providers';
+            this.titleIcon = 'real_estate_agent';
+            this.title = 'Providers';
           }
         }
       }
