@@ -30,7 +30,7 @@ export class ProviderServicesComponent implements OnInit {
 
   // Filter
   order: string = null;
-  activeStatus: string = '';
+  activeStatus: string = null;
   status: string = null;
 
   constructor(private providerService: ServiceProviderService, private resourceService: ResourceService, private router: Router,
@@ -80,6 +80,9 @@ export class ProviderServicesComponent implements OnInit {
 
   /** Handle query params and navigation ---------------> **/
   updateURLParameters(key: string, value) {
+    if (value instanceof Object) {
+      value = value['$ngOptionValue'];
+    }
     if (value === null) {
       this.queryParams = this.queryParams.filter(params => {return params.key != key});
       return;

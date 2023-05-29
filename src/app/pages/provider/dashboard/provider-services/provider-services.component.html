@@ -11,7 +11,7 @@
       <div class="uk-width-1-6 uk-padding-remove">
         <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus)"
                    placeholder="Activation Status" [(ngModel)]="activeStatus" clearAllText="Clear">
-          <ng-option [value]="''">All activation statuses</ng-option>
+          <ng-option [value]="null">All activation statuses</ng-option>
           <ng-option [value]="'true'">Active</ng-option>
           <ng-option [value]="'false'">Inactive</ng-option>
         </ng-select>
