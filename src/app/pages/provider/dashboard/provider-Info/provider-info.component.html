@@ -17,6 +17,7 @@
       </div>
       <div class="uk-padding">
         <ul id="top-navigation-tabs" class="uk-switcher" style="touch-action: pan-y pinch-zoom;">
+          <!--Basic-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
@@ -34,7 +35,7 @@
               <li>
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Website</div>
-                  <div class="uk-width-3-4">{{provider.website}}</div>
+                  <div class="uk-width-3-4"><a [href]="provider.website" target="_blank">{{provider.website}}</a></div>
                 </div>
               </li>
               <li>
@@ -58,7 +59,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Basic-->
+          </li>
+          <!--Marketing-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
@@ -73,7 +75,7 @@
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Logo</div>
                   <div class="uk-width-3-4">
-                    {{provider.logo}}
+                    <a [href]="provider.logo" target="_blank">{{provider.logo}}</a>
                   </div>
                 </div>
               </li>
@@ -81,7 +83,7 @@
               <li *ngFor="let multimedia of provider.multimedia">
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Multimedia URL</div>
-                  <div class="uk-width-3-4"><span>{{multimedia.multimediaURL}}</span></div>
+                  <div class="uk-width-3-4"><span><a [href]="multimedia.multimediaURL" target="_blank">{{multimedia.multimediaURL}}</a></span></div>
                 </div>
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Multimedia Name</div>
@@ -89,7 +91,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Marketing-->
+          </li>
+          <!--Classification-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <h5 class="">Scientific Categorisation</h5>
@@ -133,7 +136,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Classification-->
+          </li>
+          <!--Location-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
@@ -167,7 +171,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Location-->
+          </li>
+          <!--Contact-->
           <li>
             <ul class="uk-list uk-width-1-1 uk-margin-medium-bottom">
               <h5>Main Contact</h5>
@@ -235,7 +240,8 @@
                 </li>
               </div>
             </ul>
-          </li> <!--Contact-->
+          </li>
+          <!--Maturity-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
@@ -256,7 +262,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Maturity-->
+          </li>
+          <!--Dependencies-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
@@ -296,7 +303,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Dependencies-->
+          </li>
+          <!--Other-->
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
@@ -352,7 +360,7 @@
               </li>
               <li>
                 <div class="uk-grid uk-margin-remove-top">
-                  <div class="uk-width-1-4"><span>Area of Activity</span></div>
+                  <div class="uk-width-1-4"><span>Societal Grand Challenges</span></div>
                   <div class="uk-width-3-4">
                 <span *ngFor="let challenge of provider.societalGrandChallenges; let i=index">
                   {{i !== 0 ? ', ':'' + challenge}}
@@ -373,7 +381,8 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Other-->
+          </li>
+          <!--Admins-->
           <li>
             <ul *ngFor="let user of provider.users" class="uk-list uk-width-1-1 uk-margin-medium-bottom">
               <li>
@@ -395,7 +404,7 @@
                 </div>
               </li>
             </ul>
-          </li> <!--Admins-->
+          </li>
         </ul>
       </div>
     </div>
