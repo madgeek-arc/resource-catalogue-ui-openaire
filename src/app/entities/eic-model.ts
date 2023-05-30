@@ -73,9 +73,9 @@ export class Indicator implements Identifiable {
   unitName: string;
 }
 
-export class InfraService extends Bundle<Service> {
-  latest: boolean;
+export class ServiceBundle extends Bundle<any> {
   service: Service;
+  datasource: Datasource;
 }
 
 export class Measurement implements Identifiable {

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
-import {Bundle, Datasource, InfraService, Provider, ProviderBundle, Service} from '../entities/eic-model';
+import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Paging} from '../entities/paging';
@@ -60,9 +60,11 @@ export class ServiceProviderService {
   getServicesOfProvider(resourceOrganisation: string, urlParameters?: URLParameter[]) {
     let searchQuery = new HttpParams();
     searchQuery = searchQuery.append('resource_organisation', resourceOrganisation);
-    for (const urlParameter of urlParameters) {
-      for (const value of urlParameter.values) {
-        searchQuery = searchQuery.append(urlParameter.key, value);
+    if (urlParameters) {
+      for (const urlParameter of urlParameters) {
+        for (const value of urlParameter.values) {
+          searchQuery = searchQuery.append(urlParameter.key, value);
+        }
       }
     }
     return this.http.get<Paging<Bundle<Service | Datasource>>>(this.base + '/catalogue-resources/bundles', {params: searchQuery});
