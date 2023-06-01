@@ -46,15 +46,26 @@ export class ServiceProviderService {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 
-  getServiceProviderById(id: string) {
+  getProviderById(id: string) {
     return this.http.get<Provider>(this.base + `/providers/${id}`, this.options);
   }
-  getProviderBundle(id: string) {
+
+  getProviderBundleById(id: string) {
     return this.http.get<ProviderBundle>(this.base + `/bundles/providers/${id}`, this.options);
   }
 
   getPendingProviderById(id: string) {
     return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
+  }
+
+  getProviderBundles(urlParameters?: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
+    }
+    return this.http.get<Paging<ProviderBundle>>(this.base + '/bundles/providers', {params: searchQuery});
   }
 
   getServicesOfProvider(resourceOrganisation: string, urlParameters?: URLParameter[]) {

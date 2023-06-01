@@ -48,7 +48,7 @@ export class ProviderDashboardComponent implements OnInit {
       params => {
         this.providerId = params['providerId'];
         if (this.providerId) {
-          this.serviceProviderService.getProviderBundle(this.providerId).subscribe(
+          this.serviceProviderService.getProviderBundleById(this.providerId).subscribe(
             res => {this.providerBundle = res},
             error => {console.error(error)}
           );

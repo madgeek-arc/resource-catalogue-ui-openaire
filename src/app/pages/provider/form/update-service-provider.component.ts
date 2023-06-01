@@ -74,7 +74,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   getProvider() {
     this.errorMessage = '';
     const path = this.route.snapshot.routeConfig.path;
-    this.serviceProviderService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getServiceProviderById')](this.providerId)
+    this.serviceProviderService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId)
       .subscribe(
       provider => this.provider = provider,
       err => {
