@@ -7,8 +7,17 @@ import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.com
 import {ProviderHomeComponent} from './dashboard/provider-home/provider-home.component';
 import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
 import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
+import {ServiceProviderFormComponent} from './form/service-provider-form.component';
 
 const providerRoutes: Routes = [
+  {
+    path: 'provider/add',
+    component: ServiceProviderFormComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'Add new Provider'
+    }
+  },
   {
     path: 'provider/:providerId',
     children: [
@@ -70,7 +79,7 @@ const providerRoutes: Routes = [
         data: {
           breadcrumb: 'Update Provider'
         }
-      },
+      }
     ]
   }
 ];

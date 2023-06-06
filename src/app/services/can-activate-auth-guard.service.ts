@@ -23,7 +23,8 @@ export class CanActivateViaAuthGuard implements CanActivate {
   }
 
   fail(): boolean {
-    this.router.navigate(['/']).then();
+    // this.router.navigate(['/']).then();
+    this.authenticationService.tryLogin();
     return false;
   }
 

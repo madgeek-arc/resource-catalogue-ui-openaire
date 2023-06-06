@@ -11,6 +11,7 @@ import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {FormsComponent} from './pages/forms/forms.component';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
+import {JoinComponent} from './pages/provider/join/join.component';
 
 const appRoutes: Routes = [
   {
@@ -86,7 +87,8 @@ const appRoutes: Routes = [
   },
   {
     path: 'join/:token',
-    component: Datasource,
+    component: JoinComponent,
+    canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'Datasource'
     }
