@@ -13,6 +13,7 @@ import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.com
 import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
 import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
 import {ProviderHomeComponent} from './dashboard/provider-home/provider-home.component';
+import {JoinComponent} from './join/join.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {ProviderHomeComponent} from './dashboard/provider-home/provider-home.com
     ProviderHomeComponent,
     ProviderInfoComponent,
     ProviderUpdateHistoryComponent,
-    ProviderServicesComponent
+    ProviderServicesComponent,
+    JoinComponent
   ]
 })
 

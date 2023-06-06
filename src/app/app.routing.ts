@@ -84,6 +84,13 @@ const appRoutes: Routes = [
       breadcrumb: 'Datasource'
     }
   },
+  {
+    path: 'join/:token',
+    component: Datasource,
+    data: {
+      breadcrumb: 'Datasource'
+    }
+  },
 
   {
     path: 'provider',

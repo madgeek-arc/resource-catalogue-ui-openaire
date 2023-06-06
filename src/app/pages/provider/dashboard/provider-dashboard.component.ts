@@ -99,7 +99,7 @@ export class ProviderDashboardComponent implements OnInit {
   getInvitationToken() {
     this.userService.getInvitationToken(this.inviteeEmail.value).subscribe(
       res=> {
-        this.invitationUrl = location.origin + '/invitation/accept/' + res;
+        this.invitationUrl = location.origin + '/join/' + res;
         console.log(this.invitationUrl);
       },
       error => {console.error(error)}
