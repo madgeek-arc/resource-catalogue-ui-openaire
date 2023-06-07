@@ -5,7 +5,7 @@ import {AuthenticationService} from '../../../services/authentication.service';
 import {ServiceProviderService} from '../../../services/service-provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
-import {Vocabulary, Provider} from '../../../entities/eic-model';
+import {Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import BitSet from 'bitset/bitset';
 import {environment} from '../../../../environments/environment';
@@ -359,9 +359,35 @@ export class ServiceProviderFormComponent implements OnInit {
       this.showLoader = true;
       window.scrollTo(0, 0);
 
+      let token = sessionStorage.getItem('token');
+      if (token) {
+        this.serviceProviderService.createNewServiceProviderWithToken(this.newProviderForm.value, token).subscribe(
+          res => {
+            sessionStorage.removeItem('token');
+          },
+          err => {
+            this.showLoader = false;
+            window.scrollTo(0, 0);
+            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+          },
+          () => {
+            this.showLoader = false;
+            if (this.edit) {
+              this.router.navigate(['/provider/my']);
+            } else {
+              if (environment.projectName === 'OpenAIRE Catalogue')
+                this.authService.login();
+              else {
+                this.authService.login();
+              }
+            }
+            return;
+          }
+        );
+      }
+
       this.serviceProviderService[method](this.newProviderForm.value).subscribe(
-        res => {
-        },
+        res => {},
         err => {
           this.showLoader = false;
           window.scrollTo(0, 0);
@@ -375,7 +401,6 @@ export class ServiceProviderFormComponent implements OnInit {
             if (environment.projectName === 'OpenAIRE Catalogue')
               this.authService.login();
             else {
-              // this.authService.redirectURL = '/provider/my';
               this.authService.login();
             }
           }
@@ -389,38 +414,6 @@ export class ServiceProviderFormComponent implements OnInit {
       this.errorMessage = 'Please fill in all required fields (marked with an asterisk), ' +
         'and fix the data format in fields underlined with a red colour.';
     }
-  }
-
-  // empty fields can be removed from here when complete
-  toServer(service: Provider): Provider {
-    const ret = {};
-    Object.entries(service).forEach(([name, values]) => {
-      let newValues = values;
-      // console.log(name);
-      if (Array.isArray(values)) {
-        newValues = [];
-        values.forEach(e => {
-          // console.log('is array');
-          if (typeof e === 'string' || e instanceof String) {
-            if (e !== '') {
-              newValues.push(e.trim().replace(/\s\s+/g, ' '));
-            }
-          } else {
-            // console.log('array with objects');
-          }
-        });
-      } else if (typeof newValues === 'string' || newValues instanceof String) {
-        newValues = newValues.trim().replace(/\s\s+/g, ' ');
-      } else {
-        // console.log('single object');
-      }
-      ret[name] = newValues;
-    });
-    // if ( (this.firstServiceForm === true) && this.providerId) {
-    //   ret['providers'] = [];
-    //   ret['providers'].push(this.providerId);
-    // }
-    return <Provider>ret;
   }
 
   /** check form fields and tabs validity--> **/
@@ -697,20 +690,6 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** <-- User Array**/
 
-  showLogoUrlModal() {
-    if (this.newProviderForm && this.newProviderForm.get('logo').value) {
-      this.logoUrl = this.newProviderForm.get('logo').value;
-    }
-    UIkit.modal('#logoUrlModal').show();
-  }
-
-  addLogoUrl(logoUrl: string) {
-    UIkit.modal('#logoUrlModal').hide();
-    this.logoUrl = logoUrl;
-    this.newProviderForm.get('logo').setValue(logoUrl);
-    this.newProviderForm.get('logo').updateValueAndValidity();
-  }
-
   getSortedChildrenCategories(childrenCategory: Vocabulary[], parentId: string) {
     return this.sortVocabulariesByName(childrenCategory.filter(entry => entry.parentId === parentId));
   }
@@ -752,51 +731,6 @@ export class ServiceProviderFormComponent implements OnInit {
         }
       }
       this.newProviderForm.controls[i].markAsDirty();
-    }
-  }
-
-  trimFormWhiteSpaces() {
-    for (const i in this.newProviderForm.controls) {
-      // console.log(i);
-      if (this.newProviderForm.controls[i].value && this.newProviderForm.controls[i].value.constructor === Array) {
-
-      } else if (this.newProviderForm.controls[i].value && (i === 'location' || i === 'mainContact')) {
-        // TODO
-      } else if (typeof this.newProviderForm.controls[i].value === 'boolean') {
-        // console.log('skip boolean value');
-      } else {
-        // console.log('this.newProviderForm.controls[i].value: ', this.newProviderForm.controls[i].value);
-        this.newProviderForm.controls[i].setValue(this.newProviderForm.controls[i].value.trim().replace(/\s\s+/g, ' '));
-      }
-    }
-    for (let j = 0; j < this.newProviderForm.controls['users'].value.length; j++) {
-      this.newProviderForm.controls['users'].value[j].email = this.newProviderForm.controls['users'].value[j].email
-        .trim().replace(/\s\s+/g, ' ');
-      this.newProviderForm.controls['users'].value[j].name = this.newProviderForm.controls['users'].value[j].name
-        .trim().replace(/\s\s+/g, ' ');
-      this.newProviderForm.controls['users'].value[j].surname = this.newProviderForm.controls['users'].value[j].surname
-        .trim().replace(/\s\s+/g, ' ');
-    }
-
-    if (this.newProviderForm.controls['scientificDomains'] && this.newProviderForm.controls['scientificDomains'].value) {
-
-      if (this.newProviderForm.controls['scientificDomains'].value.length === 1
-        && !this.newProviderForm.controls['scientificDomains'].value[0].scientificDomain
-        && !this.newProviderForm.controls['scientificDomains'].value[0].scientificSubdomain) {
-
-        this.removeDomain(0);
-
-      }
-    }
-    if (this.newProviderForm.controls['merilScientificDomains'] && this.newProviderForm.controls['merilScientificDomains'].value) {
-
-      if (this.newProviderForm.controls['merilScientificDomains'].value.length === 1
-        && !this.newProviderForm.controls['merilScientificDomains'].value[0].merilScientificDomain
-        && !this.newProviderForm.controls['merilScientificDomains'].value[0].merilScientificSubdomain) {
-
-        this.removeMerilDomain(0);
-
-      }
     }
   }
 
