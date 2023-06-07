@@ -364,7 +364,19 @@ export class ServiceProviderFormComponent implements OnInit {
         this.serviceProviderService.createNewServiceProviderWithToken(this.newProviderForm.value, token).subscribe(
           res => {
             sessionStorage.removeItem('token');
+            setTimeout(()=>{
+              this.router.navigate([`/provider/${res.id}/dashboard/home`]);
+            }, 3000);
           },
+          err => {
+            this.showLoader = false;
+            window.scrollTo(0, 0);
+            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+          }
+        );
+      } else {
+        this.serviceProviderService[method](this.newProviderForm.value).subscribe(
+          res => {},
           err => {
             this.showLoader = false;
             window.scrollTo(0, 0);
@@ -381,31 +393,9 @@ export class ServiceProviderFormComponent implements OnInit {
                 this.authService.login();
               }
             }
-            return;
           }
         );
       }
-
-      this.serviceProviderService[method](this.newProviderForm.value).subscribe(
-        res => {},
-        err => {
-          this.showLoader = false;
-          window.scrollTo(0, 0);
-          this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
-        },
-        () => {
-          this.showLoader = false;
-          if (this.edit) {
-            this.router.navigate(['/provider/my']);
-          } else {
-            if (environment.projectName === 'OpenAIRE Catalogue')
-              this.authService.login();
-            else {
-              this.authService.login();
-            }
-          }
-        }
-      );
     } else {
       // console.log(this.newProviderForm);
       this.markFormAsDirty();

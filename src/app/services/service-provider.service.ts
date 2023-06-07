@@ -40,7 +40,7 @@ export class ServiceProviderService {
   createNewServiceProviderWithToken(newProvider: Provider, token: string) {
     let params = new HttpParams();
     params = params.append('invitation', token);
-    return this.http.post(this.base + '/providers', newProvider, {params: params});
+    return this.http.post<Provider>(this.base + '/providers', newProvider, {params: params});
   }
 
   updateServiceProvider(updatedFields: any): Observable<Provider> {
