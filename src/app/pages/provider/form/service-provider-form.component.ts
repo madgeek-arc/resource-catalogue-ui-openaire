@@ -7,7 +7,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
 import {Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
-import BitSet from 'bitset/bitset';
 import {environment} from '../../../../environments/environment';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
@@ -46,56 +45,10 @@ export class ServiceProviderFormComponent implements OnInit {
   tabs: boolean[] = [false, false, false, false, false, false, false, false];
   isPortalAdmin = false;
 
-  requiredOnTab0 = 3;
-  requiredOnTab1 = 2;
-  requiredOnTab3 = 4;
-  requiredOnTab4 = 2;
-  requiredOnTab7 = 1;
-
-  remainingOnTab0 = this.requiredOnTab0;
-  remainingOnTab1 = this.requiredOnTab1;
-  remainingOnTab3 = this.requiredOnTab3;
-  remainingOnTab4 = this.requiredOnTab4;
-  remainingOnTab7 = this.requiredOnTab7;
-
-  BitSetTab0 = new BitSet;
-  BitSetTab1 = new BitSet;
-  BitSetTab3 = new BitSet;
-  BitSetTab4 = new BitSet;
-  BitSetTab7 = new BitSet;
-
-  requiredTabs = 5;
-  completedTabs = 0;
-  completedTabsBitSet = new BitSet;
-
-  allRequiredFields = 16;
-  loaderBitSet = new BitSet;
-  loaderPercentage = 0;
-
   codeOfConduct = false;
   privacyPolicy = false;
   authorizedRepresentative = false;
   agreedToTerms: boolean;
-
-  vocabularyEntryForm: FormGroup;
-  suggestionsForm = {
-    legalStatusVocabularyEntryValueName: '',
-    domainsVocabularyEntryValueName: '',
-    categoriesVocabularyEntryValueName: '',
-    placesVocabularyEntryValueName: '',
-    providerLCSVocabularyEntryValueName: '',
-    networksVocabularyEntryValueName: '',
-    providerTypeVocabularyEntryValueName: '',
-    esfriDomainVocabularyEntryValueName: '',
-    esfriVocabularyEntryValueName: '',
-    merilDomainsVocabularyEntryValueName: '',
-    merilCategoriesVocabularyEntryValueName: '',
-    areasOfActivityVocabularyEntryValueName: '',
-    societalGrandChallengesVocabularyEntryValueName: '',
-    vocabulary: '',
-    errorMessage: '',
-    successMessage: ''
-  };
 
   readonly fullNameDesc: sd.Description = sd.providerDescMap.get('fullNameDesc');
   readonly abbreviationDesc: sd.Description = sd.providerDescMap.get('abbreviationDesc');
@@ -293,9 +246,6 @@ export class ServiceProviderFormComponent implements OnInit {
 
     // this.isPortalAdmin = this.authService.isAdmin();
 
-    this.initUserBitSets(); // Admin + mainContact
-
-    this.vocabularyEntryForm = this.fb.group(this.suggestionsForm);
   }
 
   registerProvider(tempSave: boolean) {
@@ -732,152 +682,6 @@ export class ServiceProviderFormComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  /** BitSets -->**/
-  handleBitSets(tabNum: number, bitIndex: number, formControlName: string): void {
-    if (bitIndex === 0) {
-      this.providerName = this.newProviderForm.get(formControlName).value;
-    }
-    if (this.newProviderForm.get(formControlName).valid || (this.newProviderForm.get(formControlName).disabled && this.newProviderForm.get(formControlName).value != '')) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else if (this.newProviderForm.get(formControlName).invalid) {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    } else if (this.newProviderForm.get(formControlName).pending) {
-      this.timeOut(300).then( () => this.handleBitSets(tabNum, bitIndex, formControlName));
-      return;
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfGroups(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.newProviderForm.controls[group].get(formControlName).valid || (this.newProviderForm.controls[group].get(formControlName).disabled && this.newProviderForm.controls[group].get(formControlName).value != '')) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else if (this.newProviderForm.controls[group].get(formControlName).invalid) {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfPublicContact(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.newProviderForm.get(group).value[0][formControlName] !== '' && this.newProviderForm.controls[group].valid || this.newProviderForm.controls[group].disabled) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfUsers(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.newProviderForm.get(group).value[0][formControlName] !== '') {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  initUserBitSets() {
-    this.handleBitSetsOfUsers(7, 12, 'name', 'users');
-    this.handleBitSetsOfUsers(7, 13, 'surname', 'users');
-    this.handleBitSetsOfUsers(7, 14, 'email', 'users');
-    this.handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 11, 'email', 'mainContact');
-  }
-
-  updateLoaderPercentage() {
-    // console.log(this.loaderBitSet.toString(2));
-    // console.log('cardinality: ', this.loaderBitSet.cardinality());
-    this.loaderPercentage = Math.round((this.loaderBitSet.cardinality() / this.allRequiredFields) * 100);
-    // console.log(this.loaderPercentage, '%');
-  }
-
-  decreaseRemainingFieldsPerTab(tabNum: number, bitIndex: number) {
-    if (tabNum === 0) {
-      this.BitSetTab0.set(bitIndex, 1);
-      this.remainingOnTab0 = this.requiredOnTab0 - this.BitSetTab0.cardinality();
-      if (this.remainingOnTab0 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 1) {
-      this.BitSetTab1.set(bitIndex, 1);
-      this.remainingOnTab1 = this.requiredOnTab1 - this.BitSetTab1.cardinality();
-      if (this.remainingOnTab1 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 3) { // Location
-      this.BitSetTab3.set(bitIndex, 1);
-      this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
-      if (this.remainingOnTab3 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 4) { // Contact
-      this.BitSetTab4.set(bitIndex, 1);
-      const mainContactCardinality = this.BitSetTab4.slice(9, 11).cardinality();
-      this.remainingOnTab4 = this.requiredOnTab4 - +(mainContactCardinality === 3) - this.BitSetTab4.get(15);
-      if (this.remainingOnTab4 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 7) { // Admins
-      this.BitSetTab7.set(bitIndex, 1);
-      if (this.BitSetTab7.cardinality() === 3) {
-        this.remainingOnTab7 = 0;
-        if (this.completedTabsBitSet.get(tabNum) !== 1) {
-          this.calcCompletedTabs(tabNum, 1);
-        }
-      }
-    }
-  }
-
-  increaseRemainingFieldsPerTab(tabNum: number, bitIndex: number) {
-    if (tabNum === 0) {
-      this.BitSetTab0.set(bitIndex, 0);
-      this.remainingOnTab0 = this.requiredOnTab0 - this.BitSetTab0.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 1) {
-      this.BitSetTab1.set(bitIndex, 0);
-      this.remainingOnTab1 = this.requiredOnTab1 - this.BitSetTab1.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 3) {
-      this.BitSetTab3.set(bitIndex, 0);
-      this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 4) { // Contact
-      this.BitSetTab4.set(bitIndex, 0);
-      const mainContactCardinality = this.BitSetTab4.slice(9, 11).cardinality();
-      this.remainingOnTab4 = this.requiredOnTab4 - +(mainContactCardinality === 3) - this.BitSetTab4.get(15);
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 7) { // Admins
-      this.BitSetTab7.set(bitIndex, 0);
-      this.remainingOnTab7 = this.requiredOnTab7;
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    }
-  }
-
-  calcCompletedTabs(tabNum: number, setValue: number) {
-    this.completedTabsBitSet.set(tabNum, setValue);
-    this.completedTabs = this.completedTabsBitSet.cardinality();
-  }
-
-  /** <--BitSets **/
-
   /** Terms Modal--> **/
   toggleTerm(term) {
     if (term === 'privacyPolicy') {
@@ -903,64 +707,5 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** <--Terms Modal **/
-
-  /** URL Validation--> **/
-  checkUrlValidity(formControlName: string) {
-    let urlValidity;
-    if (this.newProviderForm.get(formControlName).valid && this.newProviderForm.get(formControlName).value !== '') {
-      const url = this.newProviderForm.get(formControlName).value;
-      // console.log(url);
-      this.serviceProviderService.validateUrl(url).subscribe(
-        boolean => { urlValidity = boolean; },
-        error => { console.log(error); },
-        () => {
-          if (!urlValidity) {
-            // console.log('invalid');
-            window.scrollTo(0, 0);
-            this.errorMessage = url + ' is not a valid URL. Please enter a valid URL.';
-          }
-        }
-      );
-    }
-  }
-
-  checkUrlValidityForArrays(formArrayName: string, position: number) {
-    let urlValidity;
-    // console.log(this.newProviderForm.get(formArrayName).value[position]);
-    if (this.newProviderForm.get(formArrayName).value[position] !== '') {
-      const url = this.newProviderForm.get(formArrayName).value[position];
-      // console.log(url);
-      this.serviceProviderService.validateUrl(url).subscribe(
-        boolean => { urlValidity = boolean; },
-        error => { console.log(error); },
-        () => {
-          if (!urlValidity) {
-            // console.log('invalid');
-            window.scrollTo(0, 0);
-            this.errorMessage = url + ' is not a valid ' + formArrayName + ' URL. Please enter a valid URL.';
-          }
-        }
-      );
-    }
-  }
-
-  /** <--URL Validation **/
-
-  submitSuggestion(entryValueName, vocabulary, parent) {
-    if (entryValueName.trim() !== '') {
-      this.serviceProviderService.submitVocabularyEntry(entryValueName, vocabulary, parent, 'provider', this.providerId, null).subscribe(
-        res => {
-        },
-        error => {
-          console.log(error);
-          this.vocabularyEntryForm.get('errorMessage').setValue(error.error.error);
-        },
-        () => {
-          this.vocabularyEntryForm.reset();
-          this.vocabularyEntryForm.get('successMessage').setValue('Suggestion submitted!');
-        }
-      );
-    }
-  }
 
 }

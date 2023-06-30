@@ -207,7 +207,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         if (this.disable) {
           this.newProviderForm.disable();
         }
-        this.initProviderBitSets();
       }
     );
   }
@@ -215,23 +214,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   toggleDisable() {
     this.disable = !this.disable;
     this.newProviderForm.enable();
-  }
-
-  initProviderBitSets() {
-    this.handleBitSets(0, 0, 'name');
-    this.handleBitSets(0, 1, 'abbreviation');
-    this.handleBitSets(0, 2, 'website');
-    this.handleBitSets(1, 3, 'description');
-    this.handleBitSets(1, 4, 'logo');
-    this.handleBitSetsOfGroups(3, 5, 'streetNameAndNumber', 'location');
-    this.handleBitSetsOfGroups(3, 6, 'postalCode', 'location');
-    this.handleBitSetsOfGroups(3, 7, 'city', 'location');
-    this.handleBitSetsOfGroups(3, 8, 'country', 'location');
-    this.handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 11, 'email', 'mainContact');
-    this.handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts');
-    this.initUserBitSets();
   }
 
 }
