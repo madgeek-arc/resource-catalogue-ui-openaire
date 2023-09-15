@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../services/authentication.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {Datasource, Provider, Service} from '../../entities/eic-model';
 import {UserInfo} from '../../entities/userInfo';
 import {UserService} from '../../services/user.service';
 import * as UIkit from 'uikit';
+import {filter, map} from 'rxjs/operators';
 
 
 @Component({
@@ -23,12 +24,16 @@ export class AireTopMenuComponent implements OnInit {
   myProviders: Provider[] = [];
   isLoggedIn: boolean = false;
 
+  dashboardMode: boolean = false;
+
   public portfolioItemActive: string = null;
 
   constructor(public authenticationService: AuthenticationService, public router: Router, public resourceService: ResourceService,
-              private dataSharingService: DataSharingService, private userService: UserService) {}
+              private dataSharingService: DataSharingService, private userService: UserService, private route: ActivatedRoute) {}
 
   ngOnInit() {
+
+    this.isInDashboardMode();
 
     this.dataSharingService.refreshRequired.subscribe( value => {
       this.refresh = value;
@@ -86,5 +91,22 @@ export class AireTopMenuComponent implements OnInit {
 
   getInitials(fullName: string) {
     return fullName.split(" ").map((n)=>n[0]).join("")
+  }
+
+  isInDashboardMode() {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.route.snapshot),
+        map(route => {
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route;
+        })
+      )
+      .subscribe((route: ActivatedRouteSnapshot) => {
+        this.dashboardMode = route.data['dashboardMode'];
+      });
   }
 }

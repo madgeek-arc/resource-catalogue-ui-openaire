@@ -13,10 +13,10 @@
               <strong>{{providerName!='' ? providerName : 'Provider Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
             </div>
           </div>
-          <div class="">
+          <div class="uk-flex uk-flex-middle">
             <!--<button class="uk-button uk-button-primary">Discard</button>-->
             <button *ngIf="!disable && (!edit || pendingProvider)" class="uk-button uk-button-primary uk-margin-left" (click)="this.registerProvider(true)">Save as draft</button>
-            <button *ngIf="!disable && loaderPercentage==100" class="uk-button uk-button-secondary uk-margin-left" type="submit" (click)="registerProvider(false)">Submit</button>
+            <button *ngIf="!disable" class="uk-button uk-button-secondary uk-margin-left" type="submit" (click)="registerProvider(false)">Submit</button>
             <button *ngIf="disable" class="uk-button uk-button-secondary uk-margin-left" (click)="toggleDisable()">Edit</button>
           </div>
         </div>
@@ -103,19 +103,11 @@
                       <li class="uk-active">
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[0]}" href="#">
                           <span>1. Basic *</span>
-                          <span class="circle-number">
-                            <i *ngIf="remainingOnTab0==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab0!=0 ? remainingOnTab0 +'*' : ''}}
-                          </span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[1]}" href="#">
                           <span>2. Marketing *</span>
-                          <span class="circle-number">
-                            <i *ngIf="remainingOnTab1==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab1!=0 ? remainingOnTab1 +'*' : ''}}
-                          </span>
                         </a>
                       </li>
                       <li>
@@ -126,19 +118,11 @@
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[3]}" href="#">
                           <span>4. Location *</span>
-                          <span class="circle-number">
-                            <i *ngIf="remainingOnTab3==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab3!=0 ? remainingOnTab3 +'*' : ''}}
-                          </span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[4]}" href="#">
                           <span>5. Contact *</span>
-                          <span class="circle-number">
-                            <i *ngIf="remainingOnTab4==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab4!=0 ? remainingOnTab4 +'*' : ''}}
-                          </span>
                         </a>
                       </li>
                       <li>
@@ -148,27 +132,22 @@
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[6]}" href="#">
-                          <span>7. Other</span>
+                          <span>7. Dependencies</span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[7]}" href="#">
-                          <span>8. Admins *</span>
-                          <span class="circle-number">
-                            <i *ngIf="remainingOnTab7==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab7!=0 ? remainingOnTab7 +'*' : ''}}
-                          </span>
-                          <!--                          <span class="circle-number"><i aria-hidden="true" class="fa fa-check"></i></span>-->
+                          <span>8. Other</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[8]}" href="#">
+                          <span>9. Admins *</span>
                         </a>
                       </li>
                     </ul>
 
                     <div class="requiredFields uk-text-right">*Required fields</div>
-                    <div class="stepsCompleted uk-margin-top uk-text-center">{{completedTabs}} of {{requiredTabs}}</div>
-                    <div class="uk-margin-small-top">
-                      <progress id="js-progressbar" class="uk-progress uk-margin-remove-bottom" value="{{loaderPercentage}}" max="100"></progress>
-                      <div class="percentageNumber" [ngStyle]="{'margin-left.%': (loaderPercentage*0.9).toLocaleString()}">{{loaderPercentage}}%</div>
-                    </div>
 
                   </div>
 
@@ -187,7 +166,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <input id="providerName" class="uk-input uk-width-9-10" type="text"
                                        formControlName="name"
-                                       (input)="handleBitSets(0, 0, 'name'); unsavedChangesPrompt()"
+                                       (input)="unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('name', this.edit)}">
                               </div>
                               <i><small>Suggested length is 100 characters</small></i>
@@ -201,7 +180,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <input id="abbreviation" class="uk-input uk-width-9-10" type="text"
                                        formControlName="abbreviation"
-                                       (input)="handleBitSets(0, 1, 'abbreviation'); unsavedChangesPrompt()"
+                                       (input)="unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('abbreviation', this.edit)}">
                               </div>
                               <i><small>Suggested length is 30 characters</small></i>
@@ -215,7 +194,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <input id="website" class="uk-input uk-width-9-10" type="text" formControlName="website"
                                        placeholder="use http:// or https://"
-                                       (input)="handleBitSets(0, 2, 'website'); unsavedChangesPrompt()"
+                                       (input)="unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('website', this.edit)}">
                                 <div *ngIf="this.edit && this.isPortalAdmin && this.newProviderForm.get('website').value" class="uk-icon">
                                   <a href="{{this.newProviderForm.get('website').value}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
@@ -228,8 +207,7 @@
                               </label>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <label>
-                                  <span
-                                    class="uk-form-description uk-margin-small-right">{{legalEntityDesc.desc}}</span>
+                                  <span class="uk-form-description uk-margin-small-right">{{legalEntityDesc.desc}}</span>
                                   <input class="uk-checkbox" type="checkbox" id="legalEntityYes"
                                          formControlName="legalEntity" value="true"
                                          (input)="this.newProviderForm.get('legalStatus').setValue(''); unsavedChangesPrompt()"
@@ -253,22 +231,20 @@
                                            formControlName="legalStatus">
                                 </ng-select>
                               </div>
-                              <div class="uk-margin-small-top">
-                                <i><small>For suggestions in amending the
-                                  "{{legalStatusDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
+                            </div>
+                            <div class="uk-margin-large-bottom">
+                              <label class="uk-form-label uk-text-right" for="hostingLegalEntity">
+                                {{hostingLegalEntityDesc.label + (hostingLegalEntityDesc.mandatory ? ' (*)' : '')}}
+                              </label>
+                              <div
+                                class="uk-form-description uk-margin-top uk-width-9-10">{{hostingLegalEntityDesc.desc}}</div>
+                              <div class="uk-form-controls uk-margin-medium-top">
+                                <input id="hostingLegalEntity" class="uk-input uk-width-9-10" type="text"
+                                       formControlName="hostingLegalEntity"
+                                       (input)="unsavedChangesPrompt()"
+                                       [ngClass]="{'uk-form-danger': checkFormValidity('hostingLegalEntity', this.edit)}">
                               </div>
-                              <div *ngIf="this.newProviderForm.get('legalStatus').value === 'provider_legal_status-other'" class="uk-flex uk-flex-left">
-                                <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                  <label>
-                                    <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="providerLCSVocabularyEntryValueName">
-                                  </label>
-                                </form>
-                                <button class="uk-button uk-button-default" type="submit"
-                                        (click)="submitSuggestion(this.vocabularyEntryForm.get('legalStatusVocabularyEntryValueName').value, 'PROVIDER LEGAL STATUS', null)">
-                                  Submit
-                                </button>
-                                <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
-                              </div>
+                              <i><small>Suggested length is 80 characters</small></i>
                             </div>
                           </li>
                           <!--MARKETING-->
@@ -280,7 +256,7 @@
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{providerDescriptionDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top uk-width-9-10">
                                 <ckeditor id="description" [editor]="editor"
-                                          (change)="handleBitSets(1, 3, 'description')"
+                                          (change)="unsavedChangesPrompt()"
                                           [ngClass]="{'uk-form-danger': checkFormValidity('description', this.edit)}"
                                           formControlName="description">
                                 </ckeditor>
@@ -296,7 +272,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <input id="logo" class="uk-input uk-width-9-10" type="text" formControlName="logo"
                                        placeholder="use http:// or https://"
-                                       (input)="handleBitSets(1, 4, 'logo'); unsavedChangesPrompt()"
+                                       (input)="unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('logo', this.edit)}">
                                 <div *ngIf="this.edit && this.isPortalAdmin && this.newProviderForm.get('logo').value" class="uk-icon">
                                   <a href="{{this.newProviderForm.get('logo').value}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
@@ -304,34 +280,52 @@
                               </div>
                               <i><small>{{providerLogoDesc.desc}}</small></i>
                             </div>
-                            <div formArrayName="multimedia" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right" for="multimedia">
-                                {{providerMultimediaDesc.label + (providerMultimediaDesc.mandatory ? ' (*)' : '')}}
-                              </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{providerMultimediaDesc.desc}}</div>
-                              <div class="uk-form-controls uk-margin-medium-top">
-                                <div *ngFor="let media of getFieldAsFormArray('multimedia').controls; let i=index"
-                                     class="uk-margin-bottom">
-                                  <input id="multimedia" class="uk-input uk-width-9-10" type="text"
-                                         [formControlName]="i" placeholder="use http:// or https://"
-                                         (input)="unsavedChangesPrompt()"
-                                         [ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i, this.edit)}">
-                                  <div *ngIf="this.edit && this.isPortalAdmin && this.newProviderForm.get('multimedia').value[i]" class="uk-icon">
-                                    <a href="{{this.newProviderForm.get('multimedia').value[i]}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                            <div class="uk-margin-large-bottom">
+                              <label class="uk-form-label uk-text-right">Multimedia</label>
+                              <div class="uk-form-controls uk-margin-top">
+                                <div formArrayName="multimedia"
+                                     *ngFor="let multi of multimediaArray.controls; let i = index">
+                                  <div [formGroupName]="i"
+                                       class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
+                                    <div class="uk-margin-bottom">
+                                      <label class="uk-form-label uk-text-right" for="multimediaURL">
+                                        {{ multimediaURLDesc.label + (multimediaURLDesc.mandatory ? ' (*)' : '') }}
+                                      </label>
+                                      <div class="uk-form-description uk-margin-top uk-width-9-10">{{multimediaURLDesc.desc}}</div>
+                                      <div class="uk-form-controls uk-margin-medium-top">
+                                        <input id="multimediaURL" class="uk-input uk-width-9-10" type="text" formControlName="multimediaURL" placeholder="use http:// or https://"
+                                               (input)="unsavedChangesPrompt()"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i, this.edit, 'multimediaURL')}">
+                                        <div *ngIf="this.edit && this.isPortalAdmin && this.newProviderForm.get('multimedia').value[i]['multimediaURL']" class="uk-icon">
+                                          <a href="{{this.newProviderForm.get('multimedia').value[i]['multimediaURL']}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="uk-margin-bottom">
+                                      <label class="uk-form-label uk-text-right" for="multimediaName">
+                                        {{ multimediaNameDesc.label + (multimediaNameDesc.mandatory ? ' (*)' : '') }}
+                                      </label>
+                                      <div class="uk-form-description uk-margin-top uk-width-9-10">{{multimediaNameDesc.desc}}</div>
+                                      <div class="uk-form-controls uk-margin-medium-top">
+                                        <input id="multimediaName" class="uk-input uk-width-9-10" type="text" formControlName="multimediaName"
+                                               (input)="unsavedChangesPrompt()">
+                                        <!--[ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i, this.edit, 'multimediaName')}">-->
+                                      </div>
+                                      <i><small>Suggested length is 100 characters</small></i>
+                                    </div>
+
                                   </div>
                                   <a *ngIf="getFieldAsFormArray('multimedia').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('multimedia', i); unsavedChangesPrompt()">
+                                     class="remove-element uk-padding-small uk-display-inline-block"
+                                     (click)="removeMultimedia(i); unsavedChangesPrompt();">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
-                                <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-                                  <a class="add-new-element" (click)="push('multimedia', false, true)">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> Add {{providerMultimediaDesc.label}}
-                                  </a>
-                                </div>
-                                <!--<i><small>{{providerMultimediaDesc.desc}}</small></i>-->
+                              </div>
+                              <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-top">
+                                <a class="add-new-element" (click)="pushMultimedia()">
+                                  <i class="fa fa-plus" aria-hidden="true"></i> Add multimedia
+                                </a>
                               </div>
                             </div>
                           </li>
@@ -364,25 +358,6 @@
                                                    clearAllText="Clear"
                                                    formControlName="scientificDomain">
                                         </ng-select>
-                                        <div class="uk-margin-small-top">
-                                        <i><small>For suggestions in amending the
-                                          "{{providerScientificDomainDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                        </div>
-                                        <div *ngIf="this.domainArray.controls[i].get('scientificDomain').value">
-                                          <div *ngIf="this.domainArray.controls[i].get('scientificDomain').value === 'scientific_domain-other'" class="uk-flex uk-flex-left">
-  <!--                                          <form [formGroup]="vocabularyEntryForm" (ngSubmit)="submitSuggestion()" class="uk-search uk-search-default" style="width: 250px;">-->
-                                            <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                              <label>
-                                                <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="domainsVocabularyEntryValueName">
-                                              </label>
-                                            </form>
-                                            <button class="uk-button uk-button-default" type="submit"
-                                                    (click)="submitSuggestion(this.vocabularyEntryForm.get('domainsVocabularyEntryValueName').value, 'SCIENTIFIC DOMAIN', null)">
-                                              Submit
-                                            </button>
-                                            <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
-                                          </div>
-                                        </div>
                                       </div>
                                     </div>
 
@@ -402,24 +377,6 @@
                                                    clearAllText="Clear"
                                                    formControlName="scientificSubdomain">
                                         </ng-select>
-                                        <div class="uk-margin-small-top">
-                                          <i><small>For suggestions in amending the
-                                            "{{providerScientificSubdomainsDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                        </div>
-                                        <div *ngIf="this.domainArray.controls[i].get('scientificDomain').value && this.domainArray.controls[i].get('scientificSubdomain').value">
-                                          <div *ngIf="this.domainArray.controls[i].get('scientificSubdomain').value.includes('-other')" class="uk-flex uk-flex-left">
-                                            <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                              <label>
-                                                <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="categoriesVocabularyEntryValueName">
-                                              </label>
-                                            </form>
-                                            <button class="uk-button uk-button-default" type="submit"
-                                                    (click)="submitSuggestion(this.vocabularyEntryForm.get('categoriesVocabularyEntryValueName').value, 'SCIENTIFIC SUBDOMAIN', this.domainArray.controls[i].get('scientificDomain').value)">
-                                              Submit
-                                            </button>
-                                            <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
-                                          </div>
-                                        </div>
                                       </div>
                                     </div>
 
@@ -465,6 +422,37 @@
                                 </div>
                               </div>
                             </div>
+                            <div formArrayName="structureTypes" class="uk-margin-large-bottom">
+                              <label class="uk-form-label uk-text-right" for="structureTypes">
+                                {{structureTypesDesc.label + (structureTypesDesc.mandatory ? ' (*)' : '')}}
+                              </label>
+                              <div
+                                class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
+                              <div class="uk-form-controls uk-margin-medium-top">
+                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index" class="uk-margin-bottom">
+                                  <ng-select class="uk-width-9-10" id="structureTypes"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i, this.edit)}"
+                                             *ngIf="providerTypeVocabulary"
+                                             [items]="sortVocabulariesByName(providerTypeVocabulary)"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
+                                  <a *ngIf="getFieldAsFormArray('structureTypes').length > 1 && !disable"
+                                     class="remove-element uk-padding-small"
+                                     (click)="remove('structureTypes', i); unsavedChangesPrompt()">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                  </a>
+                                </div>
+                                <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
+                                  <a class="add-new-element" (click)="push('structureTypes', true)">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
                           </li>
                           <!--LOCATION-->
                           <li>
@@ -478,7 +466,7 @@
                                 <div class="uk-form-controls uk-margin-medium-top">
                                   <input id="streetNameAndNumber" class="uk-input uk-width-9-10" type="text"
                                          formControlName="streetNameAndNumber"
-                                         (input)="handleBitSetsOfGroups(3, 5, 'streetNameAndNumber', 'location'); unsavedChangesPrompt()"
+                                         (input)="unsavedChangesPrompt()"
                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.streetNameAndNumber', this.edit)}">
                                 </div>
                                 <i><small>Suggested length is 50 characters</small></i>
@@ -492,7 +480,7 @@
                                 <div class="uk-form-controls uk-margin-medium-top">
                                   <input id="postalCode" class="uk-input uk-width-9-10" type="text"
                                          formControlName="postalCode"
-                                         (input)="handleBitSetsOfGroups(3, 6, 'postalCode', 'location'); unsavedChangesPrompt()"
+                                         (input)="unsavedChangesPrompt()"
                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.postalCode', this.edit)}">
                                 </div>
                                 <i><small>Suggested length is 20 characters</small></i>
@@ -504,7 +492,7 @@
                                 <div class="uk-form-description uk-margin-top uk-width-9-10">{{cityDesc.desc}}</div>
                                 <div class="uk-form-controls uk-margin-medium-top">
                                   <input id="city" class="uk-input uk-width-9-10" type="text" formControlName="city"
-                                         (input)="handleBitSetsOfGroups(3, 7, 'city', 'location'); unsavedChangesPrompt()"
+                                         (input)="unsavedChangesPrompt()"
                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.city', this.edit)}">
                                 </div>
                                 <i><small>Suggested length is 20 characters</small></i>
@@ -529,7 +517,7 @@
                                 <div class="uk-form-controls uk-margin-medium-top">
 <!--                                  <select id="country" class="uk-input uk-select uk-width-9-10"-->
 <!--                                          formControlName="country"-->
-<!--                                          (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"-->
+<!--                                          (change)="unsavedChangesPrompt()"-->
 <!--                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}">-->
 <!--                                    <option value=""></option>-->
 <!--                                    <option *ngFor="let entry of placesVocabulary" value="{{entry.id}}">-->
@@ -540,28 +528,13 @@
                                   <ng-select class="uk-width-9-10" id="country"
                                              [ngClass]="{'uk-form-danger': checkFormValidity('location.country', this.edit)}"
                                              [items]="placesVocabulary"
-                                             (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"
+                                             (change)="unsavedChangesPrompt()"
                                              bindLabel="name"
                                              bindValue="id"
                                              clearAllText="Clear"
                                              formControlName="country">
                                   </ng-select>
                                 </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{countryDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngIf="this.newProviderForm.controls['location'].get('country').value === 'OT'" class="uk-flex uk-flex-left">
-                                  <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                    <label>
-                                      <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="placesVocabularyEntryValueName">
-                                    </label>
-                                  </form>
-                                  <button class="uk-button uk-button-default" type="submit"
-                                          (click)="submitSuggestion(this.vocabularyEntryForm.get('placesVocabularyEntryValueName').value, 'COUNTRY', null)">
-                                    Submit
-                                  </button>
-                                  <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                </div>
                               </div>
                             </div>
                           </li>
@@ -581,7 +554,7 @@
                                     <div class="uk-form-controls uk-margin-medium-top">
                                       <input id="mainContactFirstName" class="uk-input" type="text"
                                              formControlName="firstName"
-                                             (input)="handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact'); unsavedChangesPrompt()"
+                                             (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.firstName', this.edit)}">
                                     </div>
                                     <i><small>Suggested length is 50 characters</small></i>
@@ -595,7 +568,7 @@
                                     <div class="uk-form-controls uk-margin-medium-top">
                                       <input id="mainContactLastName" class="uk-input" type="text"
                                              formControlName="lastName"
-                                             (input)="handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact'); unsavedChangesPrompt()"
+                                             (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.lastName', this.edit)}">
                                     </div>
                                     <i><small>Suggested length is 50 characters</small></i>
@@ -608,7 +581,7 @@
                                       class="uk-form-description uk-margin-top uk-width-9-10">{{providerMainContactEmailDesc.desc}}</div>
                                     <div class="uk-form-controls uk-margin-medium-top">
                                       <input id="mainContactEmail" class="uk-input" type="text" formControlName="email"
-                                             (input)="handleBitSetsOfGroups(4, 11, 'email', 'mainContact'); unsavedChangesPrompt()"
+                                             (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.email', this.edit)}">
                                       <!--<i><small>{{ providerMainContactEmailDesc.desc }}</small></i>-->
                                     </div>
@@ -640,7 +613,6 @@
                                     </div>
                                     <i><small>Suggested length is 50 characters</small></i>
                                   </div>
-
 
                                 </div>
                               </div>
@@ -692,7 +664,7 @@
                                         class="uk-form-description uk-margin-top uk-width-9-10">{{providerPublicContactEmailDesc.desc}}</div>
                                       <div class="uk-form-controls uk-margin-medium-top">
                                         <input id="email" class="uk-input" type="text" formControlName="email"
-                                               (input)="handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts'); unsavedChangesPrompt()"
+                                               (input)="unsavedChangesPrompt()"
                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, this.edit, 'email')}">
                                         <!--<i><small>{{ providerPublicContactEmailDesc.desc }}</small></i>-->
                                       </div>
@@ -727,7 +699,7 @@
                                   </div>
                                   <a *ngIf="getFieldAsFormArray('publicContacts').length > 1 && !disable"
                                      class="remove-element uk-padding-small uk-display-inline-block"
-                                     (click)="removePublicContact(i); unsavedChangesPrompt(); handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts')">
+                                     (click)="removePublicContact(i); unsavedChangesPrompt()">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
@@ -757,22 +729,6 @@
                                            clearAllText="Clear"
                                            formControlName="lifeCycleStatus">
                                 </ng-select>
-                              </div>
-                              <div class="uk-margin-small-top">
-                                <i><small>For suggestions in amending the
-                                  "{{lifeCycleStatusDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                              </div>
-                              <div *ngIf="this.newProviderForm.get('lifeCycleStatus').value === 'provider_life_cycle_status-other'" class="uk-flex uk-flex-left">
-                                <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                  <label>
-                                    <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="providerLCSVocabularyEntryValueName">
-                                  </label>
-                                </form>
-                                <button class="uk-button uk-button-default" type="submit"
-                                        (click)="submitSuggestion(this.vocabularyEntryForm.get('providerLCSVocabularyEntryValueName').value, 'PROVIDER LIFE CYCLE STATUS', null)">
-                                  Submit
-                                </button>
-                                <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
                               </div>
                             </div>
                             <div formArrayName="certifications" class="uk-margin-large-bottom">
@@ -805,22 +761,8 @@
                               </div>
                             </div>
                           </li>
-                          <!--OTHER-->
+                          <!--DEPENDENCIES-->
                           <li>
-                            <div class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right" for="hostingLegalEntity">
-                                {{hostingLegalEntityDesc.label + (hostingLegalEntityDesc.mandatory ? ' (*)' : '')}}
-                              </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{hostingLegalEntityDesc.desc}}</div>
-                              <div class="uk-form-controls uk-margin-medium-top">
-                                <input id="hostingLegalEntity" class="uk-input uk-width-9-10" type="text"
-                                       formControlName="hostingLegalEntity"
-                                       (input)="unsavedChangesPrompt()"
-                                       [ngClass]="{'uk-form-danger': checkFormValidity('hostingLegalEntity', this.edit)}">
-                              </div>
-                              <i><small>Suggested length is 80 characters</small></i>
-                            </div>
                             <div formArrayName="participatingCountries" class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="participatingCountries">
                                 {{participatingCountriesDesc.label + (participatingCountriesDesc.mandatory ? ' (*)' : '')}}
@@ -845,23 +787,6 @@
                                      (click)="remove('participatingCountries', i); unsavedChangesPrompt()">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
-                                </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{participatingCountriesDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('participatingCountries').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('participatingCountries').value[i] === 'OT'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="placesVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('placesVocabularyEntryValueName').value, 'COUNTRY', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('participatingCountries', false)">
@@ -906,15 +831,15 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('networks').controls; let i=index"
                                      [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('networks').controls.length-1 !== i}">
-<!--                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"-->
-<!--                                          (change)="unsavedChangesPrompt()"-->
-<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">-->
-<!--                                    <option value=""></option>-->
-<!--                                    <option *ngFor="let entry of sortVocabulariesByName(networksVocabulary)"-->
-<!--                                            value="{{entry.id}}">-->
-<!--                                      {{entry.name}}-->
-<!--                                    </option>-->
-<!--                                  </select>-->
+                                  <!--                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"-->
+                                  <!--                                          (change)="unsavedChangesPrompt()"-->
+                                  <!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">-->
+                                  <!--                                    <option value=""></option>-->
+                                  <!--                                    <option *ngFor="let entry of sortVocabulariesByName(networksVocabulary)"-->
+                                  <!--                                            value="{{entry.id}}">-->
+                                  <!--                                      {{entry.name}}-->
+                                  <!--                                    </option>-->
+                                  <!--                                  </select>-->
                                   <ng-select class="uk-width-9-10" id="networks"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i, this.edit)}"
                                              [items]="sortVocabulariesByName(networksVocabulary)"
@@ -930,23 +855,6 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{networksDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('networks').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('networks').value[i] === 'provider_network-other'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="networksVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('networksVocabularyEntryValueName').value, 'PROVIDER NETWORK', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
-                                </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('networks', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{networksDesc.label}}
@@ -954,55 +862,9 @@
                                 </div>
                               </div>
                             </div>
-                            <div formArrayName="structureTypes" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right" for="structureTypes">
-                                {{structureTypesDesc.label + (structureTypesDesc.mandatory ? ' (*)' : '')}}
-                              </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
-                              <div class="uk-form-controls uk-margin-medium-top">
-                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index"
-                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('networks').controls.length-1 !== i}">
-                                  <ng-select class="uk-width-9-10" id="structureTypes"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i, this.edit)}"
-                                             *ngIf="providerTypeVocabulary"
-                                             [items]="sortVocabulariesByName(providerTypeVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('structureTypes').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('structureTypes', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
-                                </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{structureTypesDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('structureTypes').value[i] === 'provider_structure_type-other'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="providerTypeVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('providerTypeVocabularyEntryValueName').value, 'PROVIDER STRUCTURE TYPE', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
-                                </div>
-                                <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-                                  <a class="add-new-element" (click)="push('structureTypes', true)">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
+                          </li>
+                          <!--OTHER-->
+                          <li>
                             <div formArrayName="esfriDomains" class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="esfriDomains">
                                 {{ESFRIDomainDesc.label + (ESFRIDomainDesc.mandatory ? ' (*)' : '')}}
@@ -1028,23 +890,6 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{ESFRIDomainDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('esfriDomains').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('esfriDomains').value[i] === 'provider_esfri_domain-other'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="esfriDomainVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('esfriDomainVocabularyEntryValueName').value, 'PROVIDER ESFRI DOMAIN', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
-                                </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('esfriDomains', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{ESFRIDomainDesc.label}}
@@ -1068,21 +913,6 @@
                                            formControlName="esfriType">
                                 </ng-select>
                               </div>
-                              <div class="uk-margin-small-top">
-                                <i><small>For suggestions in amending the
-                                  "{{ESFRITypeDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                              </div>
-                              <div *ngIf="this.newProviderForm.get('esfriType').value === 'provider_esfri_type-other'" class="uk-flex uk-flex-left">
-                                <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                  <label>
-                                    <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="esfriVocabularyEntryValueName">
-                                  </label>
-                                </form>
-                                <button class="uk-button uk-button-default" type="submit"
-                                        (click)="submitSuggestion(this.vocabularyEntryForm.get('esfriVocabularyEntryValueName').value, 'PROVIDER ESFRI TYPE', null)">
-                                  Submit
-                                </button>
-                                <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                              </div>
                             </div>
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right">MERIL Scientific Categorisation</label>
@@ -1112,23 +942,6 @@
                                                    clearAllText="Clear"
                                                    formControlName="merilScientificDomain">
                                         </ng-select>
-                                        <div class="uk-margin-small-top">
-                                          <i><small>For suggestions in amending the
-                                            "{{merilScientificDomainsDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                        </div>
-                                        <div *ngIf="this.merilDomainArray.controls[i].get('merilScientificDomain').value">
-                                          <div *ngIf="this.merilDomainArray.controls[i].get('merilScientificDomain').value === 'provider_meril_scientific_domain-other'" class="uk-flex uk-flex-left">
-                                            <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                              <label>
-                                                <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="merilDomainsVocabularyEntryValueName">
-                                              </label>
-                                            </form>
-                                            <button class="uk-button uk-button-default" type="submit"
-                                                    (click)="submitSuggestion(this.vocabularyEntryForm.get('merilDomainsVocabularyEntryValueName').value, 'PROVIDER MERIL SCIENTIFIC DOMAIN', null)">
-                                              Submit
-                                            </button>
-                                            <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                          </div>
-                                        </div>
                                       </div>
                                     </div>
 
@@ -1149,24 +962,6 @@
                                                    clearAllText="Clear"
                                                    formControlName="merilScientificSubdomain">
                                         </ng-select>
-                                        <div class="uk-margin-small-top">
-                                          <i><small>For suggestions in amending the
-                                            "{{merilScientificSubdomainsDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                        </div>
-                                        <div *ngIf="this.merilDomainArray.controls[i].get('merilScientificDomain').value && this.merilDomainArray.controls[i].get('merilScientificSubdomain').value">
-                                          <div *ngIf="this.merilDomainArray.controls[i].get('merilScientificSubdomain').value.includes('-other')" class="uk-flex uk-flex-left">
-                                            <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                              <label>
-                                                <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="merilCategoriesVocabularyEntryValueName">
-                                              </label>
-                                            </form>
-                                            <button class="uk-button uk-button-default" type="submit"
-                                                    (click)="submitSuggestion(this.vocabularyEntryForm.get('merilCategoriesVocabularyEntryValueName').value, 'PROVIDER MERIL SCIENTIFIC SUBDOMAIN', this.merilDomainArray.controls[i].get('merilScientificDomain').value)">
-                                              Submit
-                                            </button>
-                                          <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>
-                                          </div>
-                                        </div>
                                       </div>
                                     </div>
 
@@ -1209,23 +1004,6 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{areasOfActivityDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('areasOfActivity').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('areasOfActivity').value[i] === 'provider_area_of_activity-other'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="areasOfActivityVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('areasOfActivityVocabularyEntryValueName').value, 'PROVIDER AREA OF ACTIVITY', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
-                                </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('areasOfActivity', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{areasOfActivityDesc.label}}
@@ -1257,23 +1035,6 @@
                                      (click)="remove('societalGrandChallenges', i); unsavedChangesPrompt()">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
-                                </div>
-                                <div class="uk-margin-small-top">
-                                  <i><small>For suggestions in amending the
-                                    "{{societalGrandChallengesDesc.label}}" list, please select "Other", fill in your entry and press the "Submit" button below</small></i>
-                                </div>
-                                <div *ngFor="let provider of getFieldAsFormArray('societalGrandChallenges').controls; let i=index">
-                                  <div *ngIf="this.newProviderForm.get('societalGrandChallenges').value[i] === 'provider_societal_grand_challenge-other'" class="uk-flex uk-flex-left">
-                                    <form [formGroup]="vocabularyEntryForm" class="uk-search uk-search-default" style="width: 250px;">
-                                      <label>
-                                        <input class="uk-input uk-margin-small-top" type="search" placeholder="" formControlName="societalGrandChallengesVocabularyEntryValueName">
-                                      </label>
-                                    </form>
-                                    <button class="uk-button uk-button-default" type="submit"
-                                            (click)="submitSuggestion(this.vocabularyEntryForm.get('societalGrandChallengesVocabularyEntryValueName').value, 'PROVIDER SOCIETAL GRAND CHALLENGE', null)">
-                                      Submit
-                                    </button>
-                                    <span class="uk-margin-top uk-margin-medium-left"><i>{{ this.vocabularyEntryForm.get('errorMessage').value ? this.vocabularyEntryForm.get('errorMessage').value : this.vocabularyEntryForm.get('successMessage').value}}</i></span>                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('societalGrandChallenges', false)">
@@ -1337,7 +1098,7 @@
                                       </div>
                                       <div class="uk-form-controls uk-margin-medium-top">
                                         <input id="name" class="uk-input" type="text" formControlName="name"
-                                               (input)="handleBitSetsOfUsers(7, 12, 'name', 'users'); unsavedChangesPrompt()"
+                                               (input)="unsavedChangesPrompt()"
                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('users', i, this.edit, 'name')}">
                                         <!--<i><small>{{ providerPublicContactFirstNameDesc.desc }}</small></i>-->
                                       </div>
@@ -1351,7 +1112,7 @@
                                       </div>
                                       <div class="uk-form-controls uk-margin-medium-top">
                                         <input id="surname" class="uk-input" type="text" formControlName="surname"
-                                               (input)="handleBitSetsOfUsers(7, 13, 'surname', 'users'); unsavedChangesPrompt()"
+                                               (input)="unsavedChangesPrompt()"
                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('users', i, this.edit, 'surname')}">
                                         <!--<i><small>{{ providerPublicContactLastNameDesc.desc }}</small></i>-->
                                       </div>
@@ -1365,7 +1126,7 @@
                                       </div>
                                       <div class="uk-form-controls uk-margin-medium-top">
                                         <input class="uk-input" type="text" formControlName="email"
-                                               (input)="handleBitSetsOfUsers(7, 14, 'email', 'users'); unsavedChangesPrompt()"
+                                               (input)="unsavedChangesPrompt()"
                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('users', i, this.edit, 'email')}">
                                         <!--<i><small>{{ providerPublicContactEmailDesc.desc }}</small></i>-->
                                       </div>
@@ -1376,7 +1137,7 @@
                                   </div>
                                   <a *ngIf="usersArray.length > 1 && !disable"
                                      class="remove-element uk-padding-small uk-display-inline-block"
-                                     (click)="deleteUser(i); initUserBitSets()">
+                                     (click)="deleteUser(i)">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
@@ -1419,28 +1180,12 @@
   </div>
 </div>
 
-<!--<div id="logoUrlModal" uk-modal>-->
-  <!--<div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">-->
-    <!--<label for="newLogo" class="uk-form-label">new logo url</label>-->
-    <!--<input type="text" #newLogo id="newLogo" class="uk-input uk-margin-bottom" value="{{logoUrl}}">-->
-    <!--<button class="uk-button uk-button-primary" type="button" (click)="addLogoUrl(newLogo.value)">Add</button>-->
-    <!--<button class="uk-button uk-button-primary uk-modal-close" type="button">Cancel</button>-->
-  <!--</div>-->
-<!--</div>-->
-
 <div id="modal-consent" class="uk-flex-top" uk-modal="bg-close: false; esc-close: false;">
   <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
 
     <div class="uk-margin-medium-bottom">In order to be able to register a {{serviceORresource | lowercase}} provider to EOSC you need to agree to the following: </div>
 
     <div class="uk-margin-medium-bottom">
-<!--      <div class="uk-form-controls uk-margin-bottom">-->
-<!--        <label>-->
-<!--          <input class="uk-checkbox" type="checkbox" id="codeOfConduct"  value="true"-->
-<!--                 (change)="toggleTerm('codeOfConduct')">-->
-<!--          <span class="uk-margin-small-left">I agree with the <a>EOSC Code of Conduct</a></span>-->
-<!--        </label>-->
-<!--      </div>-->
       <div class="uk-form-controls uk-margin-bottom">
         <label>
           <input class="uk-checkbox" type="checkbox" id="privacyPolicy"  value="true"

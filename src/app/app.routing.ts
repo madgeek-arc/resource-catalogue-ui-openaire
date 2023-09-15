@@ -11,6 +11,7 @@ import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {FormsComponent} from './pages/forms/forms.component';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
+import {JoinComponent} from './pages/provider/join/join.component';
 
 const appRoutes: Routes = [
   {
@@ -84,6 +85,14 @@ const appRoutes: Routes = [
       breadcrumb: 'Datasource'
     }
   },
+  {
+    path: 'join/:token',
+    component: JoinComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'Datasource'
+    }
+  },
 
   {
     path: 'provider',
@@ -92,8 +101,8 @@ const appRoutes: Routes = [
   },
 
   {
-    path: 'resource-dashboard',
-    loadChildren: () => import('../app/pages/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
+    path: 'service-dashboard',
+    loadChildren: () => import('./pages/service-dashboard/service-dashboard.module').then(m => m.ServiceDashboardModule),
     canActivate: [CanActivateViaAuthGuard]
   },
 
@@ -101,6 +110,13 @@ const appRoutes: Routes = [
     path: 'service',
     loadChildren: () => import('../app/pages/landingpages/service/service-landing-page.module').then(m => m.ServiceLandingPageModule),
   },
+
+  {
+    path: 'admin',
+    loadChildren: () => import('../app/pages/admin-dashboard/admin.module').then(m => m.AdminModule),
+    canActivate: [CanActivateViaAuthGuard]
+  },
+
   {
     path: 'forbidden',
     component: ForbiddenPageComponent,

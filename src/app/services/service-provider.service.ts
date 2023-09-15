@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
-import {Datasource, InfraService, Provider, ProviderBundle, Service} from '../entities/eic-model';
+import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Paging} from '../entities/paging';
@@ -37,6 +37,12 @@ export class ServiceProviderService {
     return this.http.post(this.base + '/provider', newProvider, this.options);
   }
 
+  createNewServiceProviderWithToken(newProvider: Provider, token: string) {
+    let params = new HttpParams();
+    params = params.append('invitation', token);
+    return this.http.post<Provider>(this.base + '/providers', newProvider, {params: params});
+  }
+
   updateServiceProvider(updatedFields: any): Observable<Provider> {
     // console.log(`knocking on: ${this.base}/provider`);
     return this.http.put<Provider>(this.base + '/provider', updatedFields, this.options);
@@ -46,10 +52,11 @@ export class ServiceProviderService {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 
-  getServiceProviderById(id: string) {
+  getProviderById(id: string) {
     return this.http.get<Provider>(this.base + `/providers/${id}`, this.options);
   }
-  getProviderBundle(id: string) {
+
+  getProviderBundleById(id: string) {
     return this.http.get<ProviderBundle>(this.base + `/bundles/providers/${id}`, this.options);
   }
 
@@ -57,15 +64,27 @@ export class ServiceProviderService {
     return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
   }
 
-  getServicesOfProvider(resourceOrganisation: string, urlParameters?: URLParameter[]) {
+  getProviderBundles(urlParameters?: URLParameter[]) {
     let searchQuery = new HttpParams();
-    searchQuery = searchQuery.append('resource_organisation', resourceOrganisation);
     for (const urlParameter of urlParameters) {
       for (const value of urlParameter.values) {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Service | Datasource>>(this.base + '/catalogue-resources', {params: searchQuery});
+    return this.http.get<Paging<ProviderBundle>>(this.base + '/bundles/providers', {params: searchQuery});
+  }
+
+  getServicesOfProvider(resourceOrganisation: string, urlParameters?: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    searchQuery = searchQuery.append('resource_organisation', resourceOrganisation);
+    if (urlParameters) {
+      for (const urlParameter of urlParameters) {
+        for (const value of urlParameter.values) {
+          searchQuery = searchQuery.append(urlParameter.key, value);
+        }
+      }
+    }
+    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.base + '/catalogue-resources/bundles', {params: searchQuery});
   }
 
   temporarySaveProvider(provider: Provider, providerExists: boolean) {
@@ -93,17 +112,6 @@ export class ServiceProviderService {
   validateUrl(url: string) {
     // console.log(`knocking on: ${this.base}/provider/validateUrl?urlForValidation=${url}`);
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
-  }
-
-  submitVocabularyEntry(entryValueName: string, vocabulary: string, parent: string, resourceType: string, providerId?: string, resourceId?: string) {
-    // console.log(`knocking on: ${this.base}/vocabularyCuration/addFront?entryValueName=${entryValueName}&vocabulary=${vocabulary}&parent=${parent}&resourceType=${resourceType}&providerId=${providerId}&resourceId=${resourceId}`);
-    if (providerId && resourceId) {
-      return this.http.post(this.base + `/vocabularyCuration/addFront?entryValueName=${entryValueName}&vocabulary=${vocabulary}&parent=${parent}&resourceType=${resourceType}&providerId=${providerId}&resourceId=${resourceId}`, this.options);
-    } else if (providerId) {
-      return this.http.post(this.base + `/vocabularyCuration/addFront?entryValueName=${entryValueName}&vocabulary=${vocabulary}&parent=${parent}&resourceType=${resourceType}&providerId=${providerId}`, this.options);
-    } else {
-      return this.http.post(this.base + `/vocabularyCuration/addFront?entryValueName=${entryValueName}&vocabulary=${vocabulary}&parent=${parent}&resourceType=${resourceType}`, this.options);
-    }
   }
 
 }

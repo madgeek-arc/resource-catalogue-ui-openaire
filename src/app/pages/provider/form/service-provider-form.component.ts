@@ -5,9 +5,8 @@ import {AuthenticationService} from '../../../services/authentication.service';
 import {ServiceProviderService} from '../../../services/service-provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
-import {Vocabulary, Provider} from '../../../entities/eic-model';
+import {Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
-import BitSet from 'bitset/bitset';
 import {environment} from '../../../../environments/environment';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
@@ -46,63 +45,18 @@ export class ServiceProviderFormComponent implements OnInit {
   tabs: boolean[] = [false, false, false, false, false, false, false, false];
   isPortalAdmin = false;
 
-  requiredOnTab0 = 3;
-  requiredOnTab1 = 2;
-  requiredOnTab3 = 4;
-  requiredOnTab4 = 2;
-  requiredOnTab7 = 1;
-
-  remainingOnTab0 = this.requiredOnTab0;
-  remainingOnTab1 = this.requiredOnTab1;
-  remainingOnTab3 = this.requiredOnTab3;
-  remainingOnTab4 = this.requiredOnTab4;
-  remainingOnTab7 = this.requiredOnTab7;
-
-  BitSetTab0 = new BitSet;
-  BitSetTab1 = new BitSet;
-  BitSetTab3 = new BitSet;
-  BitSetTab4 = new BitSet;
-  BitSetTab7 = new BitSet;
-
-  requiredTabs = 5;
-  completedTabs = 0;
-  completedTabsBitSet = new BitSet;
-
-  allRequiredFields = 16;
-  loaderBitSet = new BitSet;
-  loaderPercentage = 0;
-
   codeOfConduct = false;
   privacyPolicy = false;
   authorizedRepresentative = false;
   agreedToTerms: boolean;
-
-  vocabularyEntryForm: FormGroup;
-  suggestionsForm = {
-    legalStatusVocabularyEntryValueName: '',
-    domainsVocabularyEntryValueName: '',
-    categoriesVocabularyEntryValueName: '',
-    placesVocabularyEntryValueName: '',
-    providerLCSVocabularyEntryValueName: '',
-    networksVocabularyEntryValueName: '',
-    providerTypeVocabularyEntryValueName: '',
-    esfriDomainVocabularyEntryValueName: '',
-    esfriVocabularyEntryValueName: '',
-    merilDomainsVocabularyEntryValueName: '',
-    merilCategoriesVocabularyEntryValueName: '',
-    areasOfActivityVocabularyEntryValueName: '',
-    societalGrandChallengesVocabularyEntryValueName: '',
-    vocabulary: '',
-    errorMessage: '',
-    successMessage: ''
-  };
 
   readonly fullNameDesc: sd.Description = sd.providerDescMap.get('fullNameDesc');
   readonly abbreviationDesc: sd.Description = sd.providerDescMap.get('abbreviationDesc');
   readonly websiteDesc: sd.Description = sd.providerDescMap.get('websiteDesc');
   readonly providerDescriptionDesc: sd.Description = sd.providerDescMap.get('providerDescriptionDesc');
   readonly providerLogoDesc: sd.Description = sd.providerDescMap.get('providerLogoDesc');
-  readonly providerMultimediaDesc: sd.Description = sd.providerDescMap.get('providerMultimediaDesc');
+  readonly multimediaURLDesc: sd.Description = sd.providerDescMap.get('multimediaURLDesc');
+  readonly multimediaNameDesc: sd.Description = sd.providerDescMap.get('multimediaNameDesc');
   readonly providerScientificDomainDesc: sd.Description = sd.providerDescMap.get('providerScientificDomainDesc');
   readonly providerScientificSubdomainsDesc: sd.Description = sd.providerDescMap.get('providerScientificSubdomainsDesc');
   readonly structureTypesDesc: sd.Description = sd.providerDescMap.get('structureTypesDesc');
@@ -161,7 +115,12 @@ export class ServiceProviderFormComponent implements OnInit {
     legalStatus: [''],
     description: ['', Validators.required],
     logo: ['', Validators.compose([Validators.required, URLValidator])],
-    multimedia: this.fb.array([this.fb.control('', URLValidator)]),
+    multimedia: this.fb.array([
+      this.fb.group({
+        multimediaURL: ['', Validators.compose([Validators.required, URLValidator])],
+        multimediaName: ['']
+      })
+    ]),
     scientificDomains: this.fb.array([]),
     // scientificDomain: this.fb.array([]),
     // scientificSubdomains: this.fb.array([]),
@@ -253,7 +212,7 @@ export class ServiceProviderFormComponent implements OnInit {
               } else if (i === 'structureTypes') {
                 this.push(i, true);
               } else if (i === 'multimedia') {
-                this.push(i, false, true);
+                this.pushMultimedia();
               } else {
                 this.push(i, false);
               }
@@ -287,9 +246,6 @@ export class ServiceProviderFormComponent implements OnInit {
 
     // this.isPortalAdmin = this.authService.isAdmin();
 
-    this.initUserBitSets(); // Admin + mainContact
-
-    this.vocabularyEntryForm = this.fb.group(this.suggestionsForm);
   }
 
   registerProvider(tempSave: boolean) {
@@ -311,16 +267,23 @@ export class ServiceProviderFormComponent implements OnInit {
 
     for (let i = 0; i < this.domainArray.length ; i++) {
       if (this.domainArray.controls[i].get('scientificDomain').value === ''
-          || this.domainArray.controls[i].get('scientificDomain').value === null) {
+        || this.domainArray.controls[i].get('scientificDomain').value === null) {
         this.removeDomain(i);
       }
     }
 
     for (let i = 0; i < this.merilDomainArray.length ; i++) {
       if (this.merilDomainArray.controls[i].get('merilScientificDomain').value === ''
-          || this.merilDomainArray.controls[i].get('merilScientificDomain').value === null) {
+        || this.merilDomainArray.controls[i].get('merilScientificDomain').value === null) {
         // console.log(this.merilDomainArray.controls[i]);
         this.removeMerilDomain(i);
+      }
+    }
+
+    for (let i = 0; i < this.multimediaArray.length; i++) {
+      if (this.multimediaArray.controls[i].get('multimediaURL').value === ''
+        || this.multimediaArray.controls[i].get('multimediaURL').value === null) {
+        this.removeMultimedia(i);
       }
     }
 
@@ -346,28 +309,43 @@ export class ServiceProviderFormComponent implements OnInit {
       this.showLoader = true;
       window.scrollTo(0, 0);
 
-      this.serviceProviderService[method](this.newProviderForm.value).subscribe(
-        res => {
-        },
-        err => {
-          this.showLoader = false;
-          window.scrollTo(0, 0);
-          this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
-        },
-        () => {
-          this.showLoader = false;
-          if (this.edit) {
-            this.router.navigate(['/provider/my']);
-          } else {
-            if (environment.projectName === 'OpenAIRE Catalogue')
-              this.authService.login();
-            else {
-              // this.authService.redirectURL = '/provider/my';
-              this.authService.login();
+      let token = sessionStorage.getItem('token');
+      if (token) {
+        this.serviceProviderService.createNewServiceProviderWithToken(this.newProviderForm.value, token).subscribe(
+          res => {
+            sessionStorage.removeItem('token');
+            setTimeout(()=>{
+              this.router.navigate([`/provider/${res.id}/dashboard/home`]);
+            }, 3000);
+          },
+          err => {
+            this.showLoader = false;
+            window.scrollTo(0, 0);
+            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+          }
+        );
+      } else {
+        this.serviceProviderService[method](this.newProviderForm.value).subscribe(
+          res => {},
+          err => {
+            this.showLoader = false;
+            window.scrollTo(0, 0);
+            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+          },
+          () => {
+            this.showLoader = false;
+            if (this.edit) {
+              this.router.navigate(['/provider/my']);
+            } else {
+              if (environment.projectName === 'OpenAIRE Catalogue')
+                this.authService.login();
+              else {
+                this.authService.login();
+              }
             }
           }
-        }
-      );
+        );
+      }
     } else {
       // console.log(this.newProviderForm);
       this.markFormAsDirty();
@@ -376,38 +354,6 @@ export class ServiceProviderFormComponent implements OnInit {
       this.errorMessage = 'Please fill in all required fields (marked with an asterisk), ' +
         'and fix the data format in fields underlined with a red colour.';
     }
-  }
-
-  // empty fields can be removed from here when complete
-  toServer(service: Provider): Provider {
-    const ret = {};
-    Object.entries(service).forEach(([name, values]) => {
-      let newValues = values;
-      // console.log(name);
-      if (Array.isArray(values)) {
-        newValues = [];
-        values.forEach(e => {
-          // console.log('is array');
-          if (typeof e === 'string' || e instanceof String) {
-            if (e !== '') {
-              newValues.push(e.trim().replace(/\s\s+/g, ' '));
-            }
-          } else {
-            // console.log('array with objects');
-          }
-        });
-      } else if (typeof newValues === 'string' || newValues instanceof String) {
-        newValues = newValues.trim().replace(/\s\s+/g, ' ');
-      } else {
-        // console.log('single object');
-      }
-      ret[name] = newValues;
-    });
-    // if ( (this.firstServiceForm === true) && this.providerId) {
-    //   ret['providers'] = [];
-    //   ret['providers'].push(this.providerId);
-    // }
-    return <Provider>ret;
   }
 
   /** check form fields and tabs validity--> **/
@@ -444,13 +390,16 @@ export class ServiceProviderFormComponent implements OnInit {
       || this.checkFormValidity('abbreviation', this.edit)
       || this.checkFormValidity('website', this.edit)
       || this.checkEveryArrayFieldValidity('legalEntity', this.edit)
-      || this.checkFormValidity('legalStatus', this.edit));
+      || this.checkFormValidity('legalStatus', this.edit)
+      || this.checkFormValidity('hostingLegalEntity', this.edit));
     this.tabs[1] = (this.checkFormValidity('description', this.edit)
       || this.checkFormValidity('logo', this.edit)
-      || this.checkEveryArrayFieldValidity('multimedia', this.edit));
+      || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaURL')
+      || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaName'));
     this.tabs[2] = (this.checkEveryArrayFieldValidity('tags', this.edit)
       || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificDomain')
-      || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificSubdomain'));
+      || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificSubdomain')
+      || this.checkEveryArrayFieldValidity('structureTypes', this.edit));
     this.tabs[3] = (this.checkFormValidity('location.streetNameAndNumber', this.edit)
       || this.checkFormValidity('location.postalCode', this.edit)
       || this.checkFormValidity('location.city', this.edit)
@@ -468,19 +417,17 @@ export class ServiceProviderFormComponent implements OnInit {
       || this.checkEveryArrayFieldValidity('publicContacts', this.edit, 'position'));
     this.tabs[5] = (this.checkFormValidity('lifeCycleStatus', this.edit)
       || this.checkEveryArrayFieldValidity('certifications', this.edit));
-    this.tabs[6] = (this.checkFormValidity('hostingLegalEntity', this.edit)
-      || this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
+    this.tabs[6] = (this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
       || this.checkEveryArrayFieldValidity('affiliations', this.edit)
-      || this.checkEveryArrayFieldValidity('networks', this.edit)
-      || this.checkEveryArrayFieldValidity('structureTypes', this.edit)
-      || this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
+      || this.checkEveryArrayFieldValidity('networks', this.edit));
+    this.tabs[7] = (this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
       || this.checkFormValidity('esfriType', this.edit)
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificDomain')
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificSubdomain')
       || this.checkEveryArrayFieldValidity('areasOfActivity', this.edit)
       || this.checkEveryArrayFieldValidity('societalGrandChallenges', this.edit)
       || this.checkEveryArrayFieldValidity('nationalRoadmaps', this.edit));
-    this.tabs[6] = (this.checkEveryArrayFieldValidity('users', this.edit, 'name')
+    this.tabs[8] = (this.checkEveryArrayFieldValidity('users', this.edit, 'name')
       || this.checkEveryArrayFieldValidity('users', this.edit, 'surname')
       || this.checkEveryArrayFieldValidity('users', this.edit, 'email'));
   }
@@ -595,6 +542,28 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** <--handle form arrays**/
 
+  /** Multimedia -->**/
+  newMultimedia(): FormGroup {
+    return this.fb.group({
+      multimediaURL: ['', Validators.compose([Validators.required, URLValidator])],
+      multimediaName: ['']
+    });
+  }
+
+  get multimediaArray() {
+    return this.newProviderForm.get('multimedia') as FormArray;
+  }
+
+  pushMultimedia() {
+    this.multimediaArray.push(this.newMultimedia());
+  }
+
+  removeMultimedia(index: number) {
+    this.multimediaArray.removeAt(index);
+  }
+
+  /** <--Multimedia**/
+
   /** Contact Info -->**/
   newContact(): FormGroup {
     return this.fb.group({
@@ -661,20 +630,6 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** <-- User Array**/
 
-  showLogoUrlModal() {
-    if (this.newProviderForm && this.newProviderForm.get('logo').value) {
-      this.logoUrl = this.newProviderForm.get('logo').value;
-    }
-    UIkit.modal('#logoUrlModal').show();
-  }
-
-  addLogoUrl(logoUrl: string) {
-    UIkit.modal('#logoUrlModal').hide();
-    this.logoUrl = logoUrl;
-    this.newProviderForm.get('logo').setValue(logoUrl);
-    this.newProviderForm.get('logo').updateValueAndValidity();
-  }
-
   getSortedChildrenCategories(childrenCategory: Vocabulary[], parentId: string) {
     return this.sortVocabulariesByName(childrenCategory.filter(entry => entry.parentId === parentId));
   }
@@ -719,51 +674,6 @@ export class ServiceProviderFormComponent implements OnInit {
     }
   }
 
-  trimFormWhiteSpaces() {
-    for (const i in this.newProviderForm.controls) {
-      // console.log(i);
-      if (this.newProviderForm.controls[i].value && this.newProviderForm.controls[i].value.constructor === Array) {
-
-      } else if (this.newProviderForm.controls[i].value && (i === 'location' || i === 'mainContact')) {
-        // TODO
-      } else if (typeof this.newProviderForm.controls[i].value === 'boolean') {
-        // console.log('skip boolean value');
-      } else {
-        // console.log('this.newProviderForm.controls[i].value: ', this.newProviderForm.controls[i].value);
-        this.newProviderForm.controls[i].setValue(this.newProviderForm.controls[i].value.trim().replace(/\s\s+/g, ' '));
-      }
-    }
-    for (let j = 0; j < this.newProviderForm.controls['users'].value.length; j++) {
-      this.newProviderForm.controls['users'].value[j].email = this.newProviderForm.controls['users'].value[j].email
-        .trim().replace(/\s\s+/g, ' ');
-      this.newProviderForm.controls['users'].value[j].name = this.newProviderForm.controls['users'].value[j].name
-        .trim().replace(/\s\s+/g, ' ');
-      this.newProviderForm.controls['users'].value[j].surname = this.newProviderForm.controls['users'].value[j].surname
-        .trim().replace(/\s\s+/g, ' ');
-    }
-
-    if (this.newProviderForm.controls['scientificDomains'] && this.newProviderForm.controls['scientificDomains'].value) {
-
-      if (this.newProviderForm.controls['scientificDomains'].value.length === 1
-        && !this.newProviderForm.controls['scientificDomains'].value[0].scientificDomain
-        && !this.newProviderForm.controls['scientificDomains'].value[0].scientificSubdomain) {
-
-        this.removeDomain(0);
-
-      }
-    }
-    if (this.newProviderForm.controls['merilScientificDomains'] && this.newProviderForm.controls['merilScientificDomains'].value) {
-
-      if (this.newProviderForm.controls['merilScientificDomains'].value.length === 1
-        && !this.newProviderForm.controls['merilScientificDomains'].value[0].merilScientificDomain
-        && !this.newProviderForm.controls['merilScientificDomains'].value[0].merilScientificSubdomain) {
-
-        this.removeMerilDomain(0);
-
-      }
-    }
-  }
-
   unsavedChangesPrompt() {
     this.hasChanges = true;
   }
@@ -771,152 +681,6 @@ export class ServiceProviderFormComponent implements OnInit {
   timeOut(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-
-  /** BitSets -->**/
-  handleBitSets(tabNum: number, bitIndex: number, formControlName: string): void {
-    if (bitIndex === 0) {
-      this.providerName = this.newProviderForm.get(formControlName).value;
-    }
-    if (this.newProviderForm.get(formControlName).valid || (this.newProviderForm.get(formControlName).disabled && this.newProviderForm.get(formControlName).value != '')) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else if (this.newProviderForm.get(formControlName).invalid) {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    } else if (this.newProviderForm.get(formControlName).pending) {
-      this.timeOut(300).then( () => this.handleBitSets(tabNum, bitIndex, formControlName));
-      return;
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfGroups(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.newProviderForm.controls[group].get(formControlName).valid || (this.newProviderForm.controls[group].get(formControlName).disabled && this.newProviderForm.controls[group].get(formControlName).value != '')) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else if (this.newProviderForm.controls[group].get(formControlName).invalid) {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfPublicContact(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.newProviderForm.get(group).value[0][formControlName] !== '' && this.newProviderForm.controls[group].valid || this.newProviderForm.controls[group].disabled) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfUsers(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.newProviderForm.get(group).value[0][formControlName] !== '') {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  initUserBitSets() {
-    this.handleBitSetsOfUsers(7, 12, 'name', 'users');
-    this.handleBitSetsOfUsers(7, 13, 'surname', 'users');
-    this.handleBitSetsOfUsers(7, 14, 'email', 'users');
-    this.handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 11, 'email', 'mainContact');
-  }
-
-  updateLoaderPercentage() {
-    // console.log(this.loaderBitSet.toString(2));
-    // console.log('cardinality: ', this.loaderBitSet.cardinality());
-    this.loaderPercentage = Math.round((this.loaderBitSet.cardinality() / this.allRequiredFields) * 100);
-    // console.log(this.loaderPercentage, '%');
-  }
-
-  decreaseRemainingFieldsPerTab(tabNum: number, bitIndex: number) {
-    if (tabNum === 0) {
-      this.BitSetTab0.set(bitIndex, 1);
-      this.remainingOnTab0 = this.requiredOnTab0 - this.BitSetTab0.cardinality();
-      if (this.remainingOnTab0 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 1) {
-      this.BitSetTab1.set(bitIndex, 1);
-      this.remainingOnTab1 = this.requiredOnTab1 - this.BitSetTab1.cardinality();
-      if (this.remainingOnTab1 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 3) { // Location
-      this.BitSetTab3.set(bitIndex, 1);
-      this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
-      if (this.remainingOnTab3 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 4) { // Contact
-      this.BitSetTab4.set(bitIndex, 1);
-      const mainContactCardinality = this.BitSetTab4.slice(9, 11).cardinality();
-      this.remainingOnTab4 = this.requiredOnTab4 - +(mainContactCardinality === 3) - this.BitSetTab4.get(15);
-      if (this.remainingOnTab4 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 7) { // Admins
-      this.BitSetTab7.set(bitIndex, 1);
-      if (this.BitSetTab7.cardinality() === 3) {
-        this.remainingOnTab7 = 0;
-        if (this.completedTabsBitSet.get(tabNum) !== 1) {
-          this.calcCompletedTabs(tabNum, 1);
-        }
-      }
-    }
-  }
-
-  increaseRemainingFieldsPerTab(tabNum: number, bitIndex: number) {
-    if (tabNum === 0) {
-      this.BitSetTab0.set(bitIndex, 0);
-      this.remainingOnTab0 = this.requiredOnTab0 - this.BitSetTab0.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 1) {
-      this.BitSetTab1.set(bitIndex, 0);
-      this.remainingOnTab1 = this.requiredOnTab1 - this.BitSetTab1.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 3) {
-      this.BitSetTab3.set(bitIndex, 0);
-      this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 4) { // Contact
-      this.BitSetTab4.set(bitIndex, 0);
-      const mainContactCardinality = this.BitSetTab4.slice(9, 11).cardinality();
-      this.remainingOnTab4 = this.requiredOnTab4 - +(mainContactCardinality === 3) - this.BitSetTab4.get(15);
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 7) { // Admins
-      this.BitSetTab7.set(bitIndex, 0);
-      this.remainingOnTab7 = this.requiredOnTab7;
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    }
-  }
-
-  calcCompletedTabs(tabNum: number, setValue: number) {
-    this.completedTabsBitSet.set(tabNum, setValue);
-    this.completedTabs = this.completedTabsBitSet.cardinality();
-  }
-
-  /** <--BitSets **/
 
   /** Terms Modal--> **/
   toggleTerm(term) {
@@ -943,64 +707,5 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** <--Terms Modal **/
-
-  /** URL Validation--> **/
-  checkUrlValidity(formControlName: string) {
-    let urlValidity;
-    if (this.newProviderForm.get(formControlName).valid && this.newProviderForm.get(formControlName).value !== '') {
-      const url = this.newProviderForm.get(formControlName).value;
-      // console.log(url);
-      this.serviceProviderService.validateUrl(url).subscribe(
-        boolean => { urlValidity = boolean; },
-        error => { console.log(error); },
-        () => {
-          if (!urlValidity) {
-            // console.log('invalid');
-            window.scrollTo(0, 0);
-            this.errorMessage = url + ' is not a valid URL. Please enter a valid URL.';
-          }
-        }
-      );
-    }
-  }
-
-  checkUrlValidityForArrays(formArrayName: string, position: number) {
-    let urlValidity;
-    // console.log(this.newProviderForm.get(formArrayName).value[position]);
-    if (this.newProviderForm.get(formArrayName).value[position] !== '') {
-      const url = this.newProviderForm.get(formArrayName).value[position];
-      // console.log(url);
-      this.serviceProviderService.validateUrl(url).subscribe(
-        boolean => { urlValidity = boolean; },
-        error => { console.log(error); },
-        () => {
-          if (!urlValidity) {
-            // console.log('invalid');
-            window.scrollTo(0, 0);
-            this.errorMessage = url + ' is not a valid ' + formArrayName + ' URL. Please enter a valid URL.';
-          }
-        }
-      );
-    }
-  }
-
-  /** <--URL Validation **/
-
-  submitSuggestion(entryValueName, vocabulary, parent) {
-    if (entryValueName.trim() !== '') {
-      this.serviceProviderService.submitVocabularyEntry(entryValueName, vocabulary, parent, 'provider', this.providerId, null).subscribe(
-        res => {
-        },
-        error => {
-          console.log(error);
-          this.vocabularyEntryForm.get('errorMessage').setValue(error.error.error);
-        },
-        () => {
-          this.vocabularyEntryForm.reset();
-          this.vocabularyEntryForm.get('successMessage').setValue('Suggestion submitted!');
-        }
-      );
-    }
-  }
 
 }

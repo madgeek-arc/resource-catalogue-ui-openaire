@@ -94,7 +94,7 @@
 
 <!--NO MOBILE-->
 <div id="">
-  <div class="main-menu tm-header uk-visible@m tm-header-transparent">
+  <div class="main-menu tm-header uk-visible@m tm-header-transparent" [ngClass]="{'fixed-navbar':dashboardMode}">
     <div class="uk-navbar-container uk-navbar-transparent" style="background-color: rgb(255, 255, 255);">
       <div class="uk-container uk-container-xlarge">
 <!--        <nav id="topNavBar" class="uk-navbar" uk-navbar="dropbar: false; mode: click; delay-hide: 0;">-->
@@ -174,10 +174,18 @@
                 </li>
                 <hr *ngIf="myProviders.length > 0">
                 <li class="groups" *ngFor="let provider of myProviders" (click)="hideDrop('#userActions')">
-                  <a [routerLink]="['/provider', provider.id, 'dashboard', 'updateHistory']" class="text-black">
+                  <a [routerLink]="['/provider', provider.id, 'dashboard', 'home']" class="text-black">
                     <span class="material-icons uk-margin-right">group</span>{{provider.name}}
                   </a>
                 </li>
+                <ng-container *ngIf="user.roles.includes('ADMIN')">
+                  <hr>
+                  <li class="groups" (click)="hideDrop('#userActions')">
+                    <a [routerLink]="['/admin/providers']" class="text-black">
+                      <span class="material-icons uk-margin-right">admin_panel_settings</span>Admin pages
+                    </a>
+                  </li>
+                </ng-container>
                 <hr>
                 <li>
                   <a id="logout" (click)="logout()">Log out</a>

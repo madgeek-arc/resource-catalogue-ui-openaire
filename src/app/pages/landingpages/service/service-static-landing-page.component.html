@@ -31,7 +31,7 @@
                 <a href="{{resourcePayload.extras?.['roadmap']}}" target="_blank" class="service-menu-item">Roadmap <i class="fa fa-external-link uk-margin-small-left"></i></a>
               </li>
               <li [ngClass]="{'uk-active': path === 'miscellaneous'}"><a [routerLink]="'./miscellaneous'" class="service-menu-item">Operational Terms</a></li>
-              <li class="uk-flex uk-flex-middle"><button (click)="goto(resourcePayload.webpage)" class="uk-button uk-button-blue">Go to service</button></li>
+              <li class="uk-flex uk-flex-middle"><button (click)="goto(resourcePayload.webpage)" class="uk-button uk-button-small uk-button-blue">Go to service</button></li>
             </ul>
           </div>
         </nav>

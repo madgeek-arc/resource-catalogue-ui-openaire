@@ -1,0 +1,49 @@
+<div class="dashboard">
+  <div id="sidebar_main_content"  class="sidebar_main_swipe sidebar_main_active">
+    <aside id="sidebar_main">
+
+      <div id="sidebar_toggle" class="" (click)="toggleSidebar()"></div>
+
+      <div>
+        <div class="menu_section uk-margin-medium-top">
+          <ul>
+            <li [ngClass]="{'current_section': path === 'providers'}">
+              <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['providers']">
+                <span class="material-icons uk-margin-small-right">real_estate_agent</span>All providers
+              </a>
+            </li>
+            <li [ngClass]="{'current_section': path === 'services'}">
+              <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['services']">
+                <span class="material-icons uk-margin-small-right">grid_view</span>All services
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </aside>
+    <div id="page_content">
+      <div class="services-provider-header">
+        <div class="uk-section uk-section-xsmall">
+          <div class="uk-container uk-container-expand">
+            <div class="">
+              <div class="uk-flex uk-flex-middle uk-flex-between">
+                <div class="uk-flex uk-flex-middle">
+                  <div class="titleIcon">
+                    <span class="material-icons uk-margin-small-right">{{titleIcon}}</span>
+                  </div>
+                  <div class="uk-margin-left">
+                    <div class="uk-text-meta uk-margin-remove">SuperAdmin Dashboard</div>
+                    <h5>All {{title}}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+

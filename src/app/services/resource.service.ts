@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
@@ -41,10 +41,6 @@ export class ResourceService {
     }
   }
 
-  getResource(resourceId: string) {
-    return this.http.get<Service>(this.base + `/services/${resourceId}`, this.options);
-  }
-
   getServiceOrDatasource(resourceId: string) {
     return this.http.get<Service | Datasource>(this.base + `/catalogue-resources/${resourceId}`, this.options);
   }
@@ -57,6 +53,16 @@ export class ResourceService {
       }
     }
     return this.http.get<Paging<Service>>(this.base + `/services?${searchQuery.toString()}`, this.options);
+  }
+
+  getBundleOfServices(urlParameters?: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
+    }
+    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.base + '/catalogue-resources/bundles', {params: searchQuery});
   }
 
   getResourceTypeById(id: string) {
@@ -111,6 +117,9 @@ export class ResourceService {
 
   getService(id: string, version?: string) {
     // if version becomes optional this should be reconsidered
+    console.log(this.base);
+    console.log(id);
+    console.log(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`);
     return this.http.get<Service>(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`, this.options);
   }
 
@@ -118,69 +127,8 @@ export class ResourceService {
     return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}`);
   }
 
-  /** STATS **/
-  getVisitsForService(service: string, period?: string) {
-    let params = new HttpParams();
-    if (period) {
-      params = params.append('by', period);
-      return this.http.get(this.base + `/stats/service/visits/${service}`, {params});
-    }
-    return this.http.get(this.base + `/stats/service/visits/${service}`);
-  }
-
-  getFavouritesForService(service: string, period?: string) {
-    let params = new HttpParams();
-    if (period) {
-      params = params.append('by', period);
-      return this.http.get(this.base + `/stats/service/favourites/${service}`, {params});
-    }
-    return this.http.get(this.base + `/stats/service/favourites/${service}`);
-  }
-
-  getAddToProjectForService(service: string, period?: string) {
-    let params = new HttpParams();
-    if (period) {
-      params = params.append('by', period);
-      return this.http.get(this.base + `/stats/service/addToProject/${service}`, {params});
-    }
-    return this.http.get(this.base + `/stats/service/addToProject/${service}`);
-  }
-
-  getRatingsForService(service: string, period?: string) {
-    let params = new HttpParams();
-    if (period) {
-      params = params.append('by', period);
-      return this.http.get(this.base + `/stats/service/ratings/${service}`, {params});
-    }
-    return this.http.get(this.base + `/stats/service/ratings/${service}`);
-  }
-  /** STATS **/
-
   getMyServiceProviders() {
     return this.http.get<Provider[]>(this.base + '/providers/my');
-  }
-
-  getEU() {
-    return this.http.get(this.base + '/vocabulary/countries/EU');
-  }
-
-  getWW() {
-    return this.http.get(this.base + '/vocabulary/countries/WW');
-  }
-
-  // this should be somewhere else, I think
-  expandRegion(places, eu, ww) {
-    const iEU = places.indexOf('EU');
-    if (iEU > -1) {
-      places.splice(iEU, 1);
-      places.push(...eu);
-    }
-    const iWW = places.indexOf('WW');
-    if (iWW > -1) {
-      places.splice(iWW, 1);
-      places.push(...ww);
-    }
-    return places;
   }
 
   postService(service: Service) {
@@ -201,6 +149,10 @@ export class ResourceService {
 
   getServiceHistory(serviceId: string) {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
+  }
+
+  getServiceOrDatasourceBundle(resourceId: string) {
+    return this.http.get<Bundle<Service | Datasource>>(this.base + `/catalogue-resources/bundles/${resourceId}/`);
   }
 
 }

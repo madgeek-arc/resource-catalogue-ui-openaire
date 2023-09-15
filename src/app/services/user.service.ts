@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {UserInfo} from '../entities/userInfo';
 import {Provider} from '../entities/eic-model';
 
@@ -16,5 +16,11 @@ export class UserService {
 
   getMyProviders() {
     return this.http.get<Provider[]>(this.base + '/providers/my');
+  }
+
+  getInvitationToken(email: string) {
+    let params = new HttpParams();
+    params = params.append('email', email);
+    return this.http.post(this.base + '/invitations' , {}, {params: params, responseType: 'text'});
   }
 }
