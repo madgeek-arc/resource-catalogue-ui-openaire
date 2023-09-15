@@ -13,13 +13,8 @@ server {
 
     ${ADD_PROXY_API}
 
-    location ^~ /images/ {
-        root /;
-        autoindex on;
-    }
-
-    location ^~ /files/ {
-        root /;
+    location ~ ^/(images|files|ebooks|pitch-decks)/ {
+        root /usr/share/nginx/html/data;
         autoindex on;
     }
 
