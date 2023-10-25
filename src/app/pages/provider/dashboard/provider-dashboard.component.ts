@@ -88,67 +88,59 @@ export class ProviderDashboardComponent implements OnInit {
     }
   }
 
-  canInvite() {
-    if (this.userInfo) {
-      if (this.userInfo.roles.includes('ADMIN') || this.userInfo.roles.includes('ONBOARDING_TEAM'))
-        return true;
-    }
-    return false;
-  }
-
-  getInvitationToken() {
-    this.userService.getInvitationToken(this.inviteeEmail.value).subscribe(
-      res=> {
-        this.invitationUrl = location.origin + '/join/' + res;
-        console.log(this.invitationUrl);
-      },
-      error => {console.error(error)}
-    );
-  }
-
-  clearData() {
-    this.inviteeEmail.reset(null);
-    this.invitationUrl = null;
-  }
-
-  copyToClipboard() {
-    // navigator clipboard api needs a secure context (https)
-    if (!navigator.clipboard) {
-      this.fallbackCopyTextToClipboard(this.invitationUrl);
-      return;
-    }
-    navigator.clipboard.writeText(this.invitationUrl).then( ()=> {
-      this.title = 'copied to clipboard';
-      // console.log('Async: Copying to clipboard was successful!');
-    }).catch((err)=> {
-      console.error('Async: Could not copy text: ', err);
-    });
-  }
-
-  fallbackCopyTextToClipboard(text) { // this is deprecated support is not guaranteed
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-
-    // Avoid scrolling to bottom
-    textArea.style.top = "0";
-    textArea.style.left = "0";
-    textArea.style.position = "fixed";
-
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const successful = document.execCommand('copy');
-      if (successful)
-        this.title = 'copied to clipboard';
-      // const msg = successful ? 'successful' : 'unsuccessful';
-      // console.log('Fallback: Copying text command was ' + msg);
-    } catch (err) {
-      console.error('Fallback: Oops, unable to copy', err);
-    }
-
-    document.body.removeChild(textArea);
-  }
+  // getInvitationToken() {
+  //   this.userService.getInvitationToken(this.inviteeEmail.value).subscribe(
+  //     res=> {
+  //       this.invitationUrl = location.origin + '/join/' + res;
+  //       console.log(this.invitationUrl);
+  //     },
+  //     error => {console.error(error)}
+  //   );
+  // }
+  //
+  // clearData() {
+  //   this.inviteeEmail.reset(null);
+  //   this.invitationUrl = null;
+  // }
+  //
+  // copyToClipboard() {
+  //   // navigator clipboard api needs a secure context (https)
+  //   if (!navigator.clipboard) {
+  //     this.fallbackCopyTextToClipboard(this.invitationUrl);
+  //     return;
+  //   }
+  //   navigator.clipboard.writeText(this.invitationUrl).then( ()=> {
+  //     this.title = 'copied to clipboard';
+  //     // console.log('Async: Copying to clipboard was successful!');
+  //   }).catch((err)=> {
+  //     console.error('Async: Could not copy text: ', err);
+  //   });
+  // }
+  //
+  // fallbackCopyTextToClipboard(text) { // this is deprecated support is not guaranteed
+  //   const textArea = document.createElement("textarea");
+  //   textArea.value = text;
+  //
+  //   // Avoid scrolling to bottom
+  //   textArea.style.top = "0";
+  //   textArea.style.left = "0";
+  //   textArea.style.position = "fixed";
+  //
+  //   document.body.appendChild(textArea);
+  //   textArea.focus();
+  //   textArea.select();
+  //
+  //   try {
+  //     const successful = document.execCommand('copy');
+  //     if (successful)
+  //       this.title = 'copied to clipboard';
+  //     // const msg = successful ? 'successful' : 'unsuccessful';
+  //     // console.log('Fallback: Copying text command was ' + msg);
+  //   } catch (err) {
+  //     console.error('Fallback: Oops, unable to copy', err);
+  //   }
+  //
+  //   document.body.removeChild(textArea);
+  // }
 
 }
