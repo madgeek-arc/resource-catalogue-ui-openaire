@@ -1,14 +1,15 @@
 <div class="uk-section uk-section-xsmall filters">
 
   <div class="uk-container uk-container-expand">
-    <div class="uk-margin-medium-left uk-padding-remove uk-flex uk-flex-middle" uk-grid>
-      <div *ngIf="resourceState" class="uk-width-1-6 uk-padding-remove">
+    <div class="uk-flex uk-flex-middle">
+      <div class="uk-margin-small-right uk-text-muted">Filter by: </div>
+      <div *ngIf="resourceState" class="uk-margin-small-right">
         <ng-select id="selectStakeholder" (change)="filterSelection('status', status)"
                    [items]="resourceState" [(ngModel)]="status"
                    placeholder="Approvement status" bindLabel="name" bindValue="id" clearAllText="Clear">
         </ng-select>
       </div>
-      <div class="uk-width-1-6 uk-padding-remove">
+      <div class="uk-margin-small-right">
         <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus)"
                    placeholder="Activation Status" [(ngModel)]="activeStatus" clearAllText="Clear">
           <ng-option [value]="null">All activation statuses</ng-option>
@@ -16,7 +17,9 @@
           <ng-option [value]="'false'">Inactive</ng-option>
         </ng-select>
       </div>
-      <div class="uk-width-1-6 uk-padding-remove">
+      <div class="uk-divider-vertical uk-margin-left uk-margin-right" style="height: 40px"></div>
+      <div class="uk-margin-small-right uk-text-muted">Sort by: </div>
+      <div class="uk-margin-small-right">
         <ng-select id="order" [(ngModel)]="order" clearAllText="Clear" placeholder="Modification Order"
                    (change)="this.updateURLParameters('orderField', 'modifiedAt'); filterSelection('order', order)">
           <ng-option [value]="'desc'">Most recently modified</ng-option>
@@ -96,13 +99,20 @@
                 </div>
               </div>
 
-              <div class="uk-flex uk-flex-middle uk-margin-top">
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
-                  <span class="material-icons">edit</span>Update
-                </a>
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle">
-                  <span class="material-icons">hide_source</span>Deactivate
-                </a>
+              <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
+                <div class="uk-flex uk-flex-middle">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
+                    <span class="material-icons">edit</span>Update
+                  </a>
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle">
+                    <span class="material-icons">hide_source</span>Deactivate
+                  </a>
+                </div>
+                <div>
+                  <a class="uk-link uk-flex uk-flex-middle">
+                    <span class="material-icons">delete</span>Delete
+                  </a>
+                </div>
               </div>
 
             </div>
