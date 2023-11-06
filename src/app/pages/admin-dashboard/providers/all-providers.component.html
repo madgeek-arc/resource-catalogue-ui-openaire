@@ -68,7 +68,18 @@
             <div class="uk-card-body uk-flex uk-flex-column uk-flex-between">
               <div>
                 <div class="uk-flex uk-flex-right">
-                  <div class="uk-label">{{providerBundle.status}}</div>
+                  <div *ngIf="providerBundle?.active === false" class="inactive">
+                    <div class="uk-label uk-margin-small-right">Inactive</div>
+                  </div>
+                  <div *ngIf="providerBundle?.status==='approved provider'" class="approved">
+                    <div class="uk-label">Approved</div>
+                  </div>
+                  <div *ngIf="providerBundle?.status==='pending provider'" class="pending">
+                    <div class="uk-label">Pending</div>
+                  </div>
+                  <div *ngIf="providerBundle?.status==='rejected provider'" class="rejected">
+                    <div class="uk-label">Rejected</div>
+                  </div>
                 </div>
 
                 <div class="uk-margin-top">

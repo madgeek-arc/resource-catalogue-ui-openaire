@@ -56,7 +56,7 @@
 
           <div *ngIf="loggingInfo.length>0" class="uk-margin-large-top">
             <div class="uk-card uk-card-default uk-card-body">
-              <h6 class="uk-margin-medium-bottom">Recent history of services</h6>
+              <h6 class="uk-margin-medium-bottom">Recent history of updates</h6>
               <ul class="uk-list uk-list-divider">
                 <ng-container *ngFor="let log of loggingInfo; let i = index;">
                   <li>{{log.type | titlecase}} - {{log.actionType | titlecase}}<span class="uk-align-right">Update: {{log.date}}</span>

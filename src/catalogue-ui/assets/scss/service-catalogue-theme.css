@@ -655,12 +655,16 @@ a.remove-element {
   border-radius: 4px 0px;
 }
 
+.inactive .uk-label {
+  background: #2680eb 0% 0% no-repeat padding-box;
+}
+
 .approved .uk-label {
-  background: #3C9947 0% 0% no-repeat padding-box;
+  background: #2d9d78 0% 0% no-repeat padding-box;
 }
 
 .pending .uk-label {
-  background: #f5c400 0% 0% no-repeat padding-box;
+  background: #e68619 0% 0% no-repeat padding-box;
 }
 
 .pending-EPOT .uk-label {
@@ -668,7 +672,7 @@ a.remove-element {
 }
 
 .rejected .uk-label {
-  background: #C41C02 0% 0% no-repeat padding-box;
+  background: #e34850 0% 0% no-repeat padding-box;
 }
 
 .incomplete .uk-label {
