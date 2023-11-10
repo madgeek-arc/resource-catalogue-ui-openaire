@@ -155,4 +155,15 @@ export class ResourceService {
     return this.http.get<Bundle<Service | Datasource>>(this.base + `/catalogue-resources/bundles/${resourceId}/`);
   }
 
+  verifyService(id: string, active: boolean, status: string) {
+    return this.http.patch(this.base + `/bundles/services/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  publishService(id: string, active: boolean) { // toggles active/inactive service
+    return this.http.patch(this.base + `/bundles/services/${id}/publish?active=${active}`, this.options);
+  }
+
+  deleteService(id: string) {
+    return this.http.delete(this.base + `/services/${id}`, this.options);
+  }
 }

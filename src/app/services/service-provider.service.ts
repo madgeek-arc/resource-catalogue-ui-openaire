@@ -114,4 +114,15 @@ export class ServiceProviderService {
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
   }
 
+  verifyProvider(id: string, active: boolean, status: string) {
+    return this.http.patch(this.base + `/bundles/providers/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  publishProvider(id: string, active: boolean) { // toggles active/inactive provider
+    return this.http.patch(this.base + `/bundles/providers/${id}/publish?active=${active}`, this.options);
+  }
+
+  deleteProvider(id: string) {
+    return this.http.delete(this.base + `/providers/${id}`, this.options);
+  }
 }

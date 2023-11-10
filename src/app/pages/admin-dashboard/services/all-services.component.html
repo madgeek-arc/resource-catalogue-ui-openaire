@@ -40,6 +40,10 @@
 <div class="uk-section uk-section-xsmall">
   <div class="uk-container uk-container-expand">
 
+    <div *ngIf="showLoader" class="uk-position-center" style="z-index: 100">
+      <div uk-spinner="ratio: 2"></div>
+    </div>
+
     <ng-container *ngIf="services?.results.length > 0">
 
       <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom uk-margin-top">
@@ -116,12 +120,16 @@
                 </div>
               </div>
 
-              <div class="uk-flex uk-flex-middle uk-margin-top">
+              <div class="uk-flex uk-margin-top">
                 <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
                   <span class="material-icons">edit</span>Update
                 </a>
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle">
-                  <span class="material-icons">hide_source</span>Deactivate
+                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">
+                  <ng-container *ngIf="resourceInfo.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
+                  <ng-container *ngIf="resourceInfo.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
+                </a>
+                <a class="uk-link">
+                  <span class="material-icons" (click)="showDeletionModal(resourceInfo)">delete</span>
                 </a>
               </div>
 
@@ -150,5 +158,25 @@
         </li>
       </ul>
     </ng-container>
+  </div>
+</div>
+
+<div id="deletionModal" uk-modal>
+  <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-header uk-h4">Delete Service</div>
+  <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+    <div *ngIf="selectedService">
+      <h6>Are you sure you want to delete "{{ selectedService.service.name }}" ?</h6>
+      <p>Deleting a Service is an irreversible action.</p>
+    </div>
+    <div class="uk-text-right">
+      <button class="uk-button uk-button-secondary uk-modal-close uk-margin-small-right" type="button">Cancel</button>
+      <button *ngIf="selectedService" class="uk-button uk-button-danger uk-modal-close" type="button" (click)="deleteService(selectedService)">Delete</button>
+    </div>
+  </div>
+  <div *ngIf="loadingMessage">
+    <div class="loader-small" style="text-align: center; padding-top: 170px; color: rgb(47, 64, 80); font-weight: bold;">
+      {{ loadingMessage }}
+    </div>
+    <!--    <div class="whiteFilm"></div>-->
   </div>
 </div>
