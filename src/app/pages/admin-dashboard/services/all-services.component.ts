@@ -204,6 +204,14 @@ export class AllServicesDashboardComponent implements OnInit {
 
   /** <------------- Set filters  **/
 
+  verifyService(id, active, status) {
+    this.resourceService.verifyService(id, active, status).subscribe(
+      res => this.getResources(),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
   toggleServiceActive(bundle: Bundle<Service | Datasource>) {
     if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;

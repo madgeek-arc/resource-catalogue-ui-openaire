@@ -120,17 +120,32 @@
                 </div>
               </div>
 
-              <div class="uk-flex uk-margin-top">
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
-                  <span class="material-icons">edit</span>Update
-                </a>
-                <a *ngIf="resourceInfo.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">
-                  <ng-container *ngIf="resourceInfo.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
-                  <ng-container *ngIf="resourceInfo.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
-                </a>
-                <a class="uk-link">
-                  <span class="material-icons" (click)="showDeletionModal(resourceInfo)">delete</span>
-                </a>
+              <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
+                <div class="uk-flex uk-flex-middle">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
+                    <span class="material-icons">edit</span>Update
+                  </a>
+                  <a *ngIf="resourceInfo.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">
+                    <ng-container *ngIf="resourceInfo.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
+                    <ng-container *ngIf="resourceInfo.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
+                  </a>
+                  <a class="uk-link uk-flex uk-flex-middle" (click)="showDeletionModal(resourceInfo)">
+                    <ng-container><span class="material-icons">delete</span>Delete</ng-container>
+                  </a>
+                </div>
+                <div *ngIf="resourceInfo.status==='pending resource'" class="uk-flex uk-flex-middle">
+                  <button class="uk-button uk-button-link"><span class="material-icons">more_vert</span></button>
+                  <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                      <li (click)="verifyService(resourceInfo.id, true, 'approved resource')" class="uk-margin-bottom">
+                        <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Service</a>
+                      </li>
+                      <li (click)="verifyService(resourceInfo.id, false, 'rejected resource')">
+                        <a><i class="fa fa-thumbs-o-down fa-lg uk-margin-small-right"></i>Reject Service</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
             </div>

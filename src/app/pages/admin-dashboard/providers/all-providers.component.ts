@@ -191,6 +191,14 @@ export class AllProvidersDashboardComponent implements OnInit {
 
   /** <------------- Set filters  **/
 
+  verifyProvider(id, active, status) {
+    this.providerService.verifyProvider(id, active, status).subscribe(
+      res => this.getProviders(),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
   toggleProviderActive(bundle: Bundle<Service | Datasource>) {
     if (bundle.status === 'pending provider' || bundle.status === 'rejected provider') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
@@ -228,11 +236,9 @@ export class AllProvidersDashboardComponent implements OnInit {
         },
         err => {
           UIkit.modal('#deletionModal').hide();
-          this.loadingMessage = '';
           console.log(err);
         },
         () => {
-          this.loadingMessage = '';
         }
       );
   }

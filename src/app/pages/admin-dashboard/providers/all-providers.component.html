@@ -110,17 +110,32 @@
 <!--                </div>-->
               </div>
 
-              <div class="uk-flex uk-margin-top">
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', providerBundle.id]">
-                  <span class="material-icons">edit</span>Update
-                </a>
-                <a *ngIf="providerBundle.status==='approved provider'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleProviderActive(providerBundle)">
-                  <ng-container *ngIf="providerBundle.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
-                  <ng-container *ngIf="providerBundle.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
-                </a>
-                <a class="uk-link">
-                  <span class="material-icons" (click)="showDeletionModal(providerBundle)">delete</span>
-                </a>
+              <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
+                <div class="uk-flex uk-flex-middle">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', providerBundle.id]">
+                    <span class="material-icons">edit</span>Update
+                  </a>
+                  <a *ngIf="providerBundle.status==='approved provider'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleProviderActive(providerBundle)">
+                    <ng-container *ngIf="providerBundle.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
+                    <ng-container *ngIf="providerBundle.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
+                  </a>
+                  <a class="uk-link uk-flex uk-flex-middle" (click)="showDeletionModal(providerBundle)">
+                    <ng-container><span class="material-icons">delete</span>Delete</ng-container>
+                  </a>
+                </div>
+                <div *ngIf="providerBundle.status==='pending provider'" class="uk-flex uk-flex-middle">
+                  <button class="uk-button uk-button-link"><span class="material-icons">more_vert</span></button>
+                  <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                      <li (click)="verifyProvider(providerBundle.id, true, 'approved provider')" class="uk-margin-bottom">
+                        <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Provider</a>
+                      </li>
+                      <li (click)="verifyProvider(providerBundle.id, false, 'rejected provider')">
+                        <a><i class="fa fa-thumbs-o-down fa-lg uk-margin-small-right"></i>Reject Provider</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
             </div>
