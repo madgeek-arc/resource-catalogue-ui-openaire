@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as sd from '../../../entities/services.description';
 import {AuthenticationService} from '../../../services/authentication.service';
-import {ServiceProviderService} from '../../../services/service-provider.service';
+import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
 import {Vocabulary} from '../../../entities/eic-model';
@@ -170,7 +170,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
               public authService: AuthenticationService,
-              public serviceProviderService: ServiceProviderService,
+              public providerService: ProviderService,
               public resourceService: ResourceService,
               public router: Router,
               public route: ActivatedRoute) {
@@ -228,7 +228,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
     if (this._hasUserConsent) {
       if (this.edit) {
-        this.serviceProviderService.hasAdminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
+        this.providerService.hasAdminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
           boolean => { this.agreedToTerms = boolean; },
           error => console.log(error),
           () => {
@@ -290,7 +290,7 @@ export class ServiceProviderFormComponent implements OnInit {
     if (tempSave) {
       this.showLoader = true;
       window.scrollTo(0, 0);
-      this.serviceProviderService.temporarySaveProvider(this.newProviderForm.value, (path !== 'add/:providerId' && this.edit))
+      this.providerService.temporarySaveProvider(this.newProviderForm.value, (path !== 'add/:providerId' && this.edit))
         .subscribe(
           res => {
             this.showLoader = false;
@@ -311,7 +311,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
       let token = sessionStorage.getItem('token');
       if (token) {
-        this.serviceProviderService.createNewServiceProviderWithToken(this.newProviderForm.value, token).subscribe(
+        this.providerService.createNewServiceProviderWithToken(this.newProviderForm.value, token).subscribe(
           res => {
             sessionStorage.removeItem('token');
             setTimeout(()=>{
@@ -325,7 +325,7 @@ export class ServiceProviderFormComponent implements OnInit {
           }
         );
       } else {
-        this.serviceProviderService[method](this.newProviderForm.value).subscribe(
+        this.providerService[method](this.newProviderForm.value).subscribe(
           res => {},
           err => {
             this.showLoader = false;
@@ -697,7 +697,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   acceptTerms() {
     if (this._hasUserConsent && this.edit) {
-      this.serviceProviderService.adminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
+      this.providerService.adminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
         res => {},
         error => { console.log(error); },
         () => {}

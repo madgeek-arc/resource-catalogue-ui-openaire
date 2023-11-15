@@ -8,7 +8,7 @@ import {Paging} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 
 @Injectable()
-export class ServiceProviderService {
+export class ProviderService {
 
   constructor(public http: HttpClient, public authenticationService: AuthenticationService) {
   }

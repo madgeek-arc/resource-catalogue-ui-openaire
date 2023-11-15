@@ -13,7 +13,7 @@ import {CanActivateViaPubGuard} from './services/can-activate-pub-guard.service'
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {ReusableComponentsModule} from './shared/reusablecomponents/reusable-components.module';
-import {ServiceProviderService} from './services/service-provider.service';
+import {ProviderService} from './services/provider.service';
 import {ComparisonService} from './services/comparison.service';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
@@ -95,7 +95,7 @@ declare var require: any;
     CanActivateViaPubGuard,
     ResourceService,
     UserService,
-    ServiceProviderService,
+    ProviderService,
     DataSharingService,
     NavigationService,
     DatePipe

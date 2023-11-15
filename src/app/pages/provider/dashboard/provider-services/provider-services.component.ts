@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
-import {ServiceProviderService} from '../../../../services/service-provider.service';
+import {ProviderService} from '../../../../services/provider.service';
 import {Paging} from '../../../../entities/paging';
 import {URLParameter} from '../../../../entities/url-parameter';
 import {zip} from 'rxjs/internal/observable/zip';
@@ -40,7 +40,7 @@ export class ProviderServicesComponent implements OnInit {
   errorMessage: string;
   loadingMessage = '';
 
-  constructor(private providerService: ServiceProviderService, private resourceService: ResourceService, private router: Router,
+  constructor(private providerService: ProviderService, private resourceService: ResourceService, private router: Router,
               private route: ActivatedRoute) {
   }
 

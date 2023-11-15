@@ -47,7 +47,7 @@ export class AdminDashboardComponent implements OnInit {
     //   params => {
     //     this.providerId = params['providerId'];
     //     if (this.providerId) {
-    //       this.serviceProviderService.getProviderBundle(this.providerId).subscribe(
+    //       this.providerService.getProviderBundle(this.providerId).subscribe(
     //         res => {this.providerBundle = res},
     //         error => {console.error(error)}
     //       );

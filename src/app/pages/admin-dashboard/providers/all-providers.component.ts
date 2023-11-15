@@ -5,7 +5,7 @@ import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../
 import {FacetValue} from '../../../entities/facet';
 import {URLParameter} from '../../../entities/url-parameter';
 import {ResourceService} from '../../../services/resource.service';
-import {ServiceProviderService} from '../../../services/service-provider.service';
+import {ProviderService} from '../../../services/provider.service';
 
 declare var UIkit: any;
 
@@ -39,7 +39,7 @@ export class AllProvidersDashboardComponent implements OnInit {
   errorMessage: string;
   loadingMessage = '';
 
-  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService, private providerService: ServiceProviderService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService, private providerService: ProviderService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {ServiceProviderService} from '../../../services/service-provider.service';
+import {ProviderService} from '../../../services/provider.service';
 import {ProviderBundle} from '../../../entities/eic-model';
 import {UserService} from '../../../services/user.service';
 import {UserInfo} from '../../../entities/userInfo';
@@ -24,7 +24,7 @@ export class ProviderDashboardComponent implements OnInit {
   titleIcon: string = null;
   title: string = null;
 
-  constructor(private route: ActivatedRoute, private router: Router, private serviceProviderService: ServiceProviderService,
+  constructor(private route: ActivatedRoute, private router: Router, private providerService: ProviderService,
               private userService: UserService, private fb: FormBuilder) {
     this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
@@ -55,7 +55,7 @@ export class ProviderDashboardComponent implements OnInit {
       params => {
         this.providerId = params['providerId'];
         if (this.providerId) {
-          this.serviceProviderService.getProviderBundleById(this.providerId).subscribe(
+          this.providerService.getProviderBundleById(this.providerId).subscribe(
             res => {this.providerBundle = res},
             error => {console.error(error)}
           );
