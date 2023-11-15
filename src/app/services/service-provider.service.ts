@@ -33,8 +33,8 @@ export class ServiceProviderService {
   }
 
   createNewServiceProvider(newProvider: any) {
-    // console.log(`knocking on: ${this.base}/provider`);
-    return this.http.post(this.base + '/provider', newProvider, this.options);
+    console.log(`knocking on: ${this.base}/providers`);
+    return this.http.post(this.base + '/providers', newProvider, this.options);
   }
 
   createNewServiceProviderWithToken(newProvider: Provider, token: string) {
@@ -45,7 +45,7 @@ export class ServiceProviderService {
 
   updateServiceProvider(updatedFields: any): Observable<Provider> {
     // console.log(`knocking on: ${this.base}/provider`);
-    return this.http.put<Provider>(this.base + '/provider', updatedFields, this.options);
+    return this.http.put<Provider>(this.base + '/providers', updatedFields, this.options);
   }
 
   updateAndPublishPendingProvider(updatedFields: any): Observable<Provider> {

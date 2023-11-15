@@ -249,8 +249,8 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   registerProvider(tempSave: boolean) {
+    // console.log('Submit');
     if (!this.authService.isLoggedIn()) {
-      console.log('Submit');
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
       this.authService.login();
     }
@@ -334,15 +334,14 @@ export class ServiceProviderFormComponent implements OnInit {
           },
           () => {
             this.showLoader = false;
-            if (this.edit) {
-              this.router.navigate(['/provider/my']);
-            } else {
-              if (environment.projectName === 'OpenAIRE Catalogue')
-                this.authService.login();
-              else {
-                this.authService.login();
-              }
-            }
+            // if (this.edit) {
+            this.router.navigate([`/provider/${this.newProviderForm.value.abbreviation}/dashboard/home`]);
+            // } else {
+            //   if (environment.projectName === 'OpenAIRE Catalogue')
+            //     this.authService.login();
+            //   else {
+            //     this.authService.login();
+            //   }
           }
         );
       }
