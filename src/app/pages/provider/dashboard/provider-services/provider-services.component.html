@@ -131,7 +131,7 @@
                   <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
                     <span class="material-icons">edit</span>Update
                   </a>
-                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">
+                  <a *ngIf="resourceInfo.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">
                     <ng-container *ngIf="resourceInfo.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
                     <ng-container *ngIf="resourceInfo.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
                   </a>

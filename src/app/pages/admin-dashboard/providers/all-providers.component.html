@@ -114,7 +114,7 @@
                 <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', providerBundle.id]">
                   <span class="material-icons">edit</span>Update
                 </a>
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleProviderActive(providerBundle)">
+                <a *ngIf="providerBundle.status==='approved provider'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleProviderActive(providerBundle)">
                   <ng-container *ngIf="providerBundle.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
                   <ng-container *ngIf="providerBundle.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
                 </a>
