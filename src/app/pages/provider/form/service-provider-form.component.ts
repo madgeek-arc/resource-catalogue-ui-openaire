@@ -248,7 +248,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   }
 
-  registerProvider(tempSave: boolean) {
+  registerProvider(saveDraft: boolean) {
     // console.log('Submit');
     if (!this.authService.isLoggedIn()) {
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
@@ -287,7 +287,7 @@ export class ServiceProviderFormComponent implements OnInit {
       }
     }
 
-    if (tempSave) {
+    if (saveDraft) { //not used
       this.showLoader = true;
       window.scrollTo(0, 0);
       this.providerService.temporarySaveProvider(this.newProviderForm.value, (path !== 'add/:providerId' && this.edit))
