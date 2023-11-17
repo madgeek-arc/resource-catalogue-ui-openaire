@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Provider, ProviderBundle, Vocabulary} from '../../../../entities/eic-model';
-import {ServiceProviderService} from '../../../../services/service-provider.service';
+import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 
 @Component({

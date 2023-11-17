@@ -4,7 +4,7 @@ import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
 import {FormBuilder} from '@angular/forms';
 import {AuthenticationService} from '../../../services/authentication.service';
-import {ServiceProviderService} from '../../../services/service-provider.service';
+import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 declare var UIkit: any;
@@ -20,11 +20,11 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
 
   constructor(public fb: FormBuilder,
               public authService: AuthenticationService,
-              public serviceProviderService: ServiceProviderService,
+              public providerService: ProviderService,
               public resourceService: ResourceService,
               public router: Router,
               public route: ActivatedRoute) {
-    super(fb, authService, serviceProviderService, resourceService, router, route);
+    super(fb, authService, providerService, resourceService, router, route);
   }
 
   ngOnInit() {
@@ -74,7 +74,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   getProvider() {
     this.errorMessage = '';
     const path = this.route.snapshot.routeConfig.path;
-    this.serviceProviderService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId)
+    this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId)
       .subscribe(
       provider => this.provider = provider,
       err => {

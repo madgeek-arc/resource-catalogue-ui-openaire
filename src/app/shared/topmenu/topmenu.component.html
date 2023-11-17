@@ -178,7 +178,7 @@
                     <span class="material-icons uk-margin-right">group</span>{{provider.name}}
                   </a>
                 </li>
-                <ng-container *ngIf="user.roles.includes('ADMIN')">
+                <ng-container *ngIf="user.roles.includes('ADMIN') || user.roles.includes('ONBOARDING_TEAM')">
                   <hr>
                   <li class="groups" (click)="hideDrop('#userActions')">
                     <a [routerLink]="['/admin/providers']" class="text-black">

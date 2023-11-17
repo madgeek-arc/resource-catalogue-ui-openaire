@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
-import {ServiceProviderService} from '../../../../services/service-provider.service';
+import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {DatePipe} from '@angular/common';
 import {Paging} from '../../../../entities/paging';
@@ -25,7 +25,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   // showMaxRecords: false;
   // maxRecords = 30;
 
-  constructor(private providerService: ServiceProviderService, private resourceService: ResourceService) {
+  constructor(private providerService: ProviderService, private resourceService: ResourceService, private datePipe: DatePipe) {
   }
 
   ngOnInit() {

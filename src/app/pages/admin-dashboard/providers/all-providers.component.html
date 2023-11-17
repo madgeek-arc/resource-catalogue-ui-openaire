@@ -1,14 +1,15 @@
-<div class="uk-section uk-section-small">
+<div class="uk-section uk-section-xsmall filters">
   <div class="uk-container uk-container-expand">
 
-    <div class="uk-margin-medium-left uk-padding-remove uk-flex uk-flex-middle" uk-grid>
-      <div *ngIf="providerState" class="uk-width-1-6 uk-padding-remove">
+    <div class="uk-flex uk-flex-middle">
+      <div class="uk-margin-small-right uk-text-muted">Filter by: </div>
+      <div *ngIf="providerState" class="uk-margin-small-right">
         <ng-select id="resourceState" (change)="filterSelection('status', status)"
                    [items]="providerState" [(ngModel)]="status"
                    placeholder="Approvement status" bindLabel="name" bindValue="id" clearAllText="Clear">
         </ng-select>
       </div>
-      <div class="uk-width-1-6 uk-padding-remove">
+      <div class="uk-margin-small-right">
         <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus)"
                    placeholder="Activation Status" [(ngModel)]="activeStatus" clearAllText="Clear">
           <ng-option [value]="''">All activation statuses</ng-option>
@@ -16,7 +17,9 @@
           <ng-option [value]="'false'">Inactive</ng-option>
         </ng-select>
       </div>
-      <div class="uk-width-1-6 uk-padding-remove">
+      <div class="uk-divider-vertical uk-margin-left uk-margin-right" style="height: 40px"></div>
+      <div class="uk-margin-small-right uk-text-muted">Sort by: </div>
+      <div class="uk-margin-small-right">
         <ng-select id="order" [(ngModel)]="order" clearAllText="Clear" placeholder="Modification Order"
                    (change)="this.updateURLParameters('orderField', 'modifiedAt'); filterSelection('order', order)">
           <ng-option [value]="'desc'">Most recently modified</ng-option>
@@ -24,6 +27,12 @@
         </ng-select>
       </div>
     </div>
+
+  </div>
+</div>
+
+<div class="uk-section uk-section-xsmall">
+  <div class="uk-container uk-container-expand">
 
     <ng-container *ngIf="providers?.results.length > 0">
 
@@ -59,7 +68,18 @@
             <div class="uk-card-body uk-flex uk-flex-column uk-flex-between">
               <div>
                 <div class="uk-flex uk-flex-right">
-                  <div class="uk-label">{{providerBundle.status}}</div>
+                  <div *ngIf="providerBundle?.active === false" class="inactive">
+                    <div class="uk-label uk-margin-small-right">Inactive</div>
+                  </div>
+                  <div *ngIf="providerBundle?.status==='approved provider'" class="approved">
+                    <div class="uk-label">Approved</div>
+                  </div>
+                  <div *ngIf="providerBundle?.status==='pending provider'" class="pending">
+                    <div class="uk-label">Pending</div>
+                  </div>
+                  <div *ngIf="providerBundle?.status==='rejected provider'" class="rejected">
+                    <div class="uk-label">Rejected</div>
+                  </div>
                 </div>
 
                 <div class="uk-margin-top">
@@ -90,13 +110,32 @@
 <!--                </div>-->
               </div>
 
-              <div class="uk-flex uk-flex-middle uk-margin-top">
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', providerBundle.id]">
-                  <span class="material-icons">edit</span>Update
-                </a>
-                <a class="uk-link uk-margin-right uk-flex uk-flex-middle">
-                  <span class="material-icons">hide_source</span>Deactivate
-                </a>
+              <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
+                <div class="uk-flex uk-flex-middle">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', providerBundle.id]">
+                    <span class="material-icons">edit</span>Update
+                  </a>
+                  <a *ngIf="providerBundle.status==='approved provider'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleProviderActive(providerBundle)">
+                    <ng-container *ngIf="providerBundle.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
+                    <ng-container *ngIf="providerBundle.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
+                  </a>
+                  <a class="uk-link uk-flex uk-flex-middle" (click)="showDeletionModal(providerBundle)">
+                    <ng-container><span class="material-icons">delete</span>Delete</ng-container>
+                  </a>
+                </div>
+                <div *ngIf="providerBundle.status==='pending provider'" class="uk-flex uk-flex-middle">
+                  <button class="uk-button uk-button-link"><span class="material-icons">more_vert</span></button>
+                  <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                      <li (click)="verifyProvider(providerBundle.id, true, 'approved provider')" class="uk-margin-bottom">
+                        <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Provider</a>
+                      </li>
+                      <li (click)="verifyProvider(providerBundle.id, false, 'rejected provider')">
+                        <a><i class="fa fa-thumbs-o-down fa-lg uk-margin-small-right"></i>Reject Provider</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -124,5 +163,24 @@
         </li>
       </ul>
     </ng-container>
+  </div>
+</div>
+<div id="deletionModal" uk-modal>
+  <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-header uk-h4">Delete Provider</div>
+  <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+    <div *ngIf="selectedProvider">
+      <h6>Are you sure you want to delete "{{ selectedProvider.provider.name }}" ?</h6>
+      <p>Deleting a Provider is an irreversible action. All services under this Provider will be deleted as well.</p>
+    </div>
+    <div class="uk-text-right">
+      <button class="uk-button uk-button-secondary uk-modal-close uk-margin-small-right" type="button">Cancel</button>
+      <button *ngIf="selectedProvider" class="uk-button uk-button-danger uk-modal-close" type="button" (click)="deleteProvider(selectedProvider.id)">Delete</button>
+    </div>
+  </div>
+  <div *ngIf="loadingMessage">
+    <div class="loader-small" style="text-align: center; padding-top: 170px; color: rgb(47, 64, 80); font-weight: bold;">
+      {{ loadingMessage }}
+    </div>
+    <!--    <div class="whiteFilm"></div>-->
   </div>
 </div>

@@ -1,11 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
-import {ServiceProviderService} from '../../../../services/service-provider.service';
+import {ProviderService} from '../../../../services/provider.service';
 import {Paging} from '../../../../entities/paging';
 import {URLParameter} from '../../../../entities/url-parameter';
 import {zip} from 'rxjs/internal/observable/zip';
 import {ResourceService} from '../../../../services/resource.service';
 import {ActivatedRoute, Router} from '@angular/router';
+
+declare var UIkit: any;
 
 @Component({
   selector: 'app-provider-services',
@@ -17,6 +19,7 @@ export class ProviderServicesComponent implements OnInit {
   @Input() providerBundle: ProviderBundle = null
 
   services: Paging<Bundle<Service | Datasource>> = null;
+  selectedService: Bundle<Service | Datasource> = null;
   vocabularies: Vocabulary[] = null;
   resourceState: Vocabulary[] = null;
   queryParams: URLParameter[] = []
@@ -33,7 +36,11 @@ export class ProviderServicesComponent implements OnInit {
   activeStatus: string = null;
   status: string = null;
 
-  constructor(private providerService: ServiceProviderService, private resourceService: ResourceService, private router: Router,
+  showLoader = false;
+  errorMessage: string;
+  loadingMessage = '';
+
+  constructor(private providerService: ProviderService, private resourceService: ResourceService, private router: Router,
               private route: ActivatedRoute) {
   }
 
@@ -56,13 +63,7 @@ export class ProviderServicesComponent implements OnInit {
         this.updateURLParameters('quantity', this.pageSize);
       }
       this.setFilters();
-
-      this.providerService.getServicesOfProvider(this.providerBundle.provider.id, this.queryParams).subscribe(
-        res => {this.services = res;},
-        error => {console.error(error)},
-        () => {this.paginationInit()}
-      );
-
+      this.getResources();
     });
 
     zip(
@@ -75,6 +76,14 @@ export class ProviderServicesComponent implements OnInit {
         // this.loading = false;
       },
       error => {console.log(error);}
+    );
+  }
+
+  getResources(){
+    this.providerService.getServicesOfProvider(this.providerBundle.provider.id, this.queryParams).subscribe(
+      res => {this.services = res;},
+      error => console.error(error),
+      () => this.paginationInit()
     );
   }
 
@@ -182,6 +191,49 @@ export class ProviderServicesComponent implements OnInit {
   }
 
   /** <------------- Set filters  **/
+
+  toggleServiceActive(bundle: Bundle<Service | Datasource>) {
+    if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
+      this.errorMessage = `You cannot activate a ${bundle.status}.`;
+      window.scrollTo(0, 0);
+      return;
+    }
+    this.showLoader = true;
+    this.resourceService.publishService(bundle.id, !bundle.active).subscribe(
+      res => {},
+      error => {
+        this.showLoader = false;
+        this.errorMessage = 'Something went bad. ' + error.error.error ;
+      },
+      () => {
+        this.showLoader = false;
+        this.getResources();
+      }
+    );
+  }
+
+  showDeletionModal(bundle: Bundle<Service | Datasource>) {
+    this.selectedService = bundle;
+    if (this.selectedService) {
+      UIkit.modal('#deletionModal').show();
+    }
+  }
+
+  deleteService(bundle: Bundle<Service | Datasource>) {
+    this.showLoader = true;
+    this.resourceService.deleteService(bundle.id).subscribe(
+      res => {},
+      error => {
+        this.showLoader = false;
+        this.errorMessage = 'Something went bad. ' + error.error ;
+        // this.getResources();
+      },
+      () => {
+        window.location.reload();
+        // this.showLoader = false;
+      }
+    );
+  }
 
   getVocabularyName(id: string) {
     for (const vocabulary of this.vocabularies) {

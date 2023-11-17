@@ -8,7 +8,7 @@ import {Paging} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 
 @Injectable()
-export class ServiceProviderService {
+export class ProviderService {
 
   constructor(public http: HttpClient, public authenticationService: AuthenticationService) {
   }
@@ -33,8 +33,8 @@ export class ServiceProviderService {
   }
 
   createNewServiceProvider(newProvider: any) {
-    // console.log(`knocking on: ${this.base}/provider`);
-    return this.http.post(this.base + '/provider', newProvider, this.options);
+    console.log(`knocking on: ${this.base}/providers`);
+    return this.http.post(this.base + '/providers', newProvider, this.options);
   }
 
   createNewServiceProviderWithToken(newProvider: Provider, token: string) {
@@ -45,7 +45,7 @@ export class ServiceProviderService {
 
   updateServiceProvider(updatedFields: any): Observable<Provider> {
     // console.log(`knocking on: ${this.base}/provider`);
-    return this.http.put<Provider>(this.base + '/provider', updatedFields, this.options);
+    return this.http.put<Provider>(this.base + '/providers', updatedFields, this.options);
   }
 
   updateAndPublishPendingProvider(updatedFields: any): Observable<Provider> {
@@ -114,4 +114,15 @@ export class ServiceProviderService {
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
   }
 
+  verifyProvider(id: string, active: boolean, status: string) {
+    return this.http.patch(this.base + `/bundles/providers/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  publishProvider(id: string, active: boolean) { // toggles active/inactive provider
+    return this.http.patch(this.base + `/bundles/providers/${id}/publish?active=${active}`, this.options);
+  }
+
+  deleteProvider(id: string) {
+    return this.http.delete(this.base + `/providers/${id}`, this.options);
+  }
 }

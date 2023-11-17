@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Paging} from '../../../entities/paging';
-import {Bundle, ProviderBundle, Vocabulary} from '../../../entities/eic-model';
+import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../entities/eic-model';
 import {FacetValue} from '../../../entities/facet';
 import {URLParameter} from '../../../entities/url-parameter';
 import {ResourceService} from '../../../services/resource.service';
-import {ServiceProviderService} from '../../../services/service-provider.service';
+import {ProviderService} from '../../../services/provider.service';
 
+declare var UIkit: any;
 
 @Component({
   selector: 'app-admin-all-providers-dashboard',
@@ -16,6 +17,7 @@ import {ServiceProviderService} from '../../../services/service-provider.service
 export class AllProvidersDashboardComponent implements OnInit {
 
   providers: Paging<ProviderBundle> = null;
+  selectedProvider: ProviderBundle = null;
   providerState: Vocabulary[] = null;
   providerFacet: FacetValue[] = [];
   queryParams: URLParameter[] = [];
@@ -33,7 +35,11 @@ export class AllProvidersDashboardComponent implements OnInit {
   status: string = null;
   provider: string = null;
 
-  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService, private providerService: ServiceProviderService) {}
+  showLoader = false;
+  errorMessage: string;
+  loadingMessage = '';
+
+  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService, private providerService: ProviderService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -54,21 +60,7 @@ export class AllProvidersDashboardComponent implements OnInit {
         this.updateURLParameters('quantity', this.pageSize);
       }
       this.setFilters();
-
-      this.providerService.getProviderBundles(this.queryParams).subscribe(
-        res => {
-          this.providers = res;
-          res.facets.forEach(facet => {
-            if (facet.field === 'resource_providers') {
-              this.providerFacet = facet.values;
-              return;
-            }
-          });
-        },
-        error => {console.error(error)},
-        () => {this.paginationInit()}
-      );
-
+      this.getProviders();
     });
 
     this.resourceService.getNewVocabulariesByType('Provider state').subscribe(
@@ -79,6 +71,21 @@ export class AllProvidersDashboardComponent implements OnInit {
     );
   }
 
+  getProviders(){
+    this.providerService.getProviderBundles(this.queryParams).subscribe(
+      res => {
+        this.providers = res;
+        res.facets.forEach(facet => {
+          if (facet.field === 'resource_providers') {
+            this.providerFacet = facet.values;
+            return;
+          }
+        });
+      },
+      error => {console.error(error)},
+      () => {this.paginationInit()}
+    );
+  }
 
   /** Pagination and Paging navigation -------------> **/
   paginationInit() {
@@ -183,5 +190,57 @@ export class AllProvidersDashboardComponent implements OnInit {
   }
 
   /** <------------- Set filters  **/
+
+  verifyProvider(id, active, status) {
+    this.providerService.verifyProvider(id, active, status).subscribe(
+      res => this.getProviders(),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  toggleProviderActive(bundle: Bundle<Service | Datasource>) {
+    if (bundle.status === 'pending provider' || bundle.status === 'rejected provider') {
+      this.errorMessage = `You cannot activate a ${bundle.status}.`;
+      window.scrollTo(0, 0);
+      return;
+    }
+    this.showLoader = true;
+    this.providerService.publishProvider(bundle.id, !bundle.active).subscribe(
+      res => {},
+      error => {
+        this.showLoader = false;
+        this.errorMessage = 'Something went bad. ' + error.error.error ;
+      },
+      () => {
+        this.showLoader = false;
+        this.getProviders();
+      }
+    );
+  }
+
+  showDeletionModal(provider: ProviderBundle) {
+    this.selectedProvider = provider;
+    if (this.selectedProvider) {
+      UIkit.modal('#deletionModal').show();
+    }
+  }
+
+  deleteProvider(providerId) {
+    this.providerService.deleteProvider(providerId)
+      .subscribe(
+        res => {
+          UIkit.modal('#deletionModal').hide();
+          location.reload();
+          // this.getProviders();
+        },
+        err => {
+          UIkit.modal('#deletionModal').hide();
+          console.log(err);
+        },
+        () => {
+        }
+      );
+  }
 
 }

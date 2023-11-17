@@ -6,6 +6,7 @@ import {ResourceService} from '../../../services/resource.service';
 import {URLParameter} from '../../../entities/url-parameter';
 import {FacetValue} from '../../../entities/facet';
 
+declare var UIkit: any;
 
 @Component({
   selector: 'app-admin-all-services-dashboard',
@@ -15,6 +16,7 @@ import {FacetValue} from '../../../entities/facet';
 export class AllServicesDashboardComponent implements OnInit {
 
   services: Paging<Bundle<Service | Datasource>> = null;
+  selectedService: Bundle<Service | Datasource> = null;
   resourceState: Vocabulary[] = null;
   providerFacet: FacetValue[] = []
   queryParams: URLParameter[] = []
@@ -31,6 +33,10 @@ export class AllServicesDashboardComponent implements OnInit {
   activeStatus: string = '';
   status: string = null;
   provider: string = null;
+
+  showLoader = false;
+  errorMessage: string;
+  loadingMessage = '';
 
   constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService) {}
 
@@ -53,21 +59,7 @@ export class AllServicesDashboardComponent implements OnInit {
         this.updateURLParameters('quantity', this.pageSize);
       }
       this.setFilters();
-
-      this.resourceService.getBundleOfServices(this.queryParams).subscribe(
-        res => {
-          this.services = res;
-          res.facets.forEach(facet => {
-            if (facet.field === 'resource_providers') {
-              this.providerFacet = facet.values;
-              return;
-            }
-          });
-        },
-        error => {console.error(error)},
-        () => {this.paginationInit()}
-      );
-
+      this.getResources();
     });
     // this.resourceService.getBundleOfServices(this.queryParams).subscribe(
     //   res => {
@@ -91,6 +83,21 @@ export class AllServicesDashboardComponent implements OnInit {
     );
   }
 
+    getResources() {
+      this.resourceService.getBundleOfServices(this.queryParams).subscribe(
+        res => {
+          this.services = res;
+          res.facets.forEach(facet => {
+            if (facet.field === 'resource_providers') {
+              this.providerFacet = facet.values;
+              return;
+            }
+          });
+        },
+        error => console.error(error),
+        () => this.paginationInit()
+      );
+    }
 
   /** Pagination and Paging navigation -------------> **/
   paginationInit() {
@@ -197,6 +204,56 @@ export class AllServicesDashboardComponent implements OnInit {
 
   /** <------------- Set filters  **/
 
+  verifyService(id, active, status) {
+    this.resourceService.verifyService(id, active, status).subscribe(
+      res => this.getResources(),
+      err => console.log(err),
+      () => {}
+    );
+  }
+
+  toggleServiceActive(bundle: Bundle<Service | Datasource>) {
+    if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
+      this.errorMessage = `You cannot activate a ${bundle.status}.`;
+      window.scrollTo(0, 0);
+      return;
+    }
+    this.showLoader = true;
+    this.resourceService.publishService(bundle.id, !bundle.active).subscribe(
+      res => {},
+      error => {
+        this.showLoader = false;
+        this.errorMessage = 'Something went bad. ' + error.error.error ;
+      },
+      () => {
+        this.showLoader = false;
+        this.getResources();
+      }
+    );
+  }
+
+  showDeletionModal(bundle: Bundle<Service | Datasource>) {
+    this.selectedService = bundle;
+    if (this.selectedService) {
+      UIkit.modal('#deletionModal').show();
+    }
+  }
+
+  deleteService(bundle: Bundle<Service | Datasource>) {
+    this.showLoader = true;
+    this.resourceService.deleteService(bundle.id).subscribe(
+      res => {},
+      error => {
+        this.showLoader = false;
+        this.errorMessage = 'Something went bad. ' + error.error ;
+        // this.getResources();
+      },
+      () => {
+        window.location.reload();
+        // this.showLoader = false;
+      }
+    );
+  }
 
   getPayload(bundle : Bundle<Service | Datasource>): Service | Datasource {
     return bundle.service != null ? bundle.service : bundle.datasource;
