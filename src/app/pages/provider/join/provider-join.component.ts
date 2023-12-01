@@ -3,10 +3,10 @@ import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-join',
-  templateUrl: 'join.component.html'
+  templateUrl: 'provider-join.component.html'
 })
 
-export class JoinComponent implements OnInit {
+export class ProviderJoinComponent implements OnInit {
 
   token: string;
 

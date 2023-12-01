@@ -11,7 +11,9 @@ import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {FormsComponent} from './pages/forms/forms.component';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
-import {JoinComponent} from './pages/provider/join/join.component';
+import {ProviderJoinComponent} from './pages/provider/join/provider-join.component';
+import {JoinComponent} from './pages/public/join.component';
+import {AboutComponent} from './pages/public/about.component';
 
 const appRoutes: Routes = [
   {
@@ -87,13 +89,26 @@ const appRoutes: Routes = [
   },
   {
     path: 'join/:token',
-    component: JoinComponent,
+    component: ProviderJoinComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
-      breadcrumb: 'Datasource'
+      breadcrumb: 'Join'
     }
   },
-
+  {
+    path: 'join',
+    component: JoinComponent,
+    data: {
+      breadcrumb: 'Join'
+    }
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
+    data: {
+      breadcrumb: 'About'
+    }
+  },
   {
     path: 'provider',
     loadChildren: () => import('../app/pages/provider/provider.module').then(m => m.ProviderModule),

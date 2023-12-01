@@ -105,7 +105,7 @@ export class AdminDashboardComponent implements OnInit {
       return;
     }
     navigator.clipboard.writeText(this.invitationUrl).then( ()=> {
-      this.title = 'copied to clipboard';
+      // this.title = 'copied to clipboard';
       // console.log('Async: Copying to clipboard was successful!');
     }).catch((err)=> {
       console.error('Async: Could not copy text: ', err);
@@ -127,8 +127,8 @@ export class AdminDashboardComponent implements OnInit {
 
     try {
       const successful = document.execCommand('copy');
-      if (successful)
-        this.title = 'copied to clipboard';
+      if (successful) console.log('copied');
+      // this.title = 'copied to clipboard';
       // const msg = successful ? 'successful' : 'unsuccessful';
       // console.log('Fallback: Copying text command was ' + msg);
     } catch (err) {
