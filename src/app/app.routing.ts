@@ -98,7 +98,6 @@ const appRoutes: Routes = [
   {
     path: 'join',
     component: JoinComponent,
-    canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'Join'
     }
@@ -106,7 +105,6 @@ const appRoutes: Routes = [
   {
     path: 'about',
     component: AboutComponent,
-    canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'About'
     }
