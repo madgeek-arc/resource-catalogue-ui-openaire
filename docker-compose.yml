@@ -2,25 +2,18 @@ version: "3"
 
 services:
   platform:
-    image: docker.openminted.eu/openaire-catalogue-ui:latest                  # edit image name
+    image: docker.openminted.eu/openaire-catalogue-ui:latest      # edit image name
 
     environment:
-      - ENABLE_SSL=TRUE                                  # set to FALSE if you don't want to install ssl certificate
-      - SSL_EMAIL=user@email.mm                          # email associated with ssl certificate
-      - SERVER_NAME=example.org                          # edit server name
-      - PLATFORM_API_ENDPOINT=http://example.com/api     # edit api endpoint
-      - FAQ_API_ENDPOINT=http://example.com/faq          # edit faq endpoint
-      - MATOMO_HOST=http://example.com/matomo            # edit matomo host
-      - MATOMO_SITE_ID=1                                 # edit matomo site id
+      - SERVER_NAME=example.org                                   # edit server name
+      - PROXY_API_ENDPOINT=http://example.com/api                 # edit api endpoint
 
     ports:
       - "80:80"
       - "443:443"
 
     volumes:
-      - ./data/nginx/conf.d:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+#      - ./data/nginx/conf.d:/etc/nginx/conf.d
       - ./data/images:/images
       - ./data/files:/files
 

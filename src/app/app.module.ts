@@ -1,4 +1,6 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, NgModule} from "@angular/core";
+import {Router} from "@angular/router";
+import * as Sentry from "@sentry/angular-ivy";
 import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -31,7 +33,7 @@ import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import {ServiceWorkerModule} from '@angular/service-worker';
 import {UserService} from './services/user.service';
 
 
@@ -98,7 +100,23 @@ declare var require: any;
     ProviderService,
     DataSharingService,
     NavigationService,
-    DatePipe
+    DatePipe,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: true,
+      }),
+    }, {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+      },
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
   ],
   exports: [
     AireFooterComponent,
