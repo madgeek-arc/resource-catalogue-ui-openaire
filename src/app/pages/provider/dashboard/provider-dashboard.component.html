@@ -53,25 +53,36 @@
                   </div>
 
                   <div class="uk-flex">
-                    <div>
+                    <div *ngIf="providerBundle.status==='approved provider'">
                       <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle"
                               [routerLink]="['/provider', providerId, 'service', 'add']">
                         <span class="material-icons uk-margin-small-right">add</span>New Service
                       </button>
                     </div>
-                    <div>
-                      <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle"
+                    <div *ngIf="providerBundle.status!=='approved provider'" uk-tooltip="Disabled until provider gets approved.">
+                      <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle uk-disabled">
+                        <span class="material-icons uk-margin-small-right">add</span>New Service
+                      </button>
+                    </div>
+
+                    <div *ngIf="providerBundle.status==='approved provider'">
+                      <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle" [ngClass]="providerBundle.status!=='approved provider' ? 'uk-disabled' : ''"
                               [routerLink]="['/provider', providerId, 'datasource', 'add']">
                         <span class="material-icons uk-margin-small-right">add</span>New Datasource
                       </button>
                     </div>
+                    <div *ngIf="providerBundle.status!=='approved provider'" uk-tooltip="Disabled until provider gets approved.">
+                      <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle uk-disabled">
+                        <span class="material-icons uk-margin-small-right">add</span>New Datasource
+                      </button>
+                    </div>
+
                     <div>
                       <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle"
                               [routerLink]="['../update']">
                         <span class="material-icons uk-margin-small-right">update</span>Update provider
                       </button>
                     </div>
-
                   </div>
                 </div>
               </div>
