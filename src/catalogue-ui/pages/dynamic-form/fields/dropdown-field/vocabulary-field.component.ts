@@ -3,6 +3,7 @@ import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
 import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {FormControlService} from "../../../../services/form-control.service";
 import {URLValidator} from "../../../../shared/validators/generic.validator";
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-vocabulary-field',
@@ -26,7 +27,7 @@ export class VocabularyFieldComponent implements OnInit {
 
   dynamicVoc: object[] = [];
 
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
+  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -36,6 +37,10 @@ export class VocabularyFieldComponent implements OnInit {
       this.form = this.rootFormGroup.control;
     }
     this.formControl = this.form.get(this.fieldData.name) as FormControl;
+
+    if(this.fieldData.name === 'resourceOrganisation'){
+        this.form.get('resourceOrganisation').setValue(this.route.snapshot.paramMap.get('providerId'));
+    }
 
     if(this.fieldData.form.dependsOn) {
       // console.log(this.fieldData.form.dependsOn);
