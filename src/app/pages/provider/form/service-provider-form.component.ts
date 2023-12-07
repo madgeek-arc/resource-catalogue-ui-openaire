@@ -226,23 +226,24 @@ export class ServiceProviderFormComponent implements OnInit {
       }
     }
 
-    if (this._hasUserConsent) {
-      if (this.edit) {
-        this.providerService.hasAdminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
-          boolean => { this.agreedToTerms = boolean; },
-          error => console.log(error),
-          () => {
-            if (!this.agreedToTerms) {
-              UIkit.modal('#modal-consent').show();
-            }
-          }
-        );
-      } else {
-        if (!this.agreedToTerms) {
-          UIkit.modal('#modal-consent').show();
-        }
-      }
-    }
+    // fixme: hasAdminAcceptedTerms 404
+    // if (this._hasUserConsent) {
+    //   if (this.edit) {
+    //     this.providerService.hasAdminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
+    //       boolean => { this.agreedToTerms = boolean; },
+    //       error => console.log(error),
+    //       () => {
+    //         if (!this.agreedToTerms) {
+    //           UIkit.modal('#modal-consent').show();
+    //         }
+    //       }
+    //     );
+    //   } else {
+    //     if (!this.agreedToTerms) {
+    //       UIkit.modal('#modal-consent').show();
+    //     }
+    //   }
+    // }
 
     // this.isPortalAdmin = this.authService.isAdmin();
 
