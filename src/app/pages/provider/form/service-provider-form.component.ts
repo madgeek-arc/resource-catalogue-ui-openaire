@@ -326,7 +326,7 @@ export class ServiceProviderFormComponent implements OnInit {
           }
         );
       } else {
-        this.providerService[method](this.newProviderForm.value).subscribe(
+        this.providerService[method](this.newProviderForm.value, this.providerId).subscribe(
           res => {},
           err => {
             this.showLoader = false;
