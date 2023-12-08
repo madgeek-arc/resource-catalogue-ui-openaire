@@ -32,7 +32,7 @@ export class ProviderService {
     return url;
   }
 
-  createNewServiceProvider(newProvider: any) {
+  createNewServiceProvider(newProvider: any, providerId?: string) {
     console.log(`knocking on: ${this.base}/providers`);
     return this.http.post(this.base + '/providers', newProvider, this.options);
   }
@@ -43,12 +43,12 @@ export class ProviderService {
     return this.http.post<Provider>(this.base + '/providers', newProvider, {params: params});
   }
 
-  updateServiceProvider(updatedFields: any): Observable<Provider> {
+  updateServiceProvider(updatedFields: any, providerId?: string): Observable<Provider> {
     // console.log(`knocking on: ${this.base}/provider`);
-    return this.http.put<Provider>(this.base + '/providers', updatedFields, this.options);
+    return this.http.put<Provider>(this.base + `/providers/${providerId}`, updatedFields, this.options);
   }
 
-  updateAndPublishPendingProvider(updatedFields: any): Observable<Provider> {
+  updateAndPublishPendingProvider(updatedFields: any, providerId?: string): Observable<Provider> {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 
