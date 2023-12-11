@@ -42,7 +42,9 @@ export class ServiceProviderFormComponent implements OnInit {
   pendingProvider = false;
   disable = false;
   showLoader = false;
-  tabs: boolean[] = [false, false, false, false, false, false, false, false];
+  tabsError: boolean[] = [false, false, false, false, false, false, false, false];
+  selectedTab: number = 0;
+  selectTab(index: number): void {this.selectedTab = index}
   isPortalAdmin = false;
 
   codeOfConduct = false;
@@ -386,26 +388,26 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   markTabs() {
-    this.tabs[0] = (this.checkFormValidity('name', this.edit)
+    this.tabsError[0] = (this.checkFormValidity('name', this.edit)
       || this.checkFormValidity('abbreviation', this.edit)
       || this.checkFormValidity('website', this.edit)
       || this.checkEveryArrayFieldValidity('legalEntity', this.edit)
       || this.checkFormValidity('legalStatus', this.edit)
       || this.checkFormValidity('hostingLegalEntity', this.edit));
-    this.tabs[1] = (this.checkFormValidity('description', this.edit)
+    this.tabsError[1] = (this.checkFormValidity('description', this.edit)
       || this.checkFormValidity('logo', this.edit)
       || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaURL')
       || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaName'));
-    this.tabs[2] = (this.checkEveryArrayFieldValidity('tags', this.edit)
+    this.tabsError[2] = (this.checkEveryArrayFieldValidity('tags', this.edit)
       || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificDomain')
       || this.checkEveryArrayFieldValidity('scientificDomains', this.edit, 'scientificSubdomain')
       || this.checkEveryArrayFieldValidity('structureTypes', this.edit));
-    this.tabs[3] = (this.checkFormValidity('location.streetNameAndNumber', this.edit)
+    this.tabsError[3] = (this.checkFormValidity('location.streetNameAndNumber', this.edit)
       || this.checkFormValidity('location.postalCode', this.edit)
       || this.checkFormValidity('location.city', this.edit)
       || this.checkFormValidity('location.region', this.edit)
       || this.checkFormValidity('location.country', this.edit));
-    this.tabs[4] = (this.checkFormValidity('mainContact.firstName', this.edit)
+    this.tabsError[4] = (this.checkFormValidity('mainContact.firstName', this.edit)
       || this.checkFormValidity('mainContact.lastName', this.edit)
       || this.checkFormValidity('mainContact.email', this.edit)
       || this.checkFormValidity('mainContact.phone', this.edit)
@@ -415,19 +417,19 @@ export class ServiceProviderFormComponent implements OnInit {
       || this.checkEveryArrayFieldValidity('publicContacts', this.edit, 'email')
       || this.checkEveryArrayFieldValidity('publicContacts', this.edit, 'phone')
       || this.checkEveryArrayFieldValidity('publicContacts', this.edit, 'position'));
-    this.tabs[5] = (this.checkFormValidity('lifeCycleStatus', this.edit)
+    this.tabsError[5] = (this.checkFormValidity('lifeCycleStatus', this.edit)
       || this.checkEveryArrayFieldValidity('certifications', this.edit));
-    this.tabs[6] = (this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
+    this.tabsError[6] = (this.checkEveryArrayFieldValidity('participatingCountries', this.edit)
       || this.checkEveryArrayFieldValidity('affiliations', this.edit)
       || this.checkEveryArrayFieldValidity('networks', this.edit));
-    this.tabs[7] = (this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
+    this.tabsError[7] = (this.checkEveryArrayFieldValidity('esfriDomains', this.edit)
       || this.checkFormValidity('esfriType', this.edit)
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificDomain')
       || this.checkEveryArrayFieldValidity('merilScientificDomains', this.edit, 'merilScientificSubdomain')
       || this.checkEveryArrayFieldValidity('areasOfActivity', this.edit)
       || this.checkEveryArrayFieldValidity('societalGrandChallenges', this.edit)
       || this.checkEveryArrayFieldValidity('nationalRoadmaps', this.edit));
-    this.tabs[8] = (this.checkEveryArrayFieldValidity('users', this.edit, 'name')
+    this.tabsError[8] = (this.checkEveryArrayFieldValidity('users', this.edit, 'name')
       || this.checkEveryArrayFieldValidity('users', this.edit, 'surname')
       || this.checkEveryArrayFieldValidity('users', this.edit, 'email'));
   }

@@ -40,7 +40,7 @@
               <div [ngClass]="{'blur-filter': showLoader}">
 
                 <div *ngIf="!edit" class="uk-alert uk-alert-primary">You are about to register a new {{serviceORresource}} Provider ({{projectName=='CatRIS' ? 'SP' : 'RP'}}).
-                  You will be able to register new {{serviceORresource | lowercase}}(s) when this process is completed and your {{projectName=='CatRIS' ? 'SP' : 'RP'}} is onboarded. For further information you may visit items under the ‘support’ menu.</div>
+                  You will be able to register new {{serviceORresource | lowercase}}(s) when this process is completed and your {{projectName=='CatRIS' ? 'SP' : 'RP'}} is onboarded.</div>
 
                 <div *ngIf="errorMessage" class="uk-alert uk-alert-danger">{{errorMessage}}</div>
 
@@ -100,48 +100,48 @@
                   <div class="uk-width-1-4">
                     <div class="tabsTitle uk-margin-bottom">Provider Profile Information Blocks</div>
                     <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs" uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
-                      <li class="uk-active">
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[0]}" href="#">
+                      <li [ngClass]="{'uk-active': 0 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[0]}" (click)="selectTab(0)" href="#">
                           <span>1. Basic *</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[1]}" href="#">
+                      <li [ngClass]="{'uk-active': 1 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[1]}" (click)="selectTab(1)" href="#">
                           <span>2. Marketing *</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[2]}" href="#">
+                      <li [ngClass]="{'uk-active': 2 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[2]}" (click)="selectTab(2)" href="#">
                           <span>3. Classification</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[3]}" href="#">
+                      <li [ngClass]="{'uk-active': 3 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[3]}" (click)="selectTab(3)" href="#">
                           <span>4. Location *</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[4]}" href="#">
+                      <li [ngClass]="{'uk-active': 4 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[4]}" (click)="selectTab(4)" href="#">
                           <span>5. Contact *</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[5]}" href="#">
+                      <li [ngClass]="{'uk-active': 5 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[5]}" (click)="selectTab(5)" href="#">
                           <span>6. Maturity</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[6]}" href="#">
+                      <li [ngClass]="{'uk-active': 6 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[6]}" (click)="selectTab(6)" href="#">
                           <span>7. Dependencies</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[7]}" href="#">
+                      <li [ngClass]="{'uk-active': 7 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[7]}" (click)="selectTab(7)" href="#">
                           <span>8. Other</span>
                         </a>
                       </li>
-                      <li>
-                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[8]}" href="#">
+                      <li [ngClass]="{'uk-active': 8 === selectedTab, 'form-error': tabsError}">
+                        <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabsError[8]}" (click)="selectTab(8)" href="#">
                           <span>9. Admins *</span>
                         </a>
                       </li>
