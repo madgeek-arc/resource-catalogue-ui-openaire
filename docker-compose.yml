@@ -14,8 +14,7 @@ services:
 
     volumes:
 #      - ./data/nginx/conf.d:/etc/nginx/conf.d
-      - ./data/images:/images
-      - ./data/files:/files
+      - ./data:/usr/share/nginx/html/data
 
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
