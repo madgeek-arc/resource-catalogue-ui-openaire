@@ -4,6 +4,7 @@ import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from 
 import {FormControlService} from "../../../../services/form-control.service";
 import {URLValidator} from "../../../../shared/validators/generic.validator";
 import {ActivatedRoute} from '@angular/router';
+import {edit} from 'brace';
 
 @Component({
   selector: 'app-vocabulary-field',
@@ -38,7 +39,7 @@ export class VocabularyFieldComponent implements OnInit {
     }
     this.formControl = this.form.get(this.fieldData.name) as FormControl;
 
-    if(this.fieldData.name === 'resourceOrganisation'){
+    if(this.fieldData.name === 'resourceOrganisation' && this.route.snapshot.paramMap.get('providerId')!==null){
         this.form.get('resourceOrganisation').setValue(this.route.snapshot.paramMap.get('providerId'));
     }
 
