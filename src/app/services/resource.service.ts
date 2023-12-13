@@ -76,7 +76,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Service | Datasource>>(this.base + `/catalogue-resources`, {params: searchQuery});
+    return this.http.get<Paging<Service | Datasource>>(this.base + `/catalogue-resources?active=true`, {params: searchQuery});
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {
