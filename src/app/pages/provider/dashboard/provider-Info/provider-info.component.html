@@ -79,13 +79,13 @@
                   </div>
                 </div>
               </li>
-              <h5 *ngIf="provider.multimedia.length > 0" class="uk-margin-medium-top">Multimedia</h5>
+              <h6 *ngIf="provider.multimedia.length > 0" class="uk-margin-medium-top">Multimedia</h6>
               <li *ngFor="let multimedia of provider.multimedia">
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Multimedia URL</div>
                   <div class="uk-width-3-4"><span><a [href]="multimedia.multimediaURL" target="_blank">{{multimedia.multimediaURL}}</a></span></div>
                 </div>
-                <div class="uk-grid">
+                <div class="uk-grid uk-margin-remove-top">
                   <div class="uk-width-1-4">Multimedia Name</div>
                   <div class="uk-width-3-4"><span>{{multimedia.multimediaName}}</span></div>
                 </div>
@@ -95,43 +95,31 @@
           <!--Classification-->
           <li>
             <ul class="uk-list uk-width-1-1">
-              <h5 class="">Scientific Categorisation</h5>
-              <li>
+              <h6 *ngIf="provider.scientificDomains.length > 0">Scientific Categorisation</h6>
+              <li *ngFor="let domain of provider.scientificDomains" class="uk-margin-small-bottom">
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Scientific Domain</div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let domain of provider.scientificDomains; let i=index">
-                  {{i !== 0 ? ', ':'' + getVocabularyName('Scientific domain', domain.scientificDomain)}}
-                </span>
-                  </div>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Scientific domain', domain.scientificDomain)}}</span></div>
                 </div>
-              </li>
-              <li class="uk-margin-medium-bottom">
-                <div class="uk-grid">
+                <div class="uk-grid uk-margin-remove-top">
                   <div class="uk-width-1-4">Scientific Subdomain</div>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Scientific subdomain', domain.scientificSubdomain)}}</span></div>
+                </div>
+              </li>
+              <li class="uk-margin-medium-top">
+                <div class="uk-grid uk-margin-remove-top">
+                  <div class="uk-width-1-4"><span>Tags</span></div>
                   <div class="uk-width-3-4">
-                <span *ngFor="let domain of provider.scientificDomains; let i=index">
-                  {{i !== 0 ? ', ':'' + getVocabularyName('Scientific subdomain', domain.scientificSubdomain)}}
-                </span>
+                    <span *ngFor="let tag of provider.tags; let i=index">{{i>0 ? ', ' + tag : tag}}</span>
                   </div>
                 </div>
               </li>
               <li>
-                <div class="uk-grid uk-margin-remove-top">
-                  <div class="uk-width-1-4"><span>Tags</span></div>
-                  <div class="uk-width-3-4">
-                    <span *ngFor="let tag of provider.tags; let i=index">{{i !== 0 ? ', ':'' + tag}}</span>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="uk-grid uk-margin-remove-top">
-                  <div class="uk-width-1-4"><span>Tags</span></div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let structureType of provider.structureTypes; let i=index">
-                  {{i !== 0 ? ', ':'' + structureType}}
-                </span>
-                    <span *ngIf="provider.structureTypes.length === 0">-</span>
+                <div *ngFor="let structureType of provider.structureTypes; let i=index;"
+                     class="uk-grid uk-margin-remove-top">
+                  <div class="uk-width-1-4"><span *ngIf="i==0">Structure Type</span></div>
+                  <ng-container *ngIf="i > 0">{{ '\n' }}</ng-container>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Provider structure type', structureType)}}</span>
                   </div>
                 </div>
               </li>
@@ -149,7 +137,7 @@
               <li>
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Postal Code</div>
-                  <div class="uk-width-3-4">{{provider.location.postalCode}}}</div>
+                  <div class="uk-width-3-4">{{provider.location.postalCode}}</div>
                 </div>
               </li>
               <li>
@@ -175,7 +163,7 @@
           <!--Contact-->
           <li>
             <ul class="uk-list uk-width-1-1 uk-margin-medium-bottom">
-              <h5>Main Contact</h5>
+              <h6>Main Contact</h6>
               <li>
                 <div class="uk-grid">
                   <div class="uk-width-1-4">First Name</div>
@@ -206,7 +194,7 @@
                   <div class="uk-width-3-4">{{provider.mainContact.position}}</div>
                 </div>
               </li>
-              <h5 class="uk-margin-medium-top">Public Contacts</h5>
+              <h6 class="uk-margin-medium-top">Public Contacts</h6>
               <div *ngFor="let publicContact of provider.publicContacts">
                 <li>
                   <div class="uk-grid">
@@ -248,7 +236,7 @@
                 <div class="uk-grid">
                   <div class="uk-width-1-4">Life Cycle Status</div>
                   <div class="uk-width-3-4">
-                    <span>{{getVocabularyName('Provider life cycle status', provider.lifeCycleStatus)}}</span>
+                    <span>{{getVocabularyName('Life cycle status', provider.lifeCycleStatus)}}</span>
                   </div>
                 </div>
               </li>
@@ -256,7 +244,7 @@
                 <div class="uk-grid uk-margin-remove-top">
                   <div class="uk-width-1-4"><span>Certifications</span></div>
                   <div class="uk-width-3-4">
-                    <span *ngFor="let certification of provider.certifications; let i=index">{{i !== 0 ? ', ':'' + certification}}</span>
+                    <span *ngFor="let certification of provider.certifications; let i=index">{{i>0 ? ', ' + certification : certification}}</span>
                     <span *ngIf="provider.certifications.length === 0 ">-</span>
                   </div>
                 </div>
@@ -271,7 +259,8 @@
                   <div class="uk-width-1-4"><span>Participating Countries</span></div>
                   <div class="uk-width-3-4">
                 <span *ngFor="let country of provider.participatingCountries; let i=index">
-                  {{i !== 0 ? ', ':'' + getVocabularyName('Country', country)}}
+                  <ng-container *ngIf="i > 0"><br></ng-container>
+                  {{getVocabularyName('Country', country)}}
                 </span>
                     <span *ngIf="provider.participatingCountries.length === 0 ">-</span>
                   </div>
@@ -281,7 +270,7 @@
                 <div class="uk-grid uk-margin-remove-top">
                   <div class="uk-width-1-4"><span>Affiliations</span></div>
                   <div class="uk-width-3-4">
-                    <span *ngFor="let affiliation of provider.affiliations; let i=index">{{i !== 0 ? ', ':'' + affiliation}}</span>
+                    <span *ngFor="let affiliation of provider.affiliations; let i=index">{{i>0 ? ', ' + affiliation : affiliation}}</span>
                     <span *ngIf="provider.affiliations.length === 0 ">-</span>
                   </div>
                 </div>
@@ -291,7 +280,8 @@
                   <div class="uk-width-1-4"><span>Networks</span></div>
                   <div class="uk-width-3-4">
                 <span *ngFor="let network of provider.networks; let i=index">
-                  {{i !== 0 ? ', ':'' + getVocabularyName('Provider network', network)}}
+                  <ng-container *ngIf="i > 0"><br></ng-container>
+                  {{getVocabularyName('Provider network', network)}}
                 </span>
                   </div>
                 </div>
@@ -308,13 +298,12 @@
           <li>
             <ul class="uk-list uk-width-1-1">
               <li>
-                <div class="uk-grid uk-margin-remove-top">
-                  <div class="uk-width-1-4"><span>ESFRI Domain</span></div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let esfriDomain of provider.esfriDomains; let i=index">
-                  {{i !== 0 ? ', ':'' + esfriDomain}}
-                </span>
-                    <span *ngIf="provider.esfriDomains.length === 0">-</span>
+                <div *ngFor="let esfriDomain of provider.esfriDomains; let i=index;"
+                     class="uk-grid uk-margin-remove-top">
+                  <div class="uk-width-1-4"><span *ngIf="i==0">ESFRI Domain</span></div>
+                  <div class="uk-width-3-4"><span>
+                    <ng-container *ngIf="i > 0">{{ '\n' }}</ng-container>
+                    {{getVocabularyName('Provider esfri domain', esfriDomain)}}</span>
                   </div>
                 </div>
               </li>
@@ -326,46 +315,32 @@
                   </div>
                 </div>
               </li>
-              <h5 class="uk-margin-medium-top">MERIL Scientific Categorisation</h5>
-              <li>
+              <h6 *ngIf="provider.merilScientificDomains.length > 0" class="uk-margin-medium-top">MERIL Scientific Categorisation</h6>
+              <li *ngFor="let domain of provider.merilScientificDomains">
                 <div class="uk-grid">
                   <div class="uk-width-1-4">MERIL Scientific Domain</div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let domain of provider.merilScientificDomains; let i=index">
-                  {{i !== 0 ? ', ':'' + getVocabularyName('Provider meril scientific domain', domain.merilScientificDomain)}}
-                </span>
-                  </div>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Provider meril scientific domain', domain.merilScientificDomain)}}</span></div>
                 </div>
-              </li>
-              <li class="uk-margin-medium-bottom">
-                <div class="uk-grid">
+                <div class="uk-grid uk-margin-remove-top">
                   <div class="uk-width-1-4">MERIL Scientific Subdomain</div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let domain of provider.merilScientificDomains; let i=index">
-                  {{i !== 0 ? ', ':'' + getVocabularyName('Provider meril scientific subdomain', domain.merilScientificSubdomain)}}
-                </span>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Provider meril scientific subdomain', domain.merilScientificSubdomain)}}</span></div>
+                </div>
+              </li>
+              <li>
+                <div *ngFor="let areaOfActivity of provider.areasOfActivity; let i=index;"
+                     class="uk-grid uk-margin-remove-top">
+                  <div class="uk-width-1-4"><span *ngIf="i==0">Area of Activity</span></div>
+                  <ng-container *ngIf="i > 0">{{ '\n' }}</ng-container>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Provider area of activity', areaOfActivity)}}</span>
                   </div>
                 </div>
               </li>
               <li>
-                <div class="uk-grid uk-margin-remove-top">
-                  <div class="uk-width-1-4"><span>Area of Activity</span></div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let area of provider.areasOfActivity; let i=index">
-                  {{i !== 0 ? ', ':'' + area}}
-                </span>
-                    <span *ngIf="provider.areasOfActivity.length === 0">-</span>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="uk-grid uk-margin-remove-top">
-                  <div class="uk-width-1-4"><span>Societal Grand Challenges</span></div>
-                  <div class="uk-width-3-4">
-                <span *ngFor="let challenge of provider.societalGrandChallenges; let i=index">
-                  {{i !== 0 ? ', ':'' + challenge}}
-                </span>
-                    <span *ngIf="provider.societalGrandChallenges.length === 0">-</span>
+                <div *ngFor="let societalGrandChallenge of provider.societalGrandChallenges; let i=index;"
+                     class="uk-grid uk-margin-remove-top">
+                  <div class="uk-width-1-4"><span *ngIf="i==0">Provider Societal Grand Challenge</span></div>
+                  <ng-container *ngIf="i > 0">{{ '\n' }}</ng-container>
+                  <div class="uk-width-3-4"><span>{{getVocabularyName('Provider societal grand challenge', societalGrandChallenge)}}</span>
                   </div>
                 </div>
               </li>
@@ -374,7 +349,7 @@
                   <div class="uk-width-1-4"><span>National Roadmaps</span></div>
                   <div class="uk-width-3-4">
                 <span *ngFor="let nationalRoadmap of provider.nationalRoadmaps; let i=index">
-                  {{i !== 0 ? ', ':'' + nationalRoadmap}}
+                  {{i>0 ? ', ' + nationalRoadmap : nationalRoadmap}}
                 </span>
                     <span *ngIf="provider.nationalRoadmaps.length === 0">-</span>
                   </div>
