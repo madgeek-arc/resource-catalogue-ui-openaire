@@ -122,7 +122,7 @@ export class SearchAireComponent implements OnInit {
     this.searchResults = searchResults;
 
     if (this.searchResults.results.length > 0 ) {
-      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus'])
+      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resource_organisation'])
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {

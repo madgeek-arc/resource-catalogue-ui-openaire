@@ -30,8 +30,8 @@
           <div class="uk-margin-medium-top">
 
             <ng-template ngFor let-facet [ngForOf]="searchResults.facets">
-              <div *ngIf="facet.field === 'life_cycle_status' || facet.field === 'trl' || facet.field === 'users'
-                        || facet.field === 'portfolios'" class="uk-margin-medium-top">
+              <div *ngIf="facet.field === 'resource_organisation' || facet.field === 'life_cycle_status' || facet.field === 'trl'
+                || facet.field === 'users' || facet.field === 'portfolios'" class="uk-margin-medium-top">
                 <read-more [maxHeight]="235">
                   <p class="big-text uk-inline">{{facet.label}}</p><a class="uk-inline uk-link uk-margin-left uk-margin-small-bottom"
                                                                       (click)="clearSelections($event, facet.field)">Clear</a>
