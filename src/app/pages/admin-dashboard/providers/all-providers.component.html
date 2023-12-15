@@ -34,6 +34,10 @@
 <div class="uk-section uk-section-xsmall">
   <div class="uk-container uk-container-expand">
 
+    <div *ngIf="showLoader" class="whiteFilm">
+      <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>
+    </div>
+
     <ng-container *ngIf="providers?.results.length > 0">
 
       <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom uk-margin-top">

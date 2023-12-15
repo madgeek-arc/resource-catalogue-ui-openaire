@@ -40,8 +40,8 @@
 <div class="uk-section uk-section-xsmall">
   <div class="uk-container uk-container-expand">
 
-    <div *ngIf="showLoader" class="uk-position-center" style="z-index: 100">
-      <div uk-spinner="ratio: 2"></div>
+    <div *ngIf="showLoader" class="whiteFilm">
+      <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>
     </div>
 
     <ng-container *ngIf="services?.results.length > 0">
