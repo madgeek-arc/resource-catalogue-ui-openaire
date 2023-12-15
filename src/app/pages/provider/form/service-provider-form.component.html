@@ -398,25 +398,26 @@
                               <label class="uk-form-label uk-text-right" for="structureTypes">
                                 {{structureTypesDesc.label + (structureTypesDesc.mandatory ? ' (*)' : '')}}
                               </label>
-                              <div
-                                class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
+                              <div class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index" class="uk-margin-bottom">
-                                  <ng-select class="uk-width-9-10" id="structureTypes"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i, this.edit)}"
-                                             *ngIf="providerTypeVocabulary"
-                                             [items]="sortVocabulariesByName(providerTypeVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('structureTypes').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('structureTypes', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
+                                  <div class="uk-flex uk-flex-left">
+                                    <ng-select class="uk-width-9-10" id="structureTypes"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i, this.edit)}"
+                                               *ngIf="providerTypeVocabulary"
+                                               [items]="sortVocabulariesByName(providerTypeVocabulary)"
+                                               (change)="unsavedChangesPrompt()"
+                                               bindLabel="name"
+                                               bindValue="id"
+                                               clearAllText="Clear"
+                                               [formControlName]="i">
+                                    </ng-select>
+                                    <a *ngIf="getFieldAsFormArray('structureTypes').length > 1 && !disable"
+                                       class="remove-element uk-padding-small" style="padding-top: 5px"
+                                       (click)="remove('structureTypes', i); unsavedChangesPrompt()">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('structureTypes', true)">
@@ -742,23 +743,24 @@
                               <div
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{participatingCountriesDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
-                                <div
-                                  *ngFor="let provider of getFieldAsFormArray('participatingCountries').controls; let i=index"
+                                <div *ngFor="let provider of getFieldAsFormArray('participatingCountries').controls; let i=index"
                                   [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('participatingCountries').controls.length-1 !== i}">
-                                  <ng-select class="uk-width-9-10" id="participatingCountries"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i, this.edit)}"
-                                             [items]="placesVocabulary"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('participatingCountries').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('participatingCountries', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
+                                  <div class="uk-flex uk-flex-left">
+                                    <ng-select class="uk-width-9-10" id="participatingCountries"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i, this.edit)}"
+                                               [items]="placesVocabulary"
+                                               (change)="unsavedChangesPrompt()"
+                                               bindLabel="name"
+                                               bindValue="id"
+                                               clearAllText="Clear"
+                                               [formControlName]="i">
+                                    </ng-select>
+                                    <a *ngIf="getFieldAsFormArray('participatingCountries').length > 1 && !disable"
+                                       class="remove-element uk-padding-small" style="padding-top: 5px"
+                                       (click)="remove('participatingCountries', i); unsavedChangesPrompt()">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('participatingCountries', false)">
@@ -812,20 +814,22 @@
                                   <!--                                      {{entry.name}}-->
                                   <!--                                    </option>-->
                                   <!--                                  </select>-->
-                                  <ng-select class="uk-width-9-10" id="networks"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i, this.edit)}"
-                                             [items]="sortVocabulariesByName(networksVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('networks').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('networks', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
+                                  <div class="uk-flex uk-flex-left">
+                                    <ng-select class="uk-width-9-10" id="networks"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i, this.edit)}"
+                                               [items]="sortVocabulariesByName(networksVocabulary)"
+                                               (change)="unsavedChangesPrompt()"
+                                               bindLabel="name"
+                                               bindValue="id"
+                                               clearAllText="Clear"
+                                               [formControlName]="i">
+                                    </ng-select>
+                                    <a *ngIf="getFieldAsFormArray('networks').length > 1 && !disable"
+                                       class="remove-element uk-padding-small" style="padding-top: 5px"
+                                       (click)="remove('networks', i); unsavedChangesPrompt()">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('networks', false)">
@@ -847,20 +851,22 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('esfriDomains').controls; let i=index"
                                      [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('esfriDomains').controls.length-1 !== i}">
-                                  <ng-select class="uk-width-9-10" id="esfriDomains"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('esfriDomains', i, this.edit)}"
-                                             [items]="sortVocabulariesByName(esfriDomainVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('esfriDomains').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('esfriDomains', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
+                                  <div class="uk-flex uk-flex-left">
+                                    <ng-select class="uk-width-9-10" id="esfriDomains"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('esfriDomains', i, this.edit)}"
+                                               [items]="sortVocabulariesByName(esfriDomainVocabulary)"
+                                               (change)="unsavedChangesPrompt()"
+                                               bindLabel="name"
+                                               bindValue="id"
+                                               clearAllText="Clear"
+                                               [formControlName]="i">
+                                    </ng-select>
+                                    <a *ngIf="getFieldAsFormArray('esfriDomains').length > 1 && !disable"
+                                       class="remove-element uk-padding-small" style="padding-top: 5px"
+                                       (click)="remove('esfriDomains', i); unsavedChangesPrompt()">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('esfriDomains', false)">
@@ -958,23 +964,24 @@
                               <div
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{areasOfActivityDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
-                                <div
-                                  *ngFor="let provider of getFieldAsFormArray('areasOfActivity').controls; let i=index"
+                                <div *ngFor="let provider of getFieldAsFormArray('areasOfActivity').controls; let i=index"
                                   [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('areasOfActivity').controls.length-1 !== i}">
-                                  <ng-select class="uk-width-9-10" id="areasOfActivity"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('areasOfActivity', i, this.edit)}"
-                                             [items]="sortVocabulariesByName(areasOfActivityVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('areasOfActivity').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('areasOfActivity', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
+                                  <div class="uk-flex uk-flex-left">
+                                    <ng-select class="uk-width-9-10" id="areasOfActivity"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('areasOfActivity', i, this.edit)}"
+                                               [items]="sortVocabulariesByName(areasOfActivityVocabulary)"
+                                               (change)="unsavedChangesPrompt()"
+                                               bindLabel="name"
+                                               bindValue="id"
+                                               clearAllText="Clear"
+                                               [formControlName]="i">
+                                    </ng-select>
+                                    <a *ngIf="getFieldAsFormArray('areasOfActivity').length > 1 && !disable"
+                                       class="remove-element uk-padding-small" style="padding-top: 5px"
+                                       (click)="remove('areasOfActivity', i); unsavedChangesPrompt()">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('areasOfActivity', false)">
@@ -990,23 +997,24 @@
                               <div
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{societalGrandChallengesDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
-                                <div
-                                  *ngFor="let provider of getFieldAsFormArray('societalGrandChallenges').controls; let i=index"
+                                <div *ngFor="let provider of getFieldAsFormArray('societalGrandChallenges').controls; let i=index"
                                   [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('societalGrandChallenges').controls.length-1 !== i}">
-                                  <ng-select class="uk-width-9-10" id="societalGrandChallenges"
-                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('societalGrandChallenges', i, this.edit)}"
-                                             [items]="sortVocabulariesByName(societalGrandChallengesVocabulary)"
-                                             (change)="unsavedChangesPrompt()"
-                                             bindLabel="name"
-                                             bindValue="id"
-                                             clearAllText="Clear"
-                                             [formControlName]="i">
-                                  </ng-select>
-                                  <a *ngIf="getFieldAsFormArray('societalGrandChallenges').length > 1 && !disable"
-                                     class="remove-element uk-padding-small"
-                                     (click)="remove('societalGrandChallenges', i); unsavedChangesPrompt()">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                  </a>
+                                  <div class="uk-flex uk-flex-left">
+                                    <ng-select class="uk-width-9-10" id="societalGrandChallenges"
+                                               [ngClass]="{'uk-form-danger': checkFormArrayValidity('societalGrandChallenges', i, this.edit)}"
+                                               [items]="sortVocabulariesByName(societalGrandChallengesVocabulary)"
+                                               (change)="unsavedChangesPrompt()"
+                                               bindLabel="name"
+                                               bindValue="id"
+                                               clearAllText="Clear"
+                                               [formControlName]="i">
+                                    </ng-select>
+                                    <a *ngIf="getFieldAsFormArray('societalGrandChallenges').length > 1 && !disable"
+                                       class="remove-element uk-padding-small" style="padding-top: 5px"
+                                       (click)="remove('societalGrandChallenges', i); unsavedChangesPrompt()">
+                                      <i class="fa fa-times" aria-hidden="true"></i>
+                                    </a>
+                                  </div>
                                 </div>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('societalGrandChallenges', false)">

@@ -358,6 +358,10 @@ a.remove-element {
   text-decoration-line: none;
 }
 
+a.remove-element:hover {
+  color: #d72121;
+}
+
 .formGroupElement {
   padding: 40px;
   background: #F0F5F5 0% 0% no-repeat padding-box;
