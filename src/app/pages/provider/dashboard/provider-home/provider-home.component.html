@@ -52,9 +52,14 @@
                 </ng-container>
               </ul>
             </ul>
+            <div class="uk-margin-medium-top">
+              <a *ngIf="resourceBundles?.length>0"
+                 [routerLink]="['/provider/' + provider.id + '/dashboard/services']"
+                 class="uk-link">Show more...</a>
+            </div>
           </div>
 
-          <div *ngIf="loggingInfo.length>0" class="uk-margin-large-top">
+          <div *ngIf="loggingInfo?.length>0" class="uk-margin-large-top">
             <div class="uk-card uk-card-default uk-card-body">
               <h6 class="uk-margin-medium-bottom">Recent history of updates</h6>
               <ul class="uk-list uk-list-divider">
@@ -66,12 +71,11 @@
                   </li>
                 </ng-container>
               </ul>
-<!--              <ng-container *ngIf="loggingInfo.length > 4 && !showMaxRecords" class="uk-margin-top">-->
-<!--                <a>Show more...</a>-->
-<!--              </ng-container>-->
-<!--              <ng-container *ngIf="loggingInfo.length > 4 && showMaxRecords" class="uk-margin-top">-->
-<!--                <a>Show less...</a>-->
-<!--              </ng-container>-->
+              <div class="uk-margin-medium-top">
+                <a *ngIf="loggingInfo?.length>0"
+                   [routerLink]="['/provider/' + provider.id + '/dashboard/updateHistory']"
+                   class="uk-link">Show more...</a>
+              </div>
             </div>
           </div>
         </div>

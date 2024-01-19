@@ -22,9 +22,6 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   pendingResourceBundles: ServiceBundle[] = null;
   rejectedResourceBundles: ServiceBundle[] = null;
 
-  // showMaxRecords: false;
-  // maxRecords = 30;
-
   constructor(private providerService: ProviderService, private resourceService: ResourceService, private datePipe: DatePipe) {
   }
 
