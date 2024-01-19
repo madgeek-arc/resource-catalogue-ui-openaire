@@ -4,7 +4,6 @@ import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, Serv
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {DatePipe} from '@angular/common';
-import {Paging} from '../../../../entities/paging';
 
 @Component({
   selector: 'app-provider-home',
@@ -22,13 +21,16 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   pendingResourceBundles: ServiceBundle[] = null;
   rejectedResourceBundles: ServiceBundle[] = null;
 
-  constructor(private providerService: ProviderService, private resourceService: ResourceService, private datePipe: DatePipe) {
+  constructor(private router: Router, private providerService: ProviderService, private resourceService: ResourceService, private datePipe: DatePipe) {
   }
 
   ngOnInit() {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     this.resourceService.getUiVocabularies().subscribe(
       res => {this.vocabularies = res}
     );
+
     if (this.providerBundle) {
       this.provider = this.providerBundle.provider;
       this.loggingInfo = this.providerBundle.loggingInfo;
