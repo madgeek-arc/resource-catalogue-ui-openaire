@@ -4,6 +4,7 @@ import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, Serv
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {DatePipe} from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-provider-home',
@@ -66,6 +67,11 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
       if (vocabulary.id === id)
         return vocabulary.name;
     }
+  }
+
+  formatLogDate(logDate: string): string {
+    const dateObject = moment(logDate, 'ddd MMM DD HH:mm:ss Z YYYY');
+    return dateObject.format('DD MMM YYYY');
   }
 
 }
