@@ -1,7 +1,7 @@
 import {AbstractControl, AsyncValidatorFn, FormControl, ValidationErrors} from '@angular/forms';
 import {Observable, timer} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
-import {ServiceProviderService} from '../../services/service-provider.service';
+import {ProviderService} from '../../services/provider.service';
 
 export function URLValidator(control: AbstractControl) {
     return PatternValidator(control, /^(https?:\/\/.+){0,1}$/);
@@ -16,7 +16,7 @@ export function URLListValidator(control: AbstractControl) {
 }
 
 export class UrlValidator {
-  static createValidator(service: ServiceProviderService): AsyncValidatorFn {
+  static createValidator(service: ProviderService): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors> => {
       return service.validateUrl(control.value).pipe(
         map((result: boolean) => (result ? null : {invalidAsync: true}))
@@ -26,7 +26,7 @@ export class UrlValidator {
 }
 
 /** Increase time var to reduce server calls **/
-export const urlAsyncValidator = (service: ServiceProviderService, time: number = 0) => {
+export const urlAsyncValidator = (service: ProviderService, time: number = 0) => {
   return (control: AbstractControl): Observable<ValidationErrors> => {
     if (control.value === '') {
       return timer(time).pipe(map(res => {

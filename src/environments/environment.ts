@@ -20,7 +20,15 @@ export const environment = {
   hasUserConsent: true,
   showHelpContent: false,
   privacyPolicyURL: '',
-  marketplaceBaseURL: ''
+  marketplaceBaseURL: '',
+  sentry: {
+    dsn: 'https://c14ac91c2adaafb644a200288035d5d2@vereniki.athenarc.gr/6',
+    environment: 'develop',
+    tracesSampleRate: 1.0,
+    replaysSessionSampleRate: 0.2,
+    replaysOnErrorSampleRate: 1.0
+  },
+  disableSentry: true
 };
 
 /*

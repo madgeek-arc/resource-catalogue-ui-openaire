@@ -2,13 +2,30 @@
 /* eslint-disable */
 // Generated using typescript-generator version 2.16.538 on 2020-06-10 11:50:49.
 
-import {UiVocabulary} from './dynamic-form-model';
-
 export class Bundle<T> implements Identifiable {
   id: string;
   metadata: Metadata;
   active: boolean;
+  suspended: boolean;
+  identifiers
+  migrationStatus
+  loggingInfo: LoggingInfo[];
+  latestAuditInfo: LoggingInfo;
+  latestOnboardingInfo: LoggingInfo;
+  latestUpdateInfo: LoggingInfo;
   status: string;
+  service: Service;
+  datasource: Datasource;
+}
+
+export class LoggingInfo {
+  date: string;
+  userEmail: string;
+  userFullName: string;
+  userRole: string;
+  type: string;
+  comment: string;
+  actionType: string;
 }
 
 export class EmailMessage {
@@ -56,9 +73,9 @@ export class Indicator implements Identifiable {
   unitName: string;
 }
 
-export class InfraService extends Bundle<Service> {
-  latest: boolean;
+export class ServiceBundle extends Bundle<any> {
   service: Service;
+  datasource: Datasource;
 }
 
 export class Measurement implements Identifiable {
@@ -80,42 +97,41 @@ export class Metadata {
   source: string;
   originalId: string;
 }
+export class ProviderBundle extends Bundle<Provider> {
+  templateStatus: string;
+  provider: Provider;
+}
 
 export class Provider implements Identifiable {
   id: string;
-  name: string;
   abbreviation: string;
+  name: string;
   website: URL;
   legalEntity: boolean;
   legalStatus: string;
+  hostingLegalEntity: string;
   description: string;
   logo: URL;
-  multimedia: URL[];
+  multimedia: MultimediaPair[];
   scientificDomains: ServiceProviderDomain[];
-  // scientificSubdomains: string[];
   tags: string[];
+  structureTypes: string[];
   location: ProviderLocation;
   mainContact: ProviderMainContact;
   publicContacts: ProviderPublicContact[];
   lifeCycleStatus: string;
   certifications: string[];
-  hostingLegalEntity: string;
   participatingCountries: string[];
   affiliations: string[];
   networks: string[];
-  structureTypes: string[];
+  catalogueId: string;
   esfriDomains: string[];
   esfriType: string;
-  merilScientificDomains: ProviderMerilDomain[]; // anchor
-  // merilScientificSubdomains: string[];
+  merilScientificDomains: ProviderMerilDomain[];
   areasOfActivity: string[];
   societalGrandChallenges: string[];
   nationalRoadmaps: string[];
   users: User[];
-}
-
-export class ProviderBundle extends Bundle<Provider> {
-  provider: Provider;
 }
 
 export class ProviderLocation {
@@ -153,45 +169,6 @@ export class ProviderRequest implements Identifiable {
 export class RangeValue {
   fromValue: string;
   toValue: string;
-}
-
-export class RichService {
-  service: Service;
-  metadata: Metadata;
-  languageAvailabilityNames: string[];
-  geographicAvailabilityNames: string[];
-  trlName: string;
-  phaseName: string;
-  targetUsersNames: string[];
-  accessTypeNames: string[];
-  accessModeNames: string[];
-  fundedByNames: string[];
-  orderTypeName: string;
-  views: number;
-  ratings: number;
-  userRate: number;
-  hasRate: number;
-  favourites: number;
-  isFavourite: number;
-  categories: Category[];
-  domains: ScientificDomain[];
-  providerInfo: ProviderInfo[];
-}
-
-export class Snippet {
-  image: URL;
-  longImage: URL;
-  paymentTitle: string;
-  name: string;
-  description: string;
-  tagline: string;
-  logo: URL;
-  portfolios: UiVocabulary[];
-  id: string;
-  pitch: string;
-  label: string;
-  users: UiVocabulary[];
-  extras: any;
 }
 
 export class ServiceProviderDomain {
@@ -240,7 +217,7 @@ export class Service implements Identifiable {
   standards: string[];
   openSourceTechnologies: string[];
   version: string;
-  lastUpdate: XMLGregorianCalendar;
+  lastUpdate: string;
   changeLog: string[];
   requiredResources: string[];
   relatedResources: string[];

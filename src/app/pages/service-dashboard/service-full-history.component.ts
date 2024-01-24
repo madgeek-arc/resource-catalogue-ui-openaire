@@ -10,10 +10,9 @@ import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-service-dashboard',
-  templateUrl: './service-history.component.html',
-  styleUrls: ['./service-stats.component.css']
+  templateUrl: './service-full-history.component.html',
 })
-export class ServiceHistoryComponent implements OnInit, OnDestroy {
+export class ServiceFullHistoryComponent implements OnInit, OnDestroy {
 
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
@@ -48,12 +47,12 @@ export class ServiceHistoryComponent implements OnInit, OnDestroy {
   }
 
   getDataForService() {
-      this.resourceService.getServiceHistory(this.service.id).subscribe(
-        searchResults => this.serviceHistory = searchResults,
-        err => {
-          this.errorMessage = 'An error occurred while retrieving the history of this service. ' + err.error;
-        }
-      );
+    this.resourceService.getServiceHistory(this.service.id).subscribe(
+      searchResults => this.serviceHistory = searchResults,
+      err => {
+        this.errorMessage = 'An error occurred while retrieving the history of this service. ' + err.error;
+      }
+    );
   }
 
   ngOnDestroy(): void {

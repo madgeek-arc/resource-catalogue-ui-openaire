@@ -15,5 +15,13 @@ export const environment = {
   hasUserConsent: false,
   privacyPolicyURL: '',
   marketplaceBaseURL: '',
-  showHelpContent: false
+  showHelpContent: false,
+  sentry: {
+    dsn: 'https://c14ac91c2adaafb644a200288035d5d2@vereniki.athenarc.gr/6',
+    environment: 'production',
+    tracesSampleRate: 1.0,
+    replaysSessionSampleRate: 0.0,
+    replaysOnErrorSampleRate: 1.0
+  },
+  disableSentry: false
 };

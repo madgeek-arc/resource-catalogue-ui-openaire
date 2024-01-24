@@ -45,7 +45,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               next => {
                   this.resourcePayload = next[0];
                   this.vocabularies = next[1];
-                  if(this.resourcePayload.relatedResources.length === 1 && this.resourcePayload.relatedResources[0] === null) {
+                  if(this.resourcePayload.relatedResources == null
+                    || this.resourcePayload.relatedResources.length === 0
+                    || (this.resourcePayload.relatedResources.length === 1 && this.resourcePayload.relatedResources[0] === null)) {
                     this.relatedServices = [];
                     this.ready = true;
                   }

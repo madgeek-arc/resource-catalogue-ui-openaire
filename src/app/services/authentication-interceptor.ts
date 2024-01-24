@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {Injectable, Injector} from '@angular/core';
+import {AuthenticationService} from './authentication.service';
+import {deleteCookie} from '../entities/utils';
 
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
-  constructor(public http: HttpClient, public router: Router, public injector: Injector) {
+  constructor(public http: HttpClient, public router: Router, private authService: AuthenticationService) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -35,7 +37,12 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
             // authenticationService.redirectURL = this.router.url
             // authenticationService.login();
+            // console.log(response.url.includes('user/info'));
             console.log('came here don\'t know what to do...');
+            if (response.url.includes('user/info')) {
+              sessionStorage.clear();
+              deleteCookie(this.authService.cookieName);
+            }
             return null;
           } else if (response.status === 403) {
             this.router.navigate(['/forbidden']);

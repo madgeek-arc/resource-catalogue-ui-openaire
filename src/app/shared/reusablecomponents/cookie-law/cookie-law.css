@@ -21,7 +21,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 1000;
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
   text-align: center;

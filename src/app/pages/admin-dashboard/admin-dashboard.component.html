@@ -1,0 +1,93 @@
+<div class="dashboard">
+  <div id="sidebar_main_content"  class="sidebar_main_swipe sidebar_main_active">
+    <aside id="sidebar_main">
+
+      <div id="sidebar_toggle" class="" (click)="toggleSidebar()"></div>
+
+      <div>
+        <div class="menu_section uk-margin-medium-top">
+          <ul>
+            <li [ngClass]="{'current_section': path === 'providers'}">
+              <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['providers']">
+                <span class="material-icons uk-margin-small-right">real_estate_agent</span>All providers
+              </a>
+            </li>
+            <li [ngClass]="{'current_section': path === 'services'}">
+              <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['services']">
+                <span class="material-icons uk-margin-small-right">grid_view</span>All services
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </aside>
+    <div id="page_content">
+      <div class="services-provider-header">
+        <div class="uk-section uk-section-xsmall">
+          <div class="uk-container uk-container-expand">
+            <div class="">
+              <div class="uk-flex uk-flex-middle uk-flex-between">
+                <div class="uk-flex uk-flex-middle">
+                  <div class="titleIcon">
+                    <span class="material-icons uk-margin-small-right">{{titleIcon}}</span>
+                  </div>
+                  <div class="uk-margin-left">
+                    <div class="uk-text-meta uk-margin-remove">SuperAdmin Dashboard</div>
+                    <h5>All {{title}}</h5>
+                  </div>
+                </div>
+                <div class="uk-flex">
+                  <div *ngIf="canInvite()">
+                    <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle"
+                            uk-toggle="target: #invite-modal">
+                      <span class="material-icons uk-margin-small-right">person</span>Invite provider
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+<div id="invite-modal" uk-modal>
+  <div class="uk-modal-dialog">
+    <button class="uk-modal-close-default" type="button" uk-close (click)="clearData()"></button>
+    <div class="uk-modal-body">
+      <h4 class="uk-modal-title">Invite provider</h4>
+      <form class="uk-form-stacked uk-margin-top">
+        <div *ngIf="!invitationUrl" class="uk-margin">
+          <label class="uk-form-label" for="email">Email: </label>
+          <div class="uk-form-controls">
+            <input  class="uk-input" id="email" type="text" placeholder="Invitee email" [formControl]="inviteeEmail">
+
+          </div>
+        </div>
+        <div *ngIf="invitationUrl" class="uk-margin">
+          <label class="uk-form-label" for="email">Invitation url: </label>
+          <div class="uk-form-controls">
+            <pre style="word-break: break-word;">{{invitationUrl}}</pre>
+          </div>
+        </div>
+      </form>
+
+      <!--      {{token.value | json}}-->
+      <div class="uk-text-right">
+        <button *ngIf="!invitationUrl" class="uk-button uk-button-primary" type="button"
+                [disabled]="inviteeEmail.invalid" (click)="getInvitationToken()">
+          Create invitation token
+        </button>
+        <button *ngIf="invitationUrl" class="uk-button uk-button-primary" type="button" title="copy to clipboard"
+                (click)="copyToClipboard()">
+          <span class="material-icons uk-text-middle">content_copy</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

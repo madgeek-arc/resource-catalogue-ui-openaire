@@ -1,4 +1,6 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, NgModule} from "@angular/core";
+import {Router} from "@angular/router";
+import * as Sentry from "@sentry/angular-ivy";
 import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -13,8 +15,7 @@ import {CanActivateViaPubGuard} from './services/can-activate-pub-guard.service'
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {ReusableComponentsModule} from './shared/reusablecomponents/reusable-components.module';
-import {ServiceProviderService} from './services/service-provider.service';
-import {UserService} from './services/user.service';
+import {ProviderService} from './services/provider.service';
 import {ComparisonService} from './services/comparison.service';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
@@ -32,7 +33,8 @@ import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {UserService} from './services/user.service';
 
 
 declare var require: any;
@@ -95,10 +97,26 @@ declare var require: any;
     CanActivateViaPubGuard,
     ResourceService,
     UserService,
-    ServiceProviderService,
+    ProviderService,
     DataSharingService,
     NavigationService,
-    DatePipe
+    DatePipe,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: false,
+      }),
+    }, {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+      },
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
   ],
   exports: [
     AireFooterComponent,

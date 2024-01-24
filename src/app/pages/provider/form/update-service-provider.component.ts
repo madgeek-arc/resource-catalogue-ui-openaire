@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Provider, Type} from '../../entities/eic-model';
+import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
-import {ResourceService} from '../../services/resource.service';
+import {ResourceService} from '../../../services/resource.service';
 import {FormBuilder} from '@angular/forms';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ServiceProviderService} from '../../services/service-provider.service';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
 declare var UIkit: any;
@@ -20,11 +20,11 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
 
   constructor(public fb: FormBuilder,
               public authService: AuthenticationService,
-              public serviceProviderService: ServiceProviderService,
+              public providerService: ProviderService,
               public resourceService: ResourceService,
               public router: Router,
               public route: ActivatedRoute) {
-    super(fb, authService, serviceProviderService, resourceService, router, route);
+    super(fb, authService, providerService, resourceService, router, route);
   }
 
   ngOnInit() {
@@ -39,26 +39,28 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
       sessionStorage.removeItem('service');
     } else {
       if (this.vocabularies === null) {
-        this.resourceService.getAllVocabulariesByType().subscribe(
-          res => {
-            this.vocabularies = res;
-            this.placesVocabulary = this.vocabularies[Type.COUNTRY];
-            this.providerTypeVocabulary = this.vocabularies[Type.PROVIDER_STRUCTURE_TYPE];
-            this.providerLCSVocabulary = this.vocabularies[Type.PROVIDER_LIFE_CYCLE_STATUS];
-            this.domainsVocabulary =  this.vocabularies[Type.SCIENTIFIC_DOMAIN];
-            this.categoriesVocabulary =  this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN];
-            this.esfriDomainVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_DOMAIN];
-            this.legalStatusVocabulary =  this.vocabularies[Type.PROVIDER_LEGAL_STATUS];
-            this.esfriVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_TYPE];
-            this.areasOfActivityVocabulary =  this.vocabularies[Type.PROVIDER_AREA_OF_ACTIVITY];
-            this.networksVocabulary =  this.vocabularies[Type.PROVIDER_NETWORK];
-            this.societalGrandChallengesVocabulary =  this.vocabularies[Type.PROVIDER_SOCIETAL_GRAND_CHALLENGE];
-          },
-          error => console.log(error),
-          () => {
-            this.getProvider();
-          }
-        );
+        // this.resourceService.getAllVocabulariesByType().subscribe(
+        //   res => {
+        //     this.vocabularies = res;
+        //     this.placesVocabulary = this.vocabularies[Type.COUNTRY];
+        //     this.providerTypeVocabulary = this.vocabularies[Type.PROVIDER_STRUCTURE_TYPE];
+        //     this.providerLCSVocabulary = this.vocabularies[Type.PROVIDER_LIFE_CYCLE_STATUS];
+        //     this.domainsVocabulary =  this.vocabularies[Type.SCIENTIFIC_DOMAIN];
+        //     this.categoriesVocabulary =  this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN];
+        //     this.esfriDomainVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_DOMAIN];
+        //     this.legalStatusVocabulary =  this.vocabularies[Type.PROVIDER_LEGAL_STATUS];
+        //     this.esfriVocabulary =  this.vocabularies[Type.PROVIDER_ESFRI_TYPE];
+        //     this.areasOfActivityVocabulary =  this.vocabularies[Type.PROVIDER_AREA_OF_ACTIVITY];
+        //     this.networksVocabulary =  this.vocabularies[Type.PROVIDER_NETWORK];
+        //     this.societalGrandChallengesVocabulary =  this.vocabularies[Type.PROVIDER_SOCIETAL_GRAND_CHALLENGE];
+        //   },
+        //   error => console.log(error),
+        //   () => {
+        //     this.getProvider();
+        //   }
+        // );
+        this.setVocabularies();
+        this.getProvider();
       } else {
         this.getProvider();
       }
@@ -72,7 +74,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   getProvider() {
     this.errorMessage = '';
     const path = this.route.snapshot.routeConfig.path;
-    this.serviceProviderService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getServiceProviderById')](this.providerId)
+    this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId)
       .subscribe(
       provider => this.provider = provider,
       err => {
@@ -110,7 +112,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         }
         if (this.provider.multimedia && this.provider.multimedia.length > 1) {
           for (let i = 0; i < this.provider.multimedia.length - 1; i++) {
-            this.push('multimedia', this.providerMultimediaDesc.mandatory, true);
+            this.multimediaArray.push(this.newMultimedia());
           }
         }
         if (this.provider.structureTypes && this.provider.structureTypes.length > 1) {
@@ -205,7 +207,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         if (this.disable) {
           this.newProviderForm.disable();
         }
-        this.initProviderBitSets();
       }
     );
   }
@@ -213,23 +214,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   toggleDisable() {
     this.disable = !this.disable;
     this.newProviderForm.enable();
-  }
-
-  initProviderBitSets() {
-    this.handleBitSets(0, 0, 'name');
-    this.handleBitSets(0, 1, 'abbreviation');
-    this.handleBitSets(0, 2, 'website');
-    this.handleBitSets(1, 3, 'description');
-    this.handleBitSets(1, 4, 'logo');
-    this.handleBitSetsOfGroups(3, 5, 'streetNameAndNumber', 'location');
-    this.handleBitSetsOfGroups(3, 6, 'postalCode', 'location');
-    this.handleBitSetsOfGroups(3, 7, 'city', 'location');
-    this.handleBitSetsOfGroups(3, 8, 'country', 'location');
-    this.handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact');
-    this.handleBitSetsOfGroups(4, 11, 'email', 'mainContact');
-    this.handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts');
-    this.initUserBitSets();
   }
 
 }
