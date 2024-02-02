@@ -36,8 +36,8 @@ export class ProviderDashboardComponent implements OnInit {
             this.path = 'info';
             this.titleIcon = 'info';
             this.title = 'Provider\'s profile';
-          } else if (event.url.includes('updateHistory')) {
-            this.path = 'updateHistory';
+          } else if (event.url.includes('history')) {
+            this.path = 'history';
             this.titleIcon = 'history';
             this.title = 'History of updates';
           } else if (event.url.includes('services')) {
