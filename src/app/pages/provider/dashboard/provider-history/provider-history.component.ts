@@ -2,11 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ProviderBundle} from '../../../../entities/eic-model';
 
 @Component({
-  selector: 'app-provider-update-history',
-  templateUrl: 'provider-update-history.componenet.html'
+  selector: 'app-provider-history',
+  templateUrl: 'provider-history.componenet.html'
 })
 
-export class ProviderUpdateHistoryComponent implements OnInit {
+export class ProviderHistoryComponent implements OnInit {
 
   @Input() providerBundle: ProviderBundle = null
 

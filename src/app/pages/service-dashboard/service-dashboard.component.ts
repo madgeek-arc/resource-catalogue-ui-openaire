@@ -43,7 +43,6 @@ export class ServiceDashboardComponent implements OnInit {
       );
       this.resourceService.getServiceOrDatasourceBundle(params['resourceId']).subscribe(suc => {
         this.serviceBundle = suc;
-          console.log('Service bundle in service-dashboard.component ->', this.serviceBundle);
       },
         err => {
           if (err.status === 404) {

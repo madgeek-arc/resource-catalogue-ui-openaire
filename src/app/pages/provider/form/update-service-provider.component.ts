@@ -207,6 +207,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         if (this.disable) {
           this.newProviderForm.disable();
         }
+        this.providerName = this.newProviderForm.get('name').value;
       }
     );
   }

@@ -5,7 +5,8 @@ import {UpdateServiceProviderComponent} from './form/update-service-provider.com
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
 import {ProviderInfoComponent} from './dashboard/provider-Info/provider-info.component';
 import {ProviderHomeComponent} from './dashboard/provider-home/provider-home.component';
-import {ProviderUpdateHistoryComponent} from './dashboard/provider-update-history/provider-update-history.component';
+import {ProviderHistoryComponent} from './dashboard/provider-history/provider-history.component';
+import {ProviderFullHistoryComponent} from './dashboard/provider-history/provider-full-history.component';
 import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
 import {ServiceProviderFormComponent} from './form/service-provider-form.component';
 
@@ -55,8 +56,16 @@ const providerRoutes: Routes = [
             },
           },
           {
-            path: 'updateHistory',
-            component: ProviderUpdateHistoryComponent,
+            path: 'history',
+            component: ProviderHistoryComponent,
+            canActivate: [CanActivateViaAuthGuard],
+            data: {
+              dashboardMode: true
+            },
+          },
+          {
+            path: 'fullHistory',
+            component: ProviderFullHistoryComponent,
             canActivate: [CanActivateViaAuthGuard],
             data: {
               dashboardMode: true

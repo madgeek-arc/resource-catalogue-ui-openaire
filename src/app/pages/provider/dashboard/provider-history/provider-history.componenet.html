@@ -3,15 +3,15 @@
 
     <div *ngIf="providerBundle?.loggingInfo" class="uk-margin-medium-top">
       <div class="uk-container uk-container-center">
-        <div class="uk-flex" style="margin-bottom: -10px">
-          <div class="uk-button uk-button-action uk-disabled uk-margin-small-top uk-flex uk-align-center uk-margin-small-bottom" style="color: #ffffff; background-color: #1d193c">Today</div>
-        </div>
+<!--        <div class="uk-flex" style="margin-bottom: -10px">-->
+<!--          <div class="uk-button uk-button-action uk-disabled uk-margin-small-top uk-flex uk-align-center uk-margin-small-bottom" style="color: #ffffff; background-color: #1d193c">Today</div>-->
+<!--        </div>-->
 
         <div class="al_timeline">
 
           <ng-container *ngIf="providerBundle?.loggingInfo?.length>0">
             <ng-container *ngFor="let history of providerBundle.loggingInfo; let i = index">
-              <ng-container *ngIf="i < 10">
+              <ng-container *ngIf="i < 6">
 
                 <div class="al_timeline_block update">
                   <div class="al_timeline_image uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-scale-up uk-flex uk-flex-middle uk-flex-center">
@@ -56,9 +56,9 @@
       </div>
 
       <div class="uk-margin-top uk-text-center">
-        <!--            <a *ngIf="service"-->
-        <!--               [routerLink]="['/dashboard/' + catalogueId + '/' + service.resourceOrganisation + '/service-dashboard/' + service.id + '/fullHistory']"-->
-        <!--               class="uk-h3 uk-link">See more results ...</a>-->
+        <a *ngIf="providerBundle?.loggingInfo?.length>0"
+           [routerLink]="['/provider/' + providerBundle.id + '/dashboard/fullHistory']"
+           class="uk-h3 uk-link">See all results...</a>
       </div>
     </div>
 

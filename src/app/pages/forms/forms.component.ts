@@ -157,13 +157,25 @@ export class FormsComponent implements OnInit{
   }
 
   prepareVocabularies() {
+    this.sortVocabulariesByName(this.vocabulariesMap['Scientific domain']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Scientific subdomain']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Category']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Subcategory']);
     let voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
     this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
+    this.sortVocabulariesByName(this.vocabulariesMap['Access type']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Access mode']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Target user']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Language']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Country']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Technology readiness level']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Life cycle status']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Funding body']);
+    this.sortVocabulariesByName(this.vocabulariesMap['Funding program']);
     this.vocabulariesMap['RegionOrCountry'] = this.vocabulariesMap['Country'].concat(this.vocabulariesMap['Region']);
     this.premiumSort.transform(this.vocabulariesMap['RegionOrCountry'], ['Europe', 'Worldwide']);
   }
 
-  /** Other stuff **/
   groupByKey(array, key) {
     return array.reduce((hash, obj) => {
       if (obj[key] === undefined) {
@@ -171,6 +183,18 @@ export class FormsComponent implements OnInit{
       }
       return Object.assign(hash, {[obj[key]]: (hash[obj[key]] || []).concat(obj)});
     }, {});
+  }
+
+  sortVocabulariesByName(vocabularies: Vocabulary[]): Vocabulary[] {
+    return vocabularies.sort((vocabulary1, vocabulary2) => {
+      if (vocabulary1.name > vocabulary2.name) {
+        return 1;
+      }
+      if (vocabulary1.name < vocabulary2.name) {
+        return -1;
+      }
+      return 0;
+    });
   }
 
 }
