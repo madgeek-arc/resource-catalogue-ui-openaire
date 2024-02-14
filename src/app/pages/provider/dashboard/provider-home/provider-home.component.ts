@@ -69,9 +69,9 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
     }
   }
 
-  formatLogDate(logDate: string): string {
-    const dateObject = moment(logDate, 'ddd MMM DD HH:mm:ss Z YYYY');
-    return dateObject.format('DD MMM YYYY');
-  }
+  // formatLogDate(logDate: string): string {
+  //   const dateObject = moment(logDate, 'ddd MMM DD HH:mm:ss Z YYYY');
+  //   return dateObject.format('DD MMM YYYY');
+  // }
 
 }
