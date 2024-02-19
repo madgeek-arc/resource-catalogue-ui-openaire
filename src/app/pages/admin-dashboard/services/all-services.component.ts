@@ -88,7 +88,7 @@ export class AllServicesDashboardComponent implements OnInit {
         res => {
           this.services = res;
           res.facets.forEach(facet => {
-            if (facet.field === 'resource_providers') {
+            if (facet.field === 'resource_organisation') {
               this.providerFacet = facet.values;
               return;
             }

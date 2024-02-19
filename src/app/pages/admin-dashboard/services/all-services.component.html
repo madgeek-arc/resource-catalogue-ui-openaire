@@ -4,9 +4,9 @@
     <div class="uk-flex uk-flex-middle">
       <div class="uk-margin-small-right uk-text-muted">Filter by: </div>
       <div *ngIf="resourceState" class="uk-margin-small-right">
-        <ng-select id="provider" (change)="filterSelection('resource_providers', provider)"
+        <ng-select id="provider" (change)="filterSelection('resource_organisation', provider)"
                    [items]="providerFacet" [(ngModel)]="provider"
-                   placeholder="Provider" bindLabel="label" bindValue="value" clearAllText="Clear">
+                   placeholder="Provider" bindLabel="label" bindValue="value" clearAllText="Clear" style="width: 180px">
         </ng-select>
       </div>
       <div *ngIf="resourceState" class="uk-margin-small-right">
