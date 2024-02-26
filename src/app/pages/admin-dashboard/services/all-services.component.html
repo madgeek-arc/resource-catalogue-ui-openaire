@@ -122,7 +122,7 @@
 
               <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
                 <div class="uk-flex uk-flex-middle">
-                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/service/edit', resourceInfo.id]">
                     <span class="material-icons">edit</span>Update
                   </a>
                   <a *ngIf="resourceInfo.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">

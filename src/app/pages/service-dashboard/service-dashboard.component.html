@@ -24,10 +24,22 @@
             <div class="uk-flex">
               <div>
                 <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle"
-                        [routerLink]="['/edit/' + service.id]">
+                        [routerLink]="['/service/edit/' + service.id]">
                   <span class="material-icons uk-margin-small-right">edit</span>Update Service
                 </button>
               </div>
+              <div *ngIf="serviceBundle.status==='approved resource'">
+                <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle" [ngClass]="serviceBundle.status!=='approved resource' ? 'uk-disabled' : ''"
+                        [routerLink]="['/datasource/subprofile/add', serviceId]">
+                  <span class="material-icons uk-margin-small-right">add</span>Add Datasource
+                </button>
+              </div>
+<!--              <div *ngIf="serviceBundle.status==='approved resource'">-->
+<!--                <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle" [ngClass]="serviceBundle.status!=='approved resource' ? 'uk-disabled' : ''"-->
+<!--                        [routerLink]="['/provider', providerId, 'datasource', 'update']">-->
+<!--                  <span class="material-icons uk-margin-small-right">edit</span>Update Datasource-->
+<!--                </button>-->
+<!--              </div>-->
               <div>
                 <button class="uk-button uk-button-blue uk-margin-left uk-flex uk-flex-middle"
                         [routerLink]="['/service/' + service.id]">

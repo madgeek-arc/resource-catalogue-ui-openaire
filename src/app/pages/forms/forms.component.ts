@@ -25,11 +25,14 @@ export class FormsComponent implements OnInit{
   vocabulariesMap: Map<string, object[]> = new Map<string, object[]>();
   subVocabulariesMap: Map<string, object[]> = null
   premiumSort = new PremiumSortPipe();
+  providerId: string = null;
   resourceId: string = null;
+  datasourceId: string = null;
   resourceType: string = null;
   payloadAnswer: object = null; // Find a way to do this better
   ready: boolean = false
   errorMessage: string = null;
+  editMode: boolean = false;
 
   constructor(private formService: FormControlService, private resourceService: ResourceService,
               private route: ActivatedRoute, private router: Router ) {}
@@ -38,31 +41,31 @@ export class FormsComponent implements OnInit{
     this.ready = false;
     this.route.params.subscribe(
       params => {
+        this.providerId = params['providerId']
         this.resourceId = params['resourceId']
-        if (this.resourceId) { // edit resource
-          this.resourceService.getResourceTypeById(this.resourceId).subscribe(
-            res => {
-              this.resourceType = res['resourceType'];
-              zip(
-                this.resourceService.getServiceOrDatasource(this.resourceId),
-                this.formService.getFormModelByResourceType(this.resourceType),
-                this.resourceService.getUiVocabularies()).subscribe(
-                next => {
-                  this.payloadAnswer = {'answer': {'Service': {}}};
-                  this.payloadAnswer['answer'].Service = next[0];
-                  this.model = next[1].results[0];
-                  this.vocabulariesMap = next[2];
-                },
-                error => {console.log(error)},
-                () => {
-                  this.prepareVocabularies();
-                  this.ready = true;
-                }
-              );
+        this.datasourceId = params['datasourceId']
+        if (window.location.pathname.includes('service/add') || window.location.pathname.includes('service/edit')) this.resourceType = 'service';
+        if (window.location.pathname.includes('subprofile/add') || window.location.pathname.includes('subprofile/edit')) this.resourceType = 'datasource';
+        if (window.location.pathname.includes('service/edit') || window.location.pathname.includes('subprofile/edit')) this.editMode = true;
+        if (this.editMode) { // edit
+          zip(
+            this.resourceType === 'service' ? this.resourceService.getService(this.resourceId) : this.resourceService.getDatasource(this.datasourceId),
+            this.formService.getFormModelByResourceType(this.resourceType),
+            this.resourceService.getUiVocabularies()).subscribe(
+            next => {
+              this.payloadAnswer = {'answer': {'Service': {}}};
+              this.payloadAnswer['answer'].Service = next[0];
+              this.model = next[1].results[0];
+              this.vocabulariesMap = next[2];
+            },
+            error => {console.log(error)},
+            () => {
+              this.prepareVocabularies();
+              this.ready = true;
             }
-          )
-        } else { // add new resource
-          this.resourceType = params['resourceType'];
+          );
+        } else { // add new
+          console.log('add new');
           zip(
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
@@ -91,13 +94,9 @@ export class FormsComponent implements OnInit{
     //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
     //   console.log(value[0].get('Service').get(element).value);
     // }
-    if (!service.multimedia[0].multimediaURL) {
-      service.multimedia = null;
-    }
-    if (!service.useCases[0].useCaseURL) {
-      service.useCases = null;
-    }
     if (this.resourceType === 'service') {
+      if (!service.multimedia[0].multimediaURL) service.multimedia = null;
+      if (!service.useCases[0].useCaseURL) service.useCases = null;
       if (value[1]) {
         this.resourceService.editService(service).subscribe(
           next => {
@@ -124,16 +123,15 @@ export class FormsComponent implements OnInit{
     }
     if (this.resourceType === 'datasource') {
       let datasource: Datasource = {...value[0].get('Service').value};
-      if (!datasource.multimedia[0].multimediaURL) {
-        datasource.multimedia = null;
-      }
-      if (!datasource.useCases[0].useCaseURL) {
-        datasource.useCases = null;
-      }
+      let id = this.resourceId;
+      if (!id) id = this.datasourceId;
+      datasource.id = id;
+      datasource.serviceId = id;
+      datasource.catalogueId = "openaire";
       if (value[1]) {
         this.resourceService.editDatasource(datasource).subscribe(
           next => {
-            this.router.navigate([`/service/${next.id}/overview`]);
+            this.router.navigate([`/service/${next.id}/overview`]); //todo change page
           },
           error => {
             console.log(error);
@@ -144,7 +142,7 @@ export class FormsComponent implements OnInit{
       } else {
         this.resourceService.postDatasource(datasource).subscribe(
           next => {
-            this.router.navigate([`/service/${next.id}/overview`]);
+            this.router.navigate([`/service/${next.id}/overview`]); //todo change page
           },
           error => {
             console.log(error);

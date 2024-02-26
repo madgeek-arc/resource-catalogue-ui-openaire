@@ -4,6 +4,7 @@ import {CanActivateViaAuthGuard} from '../../services/can-activate-auth-guard.se
 import {AdminDashboardComponent} from './admin-dashboard.component';
 import {AllProvidersDashboardComponent} from './providers/all-providers.component';
 import {AllServicesDashboardComponent} from './services/all-services.component';
+import {AllDatasourcesDashboardComponent} from './datasources/all-datasources.component';
 
 const adminRoutes: Routes = [
   {
@@ -26,6 +27,14 @@ const adminRoutes: Routes = [
       {
         path: 'services',
         component: AllServicesDashboardComponent,
+        canActivate: [CanActivateViaAuthGuard],
+        data: {
+          dashboardMode: true
+        },
+      },
+      {
+        path: 'datasources',
+        component: AllDatasourcesDashboardComponent,
         canActivate: [CanActivateViaAuthGuard],
         data: {
           dashboardMode: true

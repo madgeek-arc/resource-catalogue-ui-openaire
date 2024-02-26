@@ -1,10 +1,16 @@
 <div class="uk-section uk-section-xsmall filters">
-
   <div class="uk-container uk-container-expand">
+
     <div class="uk-flex uk-flex-middle">
       <div class="uk-margin-small-right uk-text-muted">Filter by: </div>
       <div *ngIf="resourceState" class="uk-margin-small-right">
-        <ng-select id="selectStakeholder" (change)="filterSelection('status', status)"
+        <ng-select id="provider" (change)="filterSelection('resource_organisation', provider)"
+                   [items]="providerFacet" [(ngModel)]="provider"
+                   placeholder="Provider" bindLabel="label" bindValue="value" clearAllText="Clear" style="width: 180px">
+        </ng-select>
+      </div>
+      <div *ngIf="resourceState" class="uk-margin-small-right">
+        <ng-select id="resourceState" (change)="filterSelection('status', status)"
                    [items]="resourceState" [(ngModel)]="status"
                    placeholder="Approvement status" bindLabel="name" bindValue="id" clearAllText="Clear">
         </ng-select>
@@ -12,7 +18,7 @@
       <div class="uk-margin-small-right">
         <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus)"
                    placeholder="Activation Status" [(ngModel)]="activeStatus" clearAllText="Clear">
-          <ng-option [value]="null">All activation statuses</ng-option>
+          <ng-option [value]="''">All activation statuses</ng-option>
           <ng-option [value]="'true'">Active</ng-option>
           <ng-option [value]="'false'">Inactive</ng-option>
         </ng-select>
@@ -27,18 +33,22 @@
         </ng-select>
       </div>
     </div>
-  </div>
 
+  </div>
 </div>
 
-<div class="uk-section uk-section-xsmall uk-margin-bottom">
+<div class="uk-section uk-section-xsmall">
   <div class="uk-container uk-container-expand">
 
-    <ng-container *ngIf="services?.results.length > 0">
+    <div *ngIf="showLoader" class="whiteFilm">
+      <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>
+    </div>
+
+    <ng-container *ngIf="datasources?.results.length > 0">
 
       <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom uk-margin-top">
         <p class="big-text uk-margin-remove">
-          <span class="uk-text-bold">{{services.total}}</span> Services, Page <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
+          <span class="uk-text-bold">{{datasources.total}}</span> Datasources, Page <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
         </p>
         <ul class="uk-pagination uk-visible@m">
           <li *ngIf="currentPage > 2 && totalPages > 5">
@@ -61,85 +71,77 @@
 
       <div class="uk-grid uk-child-width-1-3 uk-grid-match uk-grid-small" uk-height-match="target: > div > .uk-card > .uk-card-body">
 
-        <div *ngFor="let resourceInfo of services.results ; let i = index" class="uk-grid-margin">
+        <div *ngFor="let datasourceBundle of datasources.results ; let i = index" class="uk-grid-margin">
 
           <div class="uk-card service-list-card-dashboard">
 
             <div class="uk-card-body uk-flex uk-flex-column uk-flex-between">
               <div>
                 <div class="uk-flex uk-flex-right">
-                  <div *ngIf="resourceInfo?.active === false" class="inactive">
+                  <div *ngIf="datasourceBundle?.active === false" class="inactive">
                     <div class="uk-label uk-margin-small-right">Inactive</div>
                   </div>
-                  <div *ngIf="resourceInfo?.status==='approved resource'" class="approved">
+                  <div *ngIf="datasourceBundle?.status==='approved resource'" class="approved">
                     <div class="uk-label">Approved</div>
                   </div>
-                  <div *ngIf="resourceInfo?.status==='pending resource'" class="pending">
+                  <div *ngIf="datasourceBundle?.status==='pending resource'" class="pending">
                     <div class="uk-label">Pending</div>
                   </div>
-                  <div *ngIf="resourceInfo?.status==='rejected resource'" class="rejected">
+                  <div *ngIf="datasourceBundle?.status==='rejected resource'" class="rejected">
                     <div class="uk-label">Rejected</div>
                   </div>
                 </div>
 
-                <div class="uk-margin-top">
-                  <img src="{{getPayload(resourceInfo).logo}}" width="140px" height="62px">
+                <div class="h5">
+                  {{datasourceBundle.id}}
                 </div>
 
                 <div class="uk-margin-top">
-                  <a class="uk-link" [routerLink]="['/service-dashboard', providerBundle.provider.id, getPayload(resourceInfo).id]">
-                    <h6 class="uk-text-blue">{{getPayload(resourceInfo).name}}</h6>
+                  <a class="uk-link" [routerLink]="['/service-dashboard', datasourceBundle.datasource.resourceOrganisation, datasourceBundle.datasource.id]">
+                    <h6 class="uk-text-blue">{{datasourceBundle.datasource.name}}</h6>
                   </a>
                 </div>
 
                 <div class="uk-margin-small-top">
                   <p>
                     <span class="uk-text-italic uk-text-muted uk-margin-small-right">Updated:</span>
-                    <span>{{resourceInfo.metadata?.modifiedAt | date}}</span>
+                    <span>{{datasourceBundle.metadata?.modifiedAt | date}}</span>
                     <!--                <span class="uk-margin-small-right uk-margin-small-left">.</span>-->
-                    <span *ngIf="resourceInfo.metadata?.registeredAt !== '0'">
+                    <span *ngIf="datasourceBundle.metadata?.registeredAt !== '0'">
                       <span class="uk-margin-small-right uk-margin-small-left" style="display: inline-block; font-size: 17px; color: #000000;">•</span>
                       <span class="uk-text-italic uk-text-muted uk-margin-small-right">Created:</span>
-                      <span>{{ resourceInfo.metadata?.registeredAt | date}}</span>
+                      <span>{{ datasourceBundle.metadata?.registeredAt | date}}</span>
                     </span>
                   </p>
                 </div>
 
-                <div class="uk-margin-top">
-                  <p [innerHTML]="getPayload(resourceInfo).extras['pitch']"></p>
-                </div>
               </div>
-
-<!--              <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">-->
-<!--                <div class="uk-flex uk-flex-middle">-->
-<!--                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">-->
-<!--                    <span class="material-icons">edit</span>Update-->
-<!--                  </a>-->
-<!--                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle">-->
-<!--                    <span class="material-icons">hide_source</span>Deactivate-->
-<!--                  </a>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <a class="uk-link uk-flex uk-flex-middle">-->
-<!--                    <span class="material-icons">delete</span>Delete-->
-<!--                  </a>-->
-<!--                </div>-->
-<!--              </div>-->
 
               <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
                 <div class="uk-flex uk-flex-middle">
-                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/service/edit', resourceInfo.id]">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/datasource/subprofile/edit', datasourceBundle.datasource.id]">
                     <span class="material-icons">edit</span>Update
                   </a>
-                  <a *ngIf="resourceInfo.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">
-                    <ng-container *ngIf="resourceInfo.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
-                    <ng-container *ngIf="resourceInfo.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
+                  <a *ngIf="datasourceBundle.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(datasourceBundle)">
+                    <ng-container *ngIf="datasourceBundle.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
+                    <ng-container *ngIf="datasourceBundle.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
+                  </a>
+                  <a class="uk-link uk-flex uk-flex-middle" (click)="showDeletionModal(datasourceBundle)">
+                    <ng-container><span class="material-icons">delete</span>Delete</ng-container>
                   </a>
                 </div>
-                <div>
-                  <a class="uk-link uk-flex uk-flex-middle">
-                    <span class="material-icons" (click)="showDeletionModal(resourceInfo)">delete</span>
-                  </a>
+                <div *ngIf="datasourceBundle.status==='pending resource'" class="uk-flex uk-flex-middle">
+                  <button class="uk-button uk-button-link"><span class="material-icons">more_vert</span></button>
+                  <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                      <li (click)="verifyService(datasourceBundle.id, true, 'approved resource')" class="uk-margin-bottom">
+                        <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Service</a>
+                      </li>
+                      <li (click)="verifyService(datasourceBundle.id, false, 'rejected resource')">
+                        <a><i class="fa fa-thumbs-o-down fa-lg uk-margin-small-right"></i>Reject Service</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
