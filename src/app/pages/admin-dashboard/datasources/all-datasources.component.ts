@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Paging} from '../../../entities/paging';
-import {Bundle, Datasource, Service, Vocabulary} from '../../../entities/eic-model';
+import {Bundle, Datasource, Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {URLParameter} from '../../../entities/url-parameter';
 import {FacetValue} from '../../../entities/facet';
@@ -15,8 +15,8 @@ declare var UIkit: any;
 
 export class AllDatasourcesDashboardComponent implements OnInit {
 
-  datasources: Paging<Bundle<Service | Datasource>> = null;
-  selectedService: Bundle<Service | Datasource> = null;
+  datasources: Paging<Bundle<Datasource>> = null;
+  selectedDatasource: Bundle<Datasource> = null;
   resourceState: Vocabulary[] = null;
   providerFacet: FacetValue[] = []
   queryParams: URLParameter[] = []
@@ -205,22 +205,22 @@ export class AllDatasourcesDashboardComponent implements OnInit {
 
   /** <------------- Set filters  **/
 
-  verifyService(id, active, status) {
-    this.resourceService.verifyService(id, active, status).subscribe(
+  verifyDatasource(id, active, status) {
+    this.resourceService.verifyDatasource(id, active, status).subscribe(
       res => this.getDatasources(),
       err => console.log(err),
       () => {}
     );
   }
 
-  toggleServiceActive(bundle: Bundle<Service | Datasource>) {
-    if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
+  toggleDatasourceActive(bundle: Bundle<Datasource>) {
+    if (bundle.status === 'pending datasource' || bundle.status === 'rejected datasource') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
       return;
     }
     this.showLoader = true;
-    this.resourceService.publishService(bundle.id, !bundle.active).subscribe(
+    this.resourceService.publishDatasource(bundle.id, !bundle.active).subscribe(
       res => {},
       error => {
         this.showLoader = false;
@@ -233,21 +233,21 @@ export class AllDatasourcesDashboardComponent implements OnInit {
     );
   }
 
-  showDeletionModal(bundle: Bundle<Service | Datasource>) {
-    this.selectedService = bundle;
-    if (this.selectedService) {
+  showDeletionModal(bundle: Bundle<Datasource>) {
+    this.selectedDatasource = bundle;
+    if (this.selectedDatasource) {
       UIkit.modal('#deletionModal').show();
     }
   }
 
-  deleteService(bundle: Bundle<Service | Datasource>) {
+  deleteDatasource(bundle: Bundle<Datasource>) {
     this.showLoader = true;
-    this.resourceService.deleteService(bundle.id).subscribe(
+    this.resourceService.deleteDatasource(bundle.id).subscribe(
       res => {},
       error => {
         this.showLoader = false;
         this.errorMessage = 'Something went bad. ' + error.error ;
-        // this.getResources();
+        // this.getDatasources();
       },
       () => {
         window.location.reload();
@@ -256,7 +256,4 @@ export class AllDatasourcesDashboardComponent implements OnInit {
     );
   }
 
-  getPayload(bundle : Bundle<Service | Datasource>): Service | Datasource {
-    return bundle.service != null ? bundle.service : bundle.datasource;
-  }
 }

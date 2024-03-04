@@ -81,25 +81,19 @@
                   <div *ngIf="datasourceBundle?.active === false" class="inactive">
                     <div class="uk-label uk-margin-small-right">Inactive</div>
                   </div>
-                  <div *ngIf="datasourceBundle?.status==='approved resource'" class="approved">
+                  <div *ngIf="datasourceBundle?.status==='approved datasource'" class="approved">
                     <div class="uk-label">Approved</div>
                   </div>
-                  <div *ngIf="datasourceBundle?.status==='pending resource'" class="pending">
+                  <div *ngIf="datasourceBundle?.status==='pending datasource'" class="pending">
                     <div class="uk-label">Pending</div>
                   </div>
-                  <div *ngIf="datasourceBundle?.status==='rejected resource'" class="rejected">
+                  <div *ngIf="datasourceBundle?.status==='rejected datasource'" class="rejected">
                     <div class="uk-label">Rejected</div>
                   </div>
                 </div>
 
-                <div class="h5">
+                <div class="h5 uk-margin-bottom uk-margin-top">
                   {{datasourceBundle.id}}
-                </div>
-
-                <div class="uk-margin-top">
-                  <a class="uk-link" [routerLink]="['/service-dashboard', datasourceBundle.datasource.resourceOrganisation, datasourceBundle.datasource.id]">
-                    <h6 class="uk-text-blue">{{datasourceBundle.datasource.name}}</h6>
-                  </a>
                 </div>
 
                 <div class="uk-margin-small-top">
@@ -122,7 +116,7 @@
                   <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/datasource/subprofile/edit', datasourceBundle.datasource.id]">
                     <span class="material-icons">edit</span>Update
                   </a>
-                  <a *ngIf="datasourceBundle.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(datasourceBundle)">
+                  <a *ngIf="datasourceBundle.status==='approved datasource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleDatasourceActive(datasourceBundle)">
                     <ng-container *ngIf="datasourceBundle.active === false"><span class="material-icons">hide_source</span>Activate</ng-container>
                     <ng-container *ngIf="datasourceBundle.active === true"><span class="material-icons">hide_source</span>Deactivate</ng-container>
                   </a>
@@ -130,15 +124,15 @@
                     <ng-container><span class="material-icons">delete</span>Delete</ng-container>
                   </a>
                 </div>
-                <div *ngIf="datasourceBundle.status==='pending resource'" class="uk-flex uk-flex-middle">
+                <div *ngIf="datasourceBundle.status==='pending datasource'" class="uk-flex uk-flex-middle">
                   <button class="uk-button uk-button-link"><span class="material-icons">more_vert</span></button>
                   <div uk-dropdown="mode: click">
                     <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
-                      <li (click)="verifyService(datasourceBundle.id, true, 'approved resource')" class="uk-margin-bottom">
-                        <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Service</a>
+                      <li (click)="verifyDatasource(datasourceBundle.id, true, 'approved datasource')" class="uk-margin-bottom">
+                        <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Datasource</a>
                       </li>
-                      <li (click)="verifyService(datasourceBundle.id, false, 'rejected resource')">
-                        <a><i class="fa fa-thumbs-o-down fa-lg uk-margin-small-right"></i>Reject Service</a>
+                      <li (click)="verifyDatasource(datasourceBundle.id, false, 'rejected datasource')">
+                        <a><i class="fa fa-thumbs-o-down fa-lg uk-margin-small-right"></i>Reject Datasource</a>
                       </li>
                     </ul>
                   </div>
@@ -174,15 +168,15 @@
 </div>
 
 <div id="deletionModal" uk-modal>
-  <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-header uk-h4">Delete Service</div>
+  <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-header uk-h4">Delete Datasource</div>
   <div *ngIf="!loadingMessage" class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-    <div *ngIf="selectedService">
-      <h6>Are you sure you want to delete "{{ selectedService.service.name }}" ?</h6>
-      <p>Deleting a Service is an irreversible action.</p>
+    <div *ngIf="selectedDatasource">
+      <h6>Are you sure you want to delete "{{ selectedDatasource.datasource.id }}" ?</h6>
+      <p>Deleting a Datasource is an irreversible action.</p>
     </div>
     <div class="uk-text-right">
       <button class="uk-button uk-button-secondary uk-modal-close uk-margin-small-right" type="button">Cancel</button>
-      <button *ngIf="selectedService" class="uk-button uk-button-danger uk-modal-close" type="button" (click)="deleteService(selectedService)">Delete</button>
+      <button *ngIf="selectedDatasource" class="uk-button uk-button-danger uk-modal-close" type="button" (click)="deleteDatasource(selectedDatasource)">Delete</button>
     </div>
   </div>
   <div *ngIf="loadingMessage">

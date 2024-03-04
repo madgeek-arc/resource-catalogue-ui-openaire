@@ -177,4 +177,16 @@ export class ResourceService {
   deleteService(id: string) {
     return this.http.delete(this.base + `/services/${id}`, this.options);
   }
+
+  verifyDatasource(id: string, active: boolean, status: string) {
+    return this.http.patch(this.base + `/bundles/datasources/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  publishDatasource(id: string, active: boolean) { // toggles active/inactive service
+    return this.http.patch(this.base + `/bundles/datasources/${id}/publish?active=${active}`, this.options);
+  }
+
+  deleteDatasource(id: string) {
+    return this.http.delete(this.base + `/datasources/${id}`, this.options);
+  }
 }
