@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Paging} from '../../../entities/paging';
-import {Bundle, Datasource, Service, Vocabulary} from '../../../entities/eic-model';
+import {Bundle, Service, Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {URLParameter} from '../../../entities/url-parameter';
 import {FacetValue} from '../../../entities/facet';
@@ -15,8 +15,8 @@ declare var UIkit: any;
 
 export class AllServicesDashboardComponent implements OnInit {
 
-  services: Paging<Bundle<Service | Datasource>> = null;
-  selectedService: Bundle<Service | Datasource> = null;
+  services: Paging<Bundle<Service>> = null;
+  selectedService: Bundle<Service> = null;
   resourceState: Vocabulary[] = null;
   providerFacet: FacetValue[] = []
   queryParams: URLParameter[] = []
@@ -212,7 +212,7 @@ export class AllServicesDashboardComponent implements OnInit {
     );
   }
 
-  toggleServiceActive(bundle: Bundle<Service | Datasource>) {
+  toggleServiceActive(bundle: Bundle<Service>) {
     if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
@@ -232,14 +232,14 @@ export class AllServicesDashboardComponent implements OnInit {
     );
   }
 
-  showDeletionModal(bundle: Bundle<Service | Datasource>) {
+  showDeletionModal(bundle: Bundle<Service>) {
     this.selectedService = bundle;
     if (this.selectedService) {
       UIkit.modal('#deletionModal').show();
     }
   }
 
-  deleteService(bundle: Bundle<Service | Datasource>) {
+  deleteService(bundle: Bundle<Service>) {
     this.showLoader = true;
     this.resourceService.deleteService(bundle.id).subscribe(
       res => {},
@@ -255,7 +255,7 @@ export class AllServicesDashboardComponent implements OnInit {
     );
   }
 
-  getPayload(bundle : Bundle<Service | Datasource>): Service | Datasource {
-    return bundle.service != null ? bundle.service : bundle.datasource;
-  }
+  // getPayload(bundle : Bundle<Service | Datasource>): Service | Datasource {
+  //   return bundle.service != null ? bundle.service : bundle.datasource;
+  // }
 }

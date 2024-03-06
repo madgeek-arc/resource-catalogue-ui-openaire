@@ -93,12 +93,12 @@
                 </div>
 
                 <div class="uk-margin-top">
-                  <img src="{{getPayload(resourceInfo).logo}}" width="140px" height="62px">
+                  <img src="{{resourceInfo.service.logo}}" width="140px" height="62px">
                 </div>
 
                 <div class="uk-margin-top">
-                  <a class="uk-link" [routerLink]="['/service-dashboard', getPayload(resourceInfo).resourceOrganisation, getPayload(resourceInfo).id]">
-                    <h6 class="uk-text-blue">{{getPayload(resourceInfo).name}}</h6>
+                  <a class="uk-link" [routerLink]="['/service-dashboard', resourceInfo.service.resourceOrganisation, resourceInfo.service.id]">
+                    <h6 class="uk-text-blue">{{resourceInfo.service.name}}</h6>
                   </a>
                 </div>
 
@@ -116,7 +116,7 @@
                 </div>
 
                 <div class="uk-margin-top">
-                  <p [innerHTML]="getPayload(resourceInfo).extras['pitch']"></p>
+                  <p [innerHTML]="resourceInfo.service.extras['pitch']"></p>
                 </div>
               </div>
 

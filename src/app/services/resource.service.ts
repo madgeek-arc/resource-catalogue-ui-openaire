@@ -62,7 +62,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.base + '/catalogue-resources/bundles', {params: searchQuery});
+    return this.http.get<Paging<Bundle<Service>>>(this.base + '/bundles/services', {params: searchQuery}); //former /catalogue-resources/bundles
   }
 
   getBundleOfDatasources(urlParameters?: URLParameter[]) {
