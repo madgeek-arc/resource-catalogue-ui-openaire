@@ -17,7 +17,7 @@ export class AllDatasourcesDashboardComponent implements OnInit {
 
   datasources: Paging<Bundle<Datasource>> = null;
   selectedDatasource: Bundle<Datasource> = null;
-  resourceState: Vocabulary[] = null;
+  datasourceState: Vocabulary[] = null;
   providerFacet: FacetValue[] = []
   queryParams: URLParameter[] = []
 
@@ -75,9 +75,9 @@ export class AllDatasourcesDashboardComponent implements OnInit {
     //   () => {this.paginationInit()}
     // );
 
-    this.resourceService.getNewVocabulariesByType('Resource state').subscribe(
+    this.resourceService.getNewVocabulariesByType('Datasource state').subscribe(
       res => {
-        this.resourceState = res;
+        this.datasourceState = res;
         // this.loading = false;
       },
     );
@@ -181,7 +181,7 @@ export class AllDatasourcesDashboardComponent implements OnInit {
     for (const urlParameter of this.queryParams) {
       map[urlParameter.key] = urlParameter.values.join(',');
     }
-    return this.router.navigate(['/admin/services'], {queryParams: map});
+    return this.router.navigate(['/admin/datasources'], {queryParams: map});
   }
   /** <--------------- Handle query params and navigation **/
 
