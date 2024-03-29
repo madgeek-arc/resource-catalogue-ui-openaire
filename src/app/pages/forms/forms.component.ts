@@ -65,7 +65,7 @@ export class FormsComponent implements OnInit{
             }
           );
         } else { // add new
-          console.log('add new');
+          // console.log('add new');
           zip(
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(

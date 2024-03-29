@@ -87,7 +87,7 @@ export class AllDatasourcesDashboardComponent implements OnInit {
     this.resourceService.getBundleOfDatasources(this.queryParams).subscribe(
       res => {
         this.datasources = res;
-        console.log(this.datasources);
+        // console.log(this.datasources);
         res.facets.forEach(facet => {
           if (facet.field === 'resource_organisation') {
             this.providerFacet = facet.values;
