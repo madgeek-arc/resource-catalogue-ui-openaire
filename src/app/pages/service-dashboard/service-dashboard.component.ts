@@ -17,6 +17,7 @@ export class ServiceDashboardComponent implements OnInit {
   public service: Service;
   providerId: string;
   serviceId: string;
+  datasource: Datasource = null;
 
   private sub: Subscription;
 
@@ -31,8 +32,9 @@ export class ServiceDashboardComponent implements OnInit {
     this.serviceId = this.route.snapshot.paramMap.get('resourceId');
 
     this.sub = this.route.params.subscribe(params => {
-      this.resourceService.getServiceOrDatasource(params['resourceId']).subscribe(suc => {
-          this.service = <Service>suc;
+      this.resourceService.getServiceOrDatasourceBundle(params['resourceId']).subscribe(
+        suc => {
+          this.serviceBundle = suc;
         },
         err => {
           if (err.status === 404) {
@@ -40,16 +42,11 @@ export class ServiceDashboardComponent implements OnInit {
           }
           // this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
         }
-      );
-      this.resourceService.getServiceOrDatasourceBundle(params['resourceId']).subscribe(suc => {
-        this.serviceBundle = suc;
-      },
-        err => {
-          if (err.status === 404) {
-            this.router.go('/404');
-          }
-          // this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
-        }
+      )
+
+      this.resourceService.getDatasourceByServiceId(params['resourceId']).subscribe(
+        suc => this.datasource = suc,
+        err => console.log(err)
       )
     });
   }

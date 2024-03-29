@@ -189,4 +189,8 @@ export class ResourceService {
   deleteDatasource(id: string) {
     return this.http.delete(this.base + `/datasources/${id}`, this.options);
   }
+
+  getDatasourceByServiceId(serviceId: string){
+    return this.http.get<Datasource>(this.base + `/datasources/byService/${serviceId}`, this.options);
+  }
 }
