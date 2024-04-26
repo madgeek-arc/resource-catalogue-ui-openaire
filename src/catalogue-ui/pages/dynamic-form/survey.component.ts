@@ -152,12 +152,12 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   parentSubmit() {
-    for (let i = 0; i < this.form.value?.Service?.persistentIdentitySystems.length; i++) {
+    for (let i = 0; i < this.form.value?.Service?.persistentIdentitySystems?.length; i++) {
       if (!this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityType && !this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityTypeSchemes[i]) {
         this.form.value.Service.persistentIdentitySystems[i] = null;
       }
     }
-    for (let i = 0; i < this.form.value?.Service?.researchProductLicensings.length; i++) {
+    for (let i = 0; i < this.form.value?.Service?.researchProductLicensings?.length; i++) {
       if (!this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseName && !this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseURL) {
         this.form.value.Service.researchProductLicensings[i] = null;
       }
