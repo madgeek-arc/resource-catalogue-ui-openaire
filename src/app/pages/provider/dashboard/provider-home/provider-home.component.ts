@@ -51,7 +51,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   }
 
   getResourcesOfProvider() {
-    this.providerService.getServicesOfProvider(this.providerBundle.provider.id).subscribe(
+    this.providerService.getServicesOfProvider(this.providerBundle.provider.id, [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values:['desc']}]).subscribe(
       res => {this.resourceBundles = res.results;},
       error => {console.error(error)},
       () => {
