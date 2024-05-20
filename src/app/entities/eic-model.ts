@@ -204,6 +204,9 @@ export class Service implements Identifiable {
   accessTypes: string[];
   accessModes: string[];
   tags: string[];
+  serviceCategories: string[];
+  marketplaceLocations: string[];
+  horizontalService: boolean;
   geographicalAvailabilities: string[];
   languageAvailabilities: string[];
   resourceGeographicLocations: string[];
