@@ -17,7 +17,7 @@ export const environment = {
   marketplaceBaseURL: '',
   showHelpContent: false,
   sentry: {
-    dsn: 'https://c14ac91c2adaafb644a200288035d5d2@vereniki.athenarc.gr/6',
+    dsn: 'https://c14ac91c2adaafb644a200288035d5d2@sentry.vereniki.athenarc.gr/6',
     environment: 'production',
     tracesSampleRate: 1.0,
     replaysSessionSampleRate: 0.0,
