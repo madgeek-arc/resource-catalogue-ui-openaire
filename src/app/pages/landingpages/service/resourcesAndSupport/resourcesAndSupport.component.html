@@ -1,9 +1,9 @@
-<!--GENERAL INFO-->
+<!--Support-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container uk-container-large uk-margin-large-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
-      <h2>General Info</h2>
+      <h2>Support</h2>
     </div>
 
     <div class="uk-grid uk-grid-match uk-margin-large-top">
@@ -123,7 +123,8 @@
             </div>
           </div>
 
-          <div *ngIf="resourcePayload.version" class="uk-grid-margin uk-text-center">
+          <!--VERSION-->
+          <!--<div *ngIf="resourcePayload.version" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -174,9 +175,9 @@
 
               <p class="uk-margin-medium top">Version: {{resourcePayload.version}}</p>
             </div>
-          </div>
-
-          <div *ngIf="resourcePayload.lastUpdate" class="uk-grid-margin uk-text-center">
+          </div>-->
+          <!--LAST UPDATE-->
+          <!--<div *ngIf="resourcePayload.lastUpdate" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -226,6 +227,64 @@
               </svg>
 
               <p class="uk-margin-medium top">Last Update: {{resourcePayload.lastUpdate.toString() | date}}</p>
+            </div>
+          </div>-->
+
+          <div *ngIf="resourcePayload.extras['faqs'] !== ''" class="uk-grid-margin uk-text-center">
+            <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
+
+              <img class="el-image uk-text-primary" alt="" uk-svg=""
+                   uk-img="dataSrc:/demo/devstack/images/squared-icon-project-management.svg"
+                   src="https://demo.yootheme.com/demo/devstack/images/squared-icon-project-management.svg" width="115"
+                   hidden="">
+              <svg xmlns="http://www.w3.org/2000/svg" width="115" viewBox="0 0 130 130"
+                   class="el-image uk-text-primary uk-svg">
+
+                <defs>
+                  <linearGradient id="svg-defs-gradient-squared-icon-project-management" x1="35" y1="95" x2="95" y2="35"
+                                  gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#7141F1"></stop>
+                    <stop offset="0.7" stop-color="#4D6BD8"></stop>
+                    <stop offset="1" stop-color="#3183E2"></stop>
+                  </linearGradient>
+                  <mask id="svg-defs-mask-squared-icon-project-management">
+                    <path class="uk-preserve"
+                          d="M76.26,60.08c-1.9.51.36,2.58-3.19,3.88-4.21,1.55-2.89-3-6.19,0s1.36,2.09-.52,6.16-4.18-.09-4.36,4.39,2.44.52,4,4.72-3,2.89,0,6.19,2.09-1.36,6.16.52-.09,4.18,4.39,4.36.52-2.44,4.72-4,2.89,3,6.19,0-1.36-2.09.52-6.16,4.18.09,4.36-4.39-2.44-.52-4-4.73,3-2.89,0-6.19-2.09,1.36-6.16-.52.09-4.17-4.39-4.36a5.69,5.69,0,0,0-1.54.11"
+                          fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="2"></path>
+                    <circle class="uk-preserve" cx="77.17" cy="75.15" r="7.08" fill="none" stroke="#fff"
+                            stroke-linejoin="round" stroke-width="2"></circle>
+                    <polyline class="uk-preserve" points="61.61 82.06 37.64 82.06 37.64 43.35 86.49 43.35 86.49 59.94"
+                              fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2"></polyline>
+                    <line class="uk-preserve" x1="37.64" y1="50.72" x2="86.49" y2="50.72" fill="none" stroke="#fff"
+                          stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                    <line class="uk-preserve" x1="46.86" y1="39.66" x2="46.86" y2="46.12" fill="none" stroke="#fff"
+                          stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                    <line class="uk-preserve" x1="77.28" y1="39.66" x2="77.28" y2="46.12" fill="none" stroke="#fff"
+                          stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></line>
+                  </mask>
+                </defs>
+
+                <style>
+
+                  img[src*="squared-icon-project-management.svg"] + svg {
+                    filter: drop-shadow(20px 20px 20px rgba(60, 65, 124, 0.12)) drop-shadow(-20px -20px 20px rgba(255, 255, 255, 0.9));
+                    will-change: filter;
+                  }
+
+                </style>
+
+                <rect class="uk-preserve" x="0" y="0" width="110" height="110" rx="60" fill="#f7f8fc"></rect>
+                <image width="38" height="40" x=36 y=32 xlink:href="../../../../../assets/images/icons/faq@2x.png" clip-path="url(#myCircle)" />
+              </svg>
+
+              <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">FAQs</h5>
+
+<!--              <p class="el-content uk-panel uk-margin-top regular-text">Get answers to common questions about the service.</p>-->
+
+              <button (click)="goto(resourcePayload.extras['faqs'])" class="uk-button uk-button-text">
+                View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
+              </button>
             </div>
           </div>
 
@@ -277,12 +336,12 @@
   </div>
 </div>
 
-<!--CODING MATERIAL-->
+<!--Technical Resources-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
   <div *ngIf="resourcePayload.extras?.['git']?.[0] !== '' || resourcePayload.extras?.['datasets'] !== ''" class="uk-container uk-container-large uk-margin-top uk-margin-bottom">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
-      <h2>Coding material</h2>
+      <h2>Technical Resources</h2>
     </div>
 
     <div class="tm-grid-expand uk-grid-column-small uk-grid-row-large uk-margin-large uk-grid uk-child-width-1-1@s
@@ -363,13 +422,13 @@
   </div>
 </div>
 
-<!--SUPPORTING MATERIAL-->
+<!--Resources-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
   <div *ngIf="resourcePayload.extras['communityCalls'] !== '' || resourcePayload.extras['webinars'] !== ''
               || resourcePayload.extras['tutorials'] !== ''" class="uk-container uk-container-large uk-margin-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
-      <h2>Supporting material</h2>
+      <h2>Resources</h2>
     </div>
 
     <div class="uk-margin-large-top uk-child-width-1-1@s uk-child-width-1-3@m uk-child-width-1-3@l uk-grid-row-large uk-grid-match uk-grid uk-flex-center" uk-grid="">
@@ -611,7 +670,7 @@
         </div>
       </div>
 
-      <div *ngIf="resourcePayload.extras['faqs'] !== ''" class="uk-grid-margin uk-text-center">
+      <div *ngIf="resourcePayload.extras['factsheets'] !== ''" class="uk-grid-margin uk-text-center">
         <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
           <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -656,16 +715,15 @@
             </style>
 
             <rect class="uk-preserve" x="0" y="0" width="130" height="130" rx="24" fill="#f7f8fc"></rect>
-            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/faq@2x.png" clip-path="url(#myCircle)" />
+            <image width="67" height="48" x=32 y=42 xlink:href="../../../../../assets/images/icons/Asset 6@2x.png" clip-path="url(#myCircle)" />
 
           </svg>
 
-          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">FAQs</h5>
+          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">Factsheets</h5>
 
-          <p class="el-content uk-panel uk-margin-top regular-text">Get answers to common questions about the
-            service.</p>
+          <p class="el-content uk-panel uk-margin-top regular-text">Download and read an overview of the service.</p>
 
-          <button (click)="goto(resourcePayload.extras['faqs'])" class="uk-button uk-button-text">
+          <button (click)="goto(resourcePayload.extras['factsheets'])" class="uk-button uk-button-text">
             View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
           </button>
         </div>
@@ -840,7 +898,7 @@
 
           </svg>
 
-          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">Pitch Deck</h5>
+          <h5 class="el-title uk-margin-medium-top uk-margin-remove-bottom">Service overview</h5>
 
           <p class="el-content uk-panel uk-margin-top regular-text">A downloadable presentation of the service value to users, ecosystem, solutions to problems, real life examples, how to start, the process and costs.</p>
 
@@ -908,38 +966,6 @@
             View all<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i>
           </button>
         </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<!--FACTSHEETS-->
-<div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="!!resourcePayload.extras['factsheets']" class="uk-container uk-container-large uk-margin-top">
-
-    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
-      <h2>Factsheets</h2>
-    </div>
-
-    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l uk-margin-large-top uk-flex uk-flex-middle">
-      <div class="uk-flex uk-flex-center">
-        <img src="../../../../../assets/images/factsheets.png" style="max-height:500px">
-      </div>
-
-      <div class="uk-visible@m">
-        <p class="big-text">Download and read an overview of the service</p>
-        <button (click)="goto(resourcePayload.extras['factsheets'])" class="uk-button uk-button-primary uk-margin-medium-top">
-          View all<i class="fa fa-external-link uk-margin-small-left"></i>
-        </button>
-      </div>
-
-      <div class="uk-hidden@m uk-text-center uk-margin-medium-top">
-        <p class="big-text">Download and read an overview of the service</p>
-        <button (click)="goto(resourcePayload.extras['factsheets'])" class="uk-button uk-button-primary uk-margin-medium-top">
-          View all<i class="fa fa-external-link uk-margin-small-left"></i>
-        </button>
       </div>
 
     </div>
