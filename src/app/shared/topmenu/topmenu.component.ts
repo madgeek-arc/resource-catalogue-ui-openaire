@@ -53,7 +53,10 @@ export class AireTopMenuComponent implements OnInit {
         if (this.isLoggedIn) {
           this.userService.getUserInfo().subscribe(
             res => {this.user = res},
-            error => {console.error(error)}
+            error => {
+              this.isLoggedIn = false;
+              console.error(error);
+            }
           )
           this.userService.getMyProviders().subscribe(
             res => {this.myProviders = res},
@@ -87,6 +90,7 @@ export class AireTopMenuComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
+    this.isLoggedIn = false;
   }
 
   getInitials(fullName: string) {
