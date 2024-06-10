@@ -16,13 +16,14 @@ export class AuthenticationService {
     this.isLoggedIn();
   }
 
-  tryLogin() {
-    if (getCookie(this.cookieName) === null) {
+  tryLogin(manual?: boolean) {
+    if (getCookie(this.cookieName) === null || !this.userLoggedIn) {
       console.log('Didn\'t find cookie, user is not logged in.' )
       sessionStorage.setItem('redirectUrl', window.location.pathname);
       this.login();
     } else {
       console.log('found cookie, user is logged in');
+      window.location.reload();
     }
   }
 

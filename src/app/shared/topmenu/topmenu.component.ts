@@ -85,7 +85,7 @@ export class AireTopMenuComponent implements OnInit {
   }
 
   login() {
-    this.authenticationService.tryLogin();
+    this.authenticationService.tryLogin(true);
   }
 
   logout() {
