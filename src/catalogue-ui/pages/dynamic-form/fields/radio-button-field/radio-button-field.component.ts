@@ -35,6 +35,7 @@ export class RadioButtonFieldComponent implements OnInit {
     // console.log(this.form);
 
     this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl.setValue(this.formControl.value.toString());
     // console.log(this.formControl);
     if(this.fieldData.form.dependsOn) {
       // console.log(this.fieldData.form.dependsOn);
