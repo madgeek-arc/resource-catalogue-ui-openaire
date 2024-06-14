@@ -54,7 +54,6 @@ export class ChapterEditComponent implements OnChanges{
 
   ngOnInit() {
     const path = this.route.snapshot.routeConfig.path;
-    console.log(path);
     if (path.includes('/edit/')) {
       this.isEdit = true;
     }
