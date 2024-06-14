@@ -3,8 +3,19 @@
     <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
       <div class="uk-width-1-1@m uk-first-column">
 
-        <div class="titleAndActionsBar uk-flex uk-flex-right" style="min-height: 40px">
-          <div>
+        <div class="titleAndActionsBar" style="min-height: 40px">
+          <div class="">
+            <div class="pageTitle">
+              {{isEdit ? ' Update' : ' Add New'}}{{isService ? ' Service' : ''}}{{isDatasource ? ' Datasource' : ''}}
+            </div>
+            <div *ngIf="isService" class="providerName uk-margin-small-top">
+              <strong>{{form.value.name ? form.value.name : 'Service Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
+            </div>
+            <div *ngIf="isDatasource" class="providerName uk-margin-small-top">
+              <strong>{{datasourceId ? datasourceId : 'Datasource id'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
+            </div>
+          </div>
+          <div class="uk-flex uk-flex-right">
             <button *ngIf="!readonly" class="uk-button uk-button-secondary uk-margin-left"
                     (click)="onSubmit(false)" type="submit"> Save
             </button>
