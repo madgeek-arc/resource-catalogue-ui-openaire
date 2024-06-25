@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Provider, Service, URL} from '../../../entities/eic-model';
@@ -27,6 +27,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   relatedServices: Service[] = null;
   resourcePayload: Service = null;
   cleanView = false;
+  showLogo = false;
 
   constructor(public router: Router, public route: ActivatedRoute, public resourceService: ResourceService, private authenticationService: AuthenticationService) {
   }
@@ -115,6 +116,18 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   goto(url: URL) {
     window.open(url.toString(), '_blank');
+  }
+
+  protected readonly document = document;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.checkNavbarSticky();
+  }
+
+  checkNavbarSticky() {
+    const navbar = document.getElementById('myNavBar');
+    this.showLogo = navbar && navbar.classList.contains('uk-active') && navbar.classList.contains('uk-navbar-sticky');
   }
 
 }
