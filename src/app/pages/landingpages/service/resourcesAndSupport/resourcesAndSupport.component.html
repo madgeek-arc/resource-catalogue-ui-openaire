@@ -297,13 +297,13 @@
 
           <h5 class="uk-margin-medium-bottom">Change Log</h5>
           <ng-container *ngIf="resourcePayload.extras['openAireChangeLog']?.length > 0; else noChangeLog">
-            <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog'] | slice:0:1">
+            <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog'].reverse() | slice:0:1">
               <div class="uk-child-width-1-1" uk-grid>
                 <div class="uk-margin-medium-top">
                   <span class="fs-4">{{changeLog.changeLogVersion}}</span>
                   <span class="fs-5 text-black-50"> ({{changeLog.changeDate | date}})</span>
                 </div>
-                <div *ngFor="let changes of changeLog.logs.reverse()" class="uk-child-width-1-1 uk-margin-remove-top" uk-grid>
+                <div *ngFor="let changes of changeLog.logs" class="uk-child-width-1-1 uk-margin-remove-top" uk-grid>
                   <div class="uk-margin-small-top uk-width-1-1" uk-grid>
                     <div class="uk-width-auto uk-margin-small-right">
                       <div class="badge-success uk-text-center" style="width: 100px" [ngStyle]="{'background-color': badgeColor(changes.type)}">
