@@ -6,13 +6,13 @@
         <div class="titleAndActionsBar" style="min-height: 40px">
           <div class="">
             <div class="pageTitle">
-              {{isEdit ? ' Update' : ' Add New'}}{{isService ? ' Service' : ''}}{{isDatasource ? ' Datasource' : ''}}
+              {{isEdit ? ' Update' : ' Add New'}}{{isService ? ' Service' : ''}}{{isDatasource ? ' Datasource Subprofile' : ''}}
             </div>
             <div *ngIf="isService" class="providerName uk-margin-small-top">
               <strong>{{form.value.name ? form.value.name : 'Service Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
             </div>
             <div *ngIf="isDatasource" class="providerName uk-margin-small-top">
-              <strong>{{datasourceId ? datasourceId : 'Datasource id'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
+              <strong>{{datasourceId ? datasourceId : 'Datasource Subprofile id'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
             </div>
           </div>
           <div class="uk-flex uk-flex-right">
