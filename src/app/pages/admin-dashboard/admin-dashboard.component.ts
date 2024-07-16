@@ -31,7 +31,7 @@ export class AdminDashboardComponent implements OnInit {
           } else if (event.url.includes('datasources')) {
             this.path = 'datasources';
             this.titleIcon = 'grid_view';
-            this.title = 'Datasources';
+            this.title = 'Datasource Subprofiles';
           } else {
             this.path = 'providers';
             this.titleIcon = 'real_estate_agent';
