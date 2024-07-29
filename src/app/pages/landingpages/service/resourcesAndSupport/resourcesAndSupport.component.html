@@ -421,7 +421,9 @@
 <!--Resources-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
   <div *ngIf="resourcePayload.extras['communityCalls'] !== '' || resourcePayload.extras['webinars'] !== ''
-              || resourcePayload.extras['tutorials'] !== ''" class="uk-container uk-container-large uk-margin-top">
+              || resourcePayload.extras['tutorials'] !== '' || resourcePayload.extras['glossary'] !== '' || resourcePayload.extras['factsheets'] !== ''
+              || resourcePayload.extras['guides'] !== '' || resourcePayload.extras['ebook'] !== '' || resourcePayload.extras['pitchdeckPpt'] !== ''
+              || resourcePayload.extras['mediakit'] !== ''" class="uk-container uk-container-large uk-margin-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <h2>Resources</h2>
