@@ -45,6 +45,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               this.resourceService.getUiVocabularies()).subscribe(
               next => {
                   this.resourcePayload = next[0];
+                  this.resourcePayload.extras['openAireChangeLog'].reverse();
                   this.vocabularies = next[1];
                   if(this.resourcePayload.relatedResources == null
                     || this.resourcePayload.relatedResources.length === 0

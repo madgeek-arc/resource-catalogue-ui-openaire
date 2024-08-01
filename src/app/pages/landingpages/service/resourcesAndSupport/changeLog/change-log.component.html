@@ -5,7 +5,7 @@
       <h2>Change Log</h2>
     </div>
 
-    <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog'].reverse()" class="">
+    <div *ngFor="let changeLog of resourcePayload.extras['openAireChangeLog']" class="">
       <div class="uk-child-width-1-1" uk-grid>
         <div class="uk-margin-medium-top">
           <span class="fs-4">{{changeLog.changeLogVersion}}</span>
