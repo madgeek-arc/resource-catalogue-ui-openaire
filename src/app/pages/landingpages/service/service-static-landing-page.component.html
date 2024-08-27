@@ -19,7 +19,7 @@
             <ul class="uk-navbar-nav">
               <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
               <li *ngIf="resourcePayload.extras['paymentCategories'][0]?.paymentTitle" [ngClass]="{'uk-active': path === 'pricing'}">
-                <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
+                <a [routerLink]="'./pricing'" class="service-menu-item">Subscriptions</a>
               </li>
               <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
                 <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
@@ -46,7 +46,7 @@
   <ul class="uk-tab service-tabs" data-uk-tab="{connect:'#team_tabbed',animation: 'slide-bottom'}">
     <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
     <li *ngIf="resourcePayload.extras?.['paymentCategories'][0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
-      <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
+      <a [routerLink]="'./pricing'" class="service-menu-item">Subscriptions</a>
     </li>
     <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
       <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
