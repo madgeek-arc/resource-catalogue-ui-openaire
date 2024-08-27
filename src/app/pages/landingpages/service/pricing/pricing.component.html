@@ -8,7 +8,7 @@
 
       <div *ngFor="let paymentCategory of resourcePayload?.extras?.['paymentCategories']" class="uk-margin-medium-bottom">
         <div class="el-item uk-margin-auto uk-width-large uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child  uk-flex uk-flex-column uk-flex-between"
-        [ngClass]="{'uk-card-default': !paymentCategory['paymentHighlight'], 'uk-card-primary': paymentCategory['paymentHighlight']}">
+        [ngClass]="{'uk-card-default': paymentCategory.paymentHighlight === 'false', 'uk-card-primary': paymentCategory.paymentHighlight === 'true'}">
 
           <div>
             <h5 class="el-meta uk-margin-top uk-margin-remove-bottom uk-text-center">{{paymentCategory['paymentTitle']}}</h5>
