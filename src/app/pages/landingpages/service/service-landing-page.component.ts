@@ -104,8 +104,8 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     }
     if (window.location.toString().includes('overview')) {
       this.path = 'overview';
-    } else if (window.location.toString().includes('pricing')) {
-      this.path = 'pricing';
+    } else if (window.location.toString().includes('subscriptions')) {
+      this.path = 'subscriptions';
     } else if (window.location.toString().includes('resourcesAndSupport')) {
       this.path = 'resourcesAndSupport';
     } else if (window.location.toString().includes('miscellaneous')) {
