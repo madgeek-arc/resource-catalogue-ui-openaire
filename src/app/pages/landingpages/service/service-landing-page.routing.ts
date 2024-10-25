@@ -25,7 +25,7 @@ const serviceLandingPageRoutes: Routes = [
         component: OverviewComponent,
       },
       {
-        path: 'pricing',
+        path: 'subscriptions',
         component: PricingComponent,
       },
       {
