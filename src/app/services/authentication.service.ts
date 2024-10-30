@@ -34,7 +34,7 @@ export class AuthenticationService {
   logout() {
     sessionStorage.clear();
     deleteCookie(this.cookieName);
-    window.location.href = `${environment.AAI_LOGOUT + window.location.origin + this.base}/logout`;
+    window.location.href = `${window.location.origin + this.base}/logout`;
   }
 
   public isLoggedIn(): boolean {
