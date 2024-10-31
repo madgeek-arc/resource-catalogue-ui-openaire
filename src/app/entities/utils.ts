@@ -17,6 +17,7 @@ export function getCookie(name: string): string {
 }
 
 export function deleteCookie(name) {
+  console.log("Cookie Found? " + getCookie(name));
   setCookie(name, '', new Date(0));
 }
 
