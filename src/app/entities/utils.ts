@@ -17,12 +17,11 @@ export function getCookie(name: string): string {
 }
 
 export function deleteCookie(name) {
-  console.log("Cookie exists! " + getCookie(name));
   setCookie(name, '', new Date(0));
 }
 
 export function setCookie(name: string, value: string, expiration: Date, path: string = '') {
     const expires = `expires=${expiration.toUTCString()}`;
     const cpath = path ? `; path=${path}` : '';
-    document.cookie = `${name}=${value}; ${expires}${cpath}; sameSite=None;`;
+    document.cookie = `${name}=${value}; ${expires}${cpath}; sameSite=None; secure=true;`;
 }
