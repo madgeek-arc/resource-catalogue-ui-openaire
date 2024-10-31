@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {deleteCookie, getCookie} from '../entities/utils';
+import {getCookie} from '../entities/utils';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject} from 'rxjs';
 
@@ -34,8 +34,6 @@ export class AuthenticationService {
 
   logout() {
     sessionStorage.clear();
-    deleteCookie(this.cookieName);
-    console.log('Cookie removed! Redirecting...');
     window.location.href = `${window.location.origin + this.base}/logout`;
   }
 

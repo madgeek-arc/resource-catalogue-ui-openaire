@@ -17,10 +17,7 @@ export function getCookie(name: string): string {
 }
 
 export function deleteCookie(name) {
-  console.log("Cookie Found? " + getCookie(name));
-  var d: Date = new Date();
-  d.setTime(d.getTime() + 2 * 1000);
-  setCookie(name, '', d);
+  setCookie(name, '', new Date(0));
 }
 
 export function setCookie(name: string, value: string, expiration: Date, path: string = '/') {
