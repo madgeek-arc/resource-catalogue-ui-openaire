@@ -18,10 +18,12 @@ export function getCookie(name: string): string {
 
 export function deleteCookie(name) {
   console.log("Cookie Found? " + getCookie(name));
-  setCookie(name, '', new Date(0));
+  var d: Date = new Date();
+  d.setTime(d.getTime() + 2 * 1000);
+  setCookie(name, '', d);
 }
 
-export function setCookie(name: string, value: string, expiration: Date, path: string = '') {
+export function setCookie(name: string, value: string, expiration: Date, path: string = '/') {
     const expires = `expires=${expiration.toUTCString()}`;
     const cpath = path ? `; path=${path}` : '';
     document.cookie = `${name}=${value}; ${expires}${cpath}; sameSite=None; secure=true;`;

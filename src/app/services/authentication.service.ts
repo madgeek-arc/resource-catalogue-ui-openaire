@@ -17,7 +17,8 @@ export class AuthenticationService {
   }
 
   tryLogin(manual?: boolean) {
-    if (getCookie(this.cookieName) === null || !this.userLoggedIn) {
+    let cookie = getCookie(this.cookieName);
+    if (cookie === null || cookie === (this.cookieName + "=") || !this.userLoggedIn) {
       console.debug('Didn\'t find cookie, user is not logged in.' )
       sessionStorage.setItem('redirectUrl', window.location.pathname);
       this.login();
