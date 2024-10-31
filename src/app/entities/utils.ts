@@ -2,8 +2,6 @@
  * Created by stefanos on 2/3/2017.
  */
 
-import {environment} from '../../environments/environment';
-
 export function getCookie(name: string): string {
     const ca: Array<string> = document.cookie.split(';');
     const caLen: number = ca.length;
@@ -19,6 +17,7 @@ export function getCookie(name: string): string {
 }
 
 export function deleteCookie(name) {
+  console.log("Cookie Found? " + getCookie(name));
   var d: Date = new Date();
   d.setTime(d.getTime() + 2 * 1000);
   setCookie(name, '', d);
@@ -27,5 +26,5 @@ export function deleteCookie(name) {
 export function setCookie(name: string, value: string, expiration: Date, path: string = '/') {
     const expires = `expires=${expiration.toUTCString()}`;
     const cpath = path ? `; path=${path}` : '';
-    document.cookie = `${name}=${value}; ${expires}${cpath}; domain=${environment.COOKIE_DOMAIN} sameSite=None; secure=true;`;
+    document.cookie = `${name}=${value}; ${expires}${cpath}; sameSite=None; secure=true;`;
 }

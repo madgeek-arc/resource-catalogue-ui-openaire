@@ -35,6 +35,7 @@ export class AuthenticationService {
   logout() {
     sessionStorage.clear();
     deleteCookie(this.cookieName);
+    console.log('Cookie removed! Redirecting...');
     window.location.href = `${window.location.origin + this.base}/logout`;
   }
 
