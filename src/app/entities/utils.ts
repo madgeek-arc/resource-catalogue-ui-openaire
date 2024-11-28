@@ -17,13 +17,11 @@ export function getCookie(name: string): string {
 }
 
 export function deleteCookie(name) {
-    setCookie(name, '', -1);
+  setCookie(name, '', new Date(0));
 }
 
-export function setCookie(name: string, value: string, expireDays: number, path: string = '') {
-    const d: Date = new Date();
-    d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
-    const expires = `expires=${d.toUTCString()}`;
+export function setCookie(name: string, value: string, expiration: Date, path: string = '/') {
+    const expires = `expires=${expiration.toUTCString()}`;
     const cpath = path ? `; path=${path}` : '';
-    document.cookie = `${name}=${value}; ${expires}${cpath}`;
+    document.cookie = `${name}=${value}; ${expires}${cpath}; sameSite=None; secure=true;`;
 }
