@@ -15,9 +15,9 @@
               <strong>{{datasourceId ? datasourceId : 'Datasource Subprofile id'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
             </div>
           </div>
-          <div class="uk-flex uk-flex-right">
+          <div class="uk-flex uk-flex-middle">
             <button *ngIf="!readonly" class="uk-button uk-button-secondary uk-margin-left"
-                    (click)="onSubmit(false)" type="submit"> Save
+                    (click)="onSubmit(false)" type="submit"> Submit
             </button>
           </div>
         </div>
