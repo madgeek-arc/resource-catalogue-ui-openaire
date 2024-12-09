@@ -230,7 +230,7 @@
             </div>
           </div>-->
 
-          <div *ngIf="resourcePayload.extras['faqs'] !== ''" class="uk-grid-margin uk-text-center">
+          <div *ngIf="resourcePayload.extras['faqs']" class="uk-grid-margin uk-text-center">
             <div class="el-item uk-panel uk-margin-remove-first-child uk-scrollspy-inview " uk-scrollspy-class="" style="">
 
               <img class="el-image uk-text-primary" alt="" uk-svg=""
@@ -334,7 +334,7 @@
 
 <!--Technical Resources-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="resourcePayload.extras?.['git']?.[0] !== '' || resourcePayload.extras?.['datasets'] !== ''" class="uk-container uk-container-large uk-margin-top uk-margin-bottom">
+  <div *ngIf="resourcePayload.extras?.['git']?.[0] || resourcePayload.extras?.['datasets']" class="uk-container uk-container-large uk-margin-top uk-margin-bottom">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <h2>Technical Resources</h2>
@@ -342,7 +342,7 @@
 
     <div class="tm-grid-expand uk-grid-column-small uk-grid-row-large uk-margin-large uk-grid uk-child-width-1-1@s
     uk-child-width-1-3@m uk-child-width-1-3@l uk-flex-center" uk-grid="">
-      <div *ngIf="resourcePayload.extras['git']?.[0] !== ''" class="uk-grid-item-match uk-flex-middle uk-flex-first@m uk-first-column">
+      <div *ngIf="resourcePayload.extras['git']?.[0]" class="uk-grid-item-match uk-flex-middle uk-flex-first@m uk-first-column">
 
         <div class="uk-panel uk-width-1-1">
 
@@ -393,7 +393,7 @@
         </div>
       </div>
 
-      <div *ngIf="resourcePayload.extras?.['datasets'] !== ''" class="uk-grid-item-match uk-flex-middle">
+      <div *ngIf="resourcePayload.extras?.['datasets']" class="uk-grid-item-match uk-flex-middle">
         <div class="uk-panel uk-width-1-1">
 
           <div class="uk-margin uk-width-medium uk-margin-auto uk-text-center">
@@ -420,10 +420,10 @@
 
 <!--Resources-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="resourcePayload.extras['communityCalls'] !== '' || resourcePayload.extras['webinars'] !== ''
-              || resourcePayload.extras['tutorials'] !== '' || resourcePayload.extras['glossary'] !== '' || resourcePayload.extras['factsheets'] !== ''
-              || resourcePayload.extras['guides'] !== '' || resourcePayload.extras['ebook'] !== '' || resourcePayload.extras['pitchdeckPpt'] !== ''
-              || resourcePayload.extras['mediakit'] !== ''" class="uk-container uk-container-large uk-margin-top">
+  <div *ngIf="resourcePayload.extras['communityCalls'] || resourcePayload.extras['webinars']
+              || resourcePayload.extras['tutorials'] || resourcePayload.extras['glossary'] || resourcePayload.extras['factsheets']
+              || resourcePayload.extras['guides'] || resourcePayload.extras['ebook'] || resourcePayload.extras['pitchdeckPpt']
+              || resourcePayload.extras['mediakit']" class="uk-container uk-container-large uk-margin-top">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <h2>Resources</h2>
@@ -973,7 +973,7 @@
 
 <!--LATEST NEWS-->
 <div *ngIf="resourcePayload" class="uk-section uk-section-primary uk-preserve-color">
-  <div *ngIf="resourcePayload.extras['latestNews'] !== ''" class="uk-container uk-container-large uk-margin-top">
+  <div *ngIf="resourcePayload.extras['latestNews']" class="uk-container uk-container-large uk-margin-top">
     <div class="text-center">
       <h2>Latest News</h2>
     </div>
