@@ -55,14 +55,8 @@
 
     </div>
 
-    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-1@m uk-child-width-1-1@l">
-      <ul>
-        <li>OpenAIRE members get a 30% discount<br/>
-          For EU organisations, 0% VAT if the VIES check is positive ('Exempt from VAT, article 14, Law 2859/2000').</li>
-        <li>For EU organisations with a VAT check is negative then VAT is charged.</li>
-        <li>For Outside of EU organisations, 0% VAT ('Exempt from VAT, article 14, Law 2859/2000). In that case, organisation must send a Certificate of Good Standing or any relevant documentation that proves its business activity.</li>
-        <li>For organisations with a Greek VATId number, 24% VAT is charged.</li>
-      </ul>
+    <div *ngIf="resourcePayload?.extras?.paymentInformation">
+      <span [innerHTML]="resourcePayload.extras.paymentInformation"></span>
     </div>
 
   </div>
