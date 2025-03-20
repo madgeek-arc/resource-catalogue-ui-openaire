@@ -9,7 +9,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import BitSet from "bitset";
 
 import UIkit from "uikit";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts.vfs;
 declare var require: any;
 const seedRandom = require('seedrandom');
 
