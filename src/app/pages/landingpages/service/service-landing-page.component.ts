@@ -1,11 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {Provider, Service, URL} from '../../../entities/eic-model';
-import {AuthenticationService} from '../../../services/authentication.service';
-import {ResourceService} from '../../../services/resource.service';
-import {environment} from 'src/environments/environment';
-import {zip} from 'rxjs/internal/observable/zip';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Provider, Service, URL } from '../../../entities/eic-model';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { ResourceService } from '../../../services/resource.service';
+import { environment } from 'src/environments/environment';
+import { zip } from 'rxjs/internal/observable/zip';
 
 @Component({
   selector: 'app-service-landing-page',
@@ -27,6 +27,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   relatedServices: Service[] = null;
   resourcePayload: Service = null;
   cleanView = false;
+  showLogo = false;
 
   constructor(public router: Router, public route: ActivatedRoute, public resourceService: ResourceService, private authenticationService: AuthenticationService) {
   }
@@ -44,6 +45,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               this.resourceService.getUiVocabularies()).subscribe(
               next => {
                   this.resourcePayload = next[0];
+                  this.resourcePayload.extras['openAireChangeLog'].reverse();
                   this.vocabularies = next[1];
                   if(this.resourcePayload.relatedResources == null
                     || this.resourcePayload.relatedResources.length === 0
@@ -102,8 +104,8 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     }
     if (window.location.toString().includes('overview')) {
       this.path = 'overview';
-    } else if (window.location.toString().includes('pricing')) {
-      this.path = 'pricing';
+    } else if (window.location.toString().includes('subscriptions')) {
+      this.path = 'subscriptions';
     } else if (window.location.toString().includes('resourcesAndSupport')) {
       this.path = 'resourcesAndSupport';
     } else if (window.location.toString().includes('miscellaneous')) {
@@ -115,6 +117,18 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
   goto(url: URL) {
     window.open(url.toString(), '_blank');
+  }
+
+  protected readonly document = document;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.checkNavbarSticky();
+  }
+
+  checkNavbarSticky() {
+    const navbar = document.getElementById('myNavBar');
+    this.showLogo = navbar && navbar.classList.contains('uk-active') && navbar.classList.contains('uk-navbar-sticky');
   }
 
 }

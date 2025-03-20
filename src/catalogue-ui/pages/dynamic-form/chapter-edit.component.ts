@@ -42,12 +42,30 @@ export class ChapterEditComponent implements OnChanges{
   loaderPercentage = 0;
   tabIndex= 0;
 
+  isEdit = false;
+  isService = false;
+  isDatasource = false;
+  datasourceId = '';
+
   constructor(public route: ActivatedRoute,
               protected fb: FormBuilder,
               protected router: Router) {
   }
 
   ngOnInit() {
+    const path = this.route.snapshot.routeConfig.path;
+    if (path.includes('/edit/')) {
+      this.isEdit = true;
+    }
+    if (path.includes('service/')) {
+      this.isService = true;
+    }
+    if (path.includes('subprofile/')) {
+      this.isDatasource = true;
+    }
+    if (path.includes(':datasourceId')) {
+      this.datasourceId = this.route.snapshot.paramMap.get('datasourceId');
+    }
   }
 
   ngOnChanges(changes:SimpleChanges) {

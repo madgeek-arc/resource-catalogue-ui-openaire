@@ -28,6 +28,10 @@ export class AdminDashboardComponent implements OnInit {
             this.path = 'services';
             this.titleIcon = 'grid_view';
             this.title = 'Services';
+          } else if (event.url.includes('datasources')) {
+            this.path = 'datasources';
+            this.titleIcon = 'grid_view';
+            this.title = 'Datasource Subprofiles';
           } else {
             this.path = 'providers';
             this.titleIcon = 'real_estate_agent';
@@ -87,7 +91,7 @@ export class AdminDashboardComponent implements OnInit {
     this.userService.getInvitationToken(this.inviteeEmail.value).subscribe(
       res=> {
         this.invitationUrl = location.origin + '/join/' + res;
-        console.log(this.invitationUrl);
+        // console.log(this.invitationUrl);
       },
       error => {console.error(error)}
     );

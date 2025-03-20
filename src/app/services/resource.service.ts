@@ -41,7 +41,7 @@ export class ResourceService {
     }
   }
 
-  getServiceOrDatasource(resourceId: string) {
+  getServiceOrDatasource(resourceId: string) { //todo: get rid of this
     return this.http.get<Service | Datasource>(this.base + `/catalogue-resources/${resourceId}`, this.options);
   }
 
@@ -62,7 +62,17 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.base + '/catalogue-resources/bundles', {params: searchQuery});
+    return this.http.get<Paging<Bundle<Service>>>(this.base + '/bundles/services', {params: searchQuery}); //former /catalogue-resources/bundles
+  }
+
+  getBundleOfDatasources(urlParameters?: URLParameter[]) {
+    let searchQuery = new HttpParams();
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        searchQuery = searchQuery.append(urlParameter.key, value);
+      }
+    }
+    return this.http.get<Paging<Bundle<Datasource>>>(this.base + '/bundles/datasources', {params: searchQuery});
   }
 
   getResourceTypeById(id: string) {
@@ -115,14 +125,6 @@ export class ResourceService {
     return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`);
   }
 
-  getService(id: string, version?: string) {
-    // if version becomes optional this should be reconsidered
-    console.log(this.base);
-    console.log(id);
-    console.log(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`);
-    return this.http.get<Service>(this.base + `/service/${version === undefined ? id : [id, version].join('/')}`, this.options);
-  }
-
   getResourcesGroupedByField(field: string, active?: boolean) {
     if (active) return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}?active=true`);
     return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}`);
@@ -136,12 +138,20 @@ export class ResourceService {
     return this.http.post<Service>(this.base + '/services', service, this.options);
   }
 
+  getService(serviceId: string) {
+    return this.http.get<Service>(this.base + `/services/${serviceId}`);
+  }
+
   editService(service: Service) {
     return this.http.put<Service>(this.base + `/services/${service.id}`, service, this.options);
   }
 
   postDatasource(datasource: Datasource) {
-    return this.http.post<Datasource>(this.base + '/services', datasource, this.options);
+    return this.http.post<Datasource>(this.base + '/datasources', datasource, this.options);
+  }
+
+  getDatasource(datasourceId: string) {
+    return this.http.get<Datasource>(this.base + `/datasources/${datasourceId}`);
   }
 
   editDatasource(datasource: Datasource) {
@@ -166,5 +176,21 @@ export class ResourceService {
 
   deleteService(id: string) {
     return this.http.delete(this.base + `/services/${id}`, this.options);
+  }
+
+  verifyDatasource(id: string, active: boolean, status: string) {
+    return this.http.patch(this.base + `/bundles/datasources/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  publishDatasource(id: string, active: boolean) { // toggles active/inactive service
+    return this.http.patch(this.base + `/bundles/datasources/${id}/publish?active=${active}`, this.options);
+  }
+
+  deleteDatasource(id: string) {
+    return this.http.delete(this.base + `/datasources/${id}`, this.options);
+  }
+
+  getDatasourceByServiceId(serviceId: string){
+    return this.http.get<Datasource>(this.base + `/datasources/byService/${serviceId}`, this.options);
   }
 }

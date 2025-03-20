@@ -43,11 +43,35 @@ const appRoutes: Routes = [
     }
   },
   {
-    path: 'provider/:providerId/:resourceType/add',
+    path: 'provider/:providerId/service/add',
     component: FormsComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
-      breadcrumb: 'forms'
+      breadcrumb: 'add service'
+    }
+  },
+  {
+    path: 'service/edit/:resourceId',
+    component: FormsComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'edit service'
+    }
+  },
+  {
+    path: ':resourceType/subprofile/add/:resourceId',
+    component: FormsComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'add datasource'
+    }
+  },
+  {
+    path: ':resourceType/subprofile/edit/:datasourceId',
+    component: FormsComponent,
+    canActivate: [CanActivateViaAuthGuard],
+    data: {
+      breadcrumb: 'edit datasource'
     }
   },
   {
@@ -56,14 +80,6 @@ const appRoutes: Routes = [
     // canActivate: [CanActivateViaAuthGuard],
     data: {
       breadcrumb: 'forms'
-    }
-  },
-  {
-    path: 'edit/:resourceId',
-    component: FormsComponent,
-    canActivate: [CanActivateViaAuthGuard],
-    data: {
-      breadcrumb: 'edit'
     }
   },
   {

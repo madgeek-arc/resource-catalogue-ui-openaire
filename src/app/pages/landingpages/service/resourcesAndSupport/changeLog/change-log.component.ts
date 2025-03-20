@@ -1,7 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {Service} from '../../../../../entities/eic-model';
-import {Router} from '@angular/router';
-import {AuthenticationService} from '../../../../../services/authentication.service';
+import { Component, Input } from '@angular/core';
+import { Service } from '../../../../../entities/eic-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-log',
@@ -12,8 +11,9 @@ export class ChangeLogComponent {
 
   @Input() resourcePayload: Service = null;
 
-  constructor(public router: Router) {}
   cleanView = this.router.url.includes('/changeLogClean');
+
+  constructor(public router: Router) {}
 
   badgeColor(status: string) {
     switch (status) {

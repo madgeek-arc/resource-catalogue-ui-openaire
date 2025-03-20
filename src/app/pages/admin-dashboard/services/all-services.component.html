@@ -4,9 +4,9 @@
     <div class="uk-flex uk-flex-middle">
       <div class="uk-margin-small-right uk-text-muted">Filter by: </div>
       <div *ngIf="resourceState" class="uk-margin-small-right">
-        <ng-select id="provider" (change)="filterSelection('resource_providers', provider)"
+        <ng-select id="provider" (change)="filterSelection('resource_organisation', provider)"
                    [items]="providerFacet" [(ngModel)]="provider"
-                   placeholder="Provider" bindLabel="label" bindValue="value" clearAllText="Clear">
+                   placeholder="Provider" bindLabel="label" bindValue="value" clearAllText="Clear" style="width: 180px">
         </ng-select>
       </div>
       <div *ngIf="resourceState" class="uk-margin-small-right">
@@ -93,12 +93,12 @@
                 </div>
 
                 <div class="uk-margin-top">
-                  <img src="{{getPayload(resourceInfo).logo}}" width="140px" height="62px">
+                  <img src="{{resourceInfo.service.logo}}" width="140px" height="62px">
                 </div>
 
                 <div class="uk-margin-top">
-                  <a class="uk-link" [routerLink]="['/service-dashboard', getPayload(resourceInfo).resourceOrganisation, getPayload(resourceInfo).id]">
-                    <h6 class="uk-text-blue">{{getPayload(resourceInfo).name}}</h6>
+                  <a class="uk-link" [routerLink]="['/service-dashboard', resourceInfo.service.resourceOrganisation, resourceInfo.service.id]">
+                    <h6 class="uk-text-blue">{{resourceInfo.service.name}}</h6>
                   </a>
                 </div>
 
@@ -116,13 +116,13 @@
                 </div>
 
                 <div class="uk-margin-top">
-                  <p [innerHTML]="getPayload(resourceInfo).extras['pitch']"></p>
+                  <p [innerHTML]="resourceInfo.service.extras['pitch']"></p>
                 </div>
               </div>
 
               <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-top">
                 <div class="uk-flex uk-flex-middle">
-                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/edit', resourceInfo.id]">
+                  <a class="uk-link uk-margin-right uk-flex uk-flex-middle" [routerLink]="['/service/edit', resourceInfo.id]">
                     <span class="material-icons">edit</span>Update
                   </a>
                   <a *ngIf="resourceInfo.status==='approved resource'" class="uk-link uk-margin-right uk-flex uk-flex-middle" (click)="toggleServiceActive(resourceInfo)">

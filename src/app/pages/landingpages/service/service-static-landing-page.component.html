@@ -3,23 +3,23 @@
   <div class="loader-big"></div>
 </div>
 <div *ngIf="ready && !cleanView" class="uk-visible@m">
-  <div class=" tm-header uk-visible@m tm-header-transparent service-menu">
-    <div class="uk-navbar-container uk-sticky uk-navbar-transparent" uk-sticky="top:0" media="768"
+  <div class="tm-header uk-visible@m tm-header-transparent service-menu">
+    <div id="myNavBar" class="uk-navbar-container uk-sticky uk-navbar-transparent" uk-sticky="top:0" media="768"
     cls-active="uk-active uk-navbar-sticky" style="" animation="uk-animation-slide-top"
     top=".tm-header + [class*=&quot;uk-section&quot;]" cls-inactive="uk-navbar-transparent">
     <!--<div class="uk-navbar-container uk-navbar-transparent">-->
-      <div class="uk-container uk-container-large">
+      <div class="uk-container uk-container-large uk-padding-remove-left">
         <nav class="uk-navbar" uk-navbar="">
 
-<!--          <div class="" style="padding-top: 20px; padding-bottom: 20px;">-->
-<!--            <img src="{{resourcePayload['logo']}}" alt="logo" style="max-width: 210px; height: 70px;">-->
-<!--          </div>-->
+          <div *ngIf="showLogo" class="" style="padding-top: 20px; padding-bottom: 20px;">
+            <img src="{{resourcePayload['logo']}}" alt="logo" style="max-width: 210px; height: 70px;">
+          </div>
 
           <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
               <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-              <li *ngIf="resourcePayload.extras['paymentCategories'][0]?.paymentTitle" [ngClass]="{'uk-active': path === 'pricing'}">
-                <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
+              <li *ngIf="resourcePayload.extras['paymentCategories'][0]?.paymentTitle" [ngClass]="{'uk-active': path === 'subscriptions'}">
+                <a [routerLink]="'./subscriptions'" class="service-menu-item">Subscriptions</a>
               </li>
               <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
                 <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
@@ -45,8 +45,8 @@
   <!--MOBILE & PAD PORTRAIT-->
   <ul class="uk-tab service-tabs" data-uk-tab="{connect:'#team_tabbed',animation: 'slide-bottom'}">
     <li [ngClass]="{'uk-active': path === 'overview'}"><a [routerLink]="'./overview'" class="service-menu-item">Overview</a></li>
-    <li *ngIf="resourcePayload.extras?.['paymentCategories'][0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'pricing'}">
-      <a [routerLink]="'./pricing'" class="service-menu-item">Pricing</a>
+    <li *ngIf="resourcePayload.extras?.['paymentCategories'][0]?.paymentTitle !== ''" [ngClass]="{'uk-active': path === 'subscriptions'}">
+      <a [routerLink]="'./subscriptions'" class="service-menu-item">Subscriptions</a>
     </li>
     <li [ngClass]="{'uk-active': path === 'resourcesAndSupport'}">
       <a [routerLink]="'./resourcesAndSupport'" class="service-menu-item">Resources & Support</a>
@@ -67,7 +67,7 @@
 
 <div *ngIf="(projectName=='OpenAIRE Catalogue') && canAddOrEditService && !cleanView"
      class="uk-float-right" style="z-index: 100; top: 300px; position: fixed; right: 5px;">
-  <a [routerLink]="['/edit/', id]" style="padding: 10px;" class="uk-icon-button uk-button-primary">
+  <a [routerLink]="['/service/edit/', id]" style="padding: 10px;" class="uk-icon-button uk-button-primary">
     <i class="fa fa-pencil-square-o"></i>
     <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
     <!--</span>-->

@@ -337,14 +337,15 @@ export class ServiceProviderFormComponent implements OnInit {
           },
           () => {
             this.showLoader = false;
-            // if (this.edit) {
-            this.router.navigate([`/provider/${this.newProviderForm.value.abbreviation}/dashboard/home`]);
-            // } else {
+            if (this.edit) {
+            this.router.navigate([`/provider/${this.newProviderForm.value.id}/dashboard/home`]);
+            } else { //add new provider
+              this.router.navigate([`/provider/${this.sanitizeAbbreviation(this.newProviderForm.value.abbreviation)}/dashboard/home`]);
             //   if (environment.projectName === 'OpenAIRE Catalogue')
             //     this.authService.login();
             //   else {
             //     this.authService.login();
-            //   }
+              }
           }
         );
       }
@@ -709,5 +710,13 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** <--Terms Modal **/
+
+  sanitizeAbbreviation(input: string): string {
+    return input.replace(/[\n\t\s]+/g, ' ')
+      .replace(/\s+$/g, '')
+      .replace(/[^a-zA-Z0-9\s\-_/]+/g, '')
+      .replace(/[\/\s]+/g, '_')
+      .toLowerCase();
+  }
 
 }

@@ -22,7 +22,7 @@ export const environment = {
   privacyPolicyURL: '',
   marketplaceBaseURL: '',
   sentry: {
-    dsn: 'https://c14ac91c2adaafb644a200288035d5d2@vereniki.athenarc.gr/6',
+    dsn: 'https://c14ac91c2adaafb644a200288035d5d2@sentry.vereniki.athenarc.gr/6',
     environment: 'develop',
     tracesSampleRate: 1.0,
     replaysSessionSampleRate: 0.2,

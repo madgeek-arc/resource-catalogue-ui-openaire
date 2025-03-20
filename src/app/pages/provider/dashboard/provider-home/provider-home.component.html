@@ -105,7 +105,7 @@
               <ul class="uk-list uk-list-divider">
                 <ng-container *ngFor="let log of loggingInfo; let i = index;">
                   <li>
-                    {{log.type | titlecase}} - {{log.actionType | titlecase}}<span class="uk-align-right">Update: {{formatLogDate(log.date)}}</span>
+                    {{log.type | titlecase}} - {{log.actionType | titlecase}}<span class="uk-align-right">Update: {{log.date | date: 'dd MMM yyyy'}}</span>
                   </li>
                 </ng-container>
               </ul>

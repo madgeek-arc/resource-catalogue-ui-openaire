@@ -8,6 +8,7 @@ import {Paging} from '../entities/paging';
 @Injectable()
 export class DatasourceService {
   base: string = environment.API_ENDPOINT;
+  private options = {withCredentials: true};
 
   constructor(private http: HttpClient) {}
 

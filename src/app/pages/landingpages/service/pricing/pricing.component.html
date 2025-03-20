@@ -1,22 +1,25 @@
 <div class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container uk-container-large uk-margin-large-top uk-margin-large-bottom">
 
-    <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-1@m uk-child-width-1-1@l">
-      <h2>Select a plan</h2>
-      <p class="big-text uk-margin-medium">Most of our services are free at the point of use. <br/>But we do offer different pricing models for local installations and customisations. </p>
-    </div>
+    <h2>Select a plan</h2>
 
     <div *ngIf="resourcePayload?.extras?.['paymentCategories'][0]?.['paymentTitle']"
          class="uk-grid uk-grid-match uk-child-width-1-1@s uk-child-width-1-3@m uk-child-width-1-3@l uk-margin-large-top uk-flex-center">
 
-      <div *ngFor="let paymentCategory of resourcePayload?.extras?.['paymentCategories']">
-        <div class="el-item uk-margin-auto uk-width-large uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child  uk-flex uk-flex-column uk-flex-between"
-        [ngClass]="{'uk-card-default': !paymentCategory['paymentHighlight'], 'uk-card-primary': paymentCategory['paymentHighlight']}">
+      <div *ngFor="let paymentCategory of resourcePayload?.extras?.['paymentCategories']" class="uk-margin-medium-bottom">
+        <div class="el-item uk-margin-auto uk-width-large uk-card uk-card-large uk-card-body uk-margin-remove-first-child uk-flex uk-flex-column uk-flex-between"
+        [ngClass]="{'uk-card-default': paymentCategory.paymentHighlight != 'true', 'uk-card-primary': paymentCategory.paymentHighlight === 'true'}">
 
           <div>
             <h5 class="el-meta uk-margin-top uk-margin-remove-bottom uk-text-center">{{paymentCategory['paymentTitle']}}</h5>
+            <li *ngIf="paymentCategory['paymentSubtitle']" class="uk-margin-top text-center">
+              <div class="text-info">{{ paymentCategory['paymentSubtitle'] }}</div>
+            </li>
             <h3 class="el-title uk-margin-top uk-margin-remove-bottom uk-text-center">
-              <p *ngIf="paymentCategory['paymentPrice']" class="uk-margin-remove">{{paymentCategory['paymentPrice']}} <span>&euro;</span></p>
+              <p *ngIf="paymentCategory['paymentPrice']" class="uk-margin-remove" style="font-size: 24px">{{paymentCategory['paymentPrice']}} <span>&euro;</span>
+                <span *ngIf="paymentCategory['paymentBilling']" style="font-size: 20px"> / {{paymentCategory['paymentBilling']}} &#42;
+                </span>
+              </p>
               <p *ngIf="!paymentCategory['paymentPrice']" class="uk-margin-remove">-</p>
               <p class="uk-text-meta uk-margin-remove">{{paymentCategory['paymentPeriod']}}</p>
             </h3>
@@ -44,9 +47,16 @@
             </button>
           </div>
 
+<!--          <pre>-->
+<!--            {{paymentCategory | json}}-->
+<!--          </pre>-->
         </div>
       </div>
 
+    </div>
+
+    <div *ngIf="resourcePayload?.extras?.paymentInformation">
+      <span [innerHTML]="resourcePayload.extras.paymentInformation"></span>
     </div>
 
   </div>

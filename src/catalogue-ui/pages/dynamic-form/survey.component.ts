@@ -9,7 +9,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import BitSet from "bitset";
 
 import UIkit from "uikit";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts.vfs;
 declare var require: any;
 const seedRandom = require('seedrandom');
 
@@ -152,10 +152,25 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   parentSubmit() {
+    for (let i = 0; i < this.form.value?.Service?.persistentIdentitySystems?.length; i++) {
+      if (!this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityType && !this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityTypeSchemes[i]) {
+        this.form.value.Service.persistentIdentitySystems[i] = null;
+      }
+    }
+    for (let i = 0; i < this.form.value?.Service?.researchProductLicensings?.length; i++) {
+      if (!this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseName && !this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseURL) {
+        this.form.value.Service.researchProductLicensings[i] = null;
+      }
+    }
+    if(!this.form.value?.Service?.researchProductMetadataLicensing?.researchProductMetadataLicenseName && !this.form.value?.Service?.researchProductMetadataLicensing?.researchProductMetadataLicenseURL){
+      this.form.value.Service.researchProductMetadataLicensing = null;
+    }
+    // console.log(this.form);
     this.submit.emit([this.form, this.editMode]);
   }
 
   onSubmit() { // FIXME
+    // console.log('onSubmit');
     window.scrollTo(0, 0);
     // this.showLoader = true;
     // this.formControlService.postItem(this.surveyAnswers.id, this.form.get(this.chapterForSubmission.name).value, this.editMode).subscribe(

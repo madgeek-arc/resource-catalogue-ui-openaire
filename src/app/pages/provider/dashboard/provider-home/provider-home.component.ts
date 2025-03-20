@@ -51,7 +51,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   }
 
   getResourcesOfProvider() {
-    this.providerService.getServicesOfProvider(this.providerBundle.provider.id).subscribe(
+    this.providerService.getServicesOfProvider(this.providerBundle.provider.id, [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values:['desc']}]).subscribe(
       res => {this.resourceBundles = res.results;},
       error => {console.error(error)},
       () => {
@@ -69,9 +69,9 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
     }
   }
 
-  formatLogDate(logDate: string): string {
-    const dateObject = moment(logDate, 'ddd MMM DD HH:mm:ss Z YYYY');
-    return dateObject.format('DD MMM YYYY');
-  }
+  // formatLogDate(logDate: string): string {
+  //   const dateObject = moment(logDate, 'ddd MMM DD HH:mm:ss Z YYYY');
+  //   return dateObject.format('DD MMM YYYY');
+  // }
 
 }

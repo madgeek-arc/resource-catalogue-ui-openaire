@@ -204,6 +204,9 @@ export class Service implements Identifiable {
   accessTypes: string[];
   accessModes: string[];
   tags: string[];
+  // serviceCategories: string[];
+  // marketplaceLocations: string[];
+  // horizontalService: boolean;
   geographicalAvailabilities: string[];
   languageAvailabilities: string[];
   resourceGeographicLocations: string[];
@@ -243,6 +246,9 @@ export class Service implements Identifiable {
 }
 
 export class Datasource extends Service implements Identifiable {
+  id: string;
+  serviceId: string;
+  catalogueId: string;
   submissionPolicyURL: URL;
   preservationPolicyURL: URL;
   versionControl: boolean;
@@ -251,6 +257,7 @@ export class Datasource extends Service implements Identifiable {
   datasourceClassification: string;
   researchEntityTypes: string[];
   thematic: boolean;
+  harvestable: boolean;
   researchProductLicensings: ResearchProductLicensing[];
   researchProductAccessPolicies: string[];
   researchProductMetadataLicensing: ResearchProductMetadataLicensing;

@@ -92,6 +92,22 @@
         </div>
       </div>
 
+      <div *ngIf="resourcePayload.termsOfUse && resourcePayload.termsOfUse !== ''" class="uk-margin-large-top">
+        <div class="el-item uk-card uk-card-default uk-card-large uk-card-body uk-margin-remove-first-child uk-scrollspy-inview uk-flex uk-flex-column uk-flex-between" uk-scrollspy-class="uk-animation-fade" style="">
+
+          <div>
+            <img class="el-image uk-text-emphasis" alt="" src="../../../../../assets/images/icons/Asset%207@2x.png" width="51">
+            <h5 class="el-title uk-card-title uk-margin-top uk-margin-remove-bottom">Terms Of Use</h5>
+            <div class="el-content uk-panel uk-margin-top">A document accessible via a weblink describing the rules, resource conditions and usage policy which one must agree to abide by in order to use the Resource.</div>
+          </div>
+
+          <div class="uk-margin-medium-top">
+            <button (click)="navigateTo(resourcePayload.termsOfUse)" uk-scroll="" class="el-link uk-button uk-button-primary">Read More<i class="fa fa-external-link uk-margin-small-left"></i></button>
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
   </div>
