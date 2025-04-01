@@ -159,11 +159,11 @@ export class ResourceService {
   }
 
   getServiceHistory(serviceId: string) {
-    return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
+    return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}`);
   }
 
   getServiceOrDatasourceBundle(resourceId: string) {
-    return this.http.get<Bundle<Service | Datasource>>(this.base + `/catalogue-resources/bundles/${resourceId}/`);
+    return this.http.get<Bundle<Service | Datasource>>(this.base + `/catalogue-resources/bundles/${resourceId}`);
   }
 
   verifyService(id: string, active: boolean, status: string) {
