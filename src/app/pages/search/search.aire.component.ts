@@ -53,7 +53,7 @@ export class SearchAireComponent implements OnInit {
   constructor(public fb: FormBuilder, public router: Router, public route: ActivatedRoute,
               public resourceService: ResourceService, public session: UserSessionService,
               public comparisonService: ComparisonService) {
-    this.searchForm = fb.group({'query': [''], 'searchFields': ['']});
+    this.searchForm = fb.group({query: [''], searchFields: ['']});
   }
 
   ngOnInit() {
@@ -124,7 +124,7 @@ export class SearchAireComponent implements OnInit {
     this.searchResults = searchResults;
 
     if (this.searchResults.results.length > 0 ) {
-      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation'])
+      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation']);
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {
@@ -184,11 +184,11 @@ export class SearchAireComponent implements OnInit {
         return;
       }
     }
-    this.urlParameters.push({key: key, values: [value]});
+    this.urlParameters.push({key, values: [value]});
   }
 
   navigateUsingParameters() {
-    const map: { [name: string]: string; } = {};
+    const map: { [name: string]: string } = {};
     for (const urlParameter of this.urlParameters) {
       map[urlParameter.key] = urlParameter.values.join(',');
     }

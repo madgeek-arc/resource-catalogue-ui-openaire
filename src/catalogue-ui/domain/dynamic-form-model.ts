@@ -21,9 +21,9 @@ export class TypeInfo {
   type: string;
   values: string[];
   vocabulary: string;
-  multiplicity: boolean
+  multiplicity: boolean;
   /** Newer form models give a vocabulary field a URL instead of a vocabulary name. */
-  properties?: {url?: string, idField?: string, labelField?: string, urlParams?: any};
+  properties?: {url?: string; idField?: string; labelField?: string; urlParams?: any};
 
 
   constructor() {
@@ -130,7 +130,7 @@ export class Field {
     this.parent = '';
     this.label = new StyledText();
     this.accessPath = '';
-    this.typeInfo = new TypeInfo()
+    this.typeInfo = new TypeInfo();
     this.includedInSnippet = false;
     this.form = new Form();
     this.display = new Display();

@@ -7,7 +7,7 @@ import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
   selector: 'app-update-service-provider',
