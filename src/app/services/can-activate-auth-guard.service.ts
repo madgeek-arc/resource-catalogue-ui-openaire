@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {UserSessionService} from './user-session.service';
@@ -9,7 +9,7 @@ import {UserSessionService} from './user-session.service';
  * It waits for the user-info call to answer, so a signed-in user is not sent to log in again on a fresh page load.
  */
 @Injectable()
-export class CanActivateViaAuthGuard implements CanActivate {
+export class CanActivateViaAuthGuard {
   constructor(private session: UserSessionService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
