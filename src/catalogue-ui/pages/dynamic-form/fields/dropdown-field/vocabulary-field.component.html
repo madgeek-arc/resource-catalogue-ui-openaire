@@ -1,13 +1,19 @@
 <form [formGroup]="form" class="{{fieldData.form.display.cssClasses}}">
-  <div *ngIf="fieldData.label.text" class="uk-form-label uk-margin-bottom {{fieldData.label.cssClasses}}"
+  @if (fieldData.label.text) {
+<div class="uk-form-label uk-margin-bottom {{fieldData.label.cssClasses}}"
        [attr.for]="fieldData.name" style="{{fieldData.label.style}}" [innerHTML]="fieldData.label.text + (fieldData.form.mandatory ? ' (*)' : '')">
   </div>
-  <div *ngIf="fieldData.form.description.text" class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
+}
+  @if (fieldData.form.description.text) {
+<div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
        [innerHTML]="fieldData.form.description.text" style="{{fieldData.form.description.style}}">
   </div>
+}
 
-  <div *ngIf="fieldData.typeInfo.multiplicity; else noMultiplicity;" [formArrayName]="fieldData.name">
-    <div *ngFor="let input of fieldAsFormArray().controls; let i=index" class="uk-margin-bottom uk-flex uk-flex-middle">
+  @if (fieldData.typeInfo.multiplicity) {
+<div [formArrayName]="fieldData.name">
+    @for (input of fieldAsFormArray().controls; track input; let i = $index) {
+<div class="uk-margin-bottom uk-flex uk-flex-middle">
       <ng-select class="uk-width-9-10" [id]="fieldData.name" [formControlName]="i"
                  [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.name, i, this.editMode)}"
                  [items]="dynamicVoc?.length > 0 ? dynamicVoc :
@@ -17,22 +23,27 @@
                  bindValue="id"
                  clearAllText="Clear">
       </ng-select>
-      <a *ngIf="fieldAsFormArray().length > 1"
+      @if (fieldAsFormArray().length > 1) {
+<a
          (click)="remove(fieldData.name, i); updateBitSet(fieldData); unsavedChangesPrompt()"
          class="remove-element uk-padding-small uk-animation-slide-top-small">
         <span class="material-icons">clear</span>
       </a>
+}
     </div>
+}
     <div><i><small>{{fieldData.form.suggestion.text}}</small></i></div>
-    <div *ngIf="form.enabled" class="uk-width-9-10 uk-text-center uk-margin-top">
+    @if (form.enabled) {
+<div class="uk-width-9-10 uk-text-center uk-margin-top">
       <a class="add-new-element uk-flex uk-flex-middle uk-flex-center"
          (click)="push(fieldData.name, fieldData.form.mandatory, fieldData.typeInfo.type)">
         <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData.label.text"></span>
       </a>
     </div>
+}
   </div>
+} @else {
 
-  <ng-template #noMultiplicity>
     <ng-select class="uk-width-9-10 uk-margin-small" [id]="fieldData.name" [formControlName]="fieldData.name"
                (change)="updateBitSet(fieldData); unsavedChangesPrompt()"
                [ngClass]="{'uk-form-danger': checkFormValidity()}"
@@ -42,9 +53,14 @@
                bindValue="id"
                clearAllText="Clear">
     </ng-select>
-    <div *ngIf="fieldData.form.suggestion.text" class="uk-margin-top">
+    @if (fieldData.form.suggestion.text) {
+<div class="uk-margin-top">
       <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>
     </div>
-  </ng-template>
+}
+  
+}
+
+  
 
 </form>
