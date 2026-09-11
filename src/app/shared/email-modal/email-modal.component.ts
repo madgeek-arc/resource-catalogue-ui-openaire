@@ -11,7 +11,8 @@ declare let UIkit: any;
 @Component({
   selector: 'app-email-modal',
   templateUrl: './email-modal.component.html',
-  providers: [EmailService]
+  providers: [EmailService],
+  standalone: false
 })
 export class EmailModalComponent {
 

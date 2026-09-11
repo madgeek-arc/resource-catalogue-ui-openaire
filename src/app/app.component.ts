@@ -7,7 +7,8 @@ import {NavigationService} from './services/navigation.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [NavigationService]
+  providers: [NavigationService],
+  standalone: false
 })
 export class AppComponent implements OnInit {
   isLoginOrRegister = false;
