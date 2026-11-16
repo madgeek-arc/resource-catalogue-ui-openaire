@@ -55,9 +55,9 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
       res => {this.resourceBundles = res.results;},
       error => {console.error(error)},
       () => {
-        this.approvedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'approved resource');
-        this.pendingResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'pending resource');
-        this.rejectedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'rejected resource');
+        this.approvedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'approved');
+        this.pendingResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'pending');
+        this.rejectedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'rejected');
       }
     );
   }

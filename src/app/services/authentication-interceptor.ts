@@ -1,10 +1,13 @@
-import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpContextToken, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {Injectable, Injector} from '@angular/core';
 import {AuthenticationService} from './authentication.service';
 
+/** Set on a request whose 404 the caller handles itself (e.g. trying a service id before a datasource id). */
+export const SKIP_NOT_FOUND_REDIRECT = new HttpContextToken<boolean>(() => false);
+export const skipNotFoundRedirect = () => new HttpContext().set(SKIP_NOT_FOUND_REDIRECT, true);
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -47,7 +50,9 @@ export class AuthenticationInterceptor implements HttpInterceptor {
           } else if (response.status === 404 && request.url.includes('/faq/api/page/route')) {
             // avoiding page 404 for non-working faq
           } else if (response.status === 404) {
-            this.router.navigate(['/notFound']);
+            if (!request.context.get(SKIP_NOT_FOUND_REDIRECT)) {
+              this.router.navigate(['/notFound']);
+            }
           } else if (response.status === 0) { // this is a bandage until faq is fixed
             return [];
           } else {

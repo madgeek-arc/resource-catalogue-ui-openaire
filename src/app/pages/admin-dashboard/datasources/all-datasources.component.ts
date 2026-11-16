@@ -214,7 +214,7 @@ export class AllDatasourcesDashboardComponent implements OnInit {
   }
 
   toggleDatasourceActive(bundle: Bundle<Datasource>) {
-    if (bundle.status === 'pending datasource' || bundle.status === 'rejected datasource') {
+    if (bundle.status === 'pending' || bundle.status === 'rejected') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
       return;
