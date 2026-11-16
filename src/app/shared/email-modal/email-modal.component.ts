@@ -3,7 +3,6 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
-import {AuthenticationService} from '../../services/authentication.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {EmailService} from '../../services/email.service';
 
@@ -21,7 +20,7 @@ export class EmailModalComponent {
 
   constructor(public fb: FormBuilder, public router: NavigationService, public route: ActivatedRoute,
               public resourceService: ResourceService,
-              public authenticationService: AuthenticationService, public comparisonService: ComparisonService,
+              public comparisonService: ComparisonService,
               public navigationService: NavigationService, public emailService: EmailService) {
   }
 

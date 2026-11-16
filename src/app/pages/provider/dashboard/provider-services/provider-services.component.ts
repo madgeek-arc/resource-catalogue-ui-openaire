@@ -193,7 +193,7 @@ export class ProviderServicesComponent implements OnInit {
   /** <------------- Set filters  **/
 
   toggleServiceActive(bundle: Bundle<Service | Datasource>) {
-    if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
+    if (bundle.status === 'pending' || bundle.status === 'rejected') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
       return;

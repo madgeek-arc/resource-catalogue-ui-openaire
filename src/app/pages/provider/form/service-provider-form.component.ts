@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as sd from '../../../entities/services.description';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
@@ -171,7 +171,7 @@ export class ServiceProviderFormComponent implements OnInit {
   };
 
   constructor(public fb: FormBuilder,
-              public authService: AuthenticationService,
+              public authService: UserSessionService,
               public providerService: ProviderService,
               public resourceService: ResourceService,
               public router: Router,
@@ -253,7 +253,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   registerProvider(saveDraft: boolean) {
     // console.log('Submit');
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isSignedIn()) {
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
       this.authService.login();
     }

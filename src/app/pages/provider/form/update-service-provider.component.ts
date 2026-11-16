@@ -3,7 +3,7 @@ import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
 import {FormBuilder} from '@angular/forms';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -19,7 +19,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   provider: Provider;
 
   constructor(public fb: FormBuilder,
-              public authService: AuthenticationService,
+              public authService: UserSessionService,
               public providerService: ProviderService,
               public resourceService: ResourceService,
               public router: Router,

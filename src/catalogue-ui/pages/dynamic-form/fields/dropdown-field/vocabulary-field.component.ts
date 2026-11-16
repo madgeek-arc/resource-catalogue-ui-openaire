@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
+import {Field, HandleBitSet, vocabularyName} from "../../../../domain/dynamic-form-model";
 import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {FormControlService} from "../../../../services/form-control.service";
 import {URLValidator} from "../../../../shared/validators/generic.validator";
@@ -27,6 +27,8 @@ export class VocabularyFieldComponent implements OnInit {
   form!: FormGroup;
 
   dynamicVoc: object[] = [];
+  /** Key of this field's options in `vocabularies`. */
+  vocabularyKey: string = null;
 
   constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService, private route: ActivatedRoute) {
   }
@@ -38,6 +40,7 @@ export class VocabularyFieldComponent implements OnInit {
       this.form = this.rootFormGroup.control;
     }
     this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.vocabularyKey = vocabularyName(this.fieldData.typeInfo);
 
     if(this.fieldData.name === 'resourceOrganisation' && this.route.snapshot.paramMap.get('providerId')!==null){
         this.form.get('resourceOrganisation').setValue(this.route.snapshot.paramMap.get('providerId'));

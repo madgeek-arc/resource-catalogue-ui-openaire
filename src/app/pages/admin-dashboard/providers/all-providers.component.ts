@@ -200,7 +200,7 @@ export class AllProvidersDashboardComponent implements OnInit {
   }
 
   toggleProviderActive(bundle: Bundle<Service | Datasource>) {
-    if (bundle.status === 'pending provider' || bundle.status === 'rejected provider') {
+    if (bundle.status === 'pending' || bundle.status === 'rejected') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
       return;

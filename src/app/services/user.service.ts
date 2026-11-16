@@ -15,7 +15,7 @@ export class UserService {
   }
 
   getMyProviders() {
-    return this.http.get<Provider[]>(this.base + '/providers/my');
+    return this.http.get<Provider[]>(this.base + '/oa/providers/my', {withCredentials: true});
   }
 
   getInvitationToken(email: string) {

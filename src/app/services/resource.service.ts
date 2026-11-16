@@ -1,20 +1,23 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {AuthenticationService} from './authentication.service';
+import {skipNotFoundRedirect} from './authentication-interceptor';
 import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
+import {forkJoin, Observable, of} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 
 @Injectable()
 export class ResourceService {
 
   base = environment.API_ENDPOINT;
+  private oa = this.base + '/oa';
   private options = {withCredentials: true};
 
-  constructor(public http: HttpClient, public authenticationService: AuthenticationService) {}
+  constructor(public http: HttpClient) {}
 
   static removeNulls(obj) {
     const isArray = obj instanceof Array;
@@ -41,8 +44,10 @@ export class ResourceService {
     }
   }
 
-  getServiceOrDatasource(resourceId: string) { //todo: get rid of this
-    return this.http.get<Service | Datasource>(this.base + `/catalogue-resources/${resourceId}`, this.options);
+  getServiceOrDatasource(resourceId: string): Observable<Service | Datasource> { //todo: get rid of this
+    return this.http.get<Service>(this.oa + `/services/${resourceId}`, {...this.options, context: skipNotFoundRedirect()}).pipe(
+      catchError(() => this.http.get<Datasource>(this.oa + `/datasources/${resourceId}`, this.options))
+    );
   }
 
   search(urlParameters: URLParameter[]) {
@@ -52,7 +57,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Service>>(this.base + `/services?${searchQuery.toString()}`, this.options);
+    return this.http.get<Paging<Service>>(this.oa + `/services?${searchQuery.toString()}`, this.options);
   }
 
   getBundleOfServices(urlParameters?: URLParameter[]) {
@@ -62,7 +67,7 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Bundle<Service>>>(this.base + '/bundles/services', {params: searchQuery}); //former /catalogue-resources/bundles
+    return this.http.get<Paging<Bundle<Service>>>(this.oa + '/services/bundles', {params: searchQuery, withCredentials: true});
   }
 
   getBundleOfDatasources(urlParameters?: URLParameter[]) {
@@ -72,9 +77,10 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Bundle<Datasource>>>(this.base + '/bundles/datasources', {params: searchQuery});
+    return this.http.get<Paging<Bundle<Datasource>>>(this.oa + '/datasources/bundles', {params: searchQuery, withCredentials: true});
   }
 
+  // TODO: no catalogue-resources endpoint in new API
   getResourceTypeById(id: string) {
     return this.http.get(this.base + `/catalogue-resources/${id}/resourceType`);
   }
@@ -86,12 +92,12 @@ export class ResourceService {
         searchQuery = searchQuery.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Service | Datasource>>(this.base + `/catalogue-resources?active=true`, {params: searchQuery});
+    return this.http.get<Paging<Service | Datasource>>(this.oa + `/services`, {params: searchQuery}); // TODO: new API has no combined services+datasources search
   }
 
   getServicesSnippetByUserContentAndPortfolioType(userType: string, portfolioType?: string) {
     const url = (portfolioType ? `/services?quantity=100&users=${userType}&portfolios=${portfolioType}` : `/services?quantity=100&users=${userType}`);
-    return this.http.get<Paging<Service>>(this.base + url, this.options);
+    return this.http.get<Paging<Service>>(this.oa + url, this.options); // TODO: users/portfolios filters may be unsupported
   }
 
   getVocabularyById(id: string) {
@@ -115,81 +121,96 @@ export class ResourceService {
       let params = new HttpParams();
       params = params.append(type, id);
       params = params.append('quantity','100');
-      return this.http.get<Paging<Service>>(this.base + `/services`, {params});
+      return this.http.get<Paging<Service>>(this.oa + `/services`, {params}); // TODO: vocabulary filters may be unsupported
     } else {
-      return this.http.get<Paging<Service>>(this.base + `/services`);
+      return this.http.get<Paging<Service>>(this.oa + `/services`);
     }
   }
 
-  getServicesByIdArray(idArray: string[]) {
-    return this.http.get<Service[]>(this.base + `/services/ids/${idArray.toString()}`);
+  getServicesByIdArray(idArray: string[]): Observable<Service[]> {
+    if (!idArray || idArray.length === 0) {
+      return of([]);
+    }
+    return forkJoin(idArray.map(id => this.http.get<Service>(this.oa + `/services/${id}`, {context: skipNotFoundRedirect()}).pipe(catchError(() => of(null)))))
+      .pipe(map(services => services.filter(s => s !== null)));
   }
 
-  getResourcesGroupedByField(field: string, active?: boolean) {
-    if (active) return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}?active=true`);
-    return this.http.get<Map<string, Service[] | Datasource[]>>(this.base + `/catalogue-resources/by/${field}`);
+  /**
+   * Active services grouped by the label of a facet value, e.g. 'portfolios' -> {'Assess': [...], ...}.
+   * Values with no services are left out. `active` is kept for callers; the endpoint only returns active records.
+   */
+  getResourcesGroupedByField(field: string, active?: boolean): Observable<Map<string, Service[] | Datasource[]>> {
+    return this.http.get<Map<string, Service[] | Datasource[]>>(this.oa + `/services/by/${field}`);
   }
 
   getMyServiceProviders() {
-    return this.http.get<Provider[]>(this.base + '/providers/my');
+    return this.http.get<Provider[]>(this.oa + '/providers/my', this.options);
   }
 
   postService(service: Service) {
-    return this.http.post<Service>(this.base + '/services', service, this.options);
+    return this.http.post<Service>(this.oa + '/services', service, this.options);
   }
 
   getService(serviceId: string) {
-    return this.http.get<Service>(this.base + `/services/${serviceId}`);
+    return this.http.get<Service>(this.oa + `/services/${serviceId}`);
   }
 
   editService(service: Service) {
-    return this.http.put<Service>(this.base + `/services/${service.id}`, service, this.options);
+    return this.http.put<Service>(this.oa + `/services/${service.id}`, service, this.options);
   }
 
   postDatasource(datasource: Datasource) {
-    return this.http.post<Datasource>(this.base + '/datasources', datasource, this.options);
+    return this.http.post<Datasource>(this.oa + '/datasources', datasource, this.options);
   }
 
   getDatasource(datasourceId: string) {
-    return this.http.get<Datasource>(this.base + `/datasources/${datasourceId}`);
+    return this.http.get<Datasource>(this.oa + `/datasources/${datasourceId}`);
   }
 
   editDatasource(datasource: Datasource) {
-    return this.http.put<Datasource>(this.base + `/datasources/${datasource.id}`, datasource, this.options);
+    return this.http.put<Datasource>(this.oa + `/datasources/${datasource.id}`, datasource, this.options);
   }
 
+  // TODO: no history endpoint in new API
   getServiceHistory(serviceId: string) {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}`);
   }
 
   getServiceOrDatasourceBundle(resourceId: string) {
-    return this.http.get<Bundle<Service | Datasource>>(this.base + `/catalogue-resources/bundles/${resourceId}`);
+    return this.http.get<Bundle<Service | Datasource>>(this.oa + `/services/bundles/${resourceId}`, {...this.options, context: skipNotFoundRedirect()}).pipe(
+      catchError(() => this.http.get<Bundle<Service | Datasource>>(this.oa + `/datasources/bundles/${resourceId}`, this.options))
+    );
   }
 
-  verifyService(id: string, active: boolean, status: string) {
-    return this.http.patch(this.base + `/bundles/services/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  verifyService(id: string, active: boolean, status: string, comment?: string) {
+    // old status values: 'approved resource' | 'rejected resource'
+    const action = status && status.startsWith('rejected') ? 'reject' : 'approve';
+    return this.http.post(this.oa + `/services/bundles/${id}/${action}`, {comment}, this.options);
   }
 
-  publishService(id: string, active: boolean) { // toggles active/inactive service
-    return this.http.patch(this.base + `/bundles/services/${id}/publish?active=${active}`, this.options);
+  publishService(id: string, active: boolean, comment?: string) { // toggles active/inactive
+    return this.http.post(this.oa + `/services/bundles/${id}/${active ? 'activate' : 'deactivate'}`, {comment}, this.options);
   }
 
   deleteService(id: string) {
-    return this.http.delete(this.base + `/services/${id}`, this.options);
+    return this.http.delete(this.oa + `/services/${id}`, this.options);
   }
 
-  verifyDatasource(id: string, active: boolean, status: string) {
-    return this.http.patch(this.base + `/bundles/datasources/${id}/verify?active=${active}&status=${status}`, {}, this.options);
+  verifyDatasource(id: string, active: boolean, status: string, comment?: string) {
+    // old status values: 'approved resource' | 'rejected resource'
+    const action = status && status.startsWith('rejected') ? 'reject' : 'approve';
+    return this.http.post(this.oa + `/datasources/bundles/${id}/${action}`, {comment}, this.options);
   }
 
-  publishDatasource(id: string, active: boolean) { // toggles active/inactive service
-    return this.http.patch(this.base + `/bundles/datasources/${id}/publish?active=${active}`, this.options);
+  publishDatasource(id: string, active: boolean, comment?: string) { // toggles active/inactive
+    return this.http.post(this.oa + `/datasources/bundles/${id}/${active ? 'activate' : 'deactivate'}`, {comment}, this.options);
   }
 
   deleteDatasource(id: string) {
-    return this.http.delete(this.base + `/datasources/${id}`, this.options);
+    return this.http.delete(this.oa + `/datasources/${id}`, this.options);
   }
 
+  // TODO: no datasources/byService endpoint in new API
   getDatasourceByServiceId(serviceId: string){
     return this.http.get<Datasource>(this.base + `/datasources/byService/${serviceId}`, this.options);
   }

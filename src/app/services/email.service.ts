@@ -9,6 +9,7 @@ export class EmailService {
 
   constructor(private http: HttpClient) {}
 
+  // TODO: no sendMailsToProviders endpoint in new API
   sendMail(serviceIds: string[], emailMessage: EmailMessage) {
     return this.http.post<EmailMessage>(this.base + `/request/${serviceIds}/sendMailsToProviders`,
       emailMessage, {withCredentials: true});

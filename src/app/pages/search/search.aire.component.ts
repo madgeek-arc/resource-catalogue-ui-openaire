@@ -6,7 +6,7 @@ import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
-import {AuthenticationService} from '../../services/authentication.service';
+import {UserSessionService} from '../../services/user-session.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {environment} from '../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
@@ -51,7 +51,7 @@ export class SearchAireComponent implements OnInit {
 
 
   constructor(public fb: FormBuilder, public router: Router, public route: ActivatedRoute,
-              public resourceService: ResourceService, public authenticationService: AuthenticationService,
+              public resourceService: ResourceService, public session: UserSessionService,
               public comparisonService: ComparisonService) {
     this.searchForm = fb.group({'query': [''], 'searchFields': ['']});
   }
@@ -104,16 +104,18 @@ export class SearchAireComponent implements OnInit {
     );
 
     this.canAddOrEditService = false;
-    if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
-      this.myProviders = [];
-      this.resourceService.getMyServiceProviders().subscribe(
-        res => this.myProviders = res,
-        error => console.log(error),
-        () => {
-          this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-        }
-      );
-    }
+    this.session.ready$.subscribe(user => {
+      if (user && this.projectName === 'OpenAIRE Catalogue') {
+        this.myProviders = [];
+        this.resourceService.getMyServiceProviders().subscribe(
+          res => this.myProviders = res,
+          error => console.log(error),
+          () => {
+            this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+          }
+        );
+      }
+    });
   }
 
   updateSearchResultsSnippets(searchResults: Paging<Service | Datasource>) {
@@ -122,7 +124,7 @@ export class SearchAireComponent implements OnInit {
     this.searchResults = searchResults;
 
     if (this.searchResults.results.length > 0 ) {
-      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resource_organisation'])
+      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation'])
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {

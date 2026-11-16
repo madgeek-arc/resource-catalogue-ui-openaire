@@ -44,8 +44,11 @@ export class DateFieldComponent implements OnInit {
       );
     }
 
-    if (this.formControl.value?.includes('T')) { //parse Date
-      this.formControl.setValue(this.formControl.value.split('T')[0]);
+    const value = this.formControl.value;
+    if (typeof value === 'number') { // the new API sends dates as epoch milliseconds
+      this.formControl.setValue(new Date(value).toISOString().split('T')[0]);
+    } else if (typeof value === 'string' && value.includes('T')) { //parse Date
+      this.formControl.setValue(value.split('T')[0]);
     }
     // console.log(this.fieldData);
     // console.log(this.form);

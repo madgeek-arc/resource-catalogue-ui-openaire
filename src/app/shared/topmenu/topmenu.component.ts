@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../services/authentication.service';
+import {UserSessionService} from '../../services/user-session.service';
 import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
@@ -23,12 +23,13 @@ export class AireTopMenuComponent implements OnInit {
   user: UserInfo = null;
   myProviders: Provider[] = [];
   isLoggedIn: boolean = false;
+  loading: boolean = true;
 
   dashboardMode: boolean = false;
 
   public portfolioItemActive: string = null;
 
-  constructor(public authenticationService: AuthenticationService, public router: Router, public resourceService: ResourceService,
+  constructor(public session: UserSessionService, public router: Router, public resourceService: ResourceService,
               private dataSharingService: DataSharingService, private userService: UserService, private route: ActivatedRoute) {}
 
   ngOnInit() {
@@ -47,26 +48,19 @@ export class AireTopMenuComponent implements OnInit {
       }
     });
 
-    this.authenticationService.userLoggedIn.subscribe(
-      next => {
-        this.isLoggedIn = next;
-        if (this.isLoggedIn) {
-          this.userService.getUserInfo().subscribe(
-            res => {this.user = res},
-            error => {
-              this.isLoggedIn = false;
-              console.error(error);
-            }
-          )
-          this.userService.getMyProviders().subscribe(
-            res => {this.myProviders = res},
-            error => {console.error(error)}
-          )
-        } else {
-          this.user = null;
-        }
+    // Login state comes only from the user-info call (see UserSessionService); there is no cookie to read.
+    this.session.loading$.subscribe(loading => this.loading = loading);
+    this.session.user$.subscribe(user => {
+      this.user = user;
+      this.isLoggedIn = user !== null;
+      this.myProviders = [];
+      if (this.isLoggedIn) {
+        this.userService.getMyProviders().subscribe(
+          res => {this.myProviders = res},
+          error => {console.error(error)}
+        );
       }
-    );
+    });
 
   }
 
@@ -85,12 +79,11 @@ export class AireTopMenuComponent implements OnInit {
   }
 
   login() {
-    this.authenticationService.tryLogin(true);
+    this.session.login();
   }
 
   logout() {
-    this.authenticationService.logout();
-    this.isLoggedIn = false;
+    this.session.logout();
   }
 
   getInitials(fullName: string) {
