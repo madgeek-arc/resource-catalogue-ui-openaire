@@ -22,6 +22,8 @@ export class TypeInfo {
   values: string[];
   vocabulary: string;
   multiplicity: boolean
+  /** Newer form models give a vocabulary field a URL instead of a vocabulary name. */
+  properties?: {url?: string, idField?: string, labelField?: string, urlParams?: any};
 
 
   constructor() {
@@ -30,6 +32,23 @@ export class TypeInfo {
     this.vocabulary = null;
     this.multiplicity = false;
   }
+}
+
+/**
+ * The vocabulary name a field's options are keyed by in the vocabularies map (/vocabularies/mappings).
+ * Older form models set `typeInfo.vocabulary`; newer ones only set `typeInfo.properties.url`, such as
+ * `/api/vocabulary/types/Target%20user?parent_id=...`, whose last path segment is the name ('Target user').
+ */
+export function vocabularyName(typeInfo: TypeInfo): string | null {
+  if (typeInfo?.vocabulary) {
+    return typeInfo.vocabulary;
+  }
+  const url = typeInfo?.properties?.url;
+  if (!url) {
+    return null;
+  }
+  const lastSegment = url.split('?')[0].split('/').filter(Boolean).pop();
+  return lastSegment ? decodeURIComponent(lastSegment) : null;
 }
 
 export class Form {

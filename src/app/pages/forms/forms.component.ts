@@ -53,9 +53,8 @@ export class FormsComponent implements OnInit{
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
-              this.payloadAnswer = {'answer': {'Service': {}}};
-              this.payloadAnswer['answer'].Service = next[0];
               this.model = next[1].results[0];
+              this.payloadAnswer = {'answer': {[this.sectionName]: next[0]}};
               this.vocabulariesMap = next[2];
             },
             error => {console.log(error)},
@@ -86,10 +85,18 @@ export class FormsComponent implements OnInit{
     );
   }
 
+  /**
+   * The form group holding the resource is named after the model's section: 'service' or 'datasource' in the
+   * current form models ('Service' in older ones).
+   */
+  get sectionName(): string {
+    return this.model?.sections?.[0]?.name || 'Service';
+  }
+
   submitForm(value) {
     this.ready = false;
     // console.log(value[0].get('Service').value);
-    let service: Service = {...value[0].get('Service').value};
+    let service: Service = {...value[0].get(this.sectionName).value};
     // for (const element in value[0].get('Service').controls) {
     //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
     //   console.log(value[0].get('Service').get(element).value);
@@ -122,7 +129,7 @@ export class FormsComponent implements OnInit{
       }
     }
     if (this.resourceType === 'datasource') {
-      let datasource: Datasource = {...value[0].get('Service').value};
+      let datasource: Datasource = {...value[0].get(this.sectionName).value};
       let id = this.resourceId;
       if (!id) id = this.datasourceId;
       datasource.id = id;
