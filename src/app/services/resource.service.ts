@@ -7,7 +7,7 @@ import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
 import {forkJoin, Observable, of} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 
 
 @Injectable()
@@ -136,23 +136,11 @@ export class ResourceService {
   }
 
   /**
-   * Active services grouped by the name of a vocabulary entry (e.g. 'portfolios' -> {'Assess': [...], ...}).
-   * The new API has no catalogue-resources/by/{field} endpoint, so this reads the vocabulary and runs one filtered
-   * /oa/services search per entry (the list endpoint only returns active services).
+   * Active services grouped by the label of a facet value, e.g. 'portfolios' -> {'Assess': [...], ...}.
+   * Values with no services are left out. `active` is kept for callers; the endpoint only returns active records.
    */
   getResourcesGroupedByField(field: string, active?: boolean): Observable<Map<string, Service[] | Datasource[]>> {
-    const vocabularyType = field.charAt(0).toUpperCase() + field.slice(1); // portfolios -> Portfolios
-    return this.getNewVocabulariesByType(vocabularyType).pipe(
-      switchMap(vocabularies => (vocabularies || []).length === 0 ? of([]) : forkJoin(vocabularies.map(vocabulary => {
-        const params = new HttpParams().append(field, vocabulary.id).append('quantity', '100');
-        return this.http.get<Paging<Service>>(this.oa + '/services', {params}).pipe(
-          map(paging => [vocabulary.name, paging.results] as [string, Service[]]),
-          catchError(() => of([vocabulary.name, []] as [string, Service[]]))
-        );
-      }))),
-      // Templates read it both as resources[name] and with the keyvalue pipe, so return a plain object.
-      map(groups => groups.reduce((acc, [name, services]) => ({...acc, [name]: services}), {}) as any)
-    );
+    return this.http.get<Map<string, Service[] | Datasource[]>>(this.oa + `/services/by/${field}`);
   }
 
   getMyServiceProviders() {
