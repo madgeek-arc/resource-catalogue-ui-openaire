@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Provider, Service, URL } from '../../../entities/eic-model';
-import { AuthenticationService } from '../../../services/authentication.service';
+import { UserSessionService } from '../../../services/user-session.service';
 import { ResourceService } from '../../../services/resource.service';
 import { environment } from 'src/environments/environment';
 import { zip } from 'rxjs/internal/observable/zip';
@@ -29,7 +29,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   cleanView = false;
   showLogo = false;
 
-  constructor(public router: Router, public route: ActivatedRoute, public resourceService: ResourceService, private authenticationService: AuthenticationService) {
+  constructor(public router: Router, public route: ActivatedRoute, public resourceService: ResourceService, private session: UserSessionService) {
   }
 
   ngOnInit() {
@@ -70,17 +70,18 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
     );
 
     this.canAddOrEditService = false;
-    // console.log('is logged in: ' + this.authenticationService.isLoggedIn());
-    if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
-      this.myProviders = [];
-      this.resourceService.getMyServiceProviders().subscribe(
-        res => this.myProviders = res,
-        error => console.log(error.error),
-        () => {
-          this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-        }
-      );
-    }
+    this.session.ready$.subscribe(user => {
+      if (user && this.projectName === 'OpenAIRE Catalogue') {
+        this.myProviders = [];
+        this.resourceService.getMyServiceProviders().subscribe(
+          res => this.myProviders = res,
+          error => console.log(error.error),
+          () => {
+            this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+          }
+        );
+      }
+    });
   }
 
   ngOnDestroy(): void {

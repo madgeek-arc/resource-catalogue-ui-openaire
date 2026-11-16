@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {SmoothScroll} from './services/smooth-scroll';
-import {AuthenticationService} from './services/authentication.service';
 import {NavigationService} from './services/navigation.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [AuthenticationService, NavigationService]
+  providers: [NavigationService]
 })
 export class AppComponent implements OnInit {
   isLoginOrRegister = false;
@@ -18,8 +17,7 @@ export class AppComponent implements OnInit {
   cleanView = false;
   dashboardView = false;
 
-  constructor(public router: Router, private auth: AuthenticationService) {
-    this.auth.redirect();
+  constructor(public router: Router) {
   }
 
   ngOnInit() {

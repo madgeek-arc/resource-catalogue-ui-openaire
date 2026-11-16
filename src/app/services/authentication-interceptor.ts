@@ -1,74 +1,56 @@
-import { HttpClient, HttpContext, HttpContextToken, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import {Injectable, Injector} from '@angular/core';
-import {AuthenticationService} from './authentication.service';
+import {
+  HttpContext,
+  HttpContextToken,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {EMPTY, Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 
 /** Set on a request whose 404 the caller handles itself (e.g. trying a service id before a datasource id). */
 export const SKIP_NOT_FOUND_REDIRECT = new HttpContextToken<boolean>(() => false);
 export const skipNotFoundRedirect = () => new HttpContext().set(SKIP_NOT_FOUND_REDIRECT, true);
 
+/**
+ * Handles failed API calls in one place. Every error still reaches the caller as the original HttpErrorResponse.
+ *  - 401: nothing to do here. The user-info call gets a 401 on every anonymous visit; that only means "signed out".
+ *  - 403: show the forbidden page, except for the user-info call, which must never move the visitor.
+ *  - 404: show the not-found page, unless the request opted out with SKIP_NOT_FOUND_REDIRECT.
+ */
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
-  constructor(public http: HttpClient, public router: Router, private authService: AuthenticationService) {
-  }
+  constructor(public router: Router) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // const authenticationService = this.injector.get(AuthenticationService);
-
     return next.handle(request).pipe(
       catchError((response: HttpErrorResponse) => {
-        let errorMessage: string;
-        if (response.error.message) {
-          errorMessage = response.error.message;
-        } else {
-          // if (response.error.length > 100) {
-          //   errorMessage = 'Server error';
-          // } else {
-            errorMessage = response.error;
-          // }
-        }
-        const message = errorMessage;
         if (response.error instanceof ErrorEvent) {
-          // A client-side or network error occurred. Handle it accordingly.
+          // A client-side or network error occurred.
           console.error('An error occurred:', response.error.message);
-        } else {
-          if (response.status === 401) {
-
-            // authenticationService.redirectURL = this.router.url
-            // authenticationService.login();
-            // console.log(response.url.includes('user/info'));
-            // console.log('came here don\'t know what to do...');
-            if (response.url.includes('user/info')) {
-              sessionStorage.clear();
-            }
-            return null;
-          } else if (response.status === 403) {
+        } else if (response.status === 403) {
+          if (!request.url.includes('user/info')) {
             this.router.navigate(['/forbidden']);
-          } else if (response.status === 404 && request.url.includes('/faq/api/page/route')) {
-            // avoiding page 404 for non-working faq
-          } else if (response.status === 404) {
-            if (!request.context.get(SKIP_NOT_FOUND_REDIRECT)) {
-              this.router.navigate(['/notFound']);
-            }
-          } else if (response.status === 0) { // this is a bandage until faq is fixed
-            return [];
-          } else {
-            console.error(
-              `Backend returned code ${response.status}, ` +
-              `body was: ${JSON.stringify(errorMessage)}`);
           }
+        } else if (response.status === 404 && request.url.includes('/faq/api/page/route')) {
+          // avoiding page 404 for non-working faq
+        } else if (response.status === 404) {
+          if (!request.context.get(SKIP_NOT_FOUND_REDIRECT)) {
+            this.router.navigate(['/notFound']);
+          }
+        } else if (response.status === 0) { // this is a bandage until faq is fixed
+          return EMPTY;
+        } else if (response.status !== 401) {
+          console.error(`Backend returned code ${response.status}, body was: ${JSON.stringify(response.error)}`);
         }
-        // return an observable with a user-facing error message
-        // Uncomment to enable modal errors
-        // UIkit.notification.closeAll();
-        // UIkit.notification({message: message, status: 'danger', pos: 'top-center', timeout: 5000});
         return throwError(response);
       })
     );
-
   }
 
 }

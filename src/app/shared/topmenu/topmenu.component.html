@@ -165,7 +165,7 @@
               <svg height="60" width="60">
                 <circle cx="30" cy="30" r="20" stroke-width="1"></circle>
                 <text dy=".4em" font-size="16" text-anchor="middle" x="50%" y="50%" class="">
-                  {{getInitials(user.fullname)}}
+                  {{getInitials(session.displayName)}}
                 </text>
               </svg>
             </a>
@@ -174,7 +174,7 @@
               <ul class="uk-nav uk-padding-small">
                 <li class="">
                   <div>
-                    <div class="uk-text-bold">{{user.fullname}}</div>
+                    <div class="uk-text-bold">{{session.displayName}}</div>
                     <div class="uk-text-meta">{{user.email}}</div>
                   </div>
                 </li>
@@ -184,7 +184,7 @@
                     <span class="material-icons uk-margin-right">group</span>{{provider.name}}
                   </a>
                 </li>
-                <ng-container *ngIf="user.roles.includes('ADMIN') || user.roles.includes('ONBOARDING_TEAM')">
+                <ng-container *ngIf="user.roles?.includes('ADMIN') || user.roles?.includes('ONBOARDING_TEAM')">
                   <hr>
                   <li class="groups" (click)="hideDrop('#userActions')">
                     <a [routerLink]="['/admin/providers']" class="text-black">
@@ -200,7 +200,8 @@
             </div>
           </div>
           <ng-template #loginButton>
-            <div class="uk-navbar-right">
+            <!-- Hidden while the user-info call is pending, so "Login" does not flash for a signed-in user. -->
+            <div *ngIf="!loading" class="uk-navbar-right">
               <a class="uk-navbar-item" (click)="this.login()"><span class="material-icons uk-margin-right">login</span>Login</a>
             </div>
           </ng-template>

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {AuthenticationService} from './authentication.service';
 import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
 import {forkJoin, Observable, of} from 'rxjs';
@@ -11,7 +10,7 @@ import {URLParameter} from '../entities/url-parameter';
 @Injectable()
 export class ProviderService {
 
-  constructor(public http: HttpClient, public authenticationService: AuthenticationService) {
+  constructor(public http: HttpClient) {
   }
 
   private base = environment.API_ENDPOINT;

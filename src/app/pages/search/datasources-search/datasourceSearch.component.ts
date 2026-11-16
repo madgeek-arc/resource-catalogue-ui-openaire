@@ -4,7 +4,6 @@ import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
 import {Paging} from '../../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../../shared/pipes/premium-sort.pipe';
-import {AuthenticationService} from '../../../services/authentication.service';
 import {DatasourceService} from '../../../services/datasource.service';
 import {environment} from '../../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
@@ -43,8 +42,7 @@ export class DatasourceSearchComponent implements OnInit {
   loading = false;
 
 
-  constructor(public router: Router, public route: ActivatedRoute, public datasourceService: DatasourceService,
-              public authenticationService: AuthenticationService) {
+  constructor(public router: Router, public route: ActivatedRoute, public datasourceService: DatasourceService) {
   }
 
   ngOnInit() {

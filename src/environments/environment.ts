@@ -11,8 +11,8 @@ export const environment = {
   // API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
   // API_ENDPOINT: '/openaire', // old API
   API_ENDPOINT: '/api', // to change the end point go to proxy.conf.json file
-  AAI_LOGIN: '/login',
-  AAI_LOGOUT: 'https://aai.openaire.eu/proxy/saml2/idp/SingleLogoutService.php?ReturnTo=',
+  AAI_LOGIN: '/oauth2/authorization/openaire',
+  AAI_LOGOUT: '/logout',
   STATS_ENDPOINT: 'https://providers.eosc-portal.eu/stats-api/',
   API_TOKEN_ENDPOINT: '',
   projectName: 'OpenAIRE Catalogue',

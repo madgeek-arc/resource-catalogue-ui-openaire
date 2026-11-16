@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {AuthenticationService} from './authentication.service';
 import {skipNotFoundRedirect} from './authentication-interceptor';
 import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource, Bundle} from '../entities/eic-model';
@@ -18,7 +17,7 @@ export class ResourceService {
   private oa = this.base + '/oa';
   private options = {withCredentials: true};
 
-  constructor(public http: HttpClient, public authenticationService: AuthenticationService) {}
+  constructor(public http: HttpClient) {}
 
   static removeNulls(obj) {
     const isArray = obj instanceof Array;
