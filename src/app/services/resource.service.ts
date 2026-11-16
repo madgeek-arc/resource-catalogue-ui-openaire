@@ -173,7 +173,7 @@ export class ResourceService {
 
   // TODO: no history endpoint in new API
   getServiceHistory(serviceId: string) {
-    return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
+    return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}`);
   }
 
   getServiceOrDatasourceBundle(resourceId: string) {
