@@ -5,7 +5,8 @@ export default defineConfig({
     server: {
       deps: {
         // Angular libraries are run through Vite: left to Node they would load a second copy of @angular/core.
-        inline: [/@angular\//],
+        // ng2-date-picker imports dayjs plugins without a file extension, which only Vite resolves.
+        inline: [/@angular\//, /ng2-date-picker/],
       },
     },
   },

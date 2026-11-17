@@ -1,12 +1,11 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {authGuard} from '../../services/auth.guard';
 import {AdminDashboardComponent} from './admin-dashboard.component';
 import {AllProvidersDashboardComponent} from './providers/all-providers.component';
 import {AllServicesDashboardComponent} from './services/all-services.component';
 import {AllDatasourcesDashboardComponent} from './datasources/all-datasources.component';
 
-const adminRoutes: Routes = [
+export const ADMIN_ROUTES: Routes = [
   {
     path: '',
     component: AdminDashboardComponent,
@@ -43,11 +42,3 @@ const adminRoutes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(adminRoutes)],
-  exports: [RouterModule]
-})
-
-export class AdminRouting {
-}

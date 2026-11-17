@@ -17,5 +17,9 @@
       "node_modules/@types"
     ],
     "useDefineForClassFields": false
+  },
+  // Shared by the app and spec builds. Template type errors are fixed and this is switched on later.
+  "angularCompilerOptions": {
+    "strictTemplates": false
   }
 }

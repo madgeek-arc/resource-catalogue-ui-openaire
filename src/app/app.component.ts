@@ -1,5 +1,8 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
+import {AireFooterComponent} from './shared/footer/footer.component';
+import {CookieLawComponent} from './shared/reusablecomponents/cookie-law/cookie-law.component';
 import {SmoothScroll} from './services/smooth-scroll';
 
 @Component({
@@ -7,7 +10,7 @@ import {SmoothScroll} from './services/smooth-scroll';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+  imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieLawComponent],
 })
 export class AppComponent implements OnInit {
   isLoginOrRegister = false;

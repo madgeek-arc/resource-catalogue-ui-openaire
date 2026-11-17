@@ -1,6 +1,4 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {CommonModule} from '@angular/common';
+import {Routes} from '@angular/router';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {authGuard} from './services/auth.guard';
 import {ForbiddenPageComponent} from './shared/forbidden-page/forbidden-page.component';
@@ -15,7 +13,7 @@ import {ProviderJoinComponent} from './pages/provider/join/provider-join.compone
 import {JoinComponent} from './pages/public/join.component';
 import {AboutComponent} from './pages/public/about.component';
 
-const appRoutes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: '/home',
@@ -127,24 +125,24 @@ const appRoutes: Routes = [
   },
   {
     path: 'provider',
-    loadChildren: () => import('../app/pages/provider/provider.module').then(m => m.ProviderModule),
+    loadChildren: () => import('./pages/provider/provider.routes').then(m => m.PROVIDER_ROUTES),
     canActivate: [authGuard]
   },
 
   {
     path: 'service-dashboard',
-    loadChildren: () => import('./pages/service-dashboard/service-dashboard.module').then(m => m.ServiceDashboardModule),
+    loadChildren: () => import('./pages/service-dashboard/service-dashboard.routes').then(m => m.SERVICE_DASHBOARD_ROUTES),
     canActivate: [authGuard]
   },
 
   {
     path: 'service',
-    loadChildren: () => import('../app/pages/landingpages/service/service-landing-page.module').then(m => m.ServiceLandingPageModule),
+    loadChildren: () => import('./pages/landingpages/service/service-landing-page.routes').then(m => m.SERVICE_LANDING_PAGE_ROUTES),
   },
 
   {
     path: 'admin',
-    loadChildren: () => import('../app/pages/admin-dashboard/admin.module').then(m => m.AdminModule),
+    loadChildren: () => import('./pages/admin-dashboard/admin.routes').then(m => m.ADMIN_ROUTES),
     canActivate: [authGuard]
   },
 
@@ -171,20 +169,3 @@ const appRoutes: Routes = [
     }
   }
 ];
-
-@NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forRoot(appRoutes,
-      {
-    // scrollPositionRestoration: 'enabled',
-    scrollPositionRestoration: 'disabled',
-    onSameUrlNavigation: 'reload'
-})
-  ],
-  declarations: [],
-  exports: [RouterModule]
-})
-
-export class AppRoutingModule {
-}

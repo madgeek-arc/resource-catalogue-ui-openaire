@@ -1,5 +1,4 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
+import {Routes} from '@angular/router';
 import {ServiceLandingPageComponent} from './service-landing-page.component';
 import {OverviewComponent} from './overview/overview.component';
 import {PricingComponent} from './pricing/pricing.component';
@@ -7,7 +6,7 @@ import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSu
 import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
 import {ChangeLogComponent} from './resourcesAndSupport/changeLog/change-log.component';
 
-const serviceLandingPageRoutes: Routes = [
+export const SERVICE_LANDING_PAGE_ROUTES: Routes = [
   {
     path: ':id',
     component: ServiceLandingPageComponent,
@@ -48,10 +47,3 @@ const serviceLandingPageRoutes: Routes = [
     runGuardsAndResolvers: 'always'
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(serviceLandingPageRoutes)],
-  exports: [RouterModule]
-})
-
-export class ServiceLandingPageRouting {}

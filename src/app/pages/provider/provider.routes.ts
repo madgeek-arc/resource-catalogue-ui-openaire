@@ -1,5 +1,4 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {authGuard} from '../../services/auth.guard';
 import {UpdateServiceProviderComponent} from './form/update-service-provider.component';
 import {ProviderDashboardComponent} from './dashboard/provider-dashboard.component';
@@ -10,9 +9,10 @@ import {ProviderFullHistoryComponent} from './dashboard/provider-history/provide
 import {ProviderServicesComponent} from './dashboard/provider-services/provider-services.component';
 import {ServiceProviderFormComponent} from './form/service-provider-form.component';
 
-const providerRoutes: Routes = [
+// Loaded under /provider (app.routes.ts), so the paths here leave that prefix out.
+export const PROVIDER_ROUTES: Routes = [
   {
-    path: 'provider/add',
+    path: 'add',
     component: ServiceProviderFormComponent,
     canActivate: [authGuard],
     data: {
@@ -20,7 +20,7 @@ const providerRoutes: Routes = [
     }
   },
   {
-    path: 'provider/:providerId',
+    path: ':providerId',
     children: [
       {
         path: '',
@@ -92,11 +92,3 @@ const providerRoutes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(providerRoutes)],
-  exports: [RouterModule]
-})
-
-export class ProviderRouting {
-}
