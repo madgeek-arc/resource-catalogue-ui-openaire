@@ -8,10 +8,10 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import BitSet from 'bitset';
 
+import seedRandom from 'seedrandom';
+
 import UIkit from 'uikit';
 pdfMake.vfs = pdfFonts.vfs;
-declare let require: any;
-const seedRandom = require('seedrandom');
 
 @Component({
   selector: 'app-survey',

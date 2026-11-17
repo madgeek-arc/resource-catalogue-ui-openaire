@@ -35,7 +35,6 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {UserService} from './services/user.service';
 
 
-declare let require: any;
 
 @NgModule({
   declarations: [
