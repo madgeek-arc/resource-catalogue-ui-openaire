@@ -207,9 +207,4 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     );
   }
 
-  toggleDisable() {
-    this.disable = !this.disable;
-    this.newProviderForm.enable();
-  }
-
 }

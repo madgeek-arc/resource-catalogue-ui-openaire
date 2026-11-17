@@ -5,7 +5,7 @@ apply: always
 # Project: resource-catalogue-ui-openaire – Angular
 ## Stack
 - Frontend: Angular 22, TypeScript 6, RxJS 7.8, Node 24 (`.nvmrc`); tests with Vitest (`npm test`)
-- Target: TypeScript strict, Signals, LESS. Today `strict` is off (flags are switched on one at a time) and the styles are still CSS/SCSS
+- Target: TypeScript strict, Signals, LESS. Today `strictTemplates` and most strict flags are on, but not `strictNullChecks` or `noImplicitAny`, and the styles are still CSS/SCSS
 ## [CRITICAL] Rules
 - Use signal() for local component state
 - Use computed() for derived state. 

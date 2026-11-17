@@ -28,7 +28,7 @@ The GitHub workflow in `.github/workflows/ci.yml` runs on every pull request and
 3. **Build:** `npm run build:prod`. The budget in `angular.json` fails the build when the initial bundle grows past it.
 4. **Audit:** `npm audit --audit-level=critical` prints every finding and fails on critical ones only.
 
-TypeScript's `strict` is set to `false` for now, because TypeScript 6 would otherwise switch every strict flag on at once; the flags are being turned on one at a time. Angular's `strictTemplates` is off for the same reason.
+TypeScript runs with `alwaysStrict`, `noImplicitThis`, `useUnknownInCatchVariables`, `strictFunctionTypes`, `strictBindCallApply`, `noFallthroughCasesInSwitch`, `noImplicitOverride` and `noImplicitReturns`. `noImplicitAny` and `strictNullChecks` are not on yet, and `strict` itself is set to `false` because TypeScript 6 would otherwise switch every strict flag on at once. Angular's `strictTemplates` is on, so the build fails on template type errors (a misspelled member, a wrongly typed binding); its null checks only take effect once `strictNullChecks` is on.
 
 ## Docker
 
