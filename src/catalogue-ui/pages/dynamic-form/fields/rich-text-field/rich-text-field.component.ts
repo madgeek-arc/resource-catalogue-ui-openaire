@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import {ClassicEditor} from '../../../../domain/ckeditor-classic-editor';
@@ -15,6 +15,9 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 })
 
 export class RichTextFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+
   @Input() fieldData: Field;
   @Input() editMode: any;
   @Input() position?: number = null;
@@ -28,9 +31,6 @@ export class RichTextFieldComponent implements OnInit {
   hideField: boolean = null;
 
   public editor = ClassicEditor;
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
 
   ngOnInit() {
     if (this.position !== null) {

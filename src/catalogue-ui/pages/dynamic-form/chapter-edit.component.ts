@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +17,10 @@ import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.compone
     imports: [NgStyle, NgClass, ReactiveFormsModule, DynamicFormFieldsComponent]
 })
 export class ChapterEditComponent implements OnChanges{
+  route = inject(ActivatedRoute);
+  protected fb = inject(UntypedFormBuilder);
+  protected router = inject(Router);
+
 
   @Input() form: any = null;
   @Input() tabsHeader: string;
@@ -50,11 +54,6 @@ export class ChapterEditComponent implements OnChanges{
   isService = false;
   isDatasource = false;
   datasourceId = '';
-
-  constructor(public route: ActivatedRoute,
-              protected fb: UntypedFormBuilder,
-              protected router: Router) {
-  }
 
   ngOnInit() {
     const path = this.route.snapshot.routeConfig.path;

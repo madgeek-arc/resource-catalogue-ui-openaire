@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import {ProviderService} from '../../../services/provider.service';
 import {ProviderBundle} from '../../../entities/eic-model';
@@ -16,6 +16,12 @@ import { NgClass } from '@angular/common';
 })
 
 export class ProviderDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private providerService = inject(ProviderService);
+  private userService = inject(UserService);
+  private fb = inject(UntypedFormBuilder);
+
 
   providerId: string = null;
   providerBundle: ProviderBundle = null;
@@ -27,8 +33,7 @@ export class ProviderDashboardComponent implements OnInit {
   titleIcon: string = null;
   title: string = null;
 
-  constructor(private route: ActivatedRoute, private router: Router, private providerService: ProviderService,
-              private userService: UserService, private fb: UntypedFormBuilder) {
+  constructor() {
     this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           if (event.url.includes('home')) {

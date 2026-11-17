@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {ResourceService} from '../../../services/resource.service';
 import {Service, Vocabulary} from '../../../entities/eic-model';
@@ -12,6 +12,9 @@ import {zip} from 'rxjs';
     imports: [RouterLink]
 })
 export class UserItemComponent implements OnInit {
+  protected resourceService = inject(ResourceService);
+  protected route = inject(ActivatedRoute);
+
 
   response: Paging<Service>;
   services: Map<string, object[]>;
@@ -20,9 +23,6 @@ export class UserItemComponent implements OnInit {
   portfoliosMap: Map<string, Service[]>;
   userVocId: string;
   ready = false;
-
-  constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
-  }
 
   ngOnInit() {
     this.userVocId = this.route.snapshot.paramMap.get('id');

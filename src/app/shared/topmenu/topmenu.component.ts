@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {UserSessionService} from '../../services/user-session.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
@@ -20,6 +20,13 @@ import { NgClass, KeyValuePipe } from '@angular/common';
 })
 
 export class AireTopMenuComponent implements OnInit {
+  session = inject(UserSessionService);
+  router = inject(Router);
+  resourceService = inject(ResourceService);
+  private dataSharingService = inject(DataSharingService);
+  private userService = inject(UserService);
+  private route = inject(ActivatedRoute);
+
 
   resources: Map<string, Service[] | Datasource[]> = null;
   refresh = false;
@@ -31,9 +38,6 @@ export class AireTopMenuComponent implements OnInit {
   dashboardMode = false;
 
   public portfolioItemActive: string = null;
-
-  constructor(public session: UserSessionService, public router: Router, public resourceService: ResourceService,
-              private dataSharingService: DataSharingService, private userService: UserService, private route: ActivatedRoute) {}
 
   ngOnInit() {
 

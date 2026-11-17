@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
@@ -25,6 +25,13 @@ import { EmailModalComponent } from '../../shared/email-modal/email-modal.compon
 })
 
 export class SearchAireComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  resourceService = inject(ResourceService);
+  session = inject(UserSessionService);
+  comparisonService = inject(ComparisonService);
+
 
   @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
 
@@ -55,9 +62,9 @@ export class SearchAireComponent implements OnInit {
   loading = false;
 
 
-  constructor(public fb: UntypedFormBuilder, public router: Router, public route: ActivatedRoute,
-              public resourceService: ResourceService, public session: UserSessionService,
-              public comparisonService: ComparisonService) {
+  constructor() {
+    const fb = this.fb;
+
     this.searchForm = fb.group({query: [''], searchFields: ['']});
   }
 

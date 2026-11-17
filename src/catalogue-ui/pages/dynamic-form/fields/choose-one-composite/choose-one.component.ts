@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -15,6 +15,9 @@ import { StringFieldComponent } from '../string-field/string-field.component';
 })
 
 export class ChooseOneComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formService = inject(FormControlService);
+
   @Input() fieldData: Field;
   @Input() vocabularies: Map<string, object[]>;
   @Input() subVocabularies: Map<string, object[]>;
@@ -27,9 +30,6 @@ export class ChooseOneComponent implements OnInit {
 
   form: UntypedFormGroup;
   hideField: boolean = null;
-
-  constructor(private rootFormGroup: FormGroupDirective, private formService: FormControlService) {
-  }
 
   ngOnInit() {
     if (this.position !== null) {

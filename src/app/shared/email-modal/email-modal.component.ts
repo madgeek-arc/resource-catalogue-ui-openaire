@@ -1,4 +1,4 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute} from '@angular/router';
@@ -17,15 +17,17 @@ declare let UIkit: any;
     imports: [ReactiveFormsModule, NgClass]
 })
 export class EmailModalComponent {
+  fb = inject(UntypedFormBuilder);
+  router = inject(NavigationService);
+  route = inject(ActivatedRoute);
+  resourceService = inject(ResourceService);
+  comparisonService = inject(ComparisonService);
+  navigationService = inject(NavigationService);
+  emailService = inject(EmailService);
+
 
   @Input() serviceIdsArray;
   public emailErrorMessage = '';
-
-  constructor(public fb: UntypedFormBuilder, public router: NavigationService, public route: ActivatedRoute,
-              public resourceService: ResourceService,
-              public comparisonService: ComparisonService,
-              public navigationService: NavigationService, public emailService: EmailService) {
-  }
 
   emailForm = this.fb.group({
     recipientEmail: '',

@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {SearchQuery} from '../../entities/search-query';
@@ -18,6 +18,11 @@ import { NgClass, SlicePipe } from '@angular/common';
     imports: [RouterLink, NgClass, SlicePipe]
 })
 export class HomeAireComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  router = inject(NavigationService);
+  resourceService = inject(ResourceService);
+  private dataSharingService = inject(DataSharingService);
+
   public searchForm: UntypedFormGroup;
   public categories: Category[] = [
     {
@@ -42,8 +47,9 @@ export class HomeAireComponent implements OnInit {
   public slide = 0;
   public slideMobile = 0;
 
-  constructor(public fb: UntypedFormBuilder, public router: NavigationService,  public resourceService: ResourceService,
-              private dataSharingService: DataSharingService) {
+  constructor() {
+    const fb = this.fb;
+
     this.searchForm = fb.group({query: ['']});
   }
 

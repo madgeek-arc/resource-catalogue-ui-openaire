@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Model} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
@@ -19,6 +19,11 @@ import * as uikit from 'uikit';
 })
 
 export class FormsComponent implements OnInit{
+  private formService = inject(FormControlService);
+  private resourceService = inject(ResourceService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
 
   @ViewChild(SurveyComponent) child: SurveyComponent;
 
@@ -35,9 +40,6 @@ export class FormsComponent implements OnInit{
   ready = false;
   errorMessage: string = null;
   editMode = false;
-
-  constructor(private formService: FormControlService, private resourceService: ResourceService,
-              private route: ActivatedRoute, private router: Router ) {}
 
   ngOnInit() {
     this.ready = false;

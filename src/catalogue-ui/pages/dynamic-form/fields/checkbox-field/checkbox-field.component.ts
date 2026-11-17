@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
@@ -11,6 +11,8 @@ import { NgClass } from '@angular/common';
 })
 
 export class CheckboxFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+
   @Input() fieldData: Field;
   @Input() editMode: any;
   @Input() position?: number = null;
@@ -21,9 +23,6 @@ export class CheckboxFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-
-  constructor(private rootFormGroup: FormGroupDirective) {
-  }
 
   ngOnInit() {
     // console.log(this.fieldData);

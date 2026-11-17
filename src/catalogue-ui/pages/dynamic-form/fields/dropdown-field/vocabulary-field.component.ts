@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Field, HandleBitSet, vocabularyName} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -16,6 +16,10 @@ import { NgClass } from '@angular/common';
 })
 
 export class VocabularyFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+  private route = inject(ActivatedRoute);
+
   @Input() fieldData: Field;
   @Input() vocabularies: Map<string, object[]> = null;
   @Input() subVocabularies: Map<string, object[]> = null;
@@ -32,9 +36,6 @@ export class VocabularyFieldComponent implements OnInit {
   dynamicVoc: object[] = [];
   /** Key of this field's options in `vocabularies`. */
   vocabularyKey: string = null;
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService, private route: ActivatedRoute) {
-  }
 
   ngOnInit() {
     if (this.position !== null) {

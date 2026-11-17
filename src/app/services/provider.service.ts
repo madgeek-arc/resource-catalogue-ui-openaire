@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
@@ -9,9 +9,8 @@ import {URLParameter} from '../entities/url-parameter';
 
 @Injectable({providedIn: 'root'})
 export class ProviderService {
+  http = inject(HttpClient);
 
-  constructor(public http: HttpClient) {
-  }
 
   private base = environment.API_ENDPOINT;
   private oa = this.base + '/oa';

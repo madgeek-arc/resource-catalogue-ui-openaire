@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Subscription} from 'rxjs';
@@ -20,6 +20,11 @@ import { NgClass } from '@angular/common';
 })
 
 export class SearchComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  route = inject(ActivatedRoute);
+  searchService = inject(SearchService);
+  router = inject(Router);
+
   private sortFacets = new PremiumSortFacetsPipe();
   canAddOrEditService: boolean;
   // myProviders:  Provider[] = [];
@@ -48,9 +53,9 @@ export class SearchComponent implements OnInit {
   searchFields: string[] = ['name', 'publisher', 'source'];
   filtersMobileShown = false;
 
-  constructor(public fb: UntypedFormBuilder, public route: ActivatedRoute, public searchService: SearchService,
-              // public authenticationService: AuthenticationService,
-              public router: Router) {
+  constructor() {
+    const fb = this.fb;
+
     this.searchForm = fb.group({query: [''], searchFields: ['']});
   }
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
@@ -9,10 +9,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 })
 
 export class ProviderJoinComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+
 
   token: string;
-
-  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe(

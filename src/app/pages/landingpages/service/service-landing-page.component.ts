@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subscription, zip } from 'rxjs';
 import { Provider, Service, URL } from '../../../entities/eic-model';
@@ -15,6 +15,11 @@ import { NgClass } from '@angular/common';
     imports: [NgClass, RouterLink, RouterOutlet]
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  resourceService = inject(ResourceService);
+  private session = inject(UserSessionService);
+
 
   private subscriptions: Subscription[] = [];
   projectName = environment.projectName;
@@ -30,9 +35,6 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   resourcePayload: Service = null;
   cleanView = false;
   showLogo = false;
-
-  constructor(public router: Router, public route: ActivatedRoute, public resourceService: ResourceService, private session: UserSessionService) {
-  }
 
   ngOnInit() {
     this.ready = false;

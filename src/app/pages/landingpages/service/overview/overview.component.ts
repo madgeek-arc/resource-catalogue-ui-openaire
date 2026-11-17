@@ -1,4 +1,4 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {UiVocabulary} from '../../../../entities/dynamic-form-model';
 import {Service, URL} from '../../../../entities/eic-model';
@@ -14,6 +14,8 @@ import { NgClass } from '@angular/common';
     imports: [NgClass, RouterLink]
 })
 export class OverviewComponent {
+  private router = inject(Router);
+
 
   @Input() vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Service[] = null;
@@ -25,8 +27,6 @@ export class OverviewComponent {
 
   slideMobile = 0;
   benefitSlideMobile = 0;
-
-  constructor(private router: Router) {}
 
   getVocabularyName(vocabularyType: string, id: string): string {
     // console.log(this.vocabularies);

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Field, Model, Section} from '../../../../domain/dynamic-form-model';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -14,6 +14,9 @@ import { CompareChapterComponent } from '../chapters/compare-chapter.component';
 })
 
 export class CompareSurveysComponent implements OnChanges{
+  private formControlService = inject(FormControlService);
+  private fb = inject(UntypedFormBuilder);
+
 
   @Input() payloadA: any = null;
   @Input() payloadB: any = null;
@@ -29,9 +32,6 @@ export class CompareSurveysComponent implements OnChanges{
 
   formA = this.fb.group({});
   formB = this.fb.group({});
-
-  constructor(private formControlService: FormControlService, private fb: UntypedFormBuilder,) {
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.model && this.payloadA?.answer) {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -13,6 +13,9 @@ import { NgClass } from '@angular/common';
 })
 
 export class NumberFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+
   @Input() fieldData: Field;
   @Input() editMode: any;
   @Input() position?: number = null;
@@ -26,9 +29,6 @@ export class NumberFieldComponent implements OnInit {
   hideField: boolean = null;
 
   step = '';
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
 
   ngOnInit() {
     if (this.position !== null) {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -14,6 +14,9 @@ import { SafeUrlPipe } from '../../../../shared/pipes/safeUrlPipe';
 })
 
 export class StringFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+
   @Input() fieldData: Field;
   @Input() editMode = false;
   @Input() position?: number = null;
@@ -25,9 +28,6 @@ export class StringFieldComponent implements OnInit {
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
   hideField: boolean = null;
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
 
   ngOnInit() {
     if (this.position !== null) {

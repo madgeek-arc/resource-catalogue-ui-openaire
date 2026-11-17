@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {Field, Model, Required, Section} from '../domain/dynamic-form-model';
 import {environment} from '../../environments/environment';
@@ -8,7 +8,8 @@ import {Paging} from '../domain/paging';
 
 @Injectable()
 export class FormControlService implements OnInit{
-  constructor(public http: HttpClient) { }
+  http = inject(HttpClient);
+
 
   base = environment.API_ENDPOINT;
   private options = {withCredentials: true};

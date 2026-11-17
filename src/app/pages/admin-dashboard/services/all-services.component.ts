@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Service, Vocabulary} from '../../../entities/eic-model';
@@ -19,6 +19,10 @@ declare let UIkit: any;
 })
 
 export class AllServicesDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private resourceService = inject(ResourceService);
+
 
   services: Paging<Bundle<Service>> = null;
   selectedService: Bundle<Service> = null;
@@ -42,8 +46,6 @@ export class AllServicesDashboardComponent implements OnInit {
   showLoader = false;
   errorMessage: string;
   loadingMessage = '';
-
-  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
@@ -13,15 +13,14 @@ import {SmoothScroll} from './services/smooth-scroll';
   imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieLawComponent],
 })
 export class AppComponent implements OnInit {
+  router = inject(Router);
+
   isLoginOrRegister = false;
 
   breadcrumbs: string[] = [];
 
   cleanView = false;
   dashboardView = false;
-
-  constructor(public router: Router) {
-  }
 
   ngOnInit() {
     this.router.events.subscribe((evt: any) => {

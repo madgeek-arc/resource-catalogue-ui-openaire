@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import * as sd from '../../../entities/services.description';
 import {UserSessionService} from '../../../services/user-session.service';
@@ -26,6 +26,13 @@ declare let UIkit: any;
     imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, CKEditorModule, RouterLink, LowerCasePipe]
 })
 export class ServiceProviderFormComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  authService = inject(UserSessionService);
+  providerService = inject(ProviderService);
+  resourceService = inject(ResourceService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
 
   private _hasUserConsent = environment.hasUserConsent;
 
@@ -175,14 +182,6 @@ export class ServiceProviderFormComponent implements OnInit {
       this.user()
     ])
   };
-
-  constructor(public fb: UntypedFormBuilder,
-              public authService: UserSessionService,
-              public providerService: ProviderService,
-              public resourceService: ResourceService,
-              public router: Router,
-              public route: ActivatedRoute) {
-  }
 
   ngOnInit() {
 

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
@@ -13,6 +13,11 @@ import { DatePipe, TitleCasePipe } from '@angular/common';
 })
 
 export class ProviderHomeComponent implements OnInit, OnChanges {
+  private router = inject(Router);
+  private providerService = inject(ProviderService);
+  private resourceService = inject(ResourceService);
+  private datePipe = inject(DatePipe);
+
 
   @Input() providerBundle: ProviderBundle = null;
   provider: Provider = null;
@@ -22,9 +27,6 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   approvedResourceBundles: ServiceBundle[] = null;
   pendingResourceBundles: ServiceBundle[] = null;
   rejectedResourceBundles: ServiceBundle[] = null;
-
-  constructor(private router: Router, private providerService: ProviderService, private resourceService: ResourceService, private datePipe: DatePipe) {
-  }
 
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

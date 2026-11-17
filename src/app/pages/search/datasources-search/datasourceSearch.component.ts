@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
@@ -23,6 +23,10 @@ import { ReadMoreComponent } from '../../../shared/reusablecomponents/read-more.
 })
 
 export class DatasourceSearchComponent implements OnInit {
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  datasourceService = inject(DatasourceService);
+
 
   @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
 
@@ -46,10 +50,6 @@ export class DatasourceSearchComponent implements OnInit {
   filtersMobileShown = false;
   urlParameters: URLParameter[] = [];
   loading = false;
-
-
-  constructor(public router: Router, public route: ActivatedRoute, public datasourceService: DatasourceService) {
-  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

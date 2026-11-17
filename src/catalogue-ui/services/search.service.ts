@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {Router} from '@angular/router';
 import {URLParameter} from '../domain/url-parameter';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -8,13 +8,14 @@ import {Subject} from 'rxjs';
 
 @Injectable()
 export class SearchService {
+  http = inject(HttpClient);
+  router = inject(Router);
+
 
   private options = {withCredentials: true};
   base = environment.API_ENDPOINT;
 
   public searchParams: Subject<any> = new Subject();
-
-  constructor(public http: HttpClient, public  router: Router) { }
 
   searchSnippets(urlParameters: URLParameter[]) {
     let searchQuery = new HttpParams();

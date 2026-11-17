@@ -1,17 +1,7 @@
 /**
  * Created by stefania on 4/6/17.
  */
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 
 @Component({
     selector: 'read-more',
@@ -31,6 +21,8 @@ import {
     changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreComponent implements AfterContentInit {
+  elementRef = inject(ElementRef);
+
   //the text that need to be put in the container
   //@Input() text: string;
   //maximum height of the container
@@ -39,9 +31,6 @@ export class ReadMoreComponent implements AfterContentInit {
   //set these to false to get the height of the expended container
   public isCollapsed = false;
   public isCollapsable = false;
-
-  constructor(public elementRef: ElementRef) {
-  }
 
   ngAfterContentInit() {
     setTimeout(_ => {

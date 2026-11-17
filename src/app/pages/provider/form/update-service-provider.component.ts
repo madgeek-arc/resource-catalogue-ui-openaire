@@ -2,10 +2,8 @@ import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
-import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import {UserSessionService} from '../../../services/user-session.service';
-import {ProviderService} from '../../../services/provider.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
+import {RouterLink} from '@angular/router';
 import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
 import { NgClass, LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
@@ -23,15 +21,6 @@ declare let UIkit: any;
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
   errorMessage: string;
   provider: Provider;
-
-  constructor(public fb: UntypedFormBuilder,
-              public authService: UserSessionService,
-              public providerService: ProviderService,
-              public resourceService: ResourceService,
-              public router: Router,
-              public route: ActivatedRoute) {
-    super(fb, authService, providerService, resourceService, router, route);
-  }
 
   ngOnInit() {
     this.edit = true;

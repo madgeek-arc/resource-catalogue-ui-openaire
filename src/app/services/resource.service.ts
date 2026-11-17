@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {skipNotFoundRedirect} from './authentication-interceptor';
 import {environment} from '../../environments/environment';
@@ -12,12 +12,12 @@ import {catchError, map} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class ResourceService {
+  http = inject(HttpClient);
+
 
   base = environment.API_ENDPOINT;
   private oa = this.base + '/oa';
   private options = {withCredentials: true};
-
-  constructor(public http: HttpClient) {}
 
   static removeNulls(obj) {
     const isArray = obj instanceof Array;

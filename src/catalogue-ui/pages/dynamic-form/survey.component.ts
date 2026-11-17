@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
@@ -24,6 +24,10 @@ pdfMake.vfs = pdfFonts.vfs;
 })
 
 export class SurveyComponent implements OnInit, OnChanges {
+  private formControlService = inject(FormControlService);
+  private fb = inject(UntypedFormBuilder);
+  private router = inject(Router);
+
 
   @Input() payload: any = null; // can't import specific project class in lib file
   @Input() model: Model = null;
@@ -54,7 +58,7 @@ export class SurveyComponent implements OnInit, OnChanges {
 
   form: UntypedFormGroup;
 
-  constructor(private formControlService: FormControlService, private fb: UntypedFormBuilder, private router: Router) {
+  constructor() {
     this.form = this.fb.group({});
   }
 

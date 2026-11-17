@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
@@ -12,6 +12,8 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 })
 
 export class DateFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+
 
   @Input() fieldData: Field;
   @Input() editMode: any;
@@ -24,9 +26,6 @@ export class DateFieldComponent implements OnInit {
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
   hideField: boolean = null;
-
-  constructor(private rootFormGroup: FormGroupDirective) {
-  }
 
   ngOnInit() {
     if (this.position !== null) {

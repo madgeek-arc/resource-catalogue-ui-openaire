@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {UserInfo} from '../../entities/userInfo';
@@ -14,6 +14,11 @@ import { NgClass } from '@angular/common';
 })
 
 export class AdminDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private userService = inject(UserService);
+  private fb = inject(UntypedFormBuilder);
+
 
   userInfo: UserInfo = null;
   inviteeEmail: UntypedFormControl = this.fb.control(null, [Validators.email, Validators.required]);
@@ -24,7 +29,7 @@ export class AdminDashboardComponent implements OnInit {
   titleIcon: string = null;
   title: string = null;
 
-  constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private fb: UntypedFormBuilder) {
+  constructor() {
     this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           if (event.url.includes('services')) {
