@@ -180,71 +180,79 @@
           <!--Contact-->
           <li>
             <ul class="uk-list uk-width-1-1 uk-margin-medium-bottom">
-              <h6>Main Contact</h6>
-              <li>
-                <div class="uk-grid">
-                  <div class="uk-width-1-4">First Name</div>
-                  <div class="uk-width-3-4">{{provider.mainContact.firstName}}</div>
-                </div>
-              </li>
-              <li>
-                <div class="uk-grid">
-                  <div class="uk-width-1-4">Last Name</div>
-                  <div class="uk-width-3-4">{{provider.mainContact.lastName}}</div>
-                </div>
-              </li>
-              <li>
-                <div class="uk-grid">
-                  <div class="uk-width-1-4">Email</div>
-                  <div class="uk-width-3-4">{{provider.mainContact.email}}</div>
-                </div>
-              </li>
-              <li>
-                <div class="uk-grid">
-                  <div class="uk-width-1-4">Phone</div>
-                  <div class="uk-width-3-4">{{provider.mainContact.phone}}</div>
-                </div>
-              </li>
-              <li>
-                <div class="uk-grid">
-                  <div class="uk-width-1-4">Position</div>
-                  <div class="uk-width-3-4">{{provider.mainContact.position}}</div>
-                </div>
-              </li>
-              <h6 class="uk-margin-medium-top">Public Contacts</h6>
-              @for (publicContact of provider.publicContacts; track publicContact) {
-                <div>
-                  <li>
-                    <div class="uk-grid">
-                      <div class="uk-width-1-4">First Name</div>
-                      <div class="uk-width-3-4">{{publicContact.firstName}}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="uk-grid">
-                      <div class="uk-width-1-4">Last Name</div>
-                      <div class="uk-width-3-4">{{publicContact.lastName}}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="uk-grid">
-                      <div class="uk-width-1-4">Email</div>
-                      <div class="uk-width-3-4">{{publicContact.email}}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="uk-grid">
-                      <div class="uk-width-1-4">Phone</div>
-                      <div class="uk-width-3-4">{{publicContact.phone}}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="uk-grid">
-                      <div class="uk-width-1-4">Position</div>
-                      <div class="uk-width-3-4">{{publicContact.position}}</div>
-                    </div>
-                  </li>
-                </div>
+              <!-- Providers from the /oa API carry no contact details, so each block shows only when its data is there. -->
+              @if (provider.mainContact) {
+                <h6>Main Contact</h6>
+                <li>
+                  <div class="uk-grid">
+                    <div class="uk-width-1-4">First Name</div>
+                    <div class="uk-width-3-4">{{provider.mainContact.firstName}}</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="uk-grid">
+                    <div class="uk-width-1-4">Last Name</div>
+                    <div class="uk-width-3-4">{{provider.mainContact.lastName}}</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="uk-grid">
+                    <div class="uk-width-1-4">Email</div>
+                    <div class="uk-width-3-4">{{provider.mainContact.email}}</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="uk-grid">
+                    <div class="uk-width-1-4">Phone</div>
+                    <div class="uk-width-3-4">{{provider.mainContact.phone}}</div>
+                  </div>
+                </li>
+                <li>
+                  <div class="uk-grid">
+                    <div class="uk-width-1-4">Position</div>
+                    <div class="uk-width-3-4">{{provider.mainContact.position}}</div>
+                  </div>
+                </li>
+              }
+              @if (provider.publicContacts?.length) {
+                <h6 class="uk-margin-medium-top">Public Contacts</h6>
+                @for (publicContact of provider.publicContacts; track publicContact) {
+                  <div>
+                    <li>
+                      <div class="uk-grid">
+                        <div class="uk-width-1-4">First Name</div>
+                        <div class="uk-width-3-4">{{publicContact.firstName}}</div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="uk-grid">
+                        <div class="uk-width-1-4">Last Name</div>
+                        <div class="uk-width-3-4">{{publicContact.lastName}}</div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="uk-grid">
+                        <div class="uk-width-1-4">Email</div>
+                        <div class="uk-width-3-4">{{publicContact.email}}</div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="uk-grid">
+                        <div class="uk-width-1-4">Phone</div>
+                        <div class="uk-width-3-4">{{publicContact.phone}}</div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="uk-grid">
+                        <div class="uk-width-1-4">Position</div>
+                        <div class="uk-width-3-4">{{publicContact.position}}</div>
+                      </div>
+                    </li>
+                  </div>
+                }
+              }
+              @if (!provider.mainContact && !provider.publicContacts?.length) {
+                <li>No contact details are available for this provider.</li>
               }
             </ul>
           </li>

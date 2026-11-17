@@ -210,8 +210,11 @@ export class ResourceService {
     return this.http.delete(this.oa + `/datasources/${id}`, this.options);
   }
 
-  // TODO: no datasources/byService endpoint in new API
-  getDatasourceByServiceId(serviceId: string){
-    return this.http.get<Datasource>(this.base + `/datasources/byService/${serviceId}`, this.options);
+  /** The datasource subprofile of a service, or null when it has none. */
+  getDatasourceByServiceId(serviceId: string): Observable<Datasource | null> {
+    const params = new HttpParams().set('serviceId', serviceId).set('quantity', '1');
+    return this.http.get<Paging<Datasource>>(this.oa + '/datasources', {params, withCredentials: true}).pipe(
+      map(page => page.results?.[0] ?? null)
+    );
   }
 }
