@@ -1,7 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HelpContentService} from '../../services/help-content.service';
 import {AsideHelpContentComponent, HelpContentComponent} from './help-content.component';
 import {ReadMoreComponent, ReadMoreTextComponent} from './read-more.component';
 
@@ -23,9 +22,7 @@ import {ReadMoreComponent, ReadMoreTextComponent} from './read-more.component';
         HelpContentComponent,
         AsideHelpContentComponent
     ],
-    providers: [
-        HelpContentService
-    ]
+    providers: []
 })
 export class ReusableComponentsModule {
 }

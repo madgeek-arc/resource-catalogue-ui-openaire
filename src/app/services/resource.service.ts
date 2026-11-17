@@ -10,7 +10,7 @@ import {forkJoin, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ResourceService {
 
   base = environment.API_ENDPOINT;

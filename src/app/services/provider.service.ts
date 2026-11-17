@@ -7,7 +7,7 @@ import {catchError, map, switchMap} from 'rxjs/operators';
 import {Paging} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ProviderService {
 
   constructor(public http: HttpClient) {

@@ -7,13 +7,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
 import {AppRoutingModule} from './app.routing';
-import {NavigationService} from './services/navigation.service';
-import {ResourceService} from './services/resource.service';
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {ReusableComponentsModule} from './shared/reusablecomponents/reusable-components.module';
-import {ProviderService} from './services/provider.service';
-import {ComparisonService} from './services/comparison.service';
 import {SearchAireComponent} from './pages/search/search.aire.component';
 import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
 import {HomeAireComponent} from './pages/home/home.aire.component';
@@ -23,14 +19,12 @@ import {provideMatomo, withRouter} from 'ngx-matomo-client';
 import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
-import {DataSharingService} from './services/data-sharing.service';
 import {authenticationInterceptor} from './services/authentication-interceptor';
 import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
 import {ServiceWorkerModule} from '@angular/service-worker';
-import {UserService} from './services/user.service';
 
 
 
@@ -67,12 +61,6 @@ import {UserService} from './services/user.service';
     }),
   ],
   providers: [
-    ComparisonService,
-    ResourceService,
-    UserService,
-    ProviderService,
-    DataSharingService,
-    NavigationService,
     DatePipe,
     {
       provide: ErrorHandler,

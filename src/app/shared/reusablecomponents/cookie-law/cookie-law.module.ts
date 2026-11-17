@@ -14,7 +14,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 @NgModule({
   imports: [ CommonModule, BrowserAnimationsModule ],
   declarations: [ CookieLawComponent ],
-  providers: [ CookieLawService ],
   exports: [ CookieLawComponent ]
 })
 export class CookieLawModule { }

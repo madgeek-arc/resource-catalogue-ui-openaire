@@ -4,7 +4,7 @@ import {PageContent} from '../entities/page-content';
 import {environment} from '../../environments/environment';
 import {throwError} from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class HelpContentService {
   // private _helpServiceUrl = "http://83.212.101.85:5555/api/";
   private _helpServiceUrl = environment.FAQ_ENDPOINT;

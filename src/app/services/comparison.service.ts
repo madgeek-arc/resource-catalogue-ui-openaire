@@ -4,7 +4,7 @@ import {Service} from '../entities/eic-model';
 
 declare let UIkit;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ComparisonService {
 
   public servicesToCompare: Service[] = [];

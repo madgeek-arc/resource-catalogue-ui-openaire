@@ -4,7 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {UserInfo} from '../entities/userInfo';
 import {Provider} from '../entities/eic-model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
   base = environment.API_ENDPOINT;
 
