@@ -2,15 +2,13 @@ import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
 import {Router} from '@angular/router';
 import * as Sentry from '@sentry/angular';
 import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
+import {provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
 import {AppRoutingModule} from './app.routing';
-import {CanActivateViaAuthGuard} from './services/can-activate-auth-guard.service';
 import {NavigationService} from './services/navigation.service';
 import {ResourceService} from './services/resource.service';
-import {CanActivateViaPubGuard} from './services/can-activate-pub-guard.service';
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {ReusableComponentsModule} from './shared/reusablecomponents/reusable-components.module';
@@ -26,7 +24,7 @@ import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {DataSharingService} from './services/data-sharing.service';
-import {AuthenticationInterceptor} from './services/authentication-interceptor';
+import {authenticationInterceptor} from './services/authentication-interceptor';
 import {FormsComponent} from './pages/forms/forms.component';
 import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
@@ -69,14 +67,7 @@ import {UserService} from './services/user.service';
     }),
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthenticationInterceptor,
-      multi: true
-    },
     ComparisonService,
-    CanActivateViaAuthGuard,
-    CanActivateViaPubGuard,
     ResourceService,
     UserService,
     ProviderService,
@@ -99,7 +90,7 @@ import {UserService} from './services/user.service';
       deps: [Sentry.TraceService],
       multi: true,
     },
-    provideHttpClient(withXhr(), withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptors([authenticationInterceptor])),
     provideMatomo(
       {
         scriptUrl: environment.MATOMO_URL + 'matomo.js',

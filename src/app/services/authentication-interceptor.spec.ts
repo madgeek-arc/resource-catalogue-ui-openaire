@@ -1,11 +1,11 @@
-import {HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
 import {Router, provideRouter} from '@angular/router';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
-import {AuthenticationInterceptor, skipNotFoundRedirect} from './authentication-interceptor';
+import {authenticationInterceptor, skipNotFoundRedirect} from './authentication-interceptor';
 
-describe('AuthenticationInterceptor', () => {
+describe('authenticationInterceptor', () => {
   let http: HttpClient;
   let backend: HttpTestingController;
   let navigate: ReturnType<typeof vi.spyOn>;
@@ -25,9 +25,8 @@ describe('AuthenticationInterceptor', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
-        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptors([authenticationInterceptor])),
         provideHttpClientTesting(),
-        {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
       ],
     });
     http = TestBed.inject(HttpClient);

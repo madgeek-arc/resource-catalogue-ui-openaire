@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {SearchAireComponent} from './pages/search/search.aire.component';
-import {CanActivateViaAuthGuard} from './services/can-activate-auth-guard.service';
+import {authGuard} from './services/auth.guard';
 import {ForbiddenPageComponent} from './shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from './shared/not-found-page/not-found-page.component';
 import {HomeAireComponent} from './pages/home/home.aire.component';
@@ -45,7 +45,7 @@ const appRoutes: Routes = [
   {
     path: 'provider/:providerId/service/add',
     component: FormsComponent,
-    canActivate: [CanActivateViaAuthGuard],
+    canActivate: [authGuard],
     data: {
       breadcrumb: 'add service'
     }
@@ -53,7 +53,7 @@ const appRoutes: Routes = [
   {
     path: 'service/edit/:resourceId',
     component: FormsComponent,
-    canActivate: [CanActivateViaAuthGuard],
+    canActivate: [authGuard],
     data: {
       breadcrumb: 'edit service'
     }
@@ -61,7 +61,7 @@ const appRoutes: Routes = [
   {
     path: ':resourceType/subprofile/add/:resourceId',
     component: FormsComponent,
-    canActivate: [CanActivateViaAuthGuard],
+    canActivate: [authGuard],
     data: {
       breadcrumb: 'add datasource'
     }
@@ -69,7 +69,7 @@ const appRoutes: Routes = [
   {
     path: ':resourceType/subprofile/edit/:datasourceId',
     component: FormsComponent,
-    canActivate: [CanActivateViaAuthGuard],
+    canActivate: [authGuard],
     data: {
       breadcrumb: 'edit datasource'
     }
@@ -77,7 +77,7 @@ const appRoutes: Routes = [
   {
     path: 'form',
     component: FormsComponent,
-    // canActivate: [CanActivateViaAuthGuard],
+    // canActivate: [authGuard],
     data: {
       breadcrumb: 'forms'
     }
@@ -106,7 +106,7 @@ const appRoutes: Routes = [
   {
     path: 'join/:token',
     component: ProviderJoinComponent,
-    canActivate: [CanActivateViaAuthGuard],
+    canActivate: [authGuard],
     data: {
       breadcrumb: 'Join'
     }
@@ -128,13 +128,13 @@ const appRoutes: Routes = [
   {
     path: 'provider',
     loadChildren: () => import('../app/pages/provider/provider.module').then(m => m.ProviderModule),
-    canActivate: [CanActivateViaAuthGuard]
+    canActivate: [authGuard]
   },
 
   {
     path: 'service-dashboard',
     loadChildren: () => import('./pages/service-dashboard/service-dashboard.module').then(m => m.ServiceDashboardModule),
-    canActivate: [CanActivateViaAuthGuard]
+    canActivate: [authGuard]
   },
 
   {
@@ -145,7 +145,7 @@ const appRoutes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('../app/pages/admin-dashboard/admin.module').then(m => m.AdminModule),
-    canActivate: [CanActivateViaAuthGuard]
+    canActivate: [authGuard]
   },
 
   {
