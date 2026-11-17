@@ -1,21 +1,23 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DatasourceService} from '../../../services/datasource.service';
 import {DatasourceDetails} from '../../../entities/datasource';
+import { JsonPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-datasource-landing',
-  templateUrl: 'datasource.html',
-  providers: [DatasourceService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-datasource-landing',
+    templateUrl: 'datasource.html',
+    providers: [DatasourceService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [JsonPipe]
 })
 
 export class Datasource implements OnInit {
+  private route = inject(ActivatedRoute);
+  private datasourceService = inject(DatasourceService);
+
 
   datasource: DatasourceDetails = null;
-
-  constructor(private route: ActivatedRoute, private datasourceService: DatasourceService) { }
 
   ngOnInit() {
     this.route.params.subscribe(

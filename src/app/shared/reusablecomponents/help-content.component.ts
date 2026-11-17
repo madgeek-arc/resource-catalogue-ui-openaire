@@ -1,30 +1,29 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Content, PageContent} from '../../entities/page-content';
 import {HelpContentService} from '../../services/help-content.service';
 import {environment} from '../../../environments/environment';
 
 @Component({
-  selector: 'app-help-content',
-  template: `
+    selector: 'app-help-content',
+    template: `
     @if (contents && contents.length>0) {
       @for (content of contents; track content) {
         <div [innerHTML]="content.content" class="uk-margin-medium-bottom"></div>
       }
     }
     `,
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class HelpContentComponent implements OnInit {
-  @Input() position: string;
+  _helpContentService = inject(HelpContentService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  readonly position = input<string>(undefined);
 
   contents: Content[];
   errorMessage: string = null;
-
-  constructor(public _helpContentService: HelpContentService, public route: ActivatedRoute,
-              public router: Router) {
-  }
 
   ngOnInit() {
     this.errorMessage = null;
@@ -35,7 +34,7 @@ export class HelpContentComponent implements OnInit {
   }
 
   shiftThroughContent(pageContent: PageContent) {
-    this.contents = pageContent.content[this.position];
+    this.contents = pageContent.content[this.position()];
   }
 
   isPresent() {
@@ -48,8 +47,8 @@ export class HelpContentComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-aside-help-content',
-  template: `
+    selector: 'app-aside-help-content',
+    template: `
     @if (contents && contents.length>0) {
       @for (content of contents; track content) {
         <div [innerHTML]="content.content"
@@ -57,8 +56,7 @@ export class HelpContentComponent implements OnInit {
       }
     }
     `,
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class AsideHelpContentComponent extends HelpContentComponent {
 }

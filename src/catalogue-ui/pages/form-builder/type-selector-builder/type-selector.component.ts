@@ -6,13 +6,14 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import {TypeInfo} from '../../../domain/dynamic-form-model';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-type-selector',
-  templateUrl: 'type-selector.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-type-selector',
+    templateUrl: 'type-selector.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, FormsModule]
 })
 
 export class TypeSelectorComponent {

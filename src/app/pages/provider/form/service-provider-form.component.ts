@@ -1,31 +1,40 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import * as sd from '../../../entities/services.description';
 import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
 import {Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
-import {ClassicEditor} from '../../../shared/ckeditor-classic-editor';
+import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
+import { NgClass, LowerCasePipe } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-new-service-provider',
-  templateUrl: './service-provider-form.component.html',
-  styleUrls: ['./service-provider-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-new-service-provider',
+    templateUrl: './service-provider-form.component.html',
+    styleUrls: ['./service-provider-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class ServiceProviderFormComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  authService = inject(UserSessionService);
+  providerService = inject(ProviderService);
+  resourceService = inject(ResourceService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
 
   private _hasUserConsent = environment.hasUserConsent;
 
-  public editor = ClassicEditor;
 
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
@@ -171,14 +180,6 @@ export class ServiceProviderFormComponent implements OnInit {
       this.user()
     ])
   };
-
-  constructor(public fb: UntypedFormBuilder,
-              public authService: UserSessionService,
-              public providerService: ProviderService,
-              public resourceService: ResourceService,
-              public router: Router,
-              public route: ActivatedRoute) {
-  }
 
   ngOnInit() {
 

@@ -1,28 +1,39 @@
-import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import { Component, ElementRef, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
 import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
-import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {UserSessionService} from '../../services/user-session.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {environment} from '../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {fromEvent, zip} from 'rxjs';
+import { HelpContentComponent, AsideHelpContentComponent } from '../../shared/reusablecomponents/help-content.component';
+import { NgClass } from '@angular/common';
+import { ReadMoreComponent } from '../../shared/reusablecomponents/read-more.component';
+import { EmailModalComponent } from '../../shared/email-modal/email-modal.component';
 
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.aire.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-search',
+    templateUrl: './search.aire.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [HelpContentComponent, NgClass, ReactiveFormsModule, FormsModule, ReadMoreComponent, RouterLink, AsideHelpContentComponent, EmailModalComponent]
 })
 
 export class SearchAireComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  resourceService = inject(ResourceService);
+  session = inject(UserSessionService);
+  comparisonService = inject(ComparisonService);
 
-  @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+
+  readonly searchInput = viewChild<ElementRef>('searchInput');
 
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
@@ -51,9 +62,9 @@ export class SearchAireComponent implements OnInit {
   loading = false;
 
 
-  constructor(public fb: UntypedFormBuilder, public router: Router, public route: ActivatedRoute,
-              public resourceService: ResourceService, public session: UserSessionService,
-              public comparisonService: ComparisonService) {
+  constructor() {
+    const fb = this.fb;
+
     this.searchForm = fb.group({query: [''], searchFields: ['']});
   }
 
@@ -91,7 +102,7 @@ export class SearchAireComponent implements OnInit {
       );
     });
 
-    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+    fromEvent(this.searchInput().nativeElement, 'keyup').pipe(
       map((event: any) => { // get value
         return event.target.value;
       })

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {distinctUntilChanged, filter, map, take} from 'rxjs/operators';
@@ -22,6 +22,9 @@ interface SessionState {
  */
 @Injectable({providedIn: 'root'})
 export class UserSessionService {
+  private router = inject(Router);
+  private userService = inject(UserService);
+
 
   private readonly state = new BehaviorSubject<SessionState>({loading: true, user: null});
 
@@ -32,7 +35,7 @@ export class UserSessionService {
   /** Emits once, after the user-info call has answered: the signed-in user, or null. */
   readonly ready$: Observable<UserInfo | null> = this.state.pipe(filter(s => !s.loading), take(1), map(s => s.user));
 
-  constructor(private router: Router, private userService: UserService) {
+  constructor() {
     this.userService.getUserInfo().subscribe(
       user => this.state.next({loading: false, user: user ?? null}),
       () => this.state.next({loading: false, user: null})

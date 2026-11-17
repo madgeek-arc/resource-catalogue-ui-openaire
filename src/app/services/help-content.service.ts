@@ -1,16 +1,15 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {PageContent} from '../entities/page-content';
 import {environment} from '../../environments/environment';
 import {throwError} from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class HelpContentService {
+  http = inject(HttpClient);
+
   // private _helpServiceUrl = "http://83.212.101.85:5555/api/";
   private _helpServiceUrl = environment.FAQ_ENDPOINT;
-
-  constructor(public http: HttpClient) {
-  }
 
   getActivePageContent(route: string) {
     // console.log(this._helpServiceUrl + "/page/route?q=" + route);

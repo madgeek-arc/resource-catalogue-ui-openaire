@@ -1,24 +1,28 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-number-field',
-  templateUrl: './number-field.component.html',
-  styles: ['.clear-style { height: 0 !important;}'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-number-field',
+    templateUrl: './number-field.component.html',
+    styles: ['.clear-style { height: 0 !important;}'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class NumberFieldComponent implements OnInit {
-  @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  @Input() fieldData: Field;
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
+
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
@@ -26,12 +30,10 @@ export class NumberFieldComponent implements OnInit {
 
   step = '';
 
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
-
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as UntypedFormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }

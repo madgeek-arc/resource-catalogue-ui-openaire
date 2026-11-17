@@ -1,24 +1,23 @@
-import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {LandingPageService} from '../../../services/landing-page.service';
 import {Subscriber} from 'rxjs';
 
 
 @Component({
-  selector: 'app-dataset',
-  templateUrl: 'dataset-landing-page.component.html',
-  providers: [LandingPageService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-dataset',
+    templateUrl: 'dataset-landing-page.component.html',
+    providers: [LandingPageService],
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 
 export class LandingPageComponent implements OnInit, OnDestroy {
+  protected route = inject(ActivatedRoute);
+  protected landingPageService = inject(LandingPageService);
+
   subscriptions = [];
   dataset: object = null;
   instances: object[] = null;
-
-  constructor(protected route: ActivatedRoute,
-              protected landingPageService: LandingPageService) {}
 
   ngOnInit() {
     this.subscriptions.push(

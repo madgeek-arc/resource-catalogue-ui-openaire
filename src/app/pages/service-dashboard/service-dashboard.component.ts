@@ -1,18 +1,23 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {NavigationService} from '../../services/navigation.service';
 import {Bundle, Datasource, Service} from '../../entities/eic-model';
 import {Subscription} from 'rxjs';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-service-dashboard',
-  templateUrl: './service-dashboard.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-service-dashboard',
+    templateUrl: './service-dashboard.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, NgClass, RouterOutlet]
 })
 export class ServiceDashboardComponent implements OnInit {
+  resourceService = inject(ResourceService);
+  router = inject(NavigationService);
+  private route = inject(ActivatedRoute);
+
 
   public serviceBundle: Bundle<Service | Datasource>;
   public service: Service;
@@ -21,11 +26,6 @@ export class ServiceDashboardComponent implements OnInit {
   datasource: Datasource = null;
 
   private sub: Subscription;
-
-  constructor(public resourceService: ResourceService,
-              public router: NavigationService,
-              private route: ActivatedRoute) {
-  }
 
   ngOnInit() {
     this.providerId = this.route.snapshot.paramMap.get('providerId');

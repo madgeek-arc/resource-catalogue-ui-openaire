@@ -1,33 +1,39 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UntypedFormArray, UntypedFormBuilder} from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {Section, Field, HandleBitSet, Tab, Tabs} from '../../domain/dynamic-form-model';
 import BitSet from 'bitset';
 
 import UIkit from 'uikit';
+import { NgStyle, NgClass } from '@angular/common';
+import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.component';
 
 @Component({
-  selector: 'app-chapter-edit',
-  templateUrl: './chapter.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-chapter-edit',
+    templateUrl: './chapter.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgStyle, NgClass, ReactiveFormsModule, DynamicFormFieldsComponent]
 })
 export class ChapterEditComponent implements OnChanges{
+  route = inject(ActivatedRoute);
+  protected fb = inject(UntypedFormBuilder);
+  protected router = inject(Router);
+
 
   @Input() form: any = null;
   @Input() tabsHeader: string;
   @Input() mandatoryFieldsText: string = null;
-  @Input() readonly: boolean = null;
-  @Input() validate: boolean = null;
-  @Input() vocabularies: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
+  readonly readonly = input<boolean>(null);
+  readonly validate = input<boolean>(null);
+  readonly vocabularies = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
   @Input() chapter: Section = null;
-  @Input() fields: Section[] = null;
+  readonly fields = input<Section[]>(null);
 
-  @Output() chapterHasChanges = new EventEmitter<string[]>();
-  @Output() submit = new EventEmitter();
+  readonly chapterHasChanges = output<string[]>();
+  readonly submit = output();
 
   editMode = true;
 
@@ -49,11 +55,6 @@ export class ChapterEditComponent implements OnChanges{
   isDatasource = false;
   datasourceId = '';
 
-  constructor(public route: ActivatedRoute,
-              protected fb: UntypedFormBuilder,
-              protected router: Router) {
-  }
-
   ngOnInit() {
     const path = this.route.snapshot.routeConfig.path;
     if (path.includes('/edit/')) {
@@ -71,7 +72,7 @@ export class ChapterEditComponent implements OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.fields) {
+    if (this.fields()) {
       this.initializations();
       this.ready = true;
     }
@@ -87,7 +88,7 @@ export class ChapterEditComponent implements OnChanges{
     /** Initialize tab bitsets **/
     let requiredTabs = 0; let requiredTotal = 0;
     const obj = new Map();
-    this.fields.forEach(group => {
+    this.fields().forEach(group => {
       const tab = new Tab();
       tab.requiredOnTab = tab.remainingOnTab = group.required.topLevel;
       tab.valid = false;

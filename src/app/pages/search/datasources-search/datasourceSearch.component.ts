@@ -1,5 +1,5 @@
-import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, ElementRef, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
 import {Paging} from '../../../entities/paging';
@@ -8,19 +8,27 @@ import {DatasourceService} from '../../../services/datasource.service';
 import {environment} from '../../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {fromEvent} from 'rxjs';
+import { HelpContentComponent, AsideHelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
+import { NgClass } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReadMoreComponent } from '../../../shared/reusablecomponents/read-more.component';
 
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './datasourceSearch.component.html',
-  providers: [DatasourceService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-search',
+    templateUrl: './datasourceSearch.component.html',
+    providers: [DatasourceService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [HelpContentComponent, NgClass, ReactiveFormsModule, FormsModule, RouterLink, AsideHelpContentComponent, ReadMoreComponent]
 })
 
 export class DatasourceSearchComponent implements OnInit {
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  datasourceService = inject(DatasourceService);
 
-  @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+
+  readonly searchInput = viewChild<ElementRef>('searchInput');
 
   public projectName = environment.projectName;
   searchResults: Paging<DatasourceDetails> = null;
@@ -42,10 +50,6 @@ export class DatasourceSearchComponent implements OnInit {
   filtersMobileShown = false;
   urlParameters: URLParameter[] = [];
   loading = false;
-
-
-  constructor(public router: Router, public route: ActivatedRoute, public datasourceService: DatasourceService) {
-  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -74,7 +78,7 @@ export class DatasourceSearchComponent implements OnInit {
       error => {console.log(error);}
     );
 
-    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+    fromEvent(this.searchInput().nativeElement, 'keyup').pipe(
       map((event: any) => { // get value
         return event.target.value;
       })

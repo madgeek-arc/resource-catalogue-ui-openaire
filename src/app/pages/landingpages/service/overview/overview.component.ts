@@ -1,20 +1,25 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, Input, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import {UiVocabulary} from '../../../../entities/dynamic-form-model';
 import {Service, URL} from '../../../../entities/eic-model';
 import * as uikit from 'uikit';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-service-landing-page',
-  templateUrl: 'overview.component.html',
-  // styleUrls: ['../../landing-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-service-landing-page',
+    templateUrl: 'overview.component.html',
+    // styleUrls: ['../../landing-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, RouterLink]
 })
 export class OverviewComponent {
+  private router = inject(Router);
 
-  @Input() vocabularies: Map<string, UiVocabulary[]>;
+
+  // Set by ServiceLandingPageComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Service[] = null;
   @Input() resourcePayload: Service = null;
 
@@ -24,8 +29,6 @@ export class OverviewComponent {
 
   slideMobile = 0;
   benefitSlideMobile = 0;
-
-  constructor(private router: Router) {}
 
   getVocabularyName(vocabularyType: string, id: string): string {
     // console.log(this.vocabularies);

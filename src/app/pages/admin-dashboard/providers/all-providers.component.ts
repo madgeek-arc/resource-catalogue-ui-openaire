@@ -1,22 +1,30 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../entities/eic-model';
 import {FacetValue} from '../../../entities/facet';
 import {URLParameter} from '../../../entities/url-parameter';
 import {ResourceService} from '../../../services/resource.service';
 import {ProviderService} from '../../../services/provider.service';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-admin-all-providers-dashboard',
-  templateUrl: 'all-providers.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-admin-all-providers-dashboard',
+    templateUrl: 'all-providers.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class AllProvidersDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private resourceService = inject(ResourceService);
+  private providerService = inject(ProviderService);
+
 
   providers: Paging<ProviderBundle> = null;
   selectedProvider: ProviderBundle = null;
@@ -40,8 +48,6 @@ export class AllProvidersDashboardComponent implements OnInit {
   showLoader = false;
   errorMessage: string;
   loadingMessage = '';
-
-  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService, private providerService: ProviderService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

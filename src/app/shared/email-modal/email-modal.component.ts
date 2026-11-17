@@ -1,30 +1,33 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormBuilder, Validators} from '@angular/forms';
+import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {EmailService} from '../../services/email.service';
+import { NgClass } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-email-modal',
-  templateUrl: './email-modal.component.html',
-  providers: [EmailService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-email-modal',
+    templateUrl: './email-modal.component.html',
+    providers: [EmailService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 export class EmailModalComponent {
+  fb = inject(UntypedFormBuilder);
+  router = inject(NavigationService);
+  route = inject(ActivatedRoute);
+  resourceService = inject(ResourceService);
+  comparisonService = inject(ComparisonService);
+  navigationService = inject(NavigationService);
+  emailService = inject(EmailService);
 
-  @Input() serviceIdsArray;
+
+  readonly serviceIdsArray = input(undefined);
   public emailErrorMessage = '';
-
-  constructor(public fb: UntypedFormBuilder, public router: NavigationService, public route: ActivatedRoute,
-              public resourceService: ResourceService,
-              public comparisonService: ComparisonService,
-              public navigationService: NavigationService, public emailService: EmailService) {
-  }
 
   emailForm = this.fb.group({
     recipientEmail: '',
@@ -43,7 +46,7 @@ export class EmailModalComponent {
   sendMail() {
     this.emailErrorMessage = '';
     if (this.emailForm.valid) {
-      this.emailService.sendMail(this.serviceIdsArray, this.emailForm.value).subscribe(
+      this.emailService.sendMail(this.serviceIdsArray(), this.emailForm.value).subscribe(
         res => UIkit.modal('#email-modal').hide(),
         err =>  this.emailErrorMessage = 'Something went bad, server responded: ' + err.error
       );

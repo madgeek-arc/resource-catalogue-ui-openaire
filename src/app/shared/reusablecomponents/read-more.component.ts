@@ -1,13 +1,13 @@
 /**
  * Created by stefania on 4/6/17.
  */
-import {AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnChanges, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, ChangeDetectionStrategy, inject, input, viewChild } from '@angular/core';
 
 @Component({
     selector: 'read-more',
     template: `
-        <div [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight+'px' : 'auto'" #readMoreDiv>
-          <ng-content></ng-content>
+        <div [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight()+'px' : 'auto'" #readMoreDiv>
+          <ng-content />
         </div>
         @if (isCollapsable) {
           <a (click)="isCollapsed =! isCollapsed">View {{isCollapsed ? 'more' : 'less'}}...</a>
@@ -18,28 +18,25 @@ import {AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnChanges
             overflow: hidden;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreComponent implements AfterContentInit {
+    elementRef = inject(ElementRef);
+
     //the text that need to be put in the container
     //@Input() text: string;
     //maximum height of the container
-    @Input() maxHeight = 100;
-    @ViewChild('readMoreDiv', { static: true })
-    readMoreDiv: ElementRef;
+    readonly maxHeight = input(100);
+    readonly readMoreDiv = viewChild<ElementRef>('readMoreDiv');
     //set these to false to get the height of the expended container
     public isCollapsed = false;
     public isCollapsable = false;
 
-    constructor(public elementRef: ElementRef) {
-    }
-
     ngAfterContentInit() {
         setTimeout(_ => {
-            const currentHeight = this.readMoreDiv.nativeElement.offsetHeight;
+            const currentHeight = this.readMoreDiv().nativeElement.offsetHeight;
             //collapsable only if the contents make container exceed the max height
-            if (currentHeight > this.maxHeight) {
+            if (currentHeight > this.maxHeight()) {
                 this.isCollapsed = true;
                 this.isCollapsable = true;
             } else {
@@ -51,7 +48,7 @@ export class ReadMoreComponent implements AfterContentInit {
 @Component({
     selector: 'read-more-text',
     template: `
-        <div [innerHTML]="text" [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight+'px' : 'auto'" #readMoreDiv>
+        <div [innerHTML]="text()" [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight()+'px' : 'auto'" #readMoreDiv>
           <!--{{text}}-->
         </div>
         @if (isCollapsable) {
@@ -67,12 +64,10 @@ export class ReadMoreComponent implements AfterContentInit {
             overflow: hidden;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreTextComponent extends ReadMoreComponent implements OnChanges, AfterViewInit {
-    @Input()
-    text = '';
+    readonly text = input('');
 
     ngAfterViewInit(): void {
         this.ngAfterContentInit();

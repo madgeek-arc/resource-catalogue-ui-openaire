@@ -5,8 +5,6 @@
     "sourceMap": true,
     // TypeScript 6 turns strict on by default; the strict flags are switched on one by one later instead.
     "strict": false,
-    // CKEditor 42's type declarations import CSS files, which TypeScript 6 would otherwise flag.
-    "noUncheckedSideEffectImports": false,
     "declaration": false,
     "module": "es2020",
     "moduleResolution": "bundler",
@@ -17,5 +15,9 @@
       "node_modules/@types"
     ],
     "useDefineForClassFields": false
+  },
+  // Shared by the app and spec builds. Template type errors are fixed and this is switched on later.
+  "angularCompilerOptions": {
+    "strictTemplates": false
   }
 }

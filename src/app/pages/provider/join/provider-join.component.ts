@@ -1,18 +1,18 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-join',
-  templateUrl: 'provider-join.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-join',
+    templateUrl: 'provider-join.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink]
 })
 
 export class ProviderJoinComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+
 
   token: string;
-
-  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe(

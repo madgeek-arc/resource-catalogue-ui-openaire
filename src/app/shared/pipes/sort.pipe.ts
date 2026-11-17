@@ -6,10 +6,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {isNullOrUndefined} from '../tools';
 
 
-@Pipe({
-    name: 'sort',
-    standalone: false
-})
+@Pipe({ name: 'sort' })
 export class StringArraySortPipe implements PipeTransform {
     transform(array: Array<string>, args: string): Array<string> {
         if (isNullOrUndefined(array)) {

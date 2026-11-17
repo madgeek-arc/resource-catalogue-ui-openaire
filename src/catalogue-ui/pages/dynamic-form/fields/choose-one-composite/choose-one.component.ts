@@ -1,37 +1,42 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, inject, input, output } from '@angular/core';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
+import { CompositeFieldComponent } from '../composite-field/composite-field.component';
+import { StringFieldComponent } from '../string-field/string-field.component';
 
 @Component({
-  selector: 'app-choose-one',
-  templateUrl: './choose-one.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+    selector: 'app-choose-one',
+    templateUrl: './choose-one.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, CompositeFieldComponent, StringFieldComponent]
 })
 
 export class ChooseOneComponent implements OnInit {
-  @Input() fieldData: Field;
-  @Input() vocabularies: Map<string, object[]>;
-  @Input() subVocabularies: Map<string, object[]>;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  private rootFormGroup = inject(FormGroupDirective);
+  private formService = inject(FormControlService);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  @Input() fieldData: Field;
+  readonly vocabularies = input<Map<string, object[]>>(undefined);
+  readonly subVocabularies = input<Map<string, object[]>>(undefined);
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
+
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   form: UntypedFormGroup;
   hideField: boolean = null;
 
-  constructor(private rootFormGroup: FormGroupDirective, private formService: FormControlService) {
-  }
-
   ngOnInit() {
-    if (this.position !== null) {
+    const position = this.position();
+    if (position !== null) {
       // console.log(this.rootFormGroup.control.controls[this.position]);
       // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData.name));
-      this.form = this.rootFormGroup.control.controls[this.position].get(this.fieldData.name) as UntypedFormGroup;
+      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData.name) as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control.get(this.fieldData.name) as UntypedFormGroup;
     }

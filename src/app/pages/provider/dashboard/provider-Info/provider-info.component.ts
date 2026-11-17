@@ -1,40 +1,24 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Provider, ProviderBundle, Type, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 
 @Component({
-  selector: 'app-provider-info',
-  templateUrl: 'provider-info.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-info',
+    templateUrl: 'provider-info.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 
 export class ProviderInfoComponent implements OnInit, OnChanges {
+  private resourceService = inject(ResourceService);
 
-  @Input() providerBundle: ProviderBundle = null;
+
+  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  providerBundle: ProviderBundle = null;
   provider: Provider = null;
   vocabularies: Map<string, object[]> = null;
-
-  // vocabularies: Map<string, Vocabulary[]> = null;
-  // placesVocabulary: Vocabulary[] = null;
-  // providerTypeVocabulary: Vocabulary[] = null;
-  // providerLCSVocabulary: Vocabulary[] = null;
-  // domainsVocabulary: Vocabulary[] = null;
-  // categoriesVocabulary: Vocabulary[] = null;
-  // merilDomainsVocabulary: Vocabulary[] = null;
-  // merilCategoriesVocabulary: Vocabulary[] = null;
-  // esfriDomainVocabulary: Vocabulary[] = null;
-  // legalStatusVocabulary: Vocabulary[] = null;
-  // esfriVocabulary: Vocabulary[] = null;
-  // areasOfActivityVocabulary: Vocabulary[] = null;
-  // networksVocabulary: Vocabulary[] = null;
-  // societalGrandChallengesVocabulary: Vocabulary[] = null;
-  // hostingLegalEntityVocabulary: Vocabulary[] = null;
-
-  constructor(private resourceService: ResourceService) {
-  }
 
   ngOnInit() {
 

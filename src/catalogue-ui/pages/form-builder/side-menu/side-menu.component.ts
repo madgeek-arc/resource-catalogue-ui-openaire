@@ -1,17 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, input, output} from '@angular/core';
 import {Section, Field, GroupedFields} from '../../../domain/dynamic-form-model';
 
 @Component({
-  selector: 'app-side-menu',
-  templateUrl: './side-menu.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-side-menu',
+    templateUrl: './side-menu.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 
 export class SideMenuComponent implements OnInit {
 
-  @Input() chapterModel: Section[];
-  @Output() showChapterOrSection = new EventEmitter<string>();
+  readonly chapterModel = input<Section[]>(undefined);
+  readonly showChapterOrSection = output<string>();
   // groups: Group[] = []
 
   ngOnInit() {
@@ -19,19 +18,19 @@ export class SideMenuComponent implements OnInit {
   }
 
   addSection(position) {
-    this.chapterModel[position].subSections.push(new Section());
+    this.chapterModel()[position].subSections.push(new Section());
   }
 
   addField(positionI, positionJ) {
-    this.chapterModel[positionI].subSections[positionJ].fields.push(new Field());
+    this.chapterModel()[positionI].subSections[positionJ].fields.push(new Field());
   }
 
   pushChapter() {
-    this.chapterModel.push(new Section());
+    this.chapterModel().push(new Section());
   }
 
   deleteChapter(position: number) {
-    this.chapterModel.splice(position, 1);
+    this.chapterModel().splice(position, 1);
   }
 
   emitSelection(str: string) {

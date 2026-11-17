@@ -1,23 +1,30 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Paging} from '../../domain/paging';
 import {URLParameter} from '../../domain/url-parameter';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
 import {SearchService} from '../../services/search.service';
+import { ReadMoreComponent } from '../../shared/reusable-components/read-more.component';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  providers: [SearchService],
-  // styleUrls: ['../../../lib/pages/search/search.component.scss']
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    providers: [SearchService],
+    // styleUrls: ['../../../lib/pages/search/search.component.scss']
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, ReadMoreComponent, NgClass, RouterLink]
 })
 
 export class SearchComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  route = inject(ActivatedRoute);
+  searchService = inject(SearchService);
+  router = inject(Router);
+
   private sortFacets = new PremiumSortFacetsPipe();
   canAddOrEditService: boolean;
   // myProviders:  Provider[] = [];
@@ -46,9 +53,9 @@ export class SearchComponent implements OnInit {
   searchFields: string[] = ['name', 'publisher', 'source'];
   filtersMobileShown = false;
 
-  constructor(public fb: UntypedFormBuilder, public route: ActivatedRoute, public searchService: SearchService,
-              // public authenticationService: AuthenticationService,
-              public router: Router) {
+  constructor() {
+    const fb = this.fb;
+
     this.searchForm = fb.group({query: [''], searchFields: ['']});
   }
 

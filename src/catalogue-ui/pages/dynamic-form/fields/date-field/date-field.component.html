@@ -18,7 +18,7 @@
     <dp-date-picker [formControlName]="fieldData.name" [id]="fieldData.name" class="uk-width-9-10"
       [placeholder]="fieldData.form.placeholder ? fieldData.form.placeholder : ''"
       (input)="updateBitSet(fieldData); unsavedChangesPrompt()" [config]="{format: 'YYYY-MM-DD'}"
-    [ngClass]="{'uk-form-danger': checkFormValidity() }"></dp-date-picker>
+    [ngClass]="{'uk-form-danger': checkFormValidity() }" />
     @if (fieldData.form.suggestion.text) {
       <div class="uk-margin-top">
         <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>

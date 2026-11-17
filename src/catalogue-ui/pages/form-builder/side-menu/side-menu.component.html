@@ -1,6 +1,6 @@
 <div>
   <ul uk-tab="connect: #chapter-tabs; animation: uk-animation-fade" class="uk-grid">
-    @for (chapter of chapterModel; track chapter; let i = $index) {
+    @for (chapter of chapterModel(); track chapter; let i = $index) {
       <li class="uk-width-1-1">
         <div class="uk-flex uk-flex-middle uk-width-1-1">
           <div class="uk-width-3-5">
@@ -43,6 +43,6 @@
     }
   </ul>
   <a class="uk-flex uk-flex-middle uk-margin-small" (click)="pushChapter()">
-    <span class="material-icons">add</span> {{chapterModel.length === 0 ? 'Create the first chapter': 'Chapter'}}
+    <span class="material-icons">add</span> {{chapterModel().length === 0 ? 'Create the first chapter': 'Chapter'}}
   </a>
 </div>

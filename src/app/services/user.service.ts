@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {UserInfo} from '../entities/userInfo';
 import {Provider} from '../entities/eic-model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
-  base = environment.API_ENDPOINT;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  base = environment.API_ENDPOINT;
 
   getUserInfo() {
     return this.http.get<UserInfo>(this.base + '/user/info');

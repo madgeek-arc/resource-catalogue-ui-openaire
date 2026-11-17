@@ -1,15 +1,17 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {NavigationService} from './navigation.service';
 import {Service} from '../entities/eic-model';
 
 declare let UIkit;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ComparisonService {
+  router = inject(NavigationService);
+
 
   public servicesToCompare: Service[] = [];
 
-  constructor(public router: NavigationService) {
+  constructor() {
     this.servicesToCompare = JSON.parse(sessionStorage.getItem('compareServices') || '[]');
   }
 

@@ -1,43 +1,47 @@
-import {Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Field, Model, Section} from '../../../../domain/dynamic-form-model';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { CompareChapterComponent } from '../chapters/compare-chapter.component';
 
 @Component({
-  selector: 'app-compare-surveys',
-  templateUrl: 'compare-surveys.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-compare-surveys',
+    templateUrl: 'compare-surveys.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, CompareChapterComponent]
 })
 
 export class CompareSurveysComponent implements OnChanges{
+  private formControlService = inject(FormControlService);
+  private fb = inject(UntypedFormBuilder);
 
-  @Input() payloadA: any = null;
-  @Input() payloadB: any = null;
-  @Input() entryA: any = null;
-  @Input() entryB: any = null;
+
+  readonly payloadA = input<any>(null);
+  readonly payloadB = input<any>(null);
+  readonly entryA = input<any>(null);
+  readonly entryB = input<any>(null);
   @Input() model: Model = null;
-  @Input() subType: string = null;
-  @Input() vocabulariesMap: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() tabsHeader: string = null;
+  readonly subType = input<string>(null);
+  readonly vocabulariesMap = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly tabsHeader = input<string>(null);
 
   ready = false;
 
   formA = this.fb.group({});
   formB = this.fb.group({});
 
-  constructor(private formControlService: FormControlService, private fb: UntypedFormBuilder,) {
-  }
-
   ngOnChanges(changes: SimpleChanges) {
-    if (this.model && this.payloadA?.answer) {
+    const payloadA = this.payloadA();
+    if (this.model && payloadA?.answer) {
       this.createForm(this.formA);
-      this.patchForm(this.formA, this.payloadA.answer);
-      if (this.payloadB?.answer) {
+      this.patchForm(this.formA, payloadA.answer);
+      const payloadB = this.payloadB();
+      if (payloadB?.answer) {
         this.createForm(this.formB);
-        this.patchForm(this.formB, this.payloadB.answer);
+        this.patchForm(this.formB, payloadB.answer);
       }
       this.ready = true;
     } else {
@@ -54,7 +58,7 @@ export class CompareSurveysComponent implements OnChanges{
         form.addControl(this.model.name, this.formControlService.toFormGroup(this.model.sections, true));
         break;
       }
-      if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType) {
+      if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType()) {
         form.addControl(this.model.sections[i].name, this.formControlService.toFormGroup(this.model.sections[i].subSections, true));
       }
     }

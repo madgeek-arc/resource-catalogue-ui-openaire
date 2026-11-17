@@ -2,18 +2,18 @@
   <div class="uk-container uk-container-expand">
     <div class="uk-grid">
 
-      <app-side-menu class="uk-width-1-5" [chapterModel]="formBuilder" (showChapterOrSection)="updateView($event)"></app-side-menu>
+      <app-side-menu class="uk-width-1-5" [chapterModel]="formBuilder" (showChapterOrSection)="updateView($event)" />
       <div class="uk-width-3-5">
         <ul id="chapter-tabs" class="uk-switcher">
           @for (chapter of formBuilder; track chapter) {
             <li>
-              <app-chapter-builder [chapter]="chapter" [ngClass]="{'uk-display-none': show !== 'chapter'}"></app-chapter-builder>
+              <app-chapter-builder [chapter]="chapter" [ngClass]="{'uk-display-none': show !== 'chapter'}" />
               <ul id="section-tabs" class="uk-switcher" [ngClass]="{'uk-display-none': show !== 'section'}">
                 @for (section of chapter.subSections; track section) {
                   <li>
-                    <app-section-builder [section]="section"></app-section-builder>
+                    <app-section-builder [section]="section" />
                     @for (field of section.fields; track field; let i = $index) {
-                      <app-field-builder [field]="field"></app-field-builder>
+                      <app-field-builder [field]="field" />
                     }
                   </li>
                 }

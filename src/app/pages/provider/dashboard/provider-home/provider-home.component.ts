@@ -1,20 +1,27 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject} from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
-import {DatePipe} from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-provider-home',
-  templateUrl: 'provider-home.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-home',
+    templateUrl: 'provider-home.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, TitleCasePipe, DatePipe]
 })
 
 export class ProviderHomeComponent implements OnInit, OnChanges {
+  private router = inject(Router);
+  private providerService = inject(ProviderService);
+  private resourceService = inject(ResourceService);
+  private datePipe = inject(DatePipe);
 
-  @Input() providerBundle: ProviderBundle = null;
+
+  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  providerBundle: ProviderBundle = null;
   provider: Provider = null;
   loggingInfo: LoggingInfo[] = null;
   vocabularies: Map<string, object[]> = null;
@@ -22,9 +29,6 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   approvedResourceBundles: ServiceBundle[] = null;
   pendingResourceBundles: ServiceBundle[] = null;
   rejectedResourceBundles: ServiceBundle[] = null;
-
-  constructor(private router: Router, private providerService: ProviderService, private resourceService: ResourceService, private datePipe: DatePipe) {
-  }
 
   ngOnInit() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

@@ -14,41 +14,43 @@ import {
 import {
   CookieLawService,
 } from './cookie-law.service';
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output, ChangeDetectionStrategy, forwardRef, inject } from '@angular/core';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
+import { NgStyle } from '@angular/common';
+
 
 export type CookieLawPosition = 'top' | 'bottom';
 export type CookieLawAnimation = 'topIn' | 'bottomIn' | 'topOut' | 'bottomOut';
 export type CookieLawTarget = '_blank' | '_self';
 
 @Component({
-  selector: 'cookie-law',
-  // encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger('state', [
-      state('bottomOut', style({ transform: 'translateY(100%)' })),
-      state('topOut', style({ transform: 'translateY(-100%)' })),
-      state('*', style({ transform: 'translateY(0)' })),
-
-      transition('void => topIn', [
-        style({ transform: 'translateY(-100%)' }),
-        animate('1000ms ease-in-out'),
-      ]),
-
-      transition('void => bottomIn', [
-        style({ transform: 'translateY(100%)' }),
-        animate('1000ms ease-in-out'),
-      ]),
-
-      transition('* => *', animate('1000ms ease-out')),
-    ])
-  ],
-  styleUrls: [ './cookie-law.css' ],
-  templateUrl: './cookie-law.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'cookie-law',
+    // encapsulation: ViewEncapsulation.None,
+    animations: [
+        trigger('state', [
+            state('bottomOut', style({ transform: 'translateY(100%)' })),
+            state('topOut', style({ transform: 'translateY(-100%)' })),
+            state('*', style({ transform: 'translateY(0)' })),
+            transition('void => topIn', [
+                style({ transform: 'translateY(-100%)' }),
+                animate('1000ms ease-in-out'),
+            ]),
+            transition('void => bottomIn', [
+                style({ transform: 'translateY(100%)' }),
+                animate('1000ms ease-in-out'),
+            ]),
+            transition('* => *', animate('1000ms ease-out')),
+        ])
+    ],
+    styleUrls: ['./cookie-law.css'],
+    templateUrl: './cookie-law.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgStyle, forwardRef(() => CookieLawComponent)]
 })
 export class CookieLawComponent implements OnInit {
+  private _service = inject(CookieLawService);
+  private domSanitizer = inject(DomSanitizer);
+
   public cookieLawSeen: boolean;
 
   @Input('learnMore')
@@ -86,10 +88,7 @@ export class CookieLawComponent implements OnInit {
   private _target: CookieLawTarget;
   private _position: CookieLawPosition;
 
-  constructor(
-    private _service: CookieLawService,
-    private domSanitizer: DomSanitizer,
-  ) {
+  constructor() {
     this.isSeenEvt = new EventEmitter<boolean>();
     this.animation = 'topIn';
     this._position = 'bottom';

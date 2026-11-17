@@ -1,24 +1,34 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, inject} from '@angular/core';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {Paging} from '../../../../entities/paging';
 import {URLParameter} from '../../../../entities/url-parameter';
 import {zip} from 'rxjs';
 import {ResourceService} from '../../../../services/resource.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-provider-services',
-  templateUrl: 'provider-services.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-services',
+    templateUrl: 'provider-services.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class ProviderServicesComponent implements OnInit {
+  private providerService = inject(ProviderService);
+  private resourceService = inject(ResourceService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  @Input() providerBundle: ProviderBundle = null;
+
+  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  providerBundle: ProviderBundle = null;
 
   services: Paging<Bundle<Service | Datasource>> = null;
   selectedService: Bundle<Service | Datasource> = null;
@@ -41,10 +51,6 @@ export class ProviderServicesComponent implements OnInit {
   showLoader = false;
   errorMessage: string;
   loadingMessage = '';
-
-  constructor(private providerService: ProviderService, private resourceService: ResourceService, private router: Router,
-              private route: ActivatedRoute) {
-  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

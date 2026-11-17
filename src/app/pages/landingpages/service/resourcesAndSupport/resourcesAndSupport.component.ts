@@ -1,11 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Service, URL } from '../../../../entities/eic-model';
+import { NgStyle, SlicePipe, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-service-landing-page-resources-and-support',
-  templateUrl: 'resourcesAndSupport.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-service-landing-page-resources-and-support',
+    templateUrl: 'resourcesAndSupport.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgStyle, RouterLink, SlicePipe, DatePipe]
 })
 
 export class ResourcesAndSupportComponent {

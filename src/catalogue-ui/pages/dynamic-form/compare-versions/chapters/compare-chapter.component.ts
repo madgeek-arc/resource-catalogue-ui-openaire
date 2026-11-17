@@ -1,26 +1,28 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormGroup} from '@angular/forms';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, input} from '@angular/core';
+import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Section, Tab} from '../../../../domain/dynamic-form-model';
 import BitSet from 'bitset';
+import { NgStyle, NgClass, DatePipe } from '@angular/common';
+import { DynamicFormFieldsComponent } from '../../fields/dynamic-form-fields.component';
 
 @Component({
-  selector: 'app-chapter-compare',
-  templateUrl: 'compare-chapter.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-chapter-compare',
+    templateUrl: 'compare-chapter.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgStyle, NgClass, ReactiveFormsModule, DynamicFormFieldsComponent, DatePipe]
 })
 
 export class CompareChapterComponent implements OnChanges {
 
   @Input() formA: UntypedFormGroup = null;
   @Input() formB: UntypedFormGroup = null;
-  @Input() entryA: any = null;
+  readonly entryA = input<any>(null);
   @Input() entryB: any = null;
   @Input() tabsHeader: string;
   @Input() chapter: Section = null;
   @Input() fields: Section[] = null;
-  @Input() vocabularies: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
+  readonly vocabularies = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
 
   ready = false;
 

@@ -15,14 +15,13 @@
     @for (input of fieldAsFormArray().controls; track input; let i = $index) {
 <div class="uk-margin-bottom uk-flex uk-flex-middle">
       <ng-select class="uk-width-9-10" [id]="fieldData.name" [formControlName]="i"
-                 [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.name, i, this.editMode)}"
+                 [ngClass]="{'uk-form-danger': checkFormArrayValidity(fieldData.name, i, this.editMode())}"
                  [items]="dynamicVoc?.length > 0 ? dynamicVoc :
-                 fieldData.typeInfo.values ? fieldData.typeInfo.values : vocabularies[vocabularyKey]"
+                 fieldData.typeInfo.values ? fieldData.typeInfo.values : vocabularies()[vocabularyKey]"
                  (change)="updateBitSet(fieldData); unsavedChangesPrompt()"
                  bindLabel="name"
                  bindValue="id"
-                 clearAllText="Clear">
-      </ng-select>
+                 clearAllText="Clear" />
       @if (fieldAsFormArray().length > 1) {
 <a
          (click)="remove(fieldData.name, i); updateBitSet(fieldData); unsavedChangesPrompt()"
@@ -48,11 +47,10 @@
                (change)="updateBitSet(fieldData); unsavedChangesPrompt()"
                [ngClass]="{'uk-form-danger': checkFormValidity()}"
                [items]="dynamicVoc?.length > 0 ? dynamicVoc :
-                 fieldData.typeInfo.values ? fieldData.typeInfo.values : vocabularies[vocabularyKey]"
+                 fieldData.typeInfo.values ? fieldData.typeInfo.values : vocabularies()[vocabularyKey]"
                bindLabel="name"
                bindValue="id"
-               clearAllText="Clear">
-    </ng-select>
+               clearAllText="Clear" />
     @if (fieldData.form.suggestion.text) {
 <div class="uk-margin-top">
       <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>

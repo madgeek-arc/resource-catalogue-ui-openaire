@@ -1,21 +1,28 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Service, Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {URLParameter} from '../../../entities/url-parameter';
 import {FacetValue} from '../../../entities/facet';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-admin-all-services-dashboard',
-  templateUrl: 'all-services.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-admin-all-services-dashboard',
+    templateUrl: 'all-services.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class AllServicesDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private resourceService = inject(ResourceService);
+
 
   services: Paging<Bundle<Service>> = null;
   selectedService: Bundle<Service> = null;
@@ -39,8 +46,6 @@ export class AllServicesDashboardComponent implements OnInit {
   showLoader = false;
   errorMessage: string;
   loadingMessage = '';
-
-  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

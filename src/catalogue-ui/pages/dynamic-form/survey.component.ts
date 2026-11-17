@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
@@ -11,29 +11,38 @@ import BitSet from 'bitset';
 import seedRandom from 'seedrandom';
 
 import UIkit from 'uikit';
+import { NgClass } from '@angular/common';
+import { ChapterEditComponent } from './chapter-edit.component';
 pdfMake.vfs = pdfFonts.vfs;
 
 @Component({
-  selector: 'app-survey',
-  templateUrl: 'survey.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-survey',
+    templateUrl: 'survey.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, ChapterEditComponent]
 })
 
 export class SurveyComponent implements OnInit, OnChanges {
+  private formControlService = inject(FormControlService);
+  private fb = inject(UntypedFormBuilder);
+  private router = inject(Router);
+
 
   @Input() payload: any = null; // can't import specific project class in lib file
   @Input() model: Model = null;
-  @Input() subType: string = null;
-  @Input() activeUsers: any[] = null;
-  @Input() vocabulariesMap: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() tabsHeader: string = null;
-  @Input() mandatoryFieldsText: string = null;
-  @Input() downloadPDF = false;
-  @Output() valid = new EventEmitter<boolean>();
-  @Output() submit = new EventEmitter<[UntypedFormGroup, boolean]>();
+  readonly subType = input<string>(null);
+  readonly activeUsers = input<any[]>(null);
+  readonly vocabulariesMap = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly tabsHeader = input<string>(null);
+  readonly mandatoryFieldsText = input<string>(null);
+  readonly downloadPDF = input(false);
+  readonly valid = output<boolean>();
+  readonly submit = output<[
+    UntypedFormGroup,
+    boolean
+]>();
 
   sectionIndex = 0;
   chapterChangeMap: Map<string,boolean> = new Map<string, boolean>();
@@ -52,7 +61,7 @@ export class SurveyComponent implements OnInit, OnChanges {
 
   form: UntypedFormGroup;
 
-  constructor(private formControlService: FormControlService, private fb: UntypedFormBuilder, private router: Router) {
+  constructor() {
     this.form = this.fb.group({});
   }
 
@@ -87,7 +96,7 @@ export class SurveyComponent implements OnInit, OnChanges {
           this.form.addControl(this.model.name, this.formControlService.toFormGroup(this.model.sections, true));
           break;
         }
-        if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType) {
+        if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType()) {
           this.form.addControl(this.model.sections[i].name, this.formControlService.toFormGroup(this.model.sections[i].subSections, true));
         }
       }
@@ -111,10 +120,10 @@ export class SurveyComponent implements OnInit, OnChanges {
       }
       this.ready = true;
 
-      if (this.activeUsers?.length > 0) {
+      if (this.activeUsers()?.length > 0) {
         setTimeout(()=> {
           const users = [];
-          this.activeUsers.forEach(user => {
+          this.activeUsers().forEach(user => {
             users.push(' '+user.fullname);
           });
           UIkit.tooltip('#concurrentEdit', {title: users.toString(), pos: 'bottom'});

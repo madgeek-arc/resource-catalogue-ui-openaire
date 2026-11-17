@@ -1,34 +1,35 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-large-text-field',
-  templateUrl: './large-text-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-large-text-field',
+    templateUrl: './large-text-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class LargeTextFieldComponent implements OnInit {
-  @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() readonly: boolean = null;
-  @Input() position?: number = null;
+  private rootFormGroup = inject(FormGroupDirective);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  @Input() fieldData: Field;
+  readonly editMode = input<any>(undefined);
+  readonly readonly = input<boolean>(null);
+  readonly position = input<number>(null);
+
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  constructor(private rootFormGroup: FormGroupDirective) {
-  }
-
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as UntypedFormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }

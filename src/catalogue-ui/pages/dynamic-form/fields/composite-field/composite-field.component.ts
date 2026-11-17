@@ -1,39 +1,52 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, FormControl, UntypedFormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { UntypedFormArray, FormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
+import { ChooseOneComponent } from '../choose-one-composite/choose-one.component';
+import { VocabularyFieldComponent } from '../dropdown-field/vocabulary-field.component';
+import { StringFieldComponent } from '../string-field/string-field.component';
+import { NumberFieldComponent } from '../number-field/number-field.component';
+import { CheckboxFieldComponent } from '../checkbox-field/checkbox-field.component';
+import { LargeTextFieldComponent } from '../large-text-field/large-text-field.component';
+import { RadioButtonFieldComponent } from '../radio-button-field/radio-button-field.component';
+import { RichTextFieldComponent } from '../rich-text-field/rich-text-field.component';
+import { DateFieldComponent } from '../date-field/date-field.component';
+import { RadioGridFieldComponent } from '../radio-grid-field/radio-grid-field.component';
 
 @Component({
-  selector: 'app-composite-field',
-  templateUrl: './composite-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-composite-field',
+    templateUrl: './composite-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, ChooseOneComponent, VocabularyFieldComponent, StringFieldComponent, NumberFieldComponent, CheckboxFieldComponent, LargeTextFieldComponent, RadioButtonFieldComponent, RichTextFieldComponent, DateFieldComponent, RadioGridFieldComponent]
 })
 
 export class CompositeFieldComponent implements OnInit {
-  @Input() fieldData: Field;
-  @Input() vocabularies: Map<string, object[]>;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() editMode: any;
-  @Input() readonly: boolean = null;
-  @Input() position?: number = null;
+  private rootFormGroup = inject(FormGroupDirective);
+  private formService = inject(FormControlService);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  @Input() fieldData: Field;
+  readonly vocabularies = input<Map<string, object[]>>(undefined);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly editMode = input<any>(undefined);
+  readonly readonly = input<boolean>(null);
+  readonly position = input<number>(null);
+
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   form: UntypedFormGroup;
   hideField: boolean = null;
 
-  constructor(private rootFormGroup: FormGroupDirective, private formService: FormControlService) {
-  }
-
   ngOnInit() {
     // console.log(this.fieldData.name);
-    if (this.position !== null) {
+    const position = this.position();
+    if (position !== null) {
       // console.log(this.rootFormGroup.control.controls[this.position]);
       // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData.name));
-      this.form = this.rootFormGroup.control.controls[this.position].get(this.fieldData.name) as UntypedFormGroup;
+      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData.name) as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control.get(this.fieldData.name) as UntypedFormGroup;
       // console.log(this.form);
