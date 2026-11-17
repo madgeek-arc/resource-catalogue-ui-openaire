@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {Field} from '../../../../domain/dynamic-form-model';
 import { UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
@@ -13,7 +13,7 @@ import { NgClass } from '@angular/common';
 export class RadioGridFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
 
-  @Input() fieldData: Field;
+  readonly fieldData = input<Field>(undefined);
 
   form!: UntypedFormGroup;
   hideField: boolean = null;

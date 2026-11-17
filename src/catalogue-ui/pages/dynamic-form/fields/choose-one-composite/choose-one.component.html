@@ -46,8 +46,8 @@
                     @if (getGroupOfArray(i).contains(control.name)) {
                       <div>
                         @if (control.typeInfo.type === 'composite') {
-                          <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies"
-                            [vocabularies]="vocabularies" (hasChanges)="unsavedChangesPrompt()"
+                          <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies()"
+                            [vocabularies]="vocabularies()" (hasChanges)="unsavedChangesPrompt()"
                             [position]="i" (handleBitSets)="handleBitsetOfChildren($event)"
                             (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                         }
@@ -99,7 +99,7 @@
             <div class="">
               @if (this.form.contains(control.name) && control.typeInfo.type === 'composite') {
                 <div>
-                  <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
+                  <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                     (handleBitSets)="handleBitsetOfChildren($event)" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>

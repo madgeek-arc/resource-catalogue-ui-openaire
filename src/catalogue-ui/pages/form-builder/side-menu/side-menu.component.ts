@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy, input} from '@angular/core';
 import {Section, Field, GroupedFields} from '../../../domain/dynamic-form-model';
 
 @Component({
@@ -9,7 +9,7 @@ import {Section, Field, GroupedFields} from '../../../domain/dynamic-form-model'
 
 export class SideMenuComponent implements OnInit {
 
-  @Input() chapterModel: Section[];
+  readonly chapterModel = input<Section[]>(undefined);
   @Output() showChapterOrSection = new EventEmitter<string>();
   // groups: Group[] = []
 
@@ -18,19 +18,19 @@ export class SideMenuComponent implements OnInit {
   }
 
   addSection(position) {
-    this.chapterModel[position].subSections.push(new Section());
+    this.chapterModel()[position].subSections.push(new Section());
   }
 
   addField(positionI, positionJ) {
-    this.chapterModel[positionI].subSections[positionJ].fields.push(new Field());
+    this.chapterModel()[positionI].subSections[positionJ].fields.push(new Field());
   }
 
   pushChapter() {
-    this.chapterModel.push(new Section());
+    this.chapterModel().push(new Section());
   }
 
   deleteChapter(position: number) {
-    this.chapterModel.splice(position, 1);
+    this.chapterModel().splice(position, 1);
   }
 
   emitSelection(str: string) {

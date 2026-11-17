@@ -6,15 +6,15 @@
           <div class="uk-form-controls">
             @if (fieldData.typeInfo.type === 'composite') {
               <div>
-                <app-composite-field [fieldData]="fieldData" [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
-                  [readonly]="readonly" (hasChanges)="unsavedChangesPrompt()"
+                <app-composite-field [fieldData]="fieldData" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
+                  [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
             @if (fieldData.typeInfo.type === 'chooseOne') {
               <div>
-                <app-choose-one [fieldData]="fieldData" [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
+                <app-choose-one [fieldData]="fieldData" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                   (hasChanges)="unsavedChangesPrompt()" (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
@@ -38,7 +38,7 @@
             }
             @if (fieldData.typeInfo.type === 'vocabulary' || fieldData.typeInfo.type === 'select') {
               <div>
-                <app-vocabulary-field [fieldData]="fieldData" [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
+                <app-vocabulary-field [fieldData]="fieldData" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                   (handleBitSets)="handleBitsetOfChildren($event)" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
@@ -52,7 +52,7 @@
             }
             @if (fieldData.typeInfo.type === 'radio') {
               <div>
-                <app-radio-button-field [fieldData]="fieldData" [readonly]="readonly" (hasChanges)="unsavedChangesPrompt()"
+                <app-radio-button-field [fieldData]="fieldData" [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>

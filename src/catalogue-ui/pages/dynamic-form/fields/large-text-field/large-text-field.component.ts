@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { NgClass } from '@angular/common';
@@ -14,9 +14,9 @@ export class LargeTextFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
 
   @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() readonly: boolean = null;
-  @Input() position?: number = null;
+  readonly editMode = input<any>(undefined);
+  readonly readonly = input<boolean>(null);
+  readonly position = input<number>(null);
 
   @Output() hasChanges = new EventEmitter<boolean>();
   @Output() handleBitSets = new EventEmitter<Field>();
@@ -27,8 +27,9 @@ export class LargeTextFieldComponent implements OnInit {
   hideField: boolean = null;
 
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as UntypedFormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }

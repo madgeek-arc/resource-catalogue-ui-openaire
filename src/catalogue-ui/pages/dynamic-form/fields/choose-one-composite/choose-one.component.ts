@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, input } from '@angular/core';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -19,10 +19,10 @@ export class ChooseOneComponent implements OnInit {
   private formService = inject(FormControlService);
 
   @Input() fieldData: Field;
-  @Input() vocabularies: Map<string, object[]>;
-  @Input() subVocabularies: Map<string, object[]>;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly vocabularies = input<Map<string, object[]>>(undefined);
+  readonly subVocabularies = input<Map<string, object[]>>(undefined);
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
   @Output() hasChanges = new EventEmitter<boolean>();
   @Output() handleBitSets = new EventEmitter<Field>();
@@ -32,10 +32,11 @@ export class ChooseOneComponent implements OnInit {
   hideField: boolean = null;
 
   ngOnInit() {
-    if (this.position !== null) {
+    const position = this.position();
+    if (position !== null) {
       // console.log(this.rootFormGroup.control.controls[this.position]);
       // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData.name));
-      this.form = this.rootFormGroup.control.controls[this.position].get(this.fieldData.name) as UntypedFormGroup;
+      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData.name) as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control.get(this.fieldData.name) as UntypedFormGroup;
     }

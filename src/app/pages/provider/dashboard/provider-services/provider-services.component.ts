@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, inject} from '@angular/core';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {Paging} from '../../../../entities/paging';
@@ -26,7 +26,9 @@ export class ProviderServicesComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
 
-  @Input() providerBundle: ProviderBundle = null;
+  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  providerBundle: ProviderBundle = null;
 
   services: Paging<Bundle<Service | Datasource>> = null;
   selectedService: Bundle<Service | Datasource> = null;

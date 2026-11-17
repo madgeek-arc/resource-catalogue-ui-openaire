@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -25,12 +25,12 @@ export class ChapterEditComponent implements OnChanges{
   @Input() form: any = null;
   @Input() tabsHeader: string;
   @Input() mandatoryFieldsText: string = null;
-  @Input() readonly: boolean = null;
-  @Input() validate: boolean = null;
-  @Input() vocabularies: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
+  readonly readonly = input<boolean>(null);
+  readonly validate = input<boolean>(null);
+  readonly vocabularies = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
   @Input() chapter: Section = null;
-  @Input() fields: Section[] = null;
+  readonly fields = input<Section[]>(null);
 
   @Output() chapterHasChanges = new EventEmitter<string[]>();
   @Output() submit = new EventEmitter();
@@ -72,7 +72,7 @@ export class ChapterEditComponent implements OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.fields) {
+    if (this.fields()) {
       this.initializations();
       this.ready = true;
     }
@@ -88,7 +88,7 @@ export class ChapterEditComponent implements OnChanges{
     /** Initialize tab bitsets **/
     let requiredTabs = 0; let requiredTotal = 0;
     const obj = new Map();
-    this.fields.forEach(group => {
+    this.fields().forEach(group => {
       const tab = new Tab();
       tab.requiredOnTab = tab.remainingOnTab = group.required.topLevel;
       tab.valid = false;

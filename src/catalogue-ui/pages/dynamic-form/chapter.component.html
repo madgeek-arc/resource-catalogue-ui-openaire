@@ -20,7 +20,7 @@
               }
             </div>
             <div class="uk-flex uk-flex-middle">
-              @if (!readonly) {
+              @if (!readonly()) {
                 <button class="uk-button uk-button-secondary uk-margin-left"
                   (click)="onSubmit(false)" type="submit"> Submit
                 </button>
@@ -60,13 +60,13 @@
                       </div>
                     }
                     <div class="uk-grid">
-                      <div class="uk-width-1-4" [ngStyle]="{'display': fields?.length === 1 ? 'none' : 'block'}">
+                      <div class="uk-width-1-4" [ngStyle]="{'display': fields()?.length === 1 ? 'none' : 'block'}">
                         @if (tabsHeader) {
                           <div class="tabsTitle uk-margin-bottom">{{tabsHeader}}</div>
                         }
                         <ul id="{{chapter.name}}" class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs"
                           [attr.uk-switcher]="'connect: #side-tab-'+chapter.id">
-                          @for (tab of fields; track tab; let i = $index) {
+                          @for (tab of fields(); track tab; let i = $index) {
                             <li  (click)="setTabIndex(i)">
                               <a id="{{chapter.id}}-tab{{i}}" href="#" class="remove-text-decoration uk-flex uk-flex-between"
                                 [ngClass]="{'form-error': bitset.tabs.get(tab.id).valid}">
@@ -117,18 +117,18 @@
                         }
                       </div>
                       @if (form && ready) {
-                        <div [ngClass]="fields.length === 1 ? 'uk-width-1-1' : 'uk-width-3-4'">
+                        <div [ngClass]="fields().length === 1 ? 'uk-width-1-1' : 'uk-width-3-4'">
                           <form [formGroup]="form">
                             <div class="formContainer">
                               <ul id="side-tab-{{chapter.id}}" class="uk-switcher">
-                                @for (group of fields; track group) {
+                                @for (group of fields(); track group) {
                                   <li>
                                     @for (fieldsData of group.fields; track fieldsData) {
                                       <div
                                         [ngClass]="{'uk-card uk-card-body uk-card-default uk-margin-medium-bottom': $safeNavigationMigration(fieldsData.form.display?.visible)}">
                                         <app-field [editMode]="editMode" [fieldData]="fieldsData" [form]="form"
-                                          [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
-                                          [readonly]="readonly" (hasChanges)="unsavedChangesPrompt($event)">
+                                          [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
+                                          [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt($event)">
                                           <!--                                           (handleBitSets)="handleBitSet($event)"-->
                                           <!--                                           (handleBitSetsOfComposite)="handleBitSetOfComposite($event)">-->
                                         </app-field>

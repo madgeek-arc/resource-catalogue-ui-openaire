@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {Field, HandleBitSet, vocabularyName} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -21,10 +21,10 @@ export class VocabularyFieldComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   @Input() fieldData: Field;
-  @Input() vocabularies: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly vocabularies = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
   @Output() hasChanges = new EventEmitter<boolean>();
   @Output() handleBitSets = new EventEmitter<Field>();
@@ -38,8 +38,9 @@ export class VocabularyFieldComponent implements OnInit {
   vocabularyKey: string = null;
 
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as UntypedFormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
@@ -130,7 +131,7 @@ export class VocabularyFieldComponent implements OnInit {
         this.formControl.reset();
       }
     } else if (value) {
-      this.dynamicVoc = this.subVocabularies[value];
+      this.dynamicVoc = this.subVocabularies()[value];
       this.formControl.enable();
     } else {
       this.formControl.disable();

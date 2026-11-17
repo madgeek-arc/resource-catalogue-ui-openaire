@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Provider, ProviderBundle, Type, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
@@ -14,7 +14,9 @@ export class ProviderInfoComponent implements OnInit, OnChanges {
   private resourceService = inject(ResourceService);
 
 
-  @Input() providerBundle: ProviderBundle = null;
+  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  providerBundle: ProviderBundle = null;
   provider: Provider = null;
   vocabularies: Map<string, object[]> = null;
 

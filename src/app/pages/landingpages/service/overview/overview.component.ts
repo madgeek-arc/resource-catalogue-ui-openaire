@@ -17,7 +17,9 @@ export class OverviewComponent {
   private router = inject(Router);
 
 
-  @Input() vocabularies: Map<string, UiVocabulary[]>;
+  // Set by ServiceLandingPageComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  vocabularies: Map<string, UiVocabulary[]>;
   @Input() relatedServices: Service[] = null;
   @Input() resourcePayload: Service = null;
 

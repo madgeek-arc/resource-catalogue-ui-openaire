@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, FormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
@@ -27,11 +27,11 @@ export class CompositeFieldComponent implements OnInit {
   private formService = inject(FormControlService);
 
   @Input() fieldData: Field;
-  @Input() vocabularies: Map<string, object[]>;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() editMode: any;
-  @Input() readonly: boolean = null;
-  @Input() position?: number = null;
+  readonly vocabularies = input<Map<string, object[]>>(undefined);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly editMode = input<any>(undefined);
+  readonly readonly = input<boolean>(null);
+  readonly position = input<number>(null);
 
   @Output() hasChanges = new EventEmitter<boolean>();
   @Output() handleBitSets = new EventEmitter<Field>();
@@ -42,10 +42,11 @@ export class CompositeFieldComponent implements OnInit {
 
   ngOnInit() {
     // console.log(this.fieldData.name);
-    if (this.position !== null) {
+    const position = this.position();
+    if (position !== null) {
       // console.log(this.rootFormGroup.control.controls[this.position]);
       // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData.name));
-      this.form = this.rootFormGroup.control.controls[this.position].get(this.fieldData.name) as UntypedFormGroup;
+      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData.name) as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control.get(this.fieldData.name) as UntypedFormGroup;
       // console.log(this.form);

@@ -38,24 +38,24 @@
                     <div class="">
                       @if (control.typeInfo.type === 'composite') {
                         <div>
-                          <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies" [readonly]="readonly"
-                            [vocabularies]="vocabularies" (hasChanges)="unsavedChangesPrompt()"
+                          <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies()" [readonly]="readonly()"
+                            [vocabularies]="vocabularies()" (hasChanges)="unsavedChangesPrompt()"
                             [position]="i" (handleBitSets)="handleBitsetOfChildren($event)"
                             (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                         </div>
                       }
                       @if (control.typeInfo.type === 'chooseOne') {
                         <div>
-                          <app-choose-one [fieldData]="control" [subVocabularies]="subVocabularies"
-                            [vocabularies]="vocabularies" (hasChanges)="unsavedChangesPrompt()"
+                          <app-choose-one [fieldData]="control" [subVocabularies]="subVocabularies()"
+                            [vocabularies]="vocabularies()" (hasChanges)="unsavedChangesPrompt()"
                             [position]="i" (handleBitSets)="handleBitsetOfChildren($event)"
                             (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                         </div>
                       }
                       @if (control.typeInfo.type === 'vocabulary' || control.typeInfo.type === 'select') {
                         <div class="uk-form-controls uk-margin-medium-top">
-                          <app-vocabulary-field [fieldData]="control" [subVocabularies]="subVocabularies"
-                            [vocabularies]="vocabularies" (hasChanges)="unsavedChangesPrompt()"
+                          <app-vocabulary-field [fieldData]="control" [subVocabularies]="subVocabularies()"
+                            [vocabularies]="vocabularies()" (hasChanges)="unsavedChangesPrompt()"
                             [position]="i" (handleBitSets)="handleBitsetOfChildren($event)"
                             (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                         </div>
@@ -93,7 +93,7 @@
                       @if (control.typeInfo.type === 'radio') {
                         <div class="uk-form-controls">
                           <app-radio-button-field [fieldData]="control" [position]="i" (hasChanges)="unsavedChangesPrompt()"
-                            (handleBitSets)="handleBitsetOfChildren($event)" [readonly]="readonly"
+                            (handleBitSets)="handleBitsetOfChildren($event)" [readonly]="readonly()"
                             (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                         </div>
                       }
@@ -151,22 +151,22 @@
             <div class="">
               @if (control.typeInfo.type === 'composite') {
                 <div>
-                  <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
+                  <app-composite-field [fieldData]="control" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                     (handleBitSets)="handleBitsetOfChildren($event)" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>
               }
               @if (control.typeInfo.type === 'chooseOne') {
                 <div>
-                  <app-choose-one [fieldData]="control" [subVocabularies]="subVocabularies" [vocabularies]="vocabularies"
+                  <app-choose-one [fieldData]="control" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                     (handleBitSets)="handleBitsetOfChildren($event)" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>
               }
               @if (control.typeInfo.type === 'vocabulary' || control.typeInfo.type === 'select') {
                 <div class="uk-form-controls uk-margin-medium-top">
-                  <app-vocabulary-field [fieldData]="control" [subVocabularies]="subVocabularies"
-                    [vocabularies]="vocabularies" (hasChanges)="unsavedChangesPrompt()"
+                  <app-vocabulary-field [fieldData]="control" [subVocabularies]="subVocabularies()"
+                    [vocabularies]="vocabularies()" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSets)="handleBitsetOfChildren($event)"
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>
@@ -196,7 +196,7 @@
               }
               @if (control.typeInfo.type === 'largeText') {
                 <div class="uk-form-controls">
-                  <app-large-text-field [fieldData]="control" [readonly]="readonly" (hasChanges)="unsavedChangesPrompt()"
+                  <app-large-text-field [fieldData]="control" [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSets)="handleBitsetOfChildren($event)"
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>
@@ -210,7 +210,7 @@
               }
               @if (control.typeInfo.type === 'radio') {
                 <div class="uk-form-controls">
-                  <app-radio-button-field [fieldData]="control" [readonly]="readonly" (hasChanges)="unsavedChangesPrompt()"
+                  <app-radio-button-field [fieldData]="control" [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSets)="handleBitsetOfChildren($event)"
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>

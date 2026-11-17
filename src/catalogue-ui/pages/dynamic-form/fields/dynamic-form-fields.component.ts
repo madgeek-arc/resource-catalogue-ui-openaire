@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy, input} from '@angular/core';
 import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../domain/dynamic-form-model';
 import { CompositeFieldComponent } from './composite-field/composite-field.component';
@@ -20,10 +20,10 @@ import { DateFieldComponent } from './date-field/date-field.component';
 export class DynamicFormFieldsComponent {
   @Input() fieldData: Field;
   @Input() form: UntypedFormGroup;
-  @Input() vocabularies: Map<string, object[]>;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() editMode: any;
-  @Input() readonly: boolean = null;
+  readonly vocabularies = input<Map<string, object[]>>(undefined);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly editMode = input<any>(undefined);
+  readonly readonly = input<boolean>(null);
 
   @Output() hasChanges = new EventEmitter<boolean>();
   @Output() handleBitSets = new EventEmitter<Field>();

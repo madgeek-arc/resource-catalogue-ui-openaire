@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
@@ -31,13 +31,13 @@ export class SurveyComponent implements OnInit, OnChanges {
 
   @Input() payload: any = null; // can't import specific project class in lib file
   @Input() model: Model = null;
-  @Input() subType: string = null;
-  @Input() activeUsers: any[] = null;
-  @Input() vocabulariesMap: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() tabsHeader: string = null;
-  @Input() mandatoryFieldsText: string = null;
-  @Input() downloadPDF = false;
+  readonly subType = input<string>(null);
+  readonly activeUsers = input<any[]>(null);
+  readonly vocabulariesMap = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly tabsHeader = input<string>(null);
+  readonly mandatoryFieldsText = input<string>(null);
+  readonly downloadPDF = input(false);
   @Output() valid = new EventEmitter<boolean>();
   @Output() submit = new EventEmitter<[UntypedFormGroup, boolean]>();
 
@@ -93,7 +93,7 @@ export class SurveyComponent implements OnInit, OnChanges {
           this.form.addControl(this.model.name, this.formControlService.toFormGroup(this.model.sections, true));
           break;
         }
-        if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType) {
+        if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType()) {
           this.form.addControl(this.model.sections[i].name, this.formControlService.toFormGroup(this.model.sections[i].subSections, true));
         }
       }
@@ -117,10 +117,10 @@ export class SurveyComponent implements OnInit, OnChanges {
       }
       this.ready = true;
 
-      if (this.activeUsers?.length > 0) {
+      if (this.activeUsers()?.length > 0) {
         setTimeout(()=> {
           const users = [];
-          this.activeUsers.forEach(user => {
+          this.activeUsers().forEach(user => {
             users.push(' '+user.fullname);
           });
           UIkit.tooltip('#concurrentEdit', {title: users.toString(), pos: 'bottom'});
