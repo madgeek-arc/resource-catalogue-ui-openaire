@@ -1,19 +1,20 @@
 import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormBuilder, Validators} from '@angular/forms';
+import { UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {EmailService} from '../../services/email.service';
+import { NgClass } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-email-modal',
-  templateUrl: './email-modal.component.html',
-  providers: [EmailService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-email-modal',
+    templateUrl: './email-modal.component.html',
+    providers: [EmailService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 export class EmailModalComponent {
 

@@ -1,15 +1,15 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
-import {DatePipe} from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-provider-home',
-  templateUrl: 'provider-home.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-home',
+    templateUrl: 'provider-home.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, TitleCasePipe, DatePipe]
 })
 
 export class ProviderHomeComponent implements OnInit, OnChanges {

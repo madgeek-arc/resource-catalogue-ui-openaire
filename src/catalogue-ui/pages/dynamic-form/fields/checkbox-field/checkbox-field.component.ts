@@ -1,12 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-checkbox-field',
-  templateUrl: './checkbox-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-checkbox-field',
+    templateUrl: './checkbox-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class CheckboxFieldComponent implements OnInit {

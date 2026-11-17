@@ -18,8 +18,7 @@ import {AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnChanges
             overflow: hidden;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreComponent implements AfterContentInit {
     //the text that need to be put in the container
@@ -67,8 +66,7 @@ export class ReadMoreComponent implements AfterContentInit {
             overflow: hidden;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreTextComponent extends ReadMoreComponent implements OnChanges, AfterViewInit {
     @Input()

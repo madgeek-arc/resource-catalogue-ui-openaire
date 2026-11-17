@@ -1,16 +1,17 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {NavigationService} from '../../services/navigation.service';
 import {Bundle, Datasource, Service} from '../../entities/eic-model';
 import {Subscription} from 'rxjs';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-service-dashboard',
-  templateUrl: './service-dashboard.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-service-dashboard',
+    templateUrl: './service-dashboard.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, NgClass, RouterOutlet]
 })
 export class ServiceDashboardComponent implements OnInit {
 

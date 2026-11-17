@@ -3,11 +3,8 @@ import {NgModule} from '@angular/core';
 import {ReadMoreComponent, ReadMoreTextComponent} from './read-more.component';
 
 @NgModule({
-    imports: [CommonModule],
-    declarations: [
-        ReadMoreComponent,
-        ReadMoreTextComponent,
-    ],
+    imports: [CommonModule, ReadMoreComponent,
+        ReadMoreTextComponent],
     exports: [
         ReadMoreComponent,
         ReadMoreTextComponent,

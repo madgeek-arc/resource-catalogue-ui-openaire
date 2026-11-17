@@ -1,12 +1,17 @@
 import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Field} from '../../../domain/dynamic-form-model';
 import {ClassicEditor} from '../../../domain/ckeditor-classic-editor';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { NgClass } from '@angular/common';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { TypeSelectorComponent } from '../type-selector-builder/type-selector.component';
 
 @Component({
-  selector: 'app-field-builder',
-  templateUrl: './field-builder.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-field-builder',
+    templateUrl: './field-builder.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, FormsModule, NgSelectComponent, NgOptionComponent, NgClass, CKEditorModule, TypeSelectorComponent]
 })
 
 export class FieldBuilderComponent implements OnInit {

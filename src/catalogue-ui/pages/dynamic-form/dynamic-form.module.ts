@@ -22,37 +22,35 @@ import {ChooseOneComponent} from './fields/choose-one-composite/choose-one.compo
 import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
-    declarations: [
-      StringFieldComponent,
-      CompositeFieldComponent,
-      DynamicFormFieldsComponent,
-      ChapterEditComponent,
-      VocabularyFieldComponent,
-      CheckboxFieldComponent,
-      RadioButtonFieldComponent,
-      DateFieldComponent,
-      LargeTextFieldComponent,
-      RichTextFieldComponent,
-      RadioGridFieldComponent,
-      NumberFieldComponent,
-      ChooseOneComponent,
-      SurveyComponent
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgSelectModule,
+        DpDatePickerModule,
+        ReusableComponentsModule,
+        CKEditorModule,
+        SharedModule,
+        StringFieldComponent,
+        CompositeFieldComponent,
+        DynamicFormFieldsComponent,
+        ChapterEditComponent,
+        VocabularyFieldComponent,
+        CheckboxFieldComponent,
+        RadioButtonFieldComponent,
+        DateFieldComponent,
+        LargeTextFieldComponent,
+        RichTextFieldComponent,
+        RadioGridFieldComponent,
+        NumberFieldComponent,
+        ChooseOneComponent,
+        SurveyComponent,
     ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgSelectModule,
-    DpDatePickerModule,
-    ReusableComponentsModule,
-    CKEditorModule,
-    SharedModule,
-  ],
-  exports: [
-    ChapterEditComponent,
-    SurveyComponent,
-    DynamicFormFieldsComponent
-  ]
+    exports: [
+        ChapterEditComponent,
+        SurveyComponent,
+        DynamicFormFieldsComponent
+    ]
 })
 
 export class DynamicFormModule { }

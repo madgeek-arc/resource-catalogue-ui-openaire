@@ -1,18 +1,20 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UntypedFormArray, UntypedFormBuilder} from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {Section, Field, HandleBitSet, Tab, Tabs} from '../../domain/dynamic-form-model';
 import BitSet from 'bitset';
 
 import UIkit from 'uikit';
+import { NgStyle, NgClass } from '@angular/common';
+import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.component';
 
 @Component({
-  selector: 'app-chapter-edit',
-  templateUrl: './chapter.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-chapter-edit',
+    templateUrl: './chapter.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgStyle, NgClass, ReactiveFormsModule, DynamicFormFieldsComponent]
 })
 export class ChapterEditComponent implements OnChanges{
 

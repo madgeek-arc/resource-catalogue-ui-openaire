@@ -11,11 +11,11 @@ import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 import * as uikit from 'uikit';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: 'forms.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-form',
+    templateUrl: 'forms.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [SurveyComponent]
 })
 
 export class FormsComponent implements OnInit{

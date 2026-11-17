@@ -1,12 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Service } from '../../../../../entities/eic-model';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { NgStyle, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-change-log',
-  templateUrl: 'change-log.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-change-log',
+    templateUrl: 'change-log.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgStyle, RouterLink, DatePipe]
 })
 
 export class ChangeLogComponent {

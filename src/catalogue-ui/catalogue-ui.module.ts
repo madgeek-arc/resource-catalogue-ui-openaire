@@ -9,23 +9,21 @@ import {RouterModule} from '@angular/router';
 import {FormBuilderModule} from './pages/form-builder/form-builder.module';
 
 @NgModule({
-  declarations: [
-    SearchComponent,
-    LandingPageComponent,
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ReusableComponentsModule,
-    DynamicFormModule,
-    FormBuilderModule
-  ],
-  providers: [],
-  exports: [
-    DynamicFormModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ReusableComponentsModule,
+        DynamicFormModule,
+        FormBuilderModule,
+        SearchComponent,
+        LandingPageComponent
+    ],
+    providers: [],
+    exports: [
+        DynamicFormModule
+    ]
 })
 
 export class CatalogueUiModule { }

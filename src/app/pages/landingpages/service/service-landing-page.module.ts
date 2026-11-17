@@ -11,20 +11,18 @@ import {ChangeLogComponent} from './resourcesAndSupport/changeLog/change-log.com
 import {ReusableComponentsModule} from '../../../shared/reusablecomponents/reusable-components.module';
 
 @NgModule({
-  declarations: [
-    ServiceLandingPageComponent,
-    OverviewComponent,
-    PricingComponent,
-    ResourcesAndSupportComponent,
-    MiscellaneousComponent,
-    ChangeLogComponent
-  ],
-  imports: [
-    CommonModule,
-    ReusableComponentsModule,
-    ServiceLandingPageRouting,
-    FormsModule
-  ],
+    imports: [
+        CommonModule,
+        ReusableComponentsModule,
+        ServiceLandingPageRouting,
+        FormsModule,
+        ServiceLandingPageComponent,
+        OverviewComponent,
+        PricingComponent,
+        ResourcesAndSupportComponent,
+        MiscellaneousComponent,
+        ChangeLogComponent
+    ],
 })
 
 export class ServiceLandingPageModule {}

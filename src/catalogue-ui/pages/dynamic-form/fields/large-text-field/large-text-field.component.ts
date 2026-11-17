@@ -1,12 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-large-text-field',
-  templateUrl: './large-text-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-large-text-field',
+    templateUrl: './large-text-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class LargeTextFieldComponent implements OnInit {

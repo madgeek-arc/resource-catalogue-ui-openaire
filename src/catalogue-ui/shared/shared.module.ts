@@ -3,19 +3,16 @@ import {PremiumSortFacetsPipe, PremiumSortFacetValuesPipe, PremiumSortPipe} from
 import {SafeUrlPipe} from './pipes/safeUrlPipe';
 
 @NgModule({
-  declarations: [
-    PremiumSortPipe,
-    PremiumSortFacetsPipe,
-    PremiumSortFacetValuesPipe,
-    SafeUrlPipe
-  ],
-  imports: [],
-  exports: [
-    PremiumSortPipe,
-    PremiumSortFacetsPipe,
-    PremiumSortFacetValuesPipe,
-    SafeUrlPipe
-  ]
+    imports: [PremiumSortPipe,
+        PremiumSortFacetsPipe,
+        PremiumSortFacetValuesPipe,
+        SafeUrlPipe],
+    exports: [
+        PremiumSortPipe,
+        PremiumSortFacetsPipe,
+        PremiumSortFacetValuesPipe,
+        SafeUrlPipe
+    ]
 })
 
 export class SharedModule { }

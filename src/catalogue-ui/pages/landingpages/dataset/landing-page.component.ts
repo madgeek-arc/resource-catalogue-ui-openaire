@@ -5,11 +5,10 @@ import {Subscriber} from 'rxjs';
 
 
 @Component({
-  selector: 'app-dataset',
-  templateUrl: 'dataset-landing-page.component.html',
-  providers: [LandingPageService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-dataset',
+    templateUrl: 'dataset-landing-page.component.html',
+    providers: [LandingPageService],
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 
 export class LandingPageComponent implements OnInit, OnDestroy {

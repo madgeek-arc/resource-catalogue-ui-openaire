@@ -13,22 +13,20 @@ import {AllDatasourcesDashboardComponent} from './datasources/all-datasources.co
 
 
 @NgModule({
-  imports: [
-    SharedModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AdminRouting,
-    ReusableComponentsModule,
-    NgSelectModule,
-    CKEditorModule,
-  ],
-  declarations: [
-    AdminDashboardComponent,
-    AllProvidersDashboardComponent,
-    AllServicesDashboardComponent,
-    AllDatasourcesDashboardComponent
-  ]
+    imports: [
+        SharedModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AdminRouting,
+        ReusableComponentsModule,
+        NgSelectModule,
+        CKEditorModule,
+        AdminDashboardComponent,
+        AllProvidersDashboardComponent,
+        AllServicesDashboardComponent,
+        AllDatasourcesDashboardComponent,
+    ]
 })
 
 export class AdminModule {

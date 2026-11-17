@@ -1,10 +1,9 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
-  selector: 'join-about',
-  templateUrl: './join.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'join-about',
+    templateUrl: './join.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class JoinComponent implements OnInit {
 

@@ -5,16 +5,15 @@ import {HelpContentService} from '../../services/help-content.service';
 import {environment} from '../../../environments/environment';
 
 @Component({
-  selector: 'app-help-content',
-  template: `
+    selector: 'app-help-content',
+    template: `
     @if (contents && contents.length>0) {
       @for (content of contents; track content) {
         <div [innerHTML]="content.content" class="uk-margin-medium-bottom"></div>
       }
     }
     `,
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class HelpContentComponent implements OnInit {
   @Input() position: string;
@@ -48,8 +47,8 @@ export class HelpContentComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-aside-help-content',
-  template: `
+    selector: 'app-aside-help-content',
+    template: `
     @if (contents && contents.length>0) {
       @for (content of contents; track content) {
         <div [innerHTML]="content.content"
@@ -57,8 +56,7 @@ export class HelpContentComponent implements OnInit {
       }
     }
     `,
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class AsideHelpContentComponent extends HelpContentComponent {
 }

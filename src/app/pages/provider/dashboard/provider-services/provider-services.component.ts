@@ -5,15 +5,18 @@ import {Paging} from '../../../../entities/paging';
 import {URLParameter} from '../../../../entities/url-parameter';
 import {zip} from 'rxjs';
 import {ResourceService} from '../../../../services/resource.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-provider-services',
-  templateUrl: 'provider-services.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-services',
+    templateUrl: 'provider-services.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class ProviderServicesComponent implements OnInit {

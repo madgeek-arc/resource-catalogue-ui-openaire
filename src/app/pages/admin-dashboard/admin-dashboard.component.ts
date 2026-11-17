@@ -1,15 +1,16 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {UserInfo} from '../../entities/userInfo';
-import {UntypedFormBuilder, UntypedFormControl, Validators} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-admin-dashboard',
-  templateUrl: 'admin-dashboard.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-admin-dashboard',
+    templateUrl: 'admin-dashboard.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, RouterLink, RouterOutlet, ReactiveFormsModule, FormsModule]
 })
 
 export class AdminDashboardComponent implements OnInit {

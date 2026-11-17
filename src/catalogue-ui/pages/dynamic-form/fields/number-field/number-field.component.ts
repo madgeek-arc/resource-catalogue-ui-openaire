@@ -1,14 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-number-field',
-  templateUrl: './number-field.component.html',
-  styles: ['.clear-style { height: 0 !important;}'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-number-field',
+    templateUrl: './number-field.component.html',
+    styles: ['.clear-style { height: 0 !important;}'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class NumberFieldComponent implements OnInit {

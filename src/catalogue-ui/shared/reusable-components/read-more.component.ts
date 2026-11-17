@@ -14,8 +14,8 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'read-more',
-  template: `
+    selector: 'read-more',
+    template: `
     <div [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight+'px' : 'auto'" #readMoreDiv>
       <ng-content />
     </div>
@@ -23,13 +23,12 @@ import {
       <a (click)="isCollapsed =! isCollapsed">View {{isCollapsed ? 'more' : 'less'}}...</a>
     }
     `,
-  styles: [`
+    styles: [`
     div.collapsed {
       overflow: hidden;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreComponent implements AfterContentInit {
   //the text that need to be put in the container
@@ -58,8 +57,8 @@ export class ReadMoreComponent implements AfterContentInit {
 }
 
 @Component({
-  selector: 'read-more-text',
-  template: `
+    selector: 'read-more-text',
+    template: `
     <div [innerHTML]="text" [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight+'px' : 'auto'"
       #readMoreDiv>
       <!--{{text}}-->
@@ -68,17 +67,16 @@ export class ReadMoreComponent implements AfterContentInit {
       <a (click)="isCollapsed =! isCollapsed">View {{isCollapsed ? 'more' : 'less'}}...</a>
     }
     `,
-  // The application builder never exits after a build when two components in one file have identical inline
-  // styles (its stylesheet bundler creates two esbuild contexts and disposes one), so this copy carries a CSS
-  // comment to keep the two texts different.
-  styles: [`
+    // The application builder never exits after a build when two components in one file have identical inline
+    // styles (its stylesheet bundler creates two esbuild contexts and disposes one), so this copy carries a CSS
+    // comment to keep the two texts different.
+    styles: [`
     /* read-more-text */
     div.collapsed {
       overflow: hidden;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class ReadMoreTextComponent extends ReadMoreComponent implements OnChanges, AfterViewInit {
 

@@ -1,12 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {UntypedFormControl, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-radio-button-field',
-  templateUrl: './radio-button-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-radio-button-field',
+    templateUrl: './radio-button-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class RadioButtonFieldComponent implements OnInit {

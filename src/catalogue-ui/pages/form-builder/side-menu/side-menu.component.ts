@@ -2,10 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy}
 import {Section, Field, GroupedFields} from '../../../domain/dynamic-form-model';
 
 @Component({
-  selector: 'app-side-menu',
-  templateUrl: './side-menu.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-side-menu',
+    templateUrl: './side-menu.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 
 export class SideMenuComponent implements OnInit {

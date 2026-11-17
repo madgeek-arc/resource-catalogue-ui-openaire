@@ -5,10 +5,9 @@ import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 
 @Component({
-  selector: 'app-provider-info',
-  templateUrl: 'provider-info.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-info',
+    templateUrl: 'provider-info.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 
 export class ProviderInfoComponent implements OnInit, OnChanges {

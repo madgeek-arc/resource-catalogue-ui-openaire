@@ -2,19 +2,23 @@ import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
-import {UntypedFormBuilder} from '@angular/forms';
+import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
+import { NgClass, LowerCasePipe } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-update-service-provider',
-  templateUrl: './service-provider-form.component.html',
-  styleUrls: ['./service-provider-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-update-service-provider',
+    templateUrl: './service-provider-form.component.html',
+    styleUrls: ['./service-provider-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, CKEditorModule, RouterLink, LowerCasePipe]
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
   errorMessage: string;

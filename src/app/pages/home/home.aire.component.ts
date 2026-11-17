@@ -7,13 +7,15 @@ import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {PortfolioMap} from '../../entities/portfolioMap';
 import * as uikit from 'uikit';
+import { RouterLink } from '@angular/router';
+import { NgClass, SlicePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.aire.component.html',
-  styleUrls: ['./home.aire.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-home',
+    templateUrl: './home.aire.component.html',
+    styleUrls: ['./home.aire.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, NgClass, SlicePipe]
 })
 export class HomeAireComponent implements OnInit {
   public searchForm: UntypedFormGroup;

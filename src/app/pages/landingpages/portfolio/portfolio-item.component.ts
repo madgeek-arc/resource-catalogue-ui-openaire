@@ -1,16 +1,16 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ResourceService} from '../../../services/resource.service';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {Service, Vocabulary} from '../../../entities/eic-model';
 import {zip} from 'rxjs';
 import {Paging} from '../../../entities/paging';
 
 
 @Component({
-  selector: 'app-portfolio-item',
-  templateUrl: './portfolio-item.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-portfolio-item',
+    templateUrl: './portfolio-item.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink]
 })
 export class PortfolioItemComponent implements OnInit{
 

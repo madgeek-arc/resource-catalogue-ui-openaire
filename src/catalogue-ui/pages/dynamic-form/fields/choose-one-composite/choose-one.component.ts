@@ -1,13 +1,17 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
+import { CompositeFieldComponent } from '../composite-field/composite-field.component';
+import { StringFieldComponent } from '../string-field/string-field.component';
 
 @Component({
-  selector: 'app-choose-one',
-  templateUrl: './choose-one.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+    selector: 'app-choose-one',
+    templateUrl: './choose-one.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, CompositeFieldComponent, StringFieldComponent]
 })
 
 export class ChooseOneComponent implements OnInit {

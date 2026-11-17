@@ -11,20 +11,18 @@ import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {TypeSelectorComponent} from './type-selector-builder/type-selector.component';
 
 @NgModule({
-  declarations: [
-    FormBuilderComponent,
-    SideMenuComponent,
-    FieldBuilderComponent,
-    SectionBuilderComponent,
-    ChapterBuilderComponent,
-    TypeSelectorComponent
-  ],
-  imports: [
-    CommonModule,
-    NgSelectModule,
-    FormsModule,
-    CKEditorModule
-  ],
+    imports: [
+        CommonModule,
+        NgSelectModule,
+        FormsModule,
+        CKEditorModule,
+        FormBuilderComponent,
+        SideMenuComponent,
+        FieldBuilderComponent,
+        SectionBuilderComponent,
+        ChapterBuilderComponent,
+        TypeSelectorComponent
+    ],
 })
 
 export class FormBuilderModule {}

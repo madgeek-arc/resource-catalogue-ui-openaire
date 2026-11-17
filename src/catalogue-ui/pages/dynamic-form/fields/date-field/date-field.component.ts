@@ -1,12 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
-  selector: 'app-date-field',
-  templateUrl: 'date-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-date-field',
+    templateUrl: 'date-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, DpDatePickerModule]
 })
 
 export class DateFieldComponent implements OnInit {

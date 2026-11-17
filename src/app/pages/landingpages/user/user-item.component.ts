@@ -1,15 +1,15 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {ResourceService} from '../../../services/resource.service';
 import {Service, Vocabulary} from '../../../entities/eic-model';
 import {Paging} from '../../../entities/paging';
 import {zip} from 'rxjs';
 
 @Component({
-  selector: 'app-user-item',
-  templateUrl: './user-item.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-user-item',
+    templateUrl: './user-item.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink]
 })
 export class UserItemComponent implements OnInit {
 

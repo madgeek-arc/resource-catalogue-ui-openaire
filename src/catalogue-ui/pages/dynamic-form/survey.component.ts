@@ -11,14 +11,16 @@ import BitSet from 'bitset';
 import seedRandom from 'seedrandom';
 
 import UIkit from 'uikit';
+import { NgClass } from '@angular/common';
+import { ChapterEditComponent } from './chapter-edit.component';
 pdfMake.vfs = pdfFonts.vfs;
 
 @Component({
-  selector: 'app-survey',
-  templateUrl: 'survey.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-survey',
+    templateUrl: 'survey.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, ChapterEditComponent]
 })
 
 export class SurveyComponent implements OnInit, OnChanges {

@@ -1,16 +1,17 @@
 import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
-import {Router} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {UiVocabulary} from '../../../../entities/dynamic-form-model';
 import {Service, URL} from '../../../../entities/eic-model';
 import * as uikit from 'uikit';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-service-landing-page',
-  templateUrl: 'overview.component.html',
-  // styleUrls: ['../../landing-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-service-landing-page',
+    templateUrl: 'overview.component.html',
+    // styleUrls: ['../../landing-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, RouterLink]
 })
 export class OverviewComponent {
 

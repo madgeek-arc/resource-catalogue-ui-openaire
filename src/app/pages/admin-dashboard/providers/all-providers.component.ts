@@ -1,19 +1,22 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../entities/eic-model';
 import {FacetValue} from '../../../entities/facet';
 import {URLParameter} from '../../../entities/url-parameter';
 import {ResourceService} from '../../../services/resource.service';
 import {ProviderService} from '../../../services/provider.service';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
 declare let UIkit: any;
 
 @Component({
-  selector: 'app-admin-all-providers-dashboard',
-  templateUrl: 'all-providers.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-admin-all-providers-dashboard',
+    templateUrl: 'all-providers.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class AllProvidersDashboardComponent implements OnInit {

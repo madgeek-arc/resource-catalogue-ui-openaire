@@ -1,14 +1,17 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import {ClassicEditor} from '../../../../domain/ckeditor-classic-editor';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @Component({
-  selector: 'app-rich-text-field',
-  templateUrl: './rich-text-field.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-rich-text-field',
+    templateUrl: './rich-text-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, CKEditorModule]
 })
 
 export class RichTextFieldComponent implements OnInit {

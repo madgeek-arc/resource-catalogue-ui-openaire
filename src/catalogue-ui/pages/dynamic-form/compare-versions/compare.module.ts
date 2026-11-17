@@ -6,18 +6,16 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {DynamicFormModule} from '../dynamic-form.module';
 
 @NgModule({
-  declarations: [
-    CompareSurveysComponent,
-    CompareChapterComponent
-  ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    DynamicFormModule
-  ],
-  exports: [
-    CompareSurveysComponent
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        DynamicFormModule,
+        CompareSurveysComponent,
+        CompareChapterComponent
+    ],
+    exports: [
+        CompareSurveysComponent
+    ]
 })
 
 export class CompareModule {}

@@ -1,11 +1,10 @@
 import {Component, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
-  selector: 'app-footer-aire',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-footer-aire',
+    templateUrl: './footer.component.html',
+    styleUrls: ['./footer.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class AireFooterComponent {
 }

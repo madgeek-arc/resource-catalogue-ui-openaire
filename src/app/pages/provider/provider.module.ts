@@ -20,29 +20,27 @@ import {AboutComponent} from '../public/about.component';
 
 
 @NgModule({
-  imports: [
-    SharedModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ProviderRouting,
-    ReusableComponentsModule,
-    NgSelectModule,
-    CKEditorModule,
-  ],
-  declarations: [
-    ServiceProviderFormComponent,
-    UpdateServiceProviderComponent,
-    ProviderDashboardComponent,
-    ProviderHomeComponent,
-    ProviderInfoComponent,
-    ProviderHistoryComponent,
-    ProviderFullHistoryComponent,
-    ProviderServicesComponent,
-    ProviderJoinComponent,
-    JoinComponent,
-    AboutComponent
-  ]
+    imports: [
+        SharedModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ProviderRouting,
+        ReusableComponentsModule,
+        NgSelectModule,
+        CKEditorModule,
+        ServiceProviderFormComponent,
+        UpdateServiceProviderComponent,
+        ProviderDashboardComponent,
+        ProviderHomeComponent,
+        ProviderInfoComponent,
+        ProviderHistoryComponent,
+        ProviderFullHistoryComponent,
+        ProviderServicesComponent,
+        ProviderJoinComponent,
+        JoinComponent,
+        AboutComponent,
+    ]
 })
 
 export class ProviderModule {

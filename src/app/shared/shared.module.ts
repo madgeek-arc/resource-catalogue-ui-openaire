@@ -17,42 +17,37 @@ import { EmailModalComponent } from './email-modal/email-modal.component';
 // import {PreviewResourceComponent} from '../pages/previewresource/preview-resource.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-  ],
-  declarations: [
-    JoinPipe,
-    KeysPipe,
-    StringArraySortPipe,
-    LookUpPipe,
-    PremiumSortPipe,
-    PremiumSortFacetValuesPipe,
-    PremiumSortFacetsPipe,
-    SafePipe,
-    ValuesPipe,
-    ForbiddenPageComponent,
-    NotFoundPageComponent,
-    EmailModalComponent,
-    // BreadcrumbsComponent,
-    // PendingServicesComponent,
-    // PreviewResourceComponent
-  ],
-  exports: [
-    JoinPipe,
-    KeysPipe,
-    StringArraySortPipe,
-    LookUpPipe,
-    PremiumSortPipe,
-    PremiumSortFacetValuesPipe,
-    SafePipe,
-    ValuesPipe,
-    EmailModalComponent,
-    // BreadcrumbsComponent,
-    // PendingServicesComponent,
-    // PreviewResourceComponent
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        RouterModule,
+        JoinPipe,
+        KeysPipe,
+        StringArraySortPipe,
+        LookUpPipe,
+        PremiumSortPipe,
+        PremiumSortFacetValuesPipe,
+        PremiumSortFacetsPipe,
+        SafePipe,
+        ValuesPipe,
+        ForbiddenPageComponent,
+        NotFoundPageComponent,
+        EmailModalComponent,
+    ],
+    exports: [
+        JoinPipe,
+        KeysPipe,
+        StringArraySortPipe,
+        LookUpPipe,
+        PremiumSortPipe,
+        PremiumSortFacetValuesPipe,
+        SafePipe,
+        ValuesPipe,
+        EmailModalComponent,
+        // BreadcrumbsComponent,
+        // PendingServicesComponent,
+        // PreviewResourceComponent
+    ]
 })
 export class SharedModule {
 }

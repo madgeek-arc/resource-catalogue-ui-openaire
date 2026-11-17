@@ -2,13 +2,15 @@ import {Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy} fro
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Field, Model, Section} from '../../../../domain/dynamic-form-model';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { CompareChapterComponent } from '../chapters/compare-chapter.component';
 
 @Component({
-  selector: 'app-compare-surveys',
-  templateUrl: 'compare-surveys.component.html',
-  providers: [FormControlService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-compare-surveys',
+    templateUrl: 'compare-surveys.component.html',
+    providers: [FormControlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, CompareChapterComponent]
 })
 
 export class CompareSurveysComponent implements OnChanges{

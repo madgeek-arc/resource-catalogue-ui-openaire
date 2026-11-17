@@ -29,75 +29,70 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeAireComponent,
-    SearchAireComponent,
-    DatasourceSearchComponent,
-    Datasource,
-    PortfolioItemComponent,
-    UserItemComponent,
-    // ServiceLandingPageComponent,
-    AireTopMenuComponent,
-    AireFooterComponent,
-    FormsComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ReusableComponentsModule,
-    SharedModule,
-    ProviderModule,
-    CookieLawModule,
-    NgSelectModule,
-    CatalogueUiModule,
-    AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    }),
-  ],
-  providers: [
-    DatePipe,
-    {
-      provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler({
-        showDialog: false,
-      }),
-    }, {
-      provide: Sentry.TraceService,
-      deps: [Router],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {
-      },
-      deps: [Sentry.TraceService],
-      multi: true,
-    },
-    provideHttpClient(withXhr(), withInterceptors([authenticationInterceptor])),
-    provideMatomo(
-      {
-        scriptUrl: environment.MATOMO_URL + 'matomo.js',
-        trackers: [
-          {
-            trackerUrl: environment.MATOMO_URL,
-            siteId: environment.MATOMO_SITE
-          }
-        ]
-      },
-      withRouter(),
-    ),
-  ],
-  exports: [
-    AireFooterComponent,
-    AireTopMenuComponent,
-    LowerCasePipe
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ReusableComponentsModule,
+        SharedModule,
+        ProviderModule,
+        CookieLawModule,
+        NgSelectModule,
+        CatalogueUiModule,
+        AppRoutingModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        }),
+        HomeAireComponent,
+        SearchAireComponent,
+        DatasourceSearchComponent,
+        Datasource,
+        PortfolioItemComponent,
+        UserItemComponent,
+        // ServiceLandingPageComponent,
+        AireTopMenuComponent,
+        AireFooterComponent,
+        FormsComponent,
+    ],
+    providers: [
+        DatePipe,
+        {
+            provide: ErrorHandler,
+            useValue: Sentry.createErrorHandler({
+                showDialog: false,
+            }),
+        }, {
+            provide: Sentry.TraceService,
+            deps: [Router],
+        },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: () => () => {
+            },
+            deps: [Sentry.TraceService],
+            multi: true,
+        },
+        provideHttpClient(withXhr(), withInterceptors([authenticationInterceptor])),
+        provideMatomo({
+            scriptUrl: environment.MATOMO_URL + 'matomo.js',
+            trackers: [
+                {
+                    trackerUrl: environment.MATOMO_URL,
+                    siteId: environment.MATOMO_SITE
+                }
+            ]
+        }, withRouter()),
+    ],
+    exports: [
+        AireFooterComponent,
+        AireTopMenuComponent,
+        LowerCasePipe
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

@@ -1,17 +1,18 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import {ProviderService} from '../../../services/provider.service';
 import {ProviderBundle} from '../../../entities/eic-model';
 import {UserService} from '../../../services/user.service';
 import {UserInfo} from '../../../entities/userInfo';
 import {UntypedFormBuilder, UntypedFormControl, Validators} from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-provider-dashboard',
-  templateUrl: 'provider-dashboard.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-provider-dashboard',
+    templateUrl: 'provider-dashboard.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, RouterLink, RouterOutlet]
 })
 
 export class ProviderDashboardComponent implements OnInit {

@@ -1,20 +1,22 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Paging} from '../../domain/paging';
 import {URLParameter} from '../../domain/url-parameter';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
 import {SearchService} from '../../services/search.service';
+import { ReadMoreComponent } from '../../shared/reusable-components/read-more.component';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  providers: [SearchService],
-  // styleUrls: ['../../../lib/pages/search/search.component.scss']
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    providers: [SearchService],
+    // styleUrls: ['../../../lib/pages/search/search.component.scss']
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, ReadMoreComponent, NgClass, RouterLink]
 })
 
 export class SearchComponent implements OnInit {

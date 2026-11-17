@@ -1,14 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { SafeUrlPipe } from '../../../../shared/pipes/safeUrlPipe';
 
 @Component({
-  selector: 'app-string-url-email-field',
-  templateUrl: './string-field.component.html',
-  styles: ['.clear-style { height: 0 !important;}'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-string-url-email-field',
+    templateUrl: './string-field.component.html',
+    styles: ['.clear-style { height: 0 !important;}'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, SafeUrlPipe]
 })
 
 export class StringFieldComponent implements OnInit {

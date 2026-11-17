@@ -8,9 +8,7 @@ import {ReadMoreComponent, ReadMoreTextComponent} from './read-more.component';
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
-    ],
-    declarations: [
+        ReactiveFormsModule,
         ReadMoreComponent,
         ReadMoreTextComponent,
         HelpContentComponent,

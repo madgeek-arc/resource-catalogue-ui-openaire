@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {Facet, FacetValue} from '../../domain/facet';
 
-@Pipe({name: 'premiumSort', standalone: false})
+@Pipe({ name: 'premiumSort' })
 export class PremiumSortPipe implements PipeTransform {
   transform(arr: any[], weights: string[]): any {
     const ret = (arr || []).sort((a, b): number => {
@@ -23,7 +23,7 @@ export class PremiumSortPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'premiumSortFacets', standalone: false})
+@Pipe({ name: 'premiumSortFacets' })
 export class PremiumSortFacetsPipe implements PipeTransform {
   transform(arr: Facet[], weights: string[]): any {
     const ret = (arr || []).sort((a, b): number => {
@@ -45,7 +45,7 @@ export class PremiumSortFacetsPipe implements PipeTransform {
   }
 }
 
-@Pipe({name: 'premiumSortFacetValues', standalone: false})
+@Pipe({ name: 'premiumSortFacetValues' })
 export class PremiumSortFacetValuesPipe implements PipeTransform {
   transform(arr: FacetValue[], weights: string[]): any {
     const ret = (arr || []).sort((a, b): number => {

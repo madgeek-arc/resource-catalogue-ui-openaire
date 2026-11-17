@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
 import {Paging} from '../../../entities/paging';
@@ -8,14 +8,18 @@ import {DatasourceService} from '../../../services/datasource.service';
 import {environment} from '../../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {fromEvent} from 'rxjs';
+import { HelpContentComponent, AsideHelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
+import { NgClass } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReadMoreComponent } from '../../../shared/reusablecomponents/read-more.component';
 
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './datasourceSearch.component.html',
-  providers: [DatasourceService],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-search',
+    templateUrl: './datasourceSearch.component.html',
+    providers: [DatasourceService],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [HelpContentComponent, NgClass, ReactiveFormsModule, FormsModule, RouterLink, AsideHelpContentComponent, ReadMoreComponent]
 })
 
 export class DatasourceSearchComponent implements OnInit {

@@ -1,16 +1,18 @@
 import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {Field, HandleBitSet, vocabularyName} from '../../../../domain/dynamic-form-model';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import {URLValidator} from '../../../../shared/validators/generic.validator';
 import {ActivatedRoute} from '@angular/router';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-vocabulary-field',
-  templateUrl: './vocabulary-field.component.html',
-  styleUrls: ['./vocabulary-field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-vocabulary-field',
+    templateUrl: './vocabulary-field.component.html',
+    styleUrls: ['./vocabulary-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgSelectComponent, NgClass]
 })
 
 export class VocabularyFieldComponent implements OnInit {

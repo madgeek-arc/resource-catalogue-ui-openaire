@@ -1,6 +1,6 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UserSessionService} from '../../services/user-session.service';
-import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {Datasource, Provider, Service} from '../../entities/eic-model';
@@ -8,14 +8,15 @@ import {UserInfo} from '../../entities/userInfo';
 import {UserService} from '../../services/user.service';
 import * as UIkit from 'uikit';
 import {filter, map} from 'rxjs/operators';
+import { NgClass, KeyValuePipe } from '@angular/common';
 
 
 @Component({
-  selector: 'app-top-menu-aire',
-  templateUrl: './topmenu.component.html',
-  styleUrls: ['./topmenu.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false
+    selector: 'app-top-menu-aire',
+    templateUrl: './topmenu.component.html',
+    styleUrls: ['./topmenu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [RouterLink, NgClass, KeyValuePipe]
 })
 
 export class AireTopMenuComponent implements OnInit {

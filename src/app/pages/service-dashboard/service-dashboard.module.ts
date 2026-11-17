@@ -9,19 +9,17 @@ import {ServiceDashboardRouting} from './service-dashboard.routing';
 import {ServiceDashboardComponent} from './service-dashboard.component';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ServiceDashboardRouting,
-    ReusableComponentsModule,
-  ],
-  declarations: [
-    ServiceDashboardComponent,
-    ServiceHistoryComponent,
-    ServiceFullHistoryComponent
-  ]
+    imports: [
+        SharedModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ServiceDashboardRouting,
+        ReusableComponentsModule,
+        ServiceDashboardComponent,
+        ServiceHistoryComponent,
+        ServiceFullHistoryComponent,
+    ]
 })
 
 export class ServiceDashboardModule {
