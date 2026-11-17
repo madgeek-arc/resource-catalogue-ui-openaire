@@ -1,17 +1,17 @@
 import {Routes} from '@angular/router';
-import {SearchAireComponent} from './pages/search/search.aire.component';
+
 import {authGuard} from './services/auth.guard';
-import {ForbiddenPageComponent} from './shared/forbidden-page/forbidden-page.component';
-import {NotFoundPageComponent} from './shared/not-found-page/not-found-page.component';
-import {HomeAireComponent} from './pages/home/home.aire.component';
-import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
-import {UserItemComponent} from './pages/landingpages/user/user-item.component';
-import {FormsComponent} from './pages/forms/forms.component';
-import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
-import {Datasource} from './pages/landingpages/datasource/datasource';
-import {ProviderJoinComponent} from './pages/provider/join/provider-join.component';
-import {JoinComponent} from './pages/public/join.component';
-import {AboutComponent} from './pages/public/about.component';
+
+
+
+
+
+
+
+
+
+
+
 
 export const routes: Routes = [
   {
@@ -21,28 +21,28 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeAireComponent,
+    loadComponent: () => import('./pages/home/home.aire.component').then(m => m.HomeAireComponent),
     data: {
       breadcrumb: 'Home'
     }
   },
   {
     path: 'search',
-    component: SearchAireComponent,
+    loadComponent: () => import('./pages/search/search.aire.component').then(m => m.SearchAireComponent),
     data: {
       breadcrumb: 'Search'
     }
   },
   {
     path: 'datasources/search',
-    component: DatasourceSearchComponent,
+    loadComponent: () => import('./pages/search/datasources-search/datasourceSearch.component').then(m => m.DatasourceSearchComponent),
     data: {
       breadcrumb: 'Datasources'
     }
   },
   {
     path: 'provider/:providerId/service/add',
-    component: FormsComponent,
+    loadComponent: () => import('./pages/forms/forms.component').then(m => m.FormsComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: 'add service'
@@ -50,7 +50,7 @@ export const routes: Routes = [
   },
   {
     path: 'service/edit/:resourceId',
-    component: FormsComponent,
+    loadComponent: () => import('./pages/forms/forms.component').then(m => m.FormsComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: 'edit service'
@@ -58,7 +58,7 @@ export const routes: Routes = [
   },
   {
     path: ':resourceType/subprofile/add/:resourceId',
-    component: FormsComponent,
+    loadComponent: () => import('./pages/forms/forms.component').then(m => m.FormsComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: 'add datasource'
@@ -66,7 +66,7 @@ export const routes: Routes = [
   },
   {
     path: ':resourceType/subprofile/edit/:datasourceId',
-    component: FormsComponent,
+    loadComponent: () => import('./pages/forms/forms.component').then(m => m.FormsComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: 'edit datasource'
@@ -74,7 +74,7 @@ export const routes: Routes = [
   },
   {
     path: 'form',
-    component: FormsComponent,
+    loadComponent: () => import('./pages/forms/forms.component').then(m => m.FormsComponent),
     // canActivate: [authGuard],
     data: {
       breadcrumb: 'forms'
@@ -82,28 +82,28 @@ export const routes: Routes = [
   },
   {
     path: 'portfolios/:id',
-    component: PortfolioItemComponent,
+    loadComponent: () => import('./pages/landingpages/portfolio/portfolio-item.component').then(m => m.PortfolioItemComponent),
     data: {
       breadcrumb: 'portfolio'
     }
   },
   {
     path: 'users/:id',
-    component: UserItemComponent,
+    loadComponent: () => import('./pages/landingpages/user/user-item.component').then(m => m.UserItemComponent),
     data: {
       breadcrumb: 'Users'
     }
   },
   {
     path: 'datasource/:datasourceId',
-    component: Datasource,
+    loadComponent: () => import('./pages/landingpages/datasource/datasource').then(m => m.Datasource),
     data: {
       breadcrumb: 'Datasource'
     }
   },
   {
     path: 'join/:token',
-    component: ProviderJoinComponent,
+    loadComponent: () => import('./pages/provider/join/provider-join.component').then(m => m.ProviderJoinComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: 'Join'
@@ -111,14 +111,14 @@ export const routes: Routes = [
   },
   {
     path: 'join',
-    component: JoinComponent,
+    loadComponent: () => import('./pages/public/join.component').then(m => m.JoinComponent),
     data: {
       breadcrumb: 'Join'
     }
   },
   {
     path: 'about',
-    component: AboutComponent,
+    loadComponent: () => import('./pages/public/about.component').then(m => m.AboutComponent),
     data: {
       breadcrumb: 'About'
     }
@@ -148,14 +148,14 @@ export const routes: Routes = [
 
   {
     path: 'forbidden',
-    component: ForbiddenPageComponent,
+    loadComponent: () => import('./shared/forbidden-page/forbidden-page.component').then(m => m.ForbiddenPageComponent),
     data: {
       breadcrumb: 'Forbidden'
     }
   },
   {
     path: 'notFound',
-    component: NotFoundPageComponent,
+    loadComponent: () => import('./shared/not-found-page/not-found-page.component').then(m => m.NotFoundPageComponent),
     data: {
       breadcrumb: 'Not Found'
     }

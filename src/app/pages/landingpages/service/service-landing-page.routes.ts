@@ -1,15 +1,15 @@
 import {Routes} from '@angular/router';
-import {ServiceLandingPageComponent} from './service-landing-page.component';
-import {OverviewComponent} from './overview/overview.component';
-import {PricingComponent} from './pricing/pricing.component';
-import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSupport.component';
-import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
-import {ChangeLogComponent} from './resourcesAndSupport/changeLog/change-log.component';
+
+
+
+
+
+
 
 export const SERVICE_LANDING_PAGE_ROUTES: Routes = [
   {
     path: ':id',
-    component: ServiceLandingPageComponent,
+    loadComponent: () => import('./service-landing-page.component').then(m => m.ServiceLandingPageComponent),
     data: {
       breadcrumb: 'Service'
     },
@@ -21,27 +21,27 @@ export const SERVICE_LANDING_PAGE_ROUTES: Routes = [
       },
       {
         path: 'overview',
-        component: OverviewComponent,
+        loadComponent: () => import('./overview/overview.component').then(m => m.OverviewComponent),
       },
       {
         path: 'subscriptions',
-        component: PricingComponent,
+        loadComponent: () => import('./pricing/pricing.component').then(m => m.PricingComponent),
       },
       {
         path: 'resourcesAndSupport',
-        component: ResourcesAndSupportComponent,
+        loadComponent: () => import('./resourcesAndSupport/resourcesAndSupport.component').then(m => m.ResourcesAndSupportComponent),
       },
       {
         path: 'miscellaneous',
-        component: MiscellaneousComponent,
+        loadComponent: () => import('./miscellaneous/miscellaneous.component').then(m => m.MiscellaneousComponent),
       },
       {
         path: 'changeLog',
-        component: ChangeLogComponent,
+        loadComponent: () => import('./resourcesAndSupport/changeLog/change-log.component').then(m => m.ChangeLogComponent),
       },
       {
         path: 'changeLogClean',
-        component: ChangeLogComponent,
+        loadComponent: () => import('./resourcesAndSupport/changeLog/change-log.component').then(m => m.ChangeLogComponent),
       }
     ],
     runGuardsAndResolvers: 'always'

@@ -1,14 +1,14 @@
 import {Routes} from '@angular/router';
 import {authGuard} from '../../services/auth.guard';
-import {AdminDashboardComponent} from './admin-dashboard.component';
-import {AllProvidersDashboardComponent} from './providers/all-providers.component';
-import {AllServicesDashboardComponent} from './services/all-services.component';
-import {AllDatasourcesDashboardComponent} from './datasources/all-datasources.component';
+
+
+
+
 
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
-    component: AdminDashboardComponent,
+    loadComponent: () => import('./admin-dashboard.component').then(m => m.AdminDashboardComponent),
     children: [
       {
         path: '',
@@ -17,7 +17,7 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'providers',
-        component: AllProvidersDashboardComponent,
+        loadComponent: () => import('./providers/all-providers.component').then(m => m.AllProvidersDashboardComponent),
         canActivate: [authGuard],
         data: {
           dashboardMode: true
@@ -25,7 +25,7 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'services',
-        component: AllServicesDashboardComponent,
+        loadComponent: () => import('./services/all-services.component').then(m => m.AllServicesDashboardComponent),
         canActivate: [authGuard],
         data: {
           dashboardMode: true
@@ -33,7 +33,7 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'datasources',
-        component: AllDatasourcesDashboardComponent,
+        loadComponent: () => import('./datasources/all-datasources.component').then(m => m.AllDatasourcesDashboardComponent),
         canActivate: [authGuard],
         data: {
           dashboardMode: true

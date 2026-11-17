@@ -1,14 +1,14 @@
 import {Routes} from '@angular/router';
 import {authGuard} from '../../services/auth.guard';
-import {ServiceHistoryComponent} from './service-history.component';
-import {ServiceFullHistoryComponent} from './service-full-history.component';
-import {ServiceDashboardComponent} from './service-dashboard.component';
+
+
+
 import {environment} from '../../../environments/environment';
 
 export const SERVICE_DASHBOARD_ROUTES: Routes = [
   {
     path: ':providerId/:resourceId',
-    component: ServiceDashboardComponent,
+    loadComponent: () => import('./service-dashboard.component').then(m => m.ServiceDashboardComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: environment.serviceORresource + ' dashboard'
@@ -26,14 +26,14 @@ export const SERVICE_DASHBOARD_ROUTES: Routes = [
       },
       {
         path: 'history',
-        component: ServiceHistoryComponent,
+        loadComponent: () => import('./service-history.component').then(m => m.ServiceHistoryComponent),
         data: {
           dashboardMode: true
         },
       },
       {
         path: 'fullHistory',
-        component: ServiceFullHistoryComponent,
+        loadComponent: () => import('./service-full-history.component').then(m => m.ServiceFullHistoryComponent),
         data: {
           dashboardMode: true
         },
