@@ -21,7 +21,7 @@ import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from './pages/provider/provider.module';
-import {NgxMatomoModule, NgxMatomoRouterModule} from 'ngx-matomo-client';
+import {provideMatomo, withRouter} from 'ngx-matomo-client';
 import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
@@ -59,16 +59,6 @@ import {UserService} from './services/user.service';
     ProviderModule,
     CookieLawModule,
     NgSelectModule,
-    NgxMatomoModule.forRoot({
-      scriptUrl: environment.MATOMO_URL + 'matomo.js',
-      trackers: [
-        {
-          trackerUrl: environment.MATOMO_URL,
-          siteId: environment.MATOMO_SITE
-        }
-      ]
-    }),
-    NgxMatomoRouterModule,
     CatalogueUiModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -110,6 +100,18 @@ import {UserService} from './services/user.service';
       multi: true,
     },
     provideHttpClient(withXhr(), withInterceptorsFromDi()),
+    provideMatomo(
+      {
+        scriptUrl: environment.MATOMO_URL + 'matomo.js',
+        trackers: [
+          {
+            trackerUrl: environment.MATOMO_URL,
+            siteId: environment.MATOMO_SITE
+          }
+        ]
+      },
+      withRouter(),
+    ),
   ],
   exports: [
     AireFooterComponent,
