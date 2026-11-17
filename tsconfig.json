@@ -14,7 +14,14 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    // The strict flags that are on so far; strictNullChecks and noImplicitAny follow once their errors are fixed.
+    "alwaysStrict": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true
   },
   // Shared by the app and spec builds. Template type errors are fixed and this is switched on later.
   "angularCompilerOptions": {
