@@ -25,8 +25,8 @@
       @for (input of fieldAsFormArray().controls; track input; let i = $index) {
         <div class="uk-margin-bottom uk-flex uk-flex-middle">
           <div class="uk-margin-medium-top uk-width-9-10">
-            <ckeditor [id]="fieldData.name" [formControlName]="i" [config]="{placeholder: fieldData.form.placeholder}"
-              (ngModelChange)="updateBitSet(fieldData)" [editor]="editor"
+            <app-rich-text-editor [id]="fieldData.name" [formControlName]="i" [placeholder]="fieldData.form.placeholder"
+              (ngModelChange)="updateBitSet(fieldData)"
               [ngClass]="{'uk-form-danger': checkFormValidity()}" />
           </div>
           @if (fieldAsFormArray().length > 1) {
@@ -51,8 +51,8 @@
     </div>
   } @else {
     <div class="uk-margin-medium-top uk-width-9-10">
-      <ckeditor [editor]="editor" [formControlName]="fieldData.name" (ngModelChange)="updateBitSet(fieldData)"
-        [config]="{placeholder: fieldData.form.placeholder}"
+      <app-rich-text-editor [formControlName]="fieldData.name" (ngModelChange)="updateBitSet(fieldData)"
+        [placeholder]="fieldData.form.placeholder"
         [ngClass]="{'uk-form-danger': checkFormValidity()}" />
     </div>
     @if (fieldData.form.suggestion.text) {

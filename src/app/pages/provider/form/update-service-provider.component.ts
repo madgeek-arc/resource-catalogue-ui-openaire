@@ -7,7 +7,7 @@ import {RouterLink} from '@angular/router';
 import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
 import { NgClass, LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
 declare let UIkit: any;
 
@@ -16,7 +16,7 @@ declare let UIkit: any;
     templateUrl: './service-provider-form.component.html',
     styleUrls: ['./service-provider-form.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, CKEditorModule, RouterLink, LowerCasePipe]
+    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
   errorMessage: string;

@@ -10,11 +10,10 @@ import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
-import {ClassicEditor} from '../../../shared/ckeditor-classic-editor';
 import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
 import { NgClass, LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
 declare let UIkit: any;
 
@@ -23,7 +22,7 @@ declare let UIkit: any;
     templateUrl: './service-provider-form.component.html',
     styleUrls: ['./service-provider-form.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, CKEditorModule, RouterLink, LowerCasePipe]
+    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class ServiceProviderFormComponent implements OnInit {
   fb = inject(UntypedFormBuilder);
@@ -36,7 +35,6 @@ export class ServiceProviderFormComponent implements OnInit {
 
   private _hasUserConsent = environment.hasUserConsent;
 
-  public editor = ClassicEditor;
 
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;

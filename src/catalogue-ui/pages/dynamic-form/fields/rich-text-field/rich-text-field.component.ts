@@ -1,17 +1,16 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import {ClassicEditor} from '../../../../domain/ckeditor-classic-editor';
 import {FormControlService} from '../../../../services/form-control.service';
 import { NgClass } from '@angular/common';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {RichTextEditorComponent} from '../../../../shared/rich-text-editor/rich-text-editor.component';
 
 @Component({
     selector: 'app-rich-text-field',
     templateUrl: './rich-text-field.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, CKEditorModule]
+    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, RichTextEditorComponent]
 })
 
 export class RichTextFieldComponent implements OnInit {
@@ -30,7 +29,6 @@ export class RichTextFieldComponent implements OnInit {
   form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  public editor = ClassicEditor;
 
   ngOnInit() {
     const position = this.position();
