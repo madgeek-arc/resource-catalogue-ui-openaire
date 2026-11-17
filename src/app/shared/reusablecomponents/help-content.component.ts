@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Content, PageContent} from '../../entities/page-content';
 import {HelpContentService} from '../../services/help-content.service';
@@ -7,12 +7,14 @@ import {environment} from '../../../environments/environment';
 @Component({
   selector: 'app-help-content',
   template: `
-    <ng-template [ngIf]="contents && contents.length>0">
-      <ng-template ngFor let-content [ngForOf]="contents">
+    @if (contents && contents.length>0) {
+      @for (content of contents; track content) {
         <div [innerHTML]="content.content" class="uk-margin-medium-bottom"></div>
-      </ng-template>
-    </ng-template>
-  `
+      }
+    }
+    `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class HelpContentComponent implements OnInit {
   @Input() position: string;
@@ -48,13 +50,15 @@ export class HelpContentComponent implements OnInit {
 @Component({
   selector: 'app-aside-help-content',
   template: `
-    <ng-template [ngIf]="contents && contents.length>0">
-      <ng-template ngFor let-content [ngForOf]="contents">
+    @if (contents && contents.length>0) {
+      @for (content of contents; track content) {
         <div [innerHTML]="content.content"
-             class="uk-card uk-card-body uk-card-default sidemenu uk-margin-bottom"></div>
-      </ng-template>
-    </ng-template>
-  `
+        class="uk-card uk-card-body uk-card-default sidemenu uk-margin-bottom"></div>
+      }
+    }
+    `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class AsideHelpContentComponent extends HelpContentComponent {
 }

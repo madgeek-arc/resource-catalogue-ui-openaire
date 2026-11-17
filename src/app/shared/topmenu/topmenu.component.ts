@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UserSessionService} from '../../services/user-session.service';
 import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
@@ -14,6 +14,8 @@ import {filter, map} from 'rxjs/operators';
   selector: 'app-top-menu-aire',
   templateUrl: './topmenu.component.html',
   styleUrls: ['./topmenu.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class AireTopMenuComponent implements OnInit {
@@ -22,10 +24,10 @@ export class AireTopMenuComponent implements OnInit {
   refresh = false;
   user: UserInfo = null;
   myProviders: Provider[] = [];
-  isLoggedIn: boolean = false;
-  loading: boolean = true;
+  isLoggedIn = false;
+  loading = true;
 
-  dashboardMode: boolean = false;
+  dashboardMode = false;
 
   public portfolioItemActive: string = null;
 
@@ -56,8 +58,8 @@ export class AireTopMenuComponent implements OnInit {
       this.myProviders = [];
       if (this.isLoggedIn) {
         this.userService.getMyProviders().subscribe(
-          res => {this.myProviders = res},
-          error => {console.error(error)}
+          res => {this.myProviders = res;},
+          error => {console.error(error);}
         );
       }
     });
@@ -87,7 +89,7 @@ export class AireTopMenuComponent implements OnInit {
   }
 
   getInitials(fullName: string) {
-    return fullName.split(" ").map((n)=>n[0]).join("")
+    return fullName.split(' ').map((n)=>n[0]).join('');
   }
 
   isInDashboardMode() {

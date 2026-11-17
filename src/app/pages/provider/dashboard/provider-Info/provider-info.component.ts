@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Provider, ProviderBundle, Type, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
@@ -6,14 +6,16 @@ import {ResourceService} from '../../../../services/resource.service';
 
 @Component({
   selector: 'app-provider-info',
-  templateUrl: 'provider-info.component.html'
+  templateUrl: 'provider-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class ProviderInfoComponent implements OnInit, OnChanges {
 
   @Input() providerBundle: ProviderBundle = null;
-  provider: Provider = null
-  vocabularies: Map<string, Object[]> = null;
+  provider: Provider = null;
+  vocabularies: Map<string, object[]> = null;
 
   // vocabularies: Map<string, Vocabulary[]> = null;
   // placesVocabulary: Vocabulary[] = null;
@@ -60,7 +62,7 @@ export class ProviderInfoComponent implements OnInit, OnChanges {
   setVocabularies() {
     this.resourceService.getUiVocabularies().subscribe(
       res => {
-        this.vocabularies = res
+        this.vocabularies = res;
       }
     );
   }

@@ -1,24 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
   selector: 'app-update-service-provider',
   templateUrl: './service-provider-form.component.html',
-  styleUrls: ['./service-provider-form.component.css']
+  styleUrls: ['./service-provider-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
   errorMessage: string;
   provider: Provider;
 
-  constructor(public fb: FormBuilder,
+  constructor(public fb: UntypedFormBuilder,
               public authService: UserSessionService,
               public providerService: ProviderService,
               public resourceService: ResourceService,

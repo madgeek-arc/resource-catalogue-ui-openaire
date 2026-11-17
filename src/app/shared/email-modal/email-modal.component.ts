@@ -1,24 +1,26 @@
-import {Component, Input} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
+import {UntypedFormBuilder, Validators} from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {EmailService} from '../../services/email.service';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
   selector: 'app-email-modal',
   templateUrl: './email-modal.component.html',
-  providers: [EmailService]
+  providers: [EmailService],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class EmailModalComponent {
 
   @Input() serviceIdsArray;
   public emailErrorMessage = '';
 
-  constructor(public fb: FormBuilder, public router: NavigationService, public route: ActivatedRoute,
+  constructor(public fb: UntypedFormBuilder, public router: NavigationService, public route: ActivatedRoute,
               public resourceService: ResourceService,
               public comparisonService: ComparisonService,
               public navigationService: NavigationService, public emailService: EmailService) {

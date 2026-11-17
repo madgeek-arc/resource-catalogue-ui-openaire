@@ -1,16 +1,17 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, zip } from 'rxjs';
 import { Provider, Service, URL } from '../../../entities/eic-model';
 import { UserSessionService } from '../../../services/user-session.service';
 import { ResourceService } from '../../../services/resource.service';
-import { environment } from 'src/environments/environment';
-import { zip } from 'rxjs/internal/observable/zip';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: './service-static-landing-page.component.html',
-  // styleUrls: ['../landing-page.component.css']
+  // styleUrls: ['../landing-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {
 
@@ -55,9 +56,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
                   }
                   else {
                     this.resourceService.getServicesByIdArray(this.resourcePayload.relatedResources).subscribe(
-                      next => {this.relatedServices = next},
-                      error => {console.log(error)},
-                      () => {this.ready = true}
+                      next => {this.relatedServices = next;},
+                      error => {console.log(error);},
+                      () => {this.ready = true;}
                     );
                   }
                 },

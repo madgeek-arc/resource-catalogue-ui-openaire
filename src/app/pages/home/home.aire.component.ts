@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {SearchQuery} from '../../entities/search-query';
 import {NavigationService} from '../../services/navigation.service';
@@ -11,10 +11,12 @@ import * as uikit from 'uikit';
 @Component({
   selector: 'app-home',
   templateUrl: './home.aire.component.html',
-  styleUrls: ['./home.aire.component.css']
+  styleUrls: ['./home.aire.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class HomeAireComponent implements OnInit {
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   public categories: Category[] = [
     {
       value: 'Authentication and authorization infrastructure',
@@ -38,9 +40,9 @@ export class HomeAireComponent implements OnInit {
   public slide = 0;
   public slideMobile = 0;
 
-  constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService,
+  constructor(public fb: UntypedFormBuilder, public router: NavigationService,  public resourceService: ResourceService,
               private dataSharingService: DataSharingService) {
-    this.searchForm = fb.group({'query': ['']});
+    this.searchForm = fb.group({query: ['']});
   }
 
   ngOnInit() {

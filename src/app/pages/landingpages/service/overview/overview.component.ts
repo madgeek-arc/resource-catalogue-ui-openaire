@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {UiVocabulary} from '../../../../entities/dynamic-form-model';
 import {Service, URL} from '../../../../entities/eic-model';
@@ -8,7 +8,9 @@ import * as uikit from 'uikit';
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: 'overview.component.html',
-  // styleUrls: ['../../landing-page.component.css']
+  // styleUrls: ['../../landing-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class OverviewComponent {
 

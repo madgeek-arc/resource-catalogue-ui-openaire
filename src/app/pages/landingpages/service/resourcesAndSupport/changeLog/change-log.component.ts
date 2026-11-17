@@ -1,10 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Service } from '../../../../../entities/eic-model';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-change-log',
-  templateUrl: 'change-log.component.html'
+  templateUrl: 'change-log.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class ChangeLogComponent {

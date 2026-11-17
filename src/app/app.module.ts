@@ -1,8 +1,8 @@
-import {APP_INITIALIZER, ErrorHandler, NgModule} from "@angular/core";
-import {Router} from "@angular/router";
-import * as Sentry from "@sentry/angular-ivy";
+import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
+import {Router} from '@angular/router';
+import * as Sentry from '@sentry/angular';
 import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
@@ -21,8 +21,7 @@ import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from './pages/provider/provider.module';
-import {MatomoModule} from 'ngx-matomo';
-import {HighchartsChartModule} from 'highcharts-angular';
+import {provideMatomo, withRouter} from 'ngx-matomo-client';
 import {environment} from '../environments/environment';
 import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-item.component';
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
@@ -36,7 +35,6 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {UserService} from './services/user.service';
 
 
-declare var require: any;
 
 @NgModule({
   declarations: [
@@ -54,27 +52,13 @@ declare var require: any;
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     ReusableComponentsModule,
     SharedModule,
     ProviderModule,
-    HighchartsChartModule,
     CookieLawModule,
     NgSelectModule,
-    MatomoModule.forRoot({
-      scriptUrl: environment.MATOMO_URL + 'matomo.js',
-      trackers: [
-        {
-          trackerUrl: environment.MATOMO_URL + 'matomo.php',
-          siteId: environment.MATOMO_SITE
-        }
-      ],
-      routeTracking: {
-        enable: true
-      }
-    }),
     CatalogueUiModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -115,6 +99,19 @@ declare var require: any;
       deps: [Sentry.TraceService],
       multi: true,
     },
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
+    provideMatomo(
+      {
+        scriptUrl: environment.MATOMO_URL + 'matomo.js',
+        trackers: [
+          {
+            trackerUrl: environment.MATOMO_URL,
+            siteId: environment.MATOMO_SITE
+          }
+        ]
+      },
+      withRouter(),
+    ),
   ],
   exports: [
     AireFooterComponent,

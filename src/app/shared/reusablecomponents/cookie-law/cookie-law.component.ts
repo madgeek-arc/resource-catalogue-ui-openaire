@@ -14,12 +14,8 @@ import {
 import {
   CookieLawService,
 } from './cookie-law.service';
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-
-// import {
-//   closeIcon,
-// } from './icons';
 
 export type CookieLawPosition = 'top' | 'bottom';
 export type CookieLawAnimation = 'topIn' | 'bottomIn' | 'topOut' | 'bottomOut';
@@ -49,6 +45,8 @@ export type CookieLawTarget = '_blank' | '_self';
   ],
   styleUrls: [ './cookie-law.css' ],
   templateUrl: './cookie-law.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class CookieLawComponent implements OnInit {
   public cookieLawSeen: boolean;
@@ -83,7 +81,7 @@ export class CookieLawComponent implements OnInit {
 
   private animation: CookieLawAnimation;
   private closeSvg: SafeHtml;
-  private currentStyles: {};
+  private currentStyles: Record<string, string | null>;
   private _learnMore: string;
   private _target: CookieLawTarget;
   private _position: CookieLawPosition;
@@ -115,8 +113,8 @@ export class CookieLawComponent implements OnInit {
       }
 
       this.currentStyles = {
-        'top': this.position === 'top' ? '0' : null,
-        'bottom': this.position === 'top' ? 'initial' : null,
+        top: this.position === 'top' ? '0' : null,
+        bottom: this.position === 'top' ? 'initial' : null,
       };
     }
   }

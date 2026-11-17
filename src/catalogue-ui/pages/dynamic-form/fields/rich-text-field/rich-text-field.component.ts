@@ -1,12 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormArray, FormControl, FormGroup, FormGroupDirective} from "@angular/forms";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {FormControlService} from "../../../../services/form-control.service";
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
+import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective} from '@angular/forms';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import {ClassicEditor} from '../../../../domain/ckeditor-classic-editor';
+import {FormControlService} from '../../../../services/form-control.service';
 
 @Component({
   selector: 'app-rich-text-field',
-  templateUrl: './rich-text-field.component.html'
+  templateUrl: './rich-text-field.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class RichTextFieldComponent implements OnInit {
@@ -18,8 +20,8 @@ export class RichTextFieldComponent implements OnInit {
   @Output() handleBitSets = new EventEmitter<Field>();
   @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
   hideField: boolean = null;
 
   public editor = ClassicEditor;
@@ -29,13 +31,13 @@ export class RichTextFieldComponent implements OnInit {
 
   ngOnInit() {
     if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+      this.form = this.rootFormGroup.control.controls[this.position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
     // console.log(this.form);
 
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
     // console.log(this.formControl);
 
     if(this.fieldData.form.dependsOn) {
@@ -46,7 +48,7 @@ export class RichTextFieldComponent implements OnInit {
         value => {
           this.enableDisableField(value, this.fieldData.form.dependsOn.value);
         },
-        error => {console.log(error)}
+        error => {console.log(error);}
       );
     }
   }
@@ -54,7 +56,7 @@ export class RichTextFieldComponent implements OnInit {
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   push() {

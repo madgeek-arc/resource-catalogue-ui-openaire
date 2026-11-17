@@ -1,22 +1,23 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {UserSessionService} from '../../services/user-session.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {environment} from '../../../environments/environment';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {zip} from 'rxjs/internal/observable/zip';
-import {fromEvent} from 'rxjs';
+import {fromEvent, zip} from 'rxjs';
 
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.aire.component.html'
+  templateUrl: './search.aire.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class SearchAireComponent implements OnInit {
@@ -43,17 +44,17 @@ export class SearchAireComponent implements OnInit {
   totalPages = 0;
   currentPage = 0;
 
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   errorMessage: string;
   filtersMobileShown = false;
   urlParameters: URLParameter[] = [];
   loading = false;
 
 
-  constructor(public fb: FormBuilder, public router: Router, public route: ActivatedRoute,
+  constructor(public fb: UntypedFormBuilder, public router: Router, public route: ActivatedRoute,
               public resourceService: ResourceService, public session: UserSessionService,
               public comparisonService: ComparisonService) {
-    this.searchForm = fb.group({'query': [''], 'searchFields': ['']});
+    this.searchForm = fb.group({query: [''], searchFields: ['']});
   }
 
   ngOnInit() {
@@ -124,7 +125,7 @@ export class SearchAireComponent implements OnInit {
     this.searchResults = searchResults;
 
     if (this.searchResults.results.length > 0 ) {
-      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation'])
+      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation']);
     }
     // update form values using URLParameters
     for (const urlParameter of this.urlParameters) {
@@ -184,11 +185,11 @@ export class SearchAireComponent implements OnInit {
         return;
       }
     }
-    this.urlParameters.push({key: key, values: [value]});
+    this.urlParameters.push({key, values: [value]});
   }
 
   navigateUsingParameters() {
-    const map: { [name: string]: string; } = {};
+    const map: { [name: string]: string } = {};
     for (const urlParameter of this.urlParameters) {
       map[urlParameter.key] = urlParameter.values.join(',');
     }

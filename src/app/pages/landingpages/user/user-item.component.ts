@@ -1,18 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../../services/resource.service';
 import {Service, Vocabulary} from '../../../entities/eic-model';
 import {Paging} from '../../../entities/paging';
-import {zip} from 'rxjs/internal/observable/zip';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-user-item',
   templateUrl: './user-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 export class UserItemComponent implements OnInit {
 
   response: Paging<Service>;
-  services: Map<string, Object[]>;
+  services: Map<string, object[]>;
   userVoc: Vocabulary;
   portfolios: Vocabulary[];
   portfoliosMap: Map<string, Service[]>;

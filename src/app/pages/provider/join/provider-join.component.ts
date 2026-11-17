@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-join',
-  templateUrl: 'provider-join.component.html'
+  templateUrl: 'provider-join.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class ProviderJoinComponent implements OnInit {

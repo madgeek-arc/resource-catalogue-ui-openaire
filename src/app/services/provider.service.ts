@@ -18,7 +18,7 @@ export class ProviderService {
   private httpOption = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json;charset=UTF-8',
-      'Accept': 'application/json;charset=UTF-8'
+      Accept: 'application/json;charset=UTF-8'
     })
   };
 
@@ -40,7 +40,7 @@ export class ProviderService {
   createNewServiceProviderWithToken(newProvider: Provider, token: string) {
     let params = new HttpParams();
     params = params.append('invitation', token);
-    return this.http.post<Provider>(this.oa + '/providers', newProvider, {params: params, withCredentials: true});
+    return this.http.post<Provider>(this.oa + '/providers', newProvider, {params, withCredentials: true});
   }
 
   updateServiceProvider(updatedFields: any, providerId?: string): Observable<Provider> {

@@ -1,10 +1,12 @@
-import {Component, Input} from "@angular/core";
-import {GroupedFields, Section} from "../../../domain/dynamic-form-model";
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
+import {GroupedFields, Section} from '../../../domain/dynamic-form-model';
+import {ClassicEditor} from '../../../domain/ckeditor-classic-editor';
 
 @Component({
   selector: 'app-section-builder',
-  templateUrl: 'section-builder.component.html'
+  templateUrl: 'section-builder.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class SectionBuilderComponent {

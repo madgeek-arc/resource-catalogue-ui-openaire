@@ -1,14 +1,15 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {DatePipe} from '@angular/common';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-provider-home',
-  templateUrl: 'provider-home.component.html'
+  templateUrl: 'provider-home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false
 })
 
 export class ProviderHomeComponent implements OnInit, OnChanges {
@@ -16,7 +17,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   @Input() providerBundle: ProviderBundle = null;
   provider: Provider = null;
   loggingInfo: LoggingInfo[] = null;
-  vocabularies: Map<string, Object[]> = null;
+  vocabularies: Map<string, object[]> = null;
   resourceBundles: ServiceBundle[] = null;
   approvedResourceBundles: ServiceBundle[] = null;
   pendingResourceBundles: ServiceBundle[] = null;
@@ -29,7 +30,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     this.resourceService.getUiVocabularies().subscribe(
-      res => {this.vocabularies = res}
+      res => {this.vocabularies = res;}
     );
 
     if (this.providerBundle) {
@@ -46,14 +47,14 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
     }
   }
 
-  getPayload(bundle : ServiceBundle): Service | Datasource {
+  getPayload(bundle: ServiceBundle): Service | Datasource {
     return bundle.service != null ? bundle.service : bundle.datasource;
   }
 
   getResourcesOfProvider() {
     this.providerService.getServicesOfProvider(this.providerBundle.provider.id, [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values:['desc']}]).subscribe(
       res => {this.resourceBundles = res.results;},
-      error => {console.error(error)},
+      error => {console.error(error);},
       () => {
         this.approvedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'approved');
         this.pendingResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'pending');

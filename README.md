@@ -1,27 +1,41 @@
-# Resource Catalogue UI
+# OpenAIRE Service Catalogue UI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.9.
+Angular 22 front end for the OpenAIRE service catalogue (npm package `resource-catalogue-ui`). It talks to the resource catalogue API under `/api`, mostly through its `/api/oa/*` endpoints.
 
-## Development server
+## Requirements
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:3000/`. The app will automatically reload if you change any of the source files.
+Node 24 (see `.nvmrc`; CI and the Dockerfile use it). Angular 22 needs Node 22.12 or newer and TypeScript 6.
 
-## Code scaffolding
+## Commands
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+| Command | What it does |
+| --- | --- |
+| `npm ci` | Install the locked dependencies |
+| `npm start` | Dev server on http://localhost:3000 with `proxy.conf.json`: `/api/**` goes to `localhost:8080` (the catalogue API, for example through an SSH tunnel) |
+| `npm test` | Unit tests (`*.spec.ts`) with Vitest in Node and jsdom, through `ng test`; no browser needed |
+| `npm run build:prod` | Production build into `dist/resource-catalogue-ui`; `build:beta` uses the beta environment |
+| `npm run lint` | ESLint (`eslint.config.mjs`) over TypeScript and templates |
+| `npm run lint:ci` | Same, but fails when the warning count is above the limit in `package.json` |
 
-## Build
+The environments are `src/environments/environment.ts` (dev), `environment.beta.ts` and `environment.prod.ts`; the beta and production builds swap them in.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Quality gates
 
-## Running unit tests
+The GitHub workflow in `.github/workflows/ci.yml` runs on every pull request and on pushes to `master` and `develop`:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. **Lint:** `npm run lint:ci`. The rules that move the code towards modern Angular (standalone components, `inject()`, signals, OnPush, `NgOptimizedImage`, class bindings, no inline styles, no `any`, no `console.log`, `===`) are warnings. The limit in the `lint:ci` script is the current count, and it can only go down: fix warnings, then lower the number. The old structural directives (`*ngIf`, `*ngFor`) are errors.
+2. **Test:** `npm test`.
+3. **Build:** `npm run build:prod`. The budget in `angular.json` fails the build when the initial bundle grows past it.
+4. **Audit:** `npm audit --audit-level=critical` prints every finding and fails on critical ones only.
 
-## Running end-to-end tests
+TypeScript's `strict` is set to `false` for now, because TypeScript 6 would otherwise switch every strict flag on at once; the flags are being turned on one at a time. Angular's `strictTemplates` is off for the same reason.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Docker
 
-## Further help
+`docker build -t catalogue-ui .` builds the production bundle and an nginx image. At start `init.sh` writes the nginx config from two environment variables: `SERVER_NAME` and `PROXY_API_ENDPOINT` (the catalogue API, served under `/api`). Files in the `./data` volume are served under `/images`, `/files`, `/ebooks` and `/pitch-decks`. See `docker-compose.yml`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Layout
+
+- `src/app`: the application. `pages` holds search, the service and datasource landing pages, the provider dashboard, the service dashboard, the admin dashboard and the forms; `services` holds the API clients, the session (`UserSessionService`, which asks `/api/user/info`), the route guards and the HTTP interceptor.
+- `src/catalogue-ui`: the dynamic form library behind the service, datasource and provider forms, and the form builder. It used to be a git-subrepo of `madgeek-arc/catalogue-ui`; it is now part of this repository.
+- Styles: `src/styles.scss` imports the theme CSS in `src/assets/css` and `src/catalogue-ui/assets`, on top of UIkit and Font Awesome (listed under `styles` and `scripts` in `angular.json`).
