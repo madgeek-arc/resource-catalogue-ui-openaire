@@ -80,7 +80,7 @@ export class CookieLawComponent implements OnInit {
 
   private animation: CookieLawAnimation;
   private closeSvg: SafeHtml;
-  private currentStyles: {};
+  private currentStyles: Record<string, string | null>;
   private _learnMore: string;
   private _target: CookieLawTarget;
   private _position: CookieLawPosition;

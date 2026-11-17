@@ -13,7 +13,7 @@ import {zip} from 'rxjs';
 export class UserItemComponent implements OnInit {
 
   response: Paging<Service>;
-  services: Map<string, Object[]>;
+  services: Map<string, object[]>;
   userVoc: Vocabulary;
   portfolios: Vocabulary[];
   portfoliosMap: Map<string, Service[]>;

@@ -14,7 +14,7 @@ export class ProviderInfoComponent implements OnInit, OnChanges {
 
   @Input() providerBundle: ProviderBundle = null;
   provider: Provider = null;
-  vocabularies: Map<string, Object[]> = null;
+  vocabularies: Map<string, object[]> = null;
 
   // vocabularies: Map<string, Vocabulary[]> = null;
   // placesVocabulary: Vocabulary[] = null;

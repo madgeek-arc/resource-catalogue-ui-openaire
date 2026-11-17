@@ -16,7 +16,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   @Input() providerBundle: ProviderBundle = null;
   provider: Provider = null;
   loggingInfo: LoggingInfo[] = null;
-  vocabularies: Map<string, Object[]> = null;
+  vocabularies: Map<string, object[]> = null;
   resourceBundles: ServiceBundle[] = null;
   approvedResourceBundles: ServiceBundle[] = null;
   pendingResourceBundles: ServiceBundle[] = null;
