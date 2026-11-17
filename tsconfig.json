@@ -21,7 +21,8 @@
     "useUnknownInCatchVariables": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true
   },
   // Shared by the app and spec builds. Template type errors are fixed and this is switched on later.
   "angularCompilerOptions": {
