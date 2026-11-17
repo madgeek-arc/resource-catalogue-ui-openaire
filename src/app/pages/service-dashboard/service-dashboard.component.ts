@@ -45,8 +45,7 @@ export class ServiceDashboardComponent implements OnInit {
       );
 
       this.resourceService.getDatasourceByServiceId(params['resourceId']).subscribe(
-        suc => this.datasource = suc,
-        err => console.log(err)
+        datasource => this.datasource = datasource
       );
     });
   }

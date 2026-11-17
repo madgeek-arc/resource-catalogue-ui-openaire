@@ -89,6 +89,27 @@ describe('ResourceService', () => {
     });
   });
 
+  describe('getDatasourceByServiceId', () => {
+    it('asks /api/oa/datasources for the one with that serviceId', () => {
+      let result: unknown;
+      service.getDatasourceByServiceId('cern.zenodo').subscribe(r => (result = r));
+
+      const req = backend.expectOne('/api/oa/datasources?serviceId=cern.zenodo&quantity=1');
+      expect(req.request.withCredentials).toBe(true);
+      req.flush({total: 1, from: 0, to: 1, results: [{id: 'cern.zenodo', serviceId: 'cern.zenodo'}]});
+
+      expect(result).toEqual({id: 'cern.zenodo', serviceId: 'cern.zenodo'});
+    });
+
+    it('gives null, not an error, for a service without a datasource', () => {
+      let result: unknown = 'unset';
+      service.getDatasourceByServiceId('openaire.argos').subscribe(r => (result = r));
+      backend.expectOne('/api/oa/datasources?serviceId=openaire.argos&quantity=1').flush({total: 0, from: 0, to: 0, results: []});
+
+      expect(result).toBeNull();
+    });
+  });
+
   it('groups services by a field through /api/oa/services/by/{field}', () => {
     let result: unknown;
     service.getResourcesGroupedByField('portfolios').subscribe(r => (result = r));
