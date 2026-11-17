@@ -28,7 +28,7 @@ if [ -f "$PROXY_CONF_FILE" ]; then
 else
     echo "Creating Nginx configuration: $PROXY_CONF_FILE"
 
-    [ ! -z ${SERVER_NAME+x} ] && export ADD_SERVER_NAME="server_name ${SERVER_NAME}";
+    [ ! -z ${SERVER_NAME+x} ] && export ADD_SERVER_NAME="server_name ${SERVER_NAME};";
     [ ! -z ${PROXY_API_ENDPOINT+x} ] && export ADD_PROXY_API=$(echo "$ADD_PROXY_API_CONF");
     envsubst '${ADD_SERVER_NAME} ${ADD_PROXY_API}' < $CONF_TMPL > $PROXY_CONF_FILE
 
