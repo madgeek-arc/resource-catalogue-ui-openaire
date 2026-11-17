@@ -37,5 +37,5 @@ TypeScript runs with `alwaysStrict`, `noImplicitThis`, `useUnknownInCatchVariabl
 ## Layout
 
 - `src/app`: the application. `pages` holds search, the service and datasource landing pages, the provider dashboard, the service dashboard, the admin dashboard and the forms; `services` holds the API clients, the session (`UserSessionService`, which asks `/api/user/info`), the route guards and the HTTP interceptor.
-- `src/catalogue-ui`: the dynamic form library behind the service, datasource and provider forms, and the form builder. It used to be a git-subrepo of `madgeek-arc/catalogue-ui`; it is now part of this repository.
-- Styles: `src/styles.scss` imports the theme CSS in `src/assets/css` and `src/catalogue-ui/assets`, on top of UIkit and Font Awesome (listed under `styles` and `scripts` in `angular.json`).
+- `src/catalogue-ui`: the dynamic form behind the service and datasource forms, and the rich-text editor (Tiptap) that the forms share. It used to be a git-subrepo of `madgeek-arc/catalogue-ui`; it is now part of this repository, without the parts this app does not route to.
+- Styles: `src/styles.scss` imports the theme CSS in `src/assets/css` and `src/catalogue-ui/assets`, and Font Awesome is listed under `styles` in `angular.json`. UIkit's CSS is part of `src/assets/css/theme.css`, a precompiled YOOtheme theme built on UIkit 3.7; the `uikit` package (pinned to 3.7.6 to match) only provides the JavaScript, listed under `scripts`.
