@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
 import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
@@ -33,7 +33,7 @@ export class SearchAireComponent implements OnInit {
   comparisonService = inject(ComparisonService);
 
 
-  @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+  readonly searchInput = viewChild<ElementRef>('searchInput');
 
   public projectName = environment.projectName;
   canAddOrEditService: boolean;
@@ -102,7 +102,7 @@ export class SearchAireComponent implements OnInit {
       );
     });
 
-    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+    fromEvent(this.searchInput().nativeElement, 'keyup').pipe(
       map((event: any) => { // get value
         return event.target.value;
       })

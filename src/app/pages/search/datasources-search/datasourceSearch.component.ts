@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
@@ -28,7 +28,7 @@ export class DatasourceSearchComponent implements OnInit {
   datasourceService = inject(DatasourceService);
 
 
-  @ViewChild('searchInput', { static: true }) searchInput: ElementRef;
+  readonly searchInput = viewChild<ElementRef>('searchInput');
 
   public projectName = environment.projectName;
   searchResults: Paging<DatasourceDetails> = null;
@@ -78,7 +78,7 @@ export class DatasourceSearchComponent implements OnInit {
       error => {console.log(error);}
     );
 
-    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+    fromEvent(this.searchInput().nativeElement, 'keyup').pipe(
       map((event: any) => { // get value
         return event.target.value;
       })

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Model} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
@@ -25,7 +25,7 @@ export class FormsComponent implements OnInit{
   private router = inject(Router);
 
 
-  @ViewChild(SurveyComponent) child: SurveyComponent;
+  readonly child = viewChild(SurveyComponent);
 
   tabsHeader: string = null;
   model: Model = null;

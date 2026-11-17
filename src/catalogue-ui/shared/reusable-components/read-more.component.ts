@@ -1,7 +1,7 @@
 /**
  * Created by stefania on 4/6/17.
  */
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, viewChild } from '@angular/core';
 
 @Component({
     selector: 'read-more',
@@ -27,14 +27,14 @@ export class ReadMoreComponent implements AfterContentInit {
   //@Input() text: string;
   //maximum height of the container
   readonly maxHeight = input(100);
-  @ViewChild('readMoreDiv', {static: true}) readMoreDiv: ElementRef;
+  readonly readMoreDiv = viewChild<ElementRef>('readMoreDiv');
   //set these to false to get the height of the expended container
   public isCollapsed = false;
   public isCollapsable = false;
 
   ngAfterContentInit() {
     setTimeout(_ => {
-      const currentHeight = this.readMoreDiv.nativeElement.offsetHeight;
+      const currentHeight = this.readMoreDiv().nativeElement.offsetHeight;
       //collapsable only if the contents make container exceed the max height
       if (currentHeight > this.maxHeight() || currentHeight === 0) {
         this.isCollapsed = true;
