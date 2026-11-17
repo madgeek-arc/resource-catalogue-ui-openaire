@@ -14,10 +14,10 @@ import {
 import {
   CookieLawService,
 } from './cookie-law.service';
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output, ChangeDetectionStrategy, forwardRef } from '@angular/core';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { NgStyle } from '@angular/common';
-import { CookieLawModule } from './cookie-law.module';
+
 
 export type CookieLawPosition = 'top' | 'bottom';
 export type CookieLawAnimation = 'topIn' | 'bottomIn' | 'topOut' | 'bottomOut';
@@ -45,7 +45,7 @@ export type CookieLawTarget = '_blank' | '_self';
     styleUrls: ['./cookie-law.css'],
     templateUrl: './cookie-law.html',
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgStyle, CookieLawModule]
+    imports: [NgStyle, forwardRef(() => CookieLawComponent)]
 })
 export class CookieLawComponent implements OnInit {
   public cookieLawSeen: boolean;

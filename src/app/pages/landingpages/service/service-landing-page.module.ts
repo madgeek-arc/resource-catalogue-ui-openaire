@@ -8,21 +8,20 @@ import {PricingComponent} from './pricing/pricing.component';
 import {ResourcesAndSupportComponent} from './resourcesAndSupport/resourcesAndSupport.component';
 import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
 import {ChangeLogComponent} from './resourcesAndSupport/changeLog/change-log.component';
-import {ReusableComponentsModule} from '../../../shared/reusablecomponents/reusable-components.module';
+
 
 @NgModule({
     imports: [
-        CommonModule,
-        ReusableComponentsModule,
-        ServiceLandingPageRouting,
-        FormsModule,
-        ServiceLandingPageComponent,
-        OverviewComponent,
-        PricingComponent,
-        ResourcesAndSupportComponent,
-        MiscellaneousComponent,
-        ChangeLogComponent
-    ],
+    CommonModule,
+    ServiceLandingPageRouting,
+    FormsModule,
+    ServiceLandingPageComponent,
+    OverviewComponent,
+    PricingComponent,
+    ResourcesAndSupportComponent,
+    MiscellaneousComponent,
+    ChangeLogComponent
+],
 })
 
 export class ServiceLandingPageModule {}

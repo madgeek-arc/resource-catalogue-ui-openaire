@@ -5,13 +5,13 @@ import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
 import {provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {SharedModule} from './shared/shared.module';
+
 import {AppRoutingModule} from './app.routing';
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
-import {ReusableComponentsModule} from './shared/reusablecomponents/reusable-components.module';
+
 import {SearchAireComponent} from './pages/search/search.aire.component';
-import {CookieLawModule} from './shared/reusablecomponents/cookie-law/cookie-law.module';
+
 import {HomeAireComponent} from './pages/home/home.aire.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ProviderModule} from './pages/provider/provider.module';
@@ -21,43 +21,43 @@ import {PortfolioItemComponent} from './pages/landingpages/portfolio/portfolio-i
 import {UserItemComponent} from './pages/landingpages/user/user-item.component';
 import {authenticationInterceptor} from './services/authentication-interceptor';
 import {FormsComponent} from './pages/forms/forms.component';
-import {CatalogueUiModule} from '../catalogue-ui/catalogue-ui.module';
+
 import {DatasourceSearchComponent} from './pages/search/datasources-search/datasourceSearch.component';
 import {Datasource} from './pages/landingpages/datasource/datasource';
 import {ServiceWorkerModule} from '@angular/service-worker';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CookieLawComponent} from './shared/reusablecomponents/cookie-law/cookie-law.component';
 
 
 
 @NgModule({
     declarations: [AppComponent],
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        ReusableComponentsModule,
-        SharedModule,
-        ProviderModule,
-        CookieLawModule,
-        NgSelectModule,
-        CatalogueUiModule,
-        AppRoutingModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {
-            enabled: environment.production,
-            // Register the ServiceWorker as soon as the app is stable
-            // or after 30 seconds (whichever comes first).
-            registrationStrategy: 'registerWhenStable:30000'
-        }),
-        HomeAireComponent,
-        SearchAireComponent,
-        DatasourceSearchComponent,
-        Datasource,
-        PortfolioItemComponent,
-        UserItemComponent,
-        // ServiceLandingPageComponent,
-        AireTopMenuComponent,
-        AireFooterComponent,
-        FormsComponent,
-    ],
+    BrowserAnimationsModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ProviderModule,
+    NgSelectModule,
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+        enabled: environment.production,
+        // Register the ServiceWorker as soon as the app is stable
+        // or after 30 seconds (whichever comes first).
+        registrationStrategy: 'registerWhenStable:30000'
+    }),
+    HomeAireComponent,
+    SearchAireComponent,
+    DatasourceSearchComponent,
+    Datasource,
+    PortfolioItemComponent,
+    UserItemComponent,
+    // ServiceLandingPageComponent,
+    AireTopMenuComponent,
+    AireFooterComponent,
+    FormsComponent,
+    CookieLawComponent,
+],
     providers: [
         DatePipe,
         {
