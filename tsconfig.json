@@ -22,7 +22,8 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "noImplicitReturns": true
   },
   // Shared by the app and spec builds. Template type errors are fixed and this is switched on later.
   "angularCompilerOptions": {

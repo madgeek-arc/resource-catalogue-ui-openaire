@@ -68,10 +68,7 @@ export class ProviderHomeComponent implements OnInit, OnChanges {
   }
 
   getVocabularyName(vocabularyType: string, id: string): string {
-    for (const vocabulary of this.vocabularies[vocabularyType]) {
-      if (vocabulary.id === id)
-        return vocabulary.name;
-    }
+    return this.vocabularies[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
 
   // formatLogDate(logDate: string): string {

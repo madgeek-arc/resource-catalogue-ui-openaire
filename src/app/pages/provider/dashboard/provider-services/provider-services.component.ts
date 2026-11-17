@@ -244,11 +244,7 @@ export class ProviderServicesComponent implements OnInit {
   }
 
   getVocabularyName(id: string) {
-    for (const vocabulary of this.vocabularies) {
-      if (vocabulary.id === id) {
-        return vocabulary.name;
-      }
-    }
+    return this.vocabularies.find(vocabulary => vocabulary.id === id)?.name;
   }
 
   getPayload(bundle: Bundle<Service | Datasource>): Service | Datasource {
