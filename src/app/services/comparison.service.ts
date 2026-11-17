@@ -15,7 +15,7 @@ export class ComparisonService {
     this.servicesToCompare = JSON.parse(sessionStorage.getItem('compareServices') || '[]');
   }
 
-  addOrRemove(service: Service, go?: boolean) {
+  addOrRemove(service: Service, go?: boolean): void {
     const idx = this.servicesToCompare.map(s => s.id).indexOf(service.id);
     if (idx > -1) {
       this.servicesToCompare.splice(idx, 1);
@@ -34,7 +34,7 @@ export class ComparisonService {
       }
     }
     if (go) {
-      return this.go();
+      this.go();
     }
   }
 
@@ -47,7 +47,7 @@ export class ComparisonService {
     if (this.servicesToCompare.length > 1) {
       return this.router.compare({services: this.servicesToCompare.map(x => x.id).join(',')});
     } else {
-      this.router.search({});
+      return this.router.search({});
     }
   }
 }

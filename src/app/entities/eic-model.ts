@@ -74,8 +74,8 @@ export class Indicator implements Identifiable {
 }
 
 export class ServiceBundle extends Bundle<any> {
-  service: Service;
-  datasource: Datasource;
+  override service: Service;
+  override datasource: Datasource;
 }
 
 export class Measurement implements Identifiable {
@@ -186,6 +186,32 @@ export class ServiceCategory {
   subcategory: string;
 }
 
+/** One entry of a service's change log, as the service pages show it. */
+export interface ChangeLogEntry {
+  changeLogVersion: string;
+  changeDate: string;
+  logs: {type: string; value: string}[];
+}
+
+/** A highlighted feature of a service, shown on its overview page. */
+export interface ServiceFeature {
+  featuresTitle: string;
+  featuresText: string;
+  featuresImage: string;
+}
+
+/**
+ * The free-form presentation data of a service. The fields the pages read with dot access are typed; the many others
+ * (pitch, portfolios, users, paymentCategories, ...) are read by key and keep the open index signature.
+ */
+export interface ServiceExtras {
+  image?: string;
+  paymentInformation?: string;
+  features?: ServiceFeature[];
+  openAireChangeLog?: ChangeLogEntry[];
+  [key: string]: any;
+}
+
 export class Service implements Identifiable {
   id: string;
   abbreviation: string;
@@ -242,13 +268,13 @@ export class Service implements Identifiable {
   order: URL;
   paymentModel: URL;
   pricing: URL;
-  extras: object;
+  extras: ServiceExtras;
 }
 
 export class Datasource extends Service implements Identifiable {
-  id: string;
+  override id: string;
   serviceId: string;
-  catalogueId: string;
+  override catalogueId: string;
   submissionPolicyURL: URL;
   preservationPolicyURL: URL;
   versionControl: boolean;

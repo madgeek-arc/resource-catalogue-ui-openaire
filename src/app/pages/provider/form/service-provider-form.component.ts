@@ -181,6 +181,12 @@ export class ServiceProviderFormComponent implements OnInit {
     ])
   };
 
+  /** Leaves the read-only view (the Edit button) and makes the form editable. */
+  toggleDisable() {
+    this.disable = !this.disable;
+    this.newProviderForm.enable();
+  }
+
   ngOnInit() {
 
     const path = this.route.snapshot.routeConfig.path;

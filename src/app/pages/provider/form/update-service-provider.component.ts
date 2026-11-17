@@ -19,10 +19,10 @@ declare let UIkit: any;
     imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
-  errorMessage: string;
+  override errorMessage: string;
   provider: Provider;
 
-  ngOnInit() {
+  override ngOnInit() {
     this.edit = true;
     this.providerId = this.route.snapshot.paramMap.get('providerId');
     const path = this.route.snapshot.routeConfig.path;
@@ -62,7 +62,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     }
   }
 
-  registerProvider(tempSave: boolean) {
+  override registerProvider(tempSave: boolean) {
     super.registerProvider(tempSave);
   }
 
@@ -205,11 +205,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         this.providerName = this.newProviderForm.get('name').value;
       }
     );
-  }
-
-  toggleDisable() {
-    this.disable = !this.disable;
-    this.newProviderForm.enable();
   }
 
 }

@@ -36,11 +36,7 @@ export class ProviderInfoComponent implements OnInit, OnChanges {
   }
 
   getVocabularyName(vocabularyType: string, id: string): string {
-    // console.log(this.vocabularies);
-    for (const vocabulary of this.vocabularies[vocabularyType]) {
-      if (vocabulary.id === id)
-        return vocabulary.name;
-    }
+    return this.vocabularies[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
 
   setVocabularies() {

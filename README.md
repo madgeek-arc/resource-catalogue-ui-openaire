@@ -28,7 +28,7 @@ The GitHub workflow in `.github/workflows/ci.yml` runs on every pull request and
 3. **Build:** `npm run build:prod`. The budget in `angular.json` fails the build when the initial bundle grows past it.
 4. **Audit:** `npm audit --audit-level=critical` prints every finding and fails on critical ones only.
 
-TypeScript's `strict` is set to `false` for now, because TypeScript 6 would otherwise switch every strict flag on at once; the flags are being turned on one at a time. Angular's `strictTemplates` is off for the same reason.
+TypeScript runs with `alwaysStrict`, `noImplicitThis`, `useUnknownInCatchVariables`, `strictFunctionTypes`, `strictBindCallApply`, `noFallthroughCasesInSwitch`, `noImplicitOverride` and `noImplicitReturns`. `noImplicitAny` and `strictNullChecks` are not on yet, and `strict` itself is set to `false` because TypeScript 6 would otherwise switch every strict flag on at once. Angular's `strictTemplates` is on, so the build fails on template type errors (a misspelled member, a wrongly typed binding); its null checks only take effect once `strictNullChecks` is on.
 
 ## Docker
 
@@ -37,5 +37,5 @@ TypeScript's `strict` is set to `false` for now, because TypeScript 6 would othe
 ## Layout
 
 - `src/app`: the application. `pages` holds search, the service and datasource landing pages, the provider dashboard, the service dashboard, the admin dashboard and the forms; `services` holds the API clients, the session (`UserSessionService`, which asks `/api/user/info`), the route guards and the HTTP interceptor.
-- `src/catalogue-ui`: the dynamic form library behind the service, datasource and provider forms, and the form builder. It used to be a git-subrepo of `madgeek-arc/catalogue-ui`; it is now part of this repository.
-- Styles: `src/styles.scss` imports the theme CSS in `src/assets/css` and `src/catalogue-ui/assets`, on top of UIkit and Font Awesome (listed under `styles` and `scripts` in `angular.json`).
+- `src/catalogue-ui`: the dynamic form behind the service and datasource forms, and the rich-text editor (Tiptap) that the forms share. It used to be a git-subrepo of `madgeek-arc/catalogue-ui`; it is now part of this repository, without the parts this app does not route to.
+- Styles: `src/styles.scss` imports the theme CSS in `src/assets/css` and `src/catalogue-ui/assets`, and Font Awesome is listed under `styles` in `angular.json`. UIkit's CSS is part of `src/assets/css/theme.css`, a precompiled YOOtheme theme built on UIkit 3.7; the `uikit` package (pinned to 3.7.6 to match) only provides the JavaScript, listed under `scripts`.
