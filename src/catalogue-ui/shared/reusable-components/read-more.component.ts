@@ -17,7 +17,7 @@ import {
   selector: 'read-more',
   template: `
     <div [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight+'px' : 'auto'" #readMoreDiv>
-      <ng-content></ng-content>
+      <ng-content />
     </div>
     @if (isCollapsable) {
       <a (click)="isCollapsed =! isCollapsed">View {{isCollapsed ? 'more' : 'less'}}...</a>

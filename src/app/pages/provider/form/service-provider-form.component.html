@@ -33,8 +33,7 @@
 
             <!-- LEFT HELP CONTENT -->
             <app-aside-help-content #leftHelperContent [position]="'left'"
-              [ngClass]="leftHelperContent.isPresent()?'tm-sidebar uk-width-1-4@m uk-first-column':'clear-style'">
-            </app-aside-help-content>
+              [ngClass]="leftHelperContent.isPresent()?'tm-sidebar uk-width-1-4@m uk-first-column':'clear-style'" />
 
 
             <!-- MIDDLE -->
@@ -73,8 +72,7 @@
                           }
                           <!-- TOP HELP CONTENT -->
                           <app-help-content #topHelperContent [position]="'top'"
-                            [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">
-                          </app-help-content>
+                            [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'" />
                         </div>
                       </div>
                     </div>
@@ -215,8 +213,7 @@
                                       bindLabel="name"
                                       bindValue="id"
                                       clearAllText="Clear"
-                                      formControlName="legalStatus">
-                                    </ng-select>
+                                      formControlName="legalStatus" />
                                   </div>
                                 </div>
                               }
@@ -246,8 +243,7 @@
                                   <ckeditor id="description" [editor]="editor"
                                     (change)="unsavedChangesPrompt()"
                                     [ngClass]="{'uk-form-danger': checkFormValidity('description', this.edit)}"
-                                    formControlName="description">
-                                  </ckeditor>
+                                    formControlName="description" />
                                 </div>
                                 <i><small>Suggested length is 1000 characters</small></i>
                               </div>
@@ -354,8 +350,7 @@
                                             bindLabel="name"
                                             bindValue="id"
                                             clearAllText="Clear"
-                                            formControlName="scientificDomain">
-                                          </ng-select>
+                                            formControlName="scientificDomain" />
                                         </div>
                                       </div>
                                     }
@@ -374,8 +369,7 @@
                                             bindLabel="name"
                                             bindValue="id"
                                             clearAllText="Clear"
-                                            formControlName="scientificSubdomain">
-                                          </ng-select>
+                                            formControlName="scientificSubdomain" />
                                         </div>
                                       </div>
                                     }
@@ -449,8 +443,7 @@
                                         bindLabel="name"
                                         bindValue="id"
                                         clearAllText="Clear"
-                                        [formControlName]="i">
-                                      </ng-select>
+                                        [formControlName]="i" />
                                     }
                                     @if (getFieldAsFormArray('structureTypes').length > 1 && !disable) {
                                       <a
@@ -549,8 +542,7 @@
                               bindLabel="name"
                               bindValue="id"
                               clearAllText="Clear"
-                              formControlName="country">
-                            </ng-select>
+                              formControlName="country" />
                           </div>
                         </div>
                       </div>
@@ -749,8 +741,7 @@
                           bindLabel="name"
                           bindValue="id"
                           clearAllText="Clear"
-                          formControlName="lifeCycleStatus">
-                        </ng-select>
+                          formControlName="lifeCycleStatus" />
                       </div>
                     </div>
                   }
@@ -809,8 +800,7 @@
                               bindLabel="name"
                               bindValue="id"
                               clearAllText="Clear"
-                              [formControlName]="i">
-                            </ng-select>
+                              [formControlName]="i" />
                             @if (getFieldAsFormArray('participatingCountries').length > 1 && !disable) {
                               <a
                                 class="remove-element uk-padding-small" style="padding-top: 5px"
@@ -890,8 +880,7 @@
                           bindLabel="name"
                           bindValue="id"
                           clearAllText="Clear"
-                          [formControlName]="i">
-                        </ng-select>
+                          [formControlName]="i" />
                         @if (getFieldAsFormArray('networks').length > 1 && !disable) {
                           <a
                             class="remove-element uk-padding-small" style="padding-top: 5px"
@@ -933,8 +922,7 @@
                           bindLabel="name"
                           bindValue="id"
                           clearAllText="Clear"
-                          [formControlName]="i">
-                        </ng-select>
+                          [formControlName]="i" />
                         @if (getFieldAsFormArray('esfriDomains').length > 1 && !disable) {
                           <a
                             class="remove-element uk-padding-small" style="padding-top: 5px"
@@ -967,8 +955,7 @@
                     bindLabel="name"
                     bindValue="id"
                     clearAllText="Clear"
-                    formControlName="esfriType">
-                  </ng-select>
+                    formControlName="esfriType" />
                 </div>
               </div>
               <div class="uk-margin-large-bottom">
@@ -998,8 +985,7 @@
                               bindLabel="name"
                               bindValue="id"
                               clearAllText="Clear"
-                              formControlName="merilScientificDomain">
-                            </ng-select>
+                              formControlName="merilScientificDomain" />
                           </div>
                         </div>
                       }
@@ -1019,8 +1005,7 @@
                               bindLabel="name"
                               bindValue="id"
                               clearAllText="Clear"
-                              formControlName="merilScientificSubdomain">
-                            </ng-select>
+                              formControlName="merilScientificSubdomain" />
                           </div>
                         </div>
                       }
@@ -1061,8 +1046,7 @@
                         bindLabel="name"
                         bindValue="id"
                         clearAllText="Clear"
-                        [formControlName]="i">
-                      </ng-select>
+                        [formControlName]="i" />
                       @if (getFieldAsFormArray('areasOfActivity').length > 1 && !disable) {
                         <a
                           class="remove-element uk-padding-small" style="padding-top: 5px"
@@ -1100,8 +1084,7 @@
                         bindLabel="name"
                         bindValue="id"
                         clearAllText="Clear"
-                        [formControlName]="i">
-                      </ng-select>
+                        [formControlName]="i" />
                       @if (getFieldAsFormArray('societalGrandChallenges').length > 1 && !disable) {
                         <a
                           class="remove-element uk-padding-small" style="padding-top: 5px"
@@ -1255,16 +1238,14 @@
 
 <!-- RIGHT HELP CONTENT -->
 <app-aside-help-content #rightHelperContent [position]="'right'"
-  [ngClass]="rightHelperContent.isPresent()?'tm-sidebar uk-width-1-4@m uk-first-column':'clear-style'">
-</app-aside-help-content>
+  [ngClass]="rightHelperContent.isPresent()?'tm-sidebar uk-width-1-4@m uk-first-column':'clear-style'" />
 
 </div>
 </div>
 
 <!-- BOTTOM HELP CONTENT -->
 <app-help-content #bottomHelperContent [position]="'bottom'"
-  [ngClass]="bottomHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">
-</app-help-content>
+  [ngClass]="bottomHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'" />
 
 </div>
 </div>

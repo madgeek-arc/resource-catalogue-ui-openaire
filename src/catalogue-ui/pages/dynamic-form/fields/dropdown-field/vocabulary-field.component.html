@@ -21,8 +21,7 @@
                  (change)="updateBitSet(fieldData); unsavedChangesPrompt()"
                  bindLabel="name"
                  bindValue="id"
-                 clearAllText="Clear">
-      </ng-select>
+                 clearAllText="Clear" />
       @if (fieldAsFormArray().length > 1) {
 <a
          (click)="remove(fieldData.name, i); updateBitSet(fieldData); unsavedChangesPrompt()"
@@ -51,8 +50,7 @@
                  fieldData.typeInfo.values ? fieldData.typeInfo.values : vocabularies[vocabularyKey]"
                bindLabel="name"
                bindValue="id"
-               clearAllText="Clear">
-    </ng-select>
+               clearAllText="Clear" />
     @if (fieldData.form.suggestion.text) {
 <div class="uk-margin-top">
       <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>
