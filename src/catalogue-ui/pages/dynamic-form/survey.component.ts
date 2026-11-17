@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
@@ -38,8 +38,11 @@ export class SurveyComponent implements OnInit, OnChanges {
   readonly tabsHeader = input<string>(null);
   readonly mandatoryFieldsText = input<string>(null);
   readonly downloadPDF = input(false);
-  @Output() valid = new EventEmitter<boolean>();
-  @Output() submit = new EventEmitter<[UntypedFormGroup, boolean]>();
+  readonly valid = output<boolean>();
+  readonly submit = output<[
+    UntypedFormGroup,
+    boolean
+]>();
 
   sectionIndex = 0;
   chapterChangeMap: Map<string,boolean> = new Map<string, boolean>();

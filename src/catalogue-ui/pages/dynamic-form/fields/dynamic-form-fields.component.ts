@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy, input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy, input, output} from '@angular/core';
 import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../domain/dynamic-form-model';
 import { CompositeFieldComponent } from './composite-field/composite-field.component';
@@ -25,9 +25,9 @@ export class DynamicFormFieldsComponent {
   readonly editMode = input<any>(undefined);
   readonly readonly = input<boolean>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   /** Bitsets--> **/
 

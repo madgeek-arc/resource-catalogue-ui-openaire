@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy, input} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, input, output} from '@angular/core';
 import {Section, Field, GroupedFields} from '../../../domain/dynamic-form-model';
 
 @Component({
@@ -10,7 +10,7 @@ import {Section, Field, GroupedFields} from '../../../domain/dynamic-form-model'
 export class SideMenuComponent implements OnInit {
 
   readonly chapterModel = input<Section[]>(undefined);
-  @Output() showChapterOrSection = new EventEmitter<string>();
+  readonly showChapterOrSection = output<string>();
   // groups: Group[] = []
 
   ngOnInit() {

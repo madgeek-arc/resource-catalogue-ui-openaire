@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -32,8 +32,8 @@ export class ChapterEditComponent implements OnChanges{
   @Input() chapter: Section = null;
   readonly fields = input<Section[]>(null);
 
-  @Output() chapterHasChanges = new EventEmitter<string[]>();
-  @Output() submit = new EventEmitter();
+  readonly chapterHasChanges = output<string[]>();
+  readonly submit = output();
 
   editMode = true;
 
