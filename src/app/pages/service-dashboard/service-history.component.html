@@ -72,7 +72,7 @@
   <div class="uk-margin-top uk-text-center">
     @if (serviceBundle?.loggingInfo?.length>0) {
       <a
-        [routerLink]="['/service-dashboard/' + serviceBundle?.service.resourceOrganisation + '/' + serviceBundle.id + '/fullHistory']"
+        [routerLink]="['/service-dashboard/' + $safeNavigationMigration(serviceBundle?.service.resourceOrganisation) + '/' + serviceBundle.id + '/fullHistory']"
       class="uk-h3 uk-link">See all results...</a>
     }
   </div>

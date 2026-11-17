@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
 import {URLParameter} from '../../../entities/url-parameter';
@@ -14,6 +14,7 @@ import {fromEvent} from 'rxjs';
   selector: 'app-search',
   templateUrl: './datasourceSearch.component.html',
   providers: [DatasourceService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

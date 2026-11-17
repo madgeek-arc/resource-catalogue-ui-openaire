@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Provider, ProviderBundle, Type, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
@@ -7,6 +7,7 @@ import {ResourceService} from '../../../../services/resource.service';
 @Component({
   selector: 'app-provider-info',
   templateUrl: 'provider-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import * as sd from '../../../entities/services.description';
 import {UserSessionService} from '../../../services/user-session.service';
@@ -18,6 +18,7 @@ declare let UIkit: any;
   selector: 'app-new-service-provider',
   templateUrl: './service-provider-form.component.html',
   styleUrls: ['./service-provider-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ServiceProviderFormComponent implements OnInit {

@@ -237,7 +237,7 @@
                               <p [innerHTML]="resourceInfo.extras['pitch']"></p>
                             </div>
                             {{resourceInfo.extras?.['users']}}
-                            @if (!(resourceInfo.extras?.['users'] === null || resourceInfo.extras?.['users'][0]?.name === '')) {
+                            @if (!($safeNavigationMigration(resourceInfo.extras?.['users']) === null || resourceInfo.extras?.['users'][0]?.name === '')) {
 <div
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
                               <span class="field-label  uk-margin-small-right">Users: </span>
@@ -251,7 +251,7 @@
 }
                             </div>
 }
-                            @if (!(resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === null || resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === '')) {
+                            @if (!($safeNavigationMigration(resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle) === null || resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle === '')) {
 <div
                                  class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
                               <span class="field-label">Pricing: </span>

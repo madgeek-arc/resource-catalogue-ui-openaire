@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../entities/eic-model';
@@ -12,6 +12,7 @@ declare let UIkit: any;
 @Component({
   selector: 'app-admin-all-providers-dashboard',
   templateUrl: 'all-providers.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

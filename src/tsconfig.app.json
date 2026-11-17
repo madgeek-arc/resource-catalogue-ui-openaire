@@ -9,5 +9,8 @@
     "**/*.spec.ts",
     "environments/environment.prod.ts",
     "environments/environment.beta.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  }
 }

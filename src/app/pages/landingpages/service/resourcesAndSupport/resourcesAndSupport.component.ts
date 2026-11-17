@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Service, URL } from '../../../../entities/eic-model';
 
 @Component({
   selector: 'app-service-landing-page-resources-and-support',
   templateUrl: 'resourcesAndSupport.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

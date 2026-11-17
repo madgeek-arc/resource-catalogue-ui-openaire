@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {SearchQuery} from '../../entities/search-query';
@@ -12,6 +12,7 @@ import * as uikit from 'uikit';
   selector: 'app-home',
   templateUrl: './home.aire.component.html',
   styleUrls: ['./home.aire.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class HomeAireComponent implements OnInit {

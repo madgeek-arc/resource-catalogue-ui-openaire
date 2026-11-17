@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {Paging} from '../../../../entities/paging';
@@ -12,6 +12,7 @@ declare let UIkit: any;
 @Component({
   selector: 'app-provider-services',
   templateUrl: 'provider-services.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

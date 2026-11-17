@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {UserSessionService} from '../../services/user-session.service';
 import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
@@ -14,6 +14,7 @@ import {filter, map} from 'rxjs/operators';
   selector: 'app-top-menu-aire',
   templateUrl: './topmenu.component.html',
   styleUrls: ['./topmenu.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

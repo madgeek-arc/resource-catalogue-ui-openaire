@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Datasource, Vocabulary} from '../../../entities/eic-model';
@@ -11,6 +11,7 @@ declare let UIkit: any;
 @Component({
   selector: 'app-admin-all-datasources-dashboard',
   templateUrl: 'all-datasources.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

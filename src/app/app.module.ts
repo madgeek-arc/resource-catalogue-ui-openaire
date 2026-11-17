@@ -2,7 +2,7 @@ import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
 import {Router} from '@angular/router';
 import * as Sentry from '@sentry/angular';
 import {CommonModule, DatePipe, LowerCasePipe} from '@angular/common';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
@@ -109,7 +109,7 @@ import {UserService} from './services/user.service';
       deps: [Sentry.TraceService],
       multi: true,
     },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
   ],
   exports: [
     AireFooterComponent,

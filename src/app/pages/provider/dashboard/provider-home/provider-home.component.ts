@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
@@ -8,6 +8,7 @@ import {DatePipe} from '@angular/common';
 @Component({
   selector: 'app-provider-home',
   templateUrl: 'provider-home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

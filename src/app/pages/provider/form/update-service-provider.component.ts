@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
@@ -13,6 +13,7 @@ declare let UIkit: any;
   selector: 'app-update-service-provider',
   templateUrl: './service-provider-form.component.html',
   styleUrls: ['./service-provider-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {

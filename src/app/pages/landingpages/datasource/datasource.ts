@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DatasourceService} from '../../../services/datasource.service';
 import {DatasourceDetails} from '../../../entities/datasource';
@@ -7,6 +7,7 @@ import {DatasourceDetails} from '../../../entities/datasource';
   selector: 'app-datasource-landing',
   templateUrl: 'datasource.html',
   providers: [DatasourceService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 

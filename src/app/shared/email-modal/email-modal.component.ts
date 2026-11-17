@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
 import {UntypedFormBuilder, Validators} from '@angular/forms';
 import {NavigationService} from '../../services/navigation.service';
 import {ActivatedRoute} from '@angular/router';
@@ -12,6 +12,7 @@ declare let UIkit: any;
   selector: 'app-email-modal',
   templateUrl: './email-modal.component.html',
   providers: [EmailService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class EmailModalComponent {

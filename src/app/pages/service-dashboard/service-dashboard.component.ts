@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {NavigationService} from '../../services/navigation.service';
@@ -9,6 +9,7 @@ import {Subscription} from 'rxjs';
 @Component({
   selector: 'app-service-dashboard',
   templateUrl: './service-dashboard.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ServiceDashboardComponent implements OnInit {

@@ -14,7 +14,7 @@ import {
 import {
   CookieLawService,
 } from './cookie-law.service';
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 
 export type CookieLawPosition = 'top' | 'bottom';
@@ -45,6 +45,7 @@ export type CookieLawTarget = '_blank' | '_self';
   ],
   styleUrls: [ './cookie-law.css' ],
   templateUrl: './cookie-law.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class CookieLawComponent implements OnInit {

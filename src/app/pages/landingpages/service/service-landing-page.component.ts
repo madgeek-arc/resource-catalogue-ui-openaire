@@ -1,15 +1,16 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, zip } from 'rxjs';
 import { Provider, Service, URL } from '../../../entities/eic-model';
 import { UserSessionService } from '../../../services/user-session.service';
 import { ResourceService } from '../../../services/resource.service';
-import { environment } from 'src/environments/environment';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: './service-static-landing-page.component.html',
   // styleUrls: ['../landing-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Content, PageContent} from '../../entities/page-content';
 import {HelpContentService} from '../../services/help-content.service';
@@ -13,6 +13,7 @@ import {environment} from '../../../environments/environment';
       }
     }
     `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class HelpContentComponent implements OnInit {
@@ -56,6 +57,7 @@ export class HelpContentComponent implements OnInit {
       }
     }
     `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class AsideHelpContentComponent extends HelpContentComponent {

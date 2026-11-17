@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ResourceService} from '../../../services/resource.service';
 import {Service, Vocabulary} from '../../../entities/eic-model';
@@ -8,6 +8,7 @@ import {zip} from 'rxjs';
 @Component({
   selector: 'app-user-item',
   templateUrl: './user-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class UserItemComponent implements OnInit {

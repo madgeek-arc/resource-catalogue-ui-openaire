@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {ResourceService} from '../../../services/resource.service';
 import {ActivatedRoute} from '@angular/router';
 import {Service, Vocabulary} from '../../../entities/eic-model';
@@ -9,6 +9,7 @@ import {Paging} from '../../../entities/paging';
 @Component({
   selector: 'app-portfolio-item',
   templateUrl: './portfolio-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PortfolioItemComponent implements OnInit{

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
 import {URLParameter} from '../../entities/url-parameter';
 import {Paging} from '../../entities/paging';
@@ -16,6 +16,7 @@ import {fromEvent, zip} from 'rxjs';
 @Component({
   selector: 'app-search',
   templateUrl: './search.aire.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 
