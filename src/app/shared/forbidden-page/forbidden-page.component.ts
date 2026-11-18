@@ -1,20 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-forbidden-page',
     templateUrl: './forbidden-page.component.html',
     styleUrls: ['./forbidden-page.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ForbiddenPageComponent implements OnInit {
+export class ForbiddenPageComponent {
 
   projectName = environment.projectName;
   serviceORresource = environment.serviceORresource;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }
