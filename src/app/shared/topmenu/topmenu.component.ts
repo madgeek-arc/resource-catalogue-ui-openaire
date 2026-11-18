@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
 import {UserSessionService} from '../../services/user-session.service';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {Datasource, Provider, Service} from '../../entities/eic-model';
@@ -26,7 +26,6 @@ export class AireTopMenuComponent {
   private resourceService = inject(ResourceService);
   private dataSharingService = inject(DataSharingService);
   private userService = inject(UserService);
-  private route = inject(ActivatedRoute);
 
   // Login state comes only from the user-info call (see UserSessionService); there is no cookie to read.
   readonly user = toSignal(this.session.user$, {initialValue: null});
@@ -43,11 +42,15 @@ export class AireTopMenuComponent {
     ))
   ), {initialValue: [] as Provider[]});
 
-  /** True on routes whose deepest snapshot has `data: {dashboardMode: true}`. */
+  /**
+   * True on routes whose deepest snapshot has `data: {dashboardMode: true}`.
+   * Reads the router's current state rather than an injected ActivatedRoute: ProviderHomeComponent turns off
+   * route reuse, after which each navigation builds a new root and an injected one keeps the old snapshot.
+   */
   readonly dashboardMode = toSignal(this.router.events.pipe(
     filter(event => event instanceof NavigationEnd),
     map(() => {
-      let route = this.route.snapshot;
+      let route = this.router.routerState.snapshot.root;
       while (route.firstChild) {
         route = route.firstChild;
       }

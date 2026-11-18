@@ -175,6 +175,22 @@ describe('AireTopMenuComponent', () => {
     expect(menu().classList).not.toContain('fixed-navbar');
   });
 
+  it('unpins the menu when a page has turned off route reuse', async () => {
+    const {fixture, root} = setUp();
+    const router = TestBed.inject(Router);
+    const menu = () => root.querySelector('.main-menu')!;
+
+    // ProviderHomeComponent does this, so every later navigation builds a new root ActivatedRoute.
+    await router.navigateByUrl('/dashboard');
+    router.routeReuseStrategy.shouldReuseRoute = () => false;
+    fixture.detectChanges();
+    expect(menu().classList).toContain('fixed-navbar');
+
+    await router.navigateByUrl('/');
+    fixture.detectChanges();
+    expect(menu().classList).not.toContain('fixed-navbar');
+  });
+
   it('switches the mobile menu between the portfolio list and one portfolio', () => {
     const {fixture, root} = setUp();
     resources.next({'Portfolio A': [{id: 'openaire.argos', name: 'Argos'}]});
