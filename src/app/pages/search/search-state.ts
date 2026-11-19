@@ -32,6 +32,16 @@ export class SearchParameters {
     }
   }
 
+  /** Renames a parameter, unless the new name is already there, in which case the old one is dropped. */
+  rename(from: string, to: string) {
+    const parameter = this.list.find(p => p.key === from);
+    if (parameter && this.list.some(p => p.key === to)) {
+      this.remove(from);
+    } else if (parameter) {
+      parameter.key = to;
+    }
+  }
+
   remove(key: string) {
     const index = this.list.findIndex(parameter => parameter.key === key);
     if (index > -1) {
