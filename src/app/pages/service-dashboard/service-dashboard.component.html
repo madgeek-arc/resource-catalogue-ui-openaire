@@ -8,7 +8,7 @@
       <div class="uk-container uk-container-expand">
         <div class="">
           <div class="uk-margin-bottom">
-            <a class="uk-link uk-flex uk-flex-middle" [routerLink]="['/provider', providerId, 'dashboard', 'services']">
+            <a class="uk-link uk-flex uk-flex-middle" [routerLink]="['/provider', providerId(), 'dashboard', 'services']">
               <span class="material-icons uk-margin-small-right">keyboard_backspace</span>
               <span>Provider Dashboard</span>
             </a>
@@ -36,7 +36,7 @@
               @if (serviceBundle.status==='approved') {
 <div>
                 <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle" [class.uk-disabled]="serviceBundle.status!=='approved'"
-                        [routerLink]="['/datasource/subprofile/add', serviceId]">
+                        [routerLink]="['/datasource/subprofile/add', serviceId()]">
                   <span class="material-icons uk-margin-small-right">add</span>Add Datasource Subprofile
                 </button>
               </div>
@@ -48,7 +48,7 @@
                 @if (serviceBundle.status==='approved') {
 <div>
                   <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle" [class.uk-disabled]="serviceBundle.status!=='approved'"
-                          [routerLink]="['/datasource/subprofile/edit', serviceId]">
+                          [routerLink]="['/datasource/subprofile/edit', serviceId()]">
                     <span class="material-icons uk-margin-small-right">edit</span>Update Datasource Subprofile
                   </button>
                 </div>

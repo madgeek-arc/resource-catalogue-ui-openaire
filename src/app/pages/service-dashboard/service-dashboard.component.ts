@@ -18,8 +18,9 @@ export class ServiceDashboardComponent {
   private navigation = inject(NavigationService);
   private route = inject(ActivatedRoute);
 
-  readonly providerId = this.route.snapshot.paramMap.get('providerId');
-  readonly serviceId = this.route.snapshot.paramMap.get('resourceId');
+  /** Follow the route, so another service's dashboard opened from here does not keep the old ids. */
+  readonly providerId = toSignal(this.route.params.pipe(map(params => params['providerId'] as string)));
+  readonly serviceId = toSignal(this.route.params.pipe(map(params => params['resourceId'] as string)));
 
   private readonly resourceId$ = this.route.params.pipe(map(params => params['resourceId'] as string));
 
