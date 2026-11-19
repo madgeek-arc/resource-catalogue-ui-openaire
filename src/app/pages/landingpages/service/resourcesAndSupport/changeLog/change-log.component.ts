@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
 import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
 import {DatePipe} from '@angular/common';
-import {Service} from '../../../../../entities/eic-model';
 import {changeLogBadgeColor} from '../../changelog-badge';
+import {ServiceLandingData} from '../../service-landing-data';
 
 @Component({
   selector: 'app-change-log',
@@ -11,8 +11,8 @@ import {changeLogBadgeColor} from '../../changelog-badge';
   imports: [RouterLink, DatePipe]
 })
 export class ChangeLogComponent {
-  /** ServiceLandingPageComponent passes the service through its router outlet; null until it has loaded. */
-  readonly payload = inject(ROUTER_OUTLET_DATA) as Signal<Service | null>;
+  private data = inject(ROUTER_OUTLET_DATA) as Signal<ServiceLandingData | null>;
+  readonly payload = computed(() => this.data()?.service ?? null);
 
   readonly cleanView = inject(Router).url.includes('/changeLogClean');
 
