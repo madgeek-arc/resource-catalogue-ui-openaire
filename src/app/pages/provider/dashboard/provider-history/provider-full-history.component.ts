@@ -1,24 +1,15 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
+import {DatePipe} from '@angular/common';
 import {ProviderBundle} from '../../../../entities/eic-model';
-import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-provider-full-history',
-    templateUrl: 'provider-full-history.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [RouterLink, DatePipe]
+  selector: 'app-provider-full-history',
+  templateUrl: 'provider-full-history.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, DatePipe]
 })
-
-export class ProviderFullHistoryComponent implements OnInit {
-
-  @Input() providerBundle: ProviderBundle = null;
-
-  constructor() {
-  }
-
-  ngOnInit() {
-    // console.log(this.providerBundle);
-  }
-
+export class ProviderFullHistoryComponent {
+  /** ProviderDashboardComponent passes the bundle through its router outlet; null until it has loaded. */
+  readonly bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
 }

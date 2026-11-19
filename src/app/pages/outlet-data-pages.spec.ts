@@ -1,0 +1,129 @@
+import {ChangeDetectionStrategy, Component, Type} from '@angular/core';
+import {TestBed} from '@angular/core/testing';
+import {ActivatedRoute, provideRouter, Router, RouterOutlet} from '@angular/router';
+import {of} from 'rxjs';
+import {afterEach, beforeEach, describe, expect, it} from 'vitest';
+import {ProviderBundle} from '../entities/eic-model';
+import {MiscellaneousComponent} from './landingpages/service/miscellaneous/miscellaneous.component';
+import {PricingComponent} from './landingpages/service/pricing/pricing.component';
+import {ChangeLogComponent} from './landingpages/service/resourcesAndSupport/changeLog/change-log.component';
+import {ResourcesAndSupportComponent} from './landingpages/service/resourcesAndSupport/resourcesAndSupport.component';
+import {ProviderFullHistoryComponent} from './provider/dashboard/provider-history/provider-full-history.component';
+import {ProviderHistoryComponent} from './provider/dashboard/provider-history/provider-history.component';
+import {ProviderJoinComponent} from './provider/join/provider-join.component';
+import {ServiceFullHistoryComponent} from './service-dashboard/service-full-history.component';
+import {ServiceHistoryComponent} from './service-dashboard/service-history.component';
+
+// Stands in for the Eager parent pages (provider and service dashboards, service landing page): they pass their
+// data through [routerOutletData] and get it from the server after the child page is already shown.
+@Component({
+  imports: [RouterOutlet],
+  template: '<router-outlet [routerOutletData]="data" />',
+  changeDetection: ChangeDetectionStrategy.Eager
+})
+class ParentComponent {
+  data: unknown = null;
+}
+
+// The history pages show the action ("Approved"), the full-history pages the user ("Ada Lovelace").
+const log = [{type: 'onboard', actionType: 'approved', date: '1700000000000', userFullName: 'Ada Lovelace'}];
+const providerBundle = {id: 'openaire', loggingInfo: log, metadata: {registeredBy: 'Ada', registeredAt: '1700000000000'}} as unknown as ProviderBundle;
+const serviceBundle = {id: 's1', service: {resourceOrganisation: 'openaire'}, loggingInfo: log, metadata: {registeredBy: 'Ada', registeredAt: '1700000000000'}};
+const service = {
+  id: 's1',
+  termsOfUse: 'https://example.org/terms',
+  extras: {
+    openAireChangeLog: [{changeLogVersion: '2.0', changeDate: '1700000000000', logs: [{type: 'Fixed', value: 'A bug'}, {type: 'Other', value: 'Misc'}]}],
+    paymentCategories: [
+      {paymentTitle: 'Free', paymentHighlight: 'false'},
+      {paymentTitle: 'Pro', paymentHighlight: 'true'}
+    ]
+  }
+};
+
+describe('pages that get their data through the router outlet', () => {
+  const setUp = async (component: Type<unknown>, path = 'page') => {
+    TestBed.configureTestingModule({providers: [provideRouter([{path: ':x', component}])]});
+    const fixture = TestBed.createComponent(ParentComponent);
+    await TestBed.inject(Router).navigateByUrl('/' + path);
+    fixture.detectChanges();
+    const root: HTMLElement = fixture.nativeElement;
+    const show = (data: unknown) => {
+      fixture.componentInstance.data = data;
+      fixture.detectChanges();
+    };
+    return {root, show, text: () => root.textContent!.replace(/\s+/g, ' ')};
+  };
+
+  it.each([
+    [ProviderHistoryComponent, providerBundle, 'Approved'],
+    [ProviderFullHistoryComponent, providerBundle, 'Ada Lovelace'],
+    [ServiceHistoryComponent, serviceBundle, 'Approved'],
+    [ServiceFullHistoryComponent, serviceBundle, 'Ada Lovelace'],
+  ] as [Type<unknown>, unknown, string][])('%o shows the history once the bundle arrives', async (component, bundle, entry) => {
+    const {show, text} = await setUp(component);
+    expect(text()).not.toContain(entry);
+
+    show(bundle);
+    expect(text()).toContain(entry);
+  });
+
+  it('links the provider history to the full history of that provider', async () => {
+    const {root, show} = await setUp(ProviderHistoryComponent);
+    show(providerBundle);
+    expect(root.querySelector('[href="/provider/openaire/dashboard/fullHistory"]')).not.toBeNull();
+  });
+
+  it('shows the miscellaneous tab once the service arrives', async () => {
+    const {show, text} = await setUp(MiscellaneousComponent);
+    expect(text().trim()).toBe('');
+
+    show(service);
+    expect(text()).toContain('Important operational and legal service details');
+  });
+
+  it('highlights the pricing plans marked as highlighted', async () => {
+    const {root, show} = await setUp(PricingComponent);
+    show(service);
+    const cards = [...root.querySelectorAll('.uk-card')];
+    expect(cards.map(card => card.classList.contains('uk-card-primary'))).toEqual([false, true]);
+    expect(cards.map(card => card.classList.contains('uk-card-default'))).toEqual([true, false]);
+  });
+
+  it.each([
+    [ChangeLogComponent],
+    [ResourcesAndSupportComponent],
+  ] as [Type<unknown>][])('%o colours the change-log badges by type', async component => {
+    const {root, show} = await setUp(component);
+    show(service);
+    const badges = [...root.querySelectorAll<HTMLElement>('.badge-success')];
+    expect(badges.map(badge => [badge.textContent!.trim(), badge.style.backgroundColor])).toEqual([
+      ['Fixed', 'rgb(240, 80, 110)'],
+      ['Other', '']
+    ]);
+  });
+
+  it('hides the change-log links in the clean view', async () => {
+    const full = await setUp(ChangeLogComponent, 'changeLog');
+    full.show(service);
+    const linksInFullView = full.root.querySelectorAll('a, button').length;
+    TestBed.resetTestingModule();
+
+    const clean = await setUp(ChangeLogComponent, 'changeLogClean');
+    clean.show(service);
+    expect(clean.root.querySelectorAll('a, button').length).toBeLessThan(linksInFullView);
+  });
+});
+
+describe('ProviderJoinComponent', () => {
+  beforeEach(() => sessionStorage.removeItem('token'));
+  afterEach(() => sessionStorage.removeItem('token'));
+
+  it('keeps the invitation token for the provider form', () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([]), {provide: ActivatedRoute, useValue: {params: of({token: 'abc'})}}]
+    });
+    TestBed.createComponent(ProviderJoinComponent).detectChanges();
+    expect(sessionStorage.getItem('token')).toBe('abc');
+  });
+});

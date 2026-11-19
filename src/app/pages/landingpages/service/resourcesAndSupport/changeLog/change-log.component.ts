@@ -1,38 +1,20 @@
-import { Component, Input, ChangeDetectionStrategy, inject } from '@angular/core';
-import { Service } from '../../../../../entities/eic-model';
-import { Router, RouterLink } from '@angular/router';
-import { NgStyle, DatePipe } from '@angular/common';
+import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
+import {DatePipe} from '@angular/common';
+import {Service} from '../../../../../entities/eic-model';
+import {changeLogBadgeColor} from '../../changelog-badge';
 
 @Component({
-    selector: 'app-change-log',
-    templateUrl: 'change-log.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgStyle, RouterLink, DatePipe]
+  selector: 'app-change-log',
+  templateUrl: 'change-log.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, DatePipe]
 })
-
 export class ChangeLogComponent {
-  router = inject(Router);
+  /** ServiceLandingPageComponent passes the service through its router outlet; null until it has loaded. */
+  readonly payload = inject(ROUTER_OUTLET_DATA) as Signal<Service | null>;
 
+  readonly cleanView = inject(Router).url.includes('/changeLogClean');
 
-  @Input() resourcePayload: Service = null;
-
-  cleanView = this.router.url.includes('/changeLogClean');
-
-  badgeColor(status: string) {
-    switch (status) {
-      case 'Add':
-        return 'rgb(76, 137, 242)';
-      case 'Added':
-        return 'rgb(20, 179, 119)';
-      case 'Fixed':
-        return 'rgb(240, 80, 110)';
-      case 'Changed':
-        return 'rgb(76, 137, 242)';
-      case 'Removed':
-        return 'rgb(250, 160, 90)';
-      default:
-        return undefined;
-    }
-  }
-
+  readonly badgeColor = changeLogBadgeColor;
 }

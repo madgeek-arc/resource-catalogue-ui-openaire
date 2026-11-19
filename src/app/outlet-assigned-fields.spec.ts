@@ -15,6 +15,8 @@ import {ProviderServicesComponent} from './pages/provider/dashboard/provider-ser
  * fields of the routed component (ServiceLandingPageComponent.onOutletLoaded, ProviderDashboardComponent.onActivate).
  * Those fields must stay plain properties. A signal input there is replaced by the plain value, and the page then
  * fails as soon as it calls it (the signal-input migration cannot see these untyped assignments).
+ * A page that moves to OnPush reads ROUTER_OUTLET_DATA instead (see pages/outlet-data-pages.spec.ts), under a
+ * field name the parent does not assign.
  */
 describe('fields assigned by a router outlet', () => {
   it.each([
