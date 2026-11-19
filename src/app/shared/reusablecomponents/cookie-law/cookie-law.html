@@ -1,16 +1,17 @@
 @if (!cookieLawSeen) {
   <div class="cookie-law-wrapper"
-    [ngStyle]="currentStyles"
-    [@state]="animation"
+    [style.top]="top()"
+    [style.bottom]="bottom()"
+    [@state]="animation()"
     (@state.done)="afterDismissAnimation($event)">
     <div class="copy">
       <span #ref><ng-content /></span>
       @if (ref.childNodes.length == 0) {
         <span>
           By continuing to browse the site, you're agreeing to our use of cookies.
-          @if (learnMore) {
+          @if (learnMore()) {
             <span>
-              Learn more in our <a [href]="learnMore" [target]="target">privacy policy</a>.
+              Learn more in our <a [href]="learnMore()" [target]="target()">privacy policy</a>.
             </span>
           }
         </span>
