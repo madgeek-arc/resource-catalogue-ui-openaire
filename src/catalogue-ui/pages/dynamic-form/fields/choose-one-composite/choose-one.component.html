@@ -1,46 +1,46 @@
 @if (form) {
-  <form [formGroup]="form" class="{{fieldData.form.display?.cssClasses}}" [ngClass]="{'uk-hidden clear-style': hideField}">
-    <!--  {{fieldData.name | json}}-->
-    @if (fieldData.label?.text) {
-      <div class="uk-form-label uk-margin-bottom {{fieldData.label?.cssClasses}}"
-        [attr.for]="fieldData.name" style="{{fieldData.label.style}}">
-        {{fieldData.label?.text + (fieldData.form.mandatory ? ' (*)' : '')}}
+  <form [formGroup]="form" class="{{fieldData().form.display?.cssClasses}}" [class.uk-hidden]="hideField()" [class.clear-style]="hideField()">
+    <!--  {{fieldData().name | json}}-->
+    @if (fieldData().label?.text) {
+      <div class="uk-form-label uk-margin-bottom {{fieldData().label?.cssClasses}}"
+        [attr.for]="fieldData().name" style="{{fieldData().label.style}}">
+        {{fieldData().label?.text + (fieldData().form.mandatory ? ' (*)' : '')}}
       </div>
     }
-    @if (fieldData.form.description?.showLess) {
-      @if (fieldData.form.description.text) {
-        <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
-          style="{{fieldData.form.description.style}}">
-          <read-more-text [maxHeight]="46" [text]="fieldData.form.description.text" />
+    @if (fieldData().form.description?.showLess) {
+      @if (fieldData().form.description.text) {
+        <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
+          style="{{fieldData().form.description.style}}">
+          <read-more-text [maxHeight]="46" [text]="fieldData().form.description.text" />
         </div>
       }
     } @else {
-      @if (fieldData.form.description?.text) {
+      @if (fieldData().form.description?.text) {
         <div
-          class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
-          [innerHTML]="fieldData.form.description.text" style="{{fieldData.form.description.style}}">
+          class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
+          [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}">
           <!--  [innerHTML]="'<read-more-text [maxHeight]=&quot260&quot [text]=\'asdsad\'></read-more-text>'">-->
         </div>
       }
     }
-    @if (fieldData.typeInfo.multiplicity) {
+    @if (fieldData().typeInfo.multiplicity) {
       <div>
         @for (arrayControl of fieldAsFormArray().controls; track arrayControl; let i = $index) {
           <div>
             <!-- Show radio so user can choose one-->
             <div class="uk-margin-small-bottom">
-              @for (field of fieldData.subFields; track field; let j = $index) {
+              @for (field of fieldData().subFields; track field; let j = $index) {
                 <div>
                   <label class="uk-form-label">
-                    <input class="uk-radio uk-margin-small-right" type="radio" [name]="i+'-'+fieldData.name" [checked]="j===0"
+                    <input class="uk-radio uk-margin-small-right" type="radio" [name]="i+'-'+fieldData().name" [checked]="j===0"
                       (click)="chooseOne(field.name, i)">
                     {{field.label.text}}
                   </label>
                 </div>
               }
             </div>
-            <div [formGroupName]="i" class="uk-width-9-10 uk-display-inline-block" [ngClass]="{'uk-margin-bottom formGroupElement': $safeNavigationMigration(fieldData.form.display?.hasBorder)}">
-              @for (control of fieldData?.subFields; track control; let j = $index) {
+            <div [formGroupName]="i" class="uk-width-9-10 uk-display-inline-block" [class.uk-margin-bottom]="$safeNavigationMigration(fieldData().form.display?.hasBorder)" [class.formGroupElement]="$safeNavigationMigration(fieldData().form.display?.hasBorder)">
+              @for (control of fieldData()?.subFields; track control; let j = $index) {
                 <div>
                   <div class="">
                     @if (getGroupOfArray(i).contains(control.name)) {
@@ -66,7 +66,7 @@
             </div>
             @if (fieldAsFormArray().length > 1) {
               <a class="remove-element uk-padding-small uk-display-inline-block"
-                (click)="remove(i); updateBitSetOfComposite(fieldData, i); unsavedChangesPrompt();">
+                (click)="remove(i); updateBitSetOfComposite(fieldData(), i); unsavedChangesPrompt();">
                 <span class="material-icons">clear</span>
               </a>
             }
@@ -74,8 +74,8 @@
         }
         @if (form.enabled) {
           <div class="uk-width-9-10 uk-text-center uk-margin-top">
-            <a class="add-new-element uk-flex uk-flex-middle uk-flex-center" (click)="pushComposite(fieldData)">
-              <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData.label.text"></span>
+            <a class="add-new-element uk-flex uk-flex-middle uk-flex-center" (click)="pushComposite(fieldData())">
+              <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData().label.text"></span>
             </a>
           </div>
         }
@@ -83,18 +83,18 @@
     } @else {
       <!-- Show radio so user can choose one-->
       <div class="uk-margin-small-bottom">
-        @for (field of fieldData.subFields; track field; let i = $index) {
+        @for (field of fieldData().subFields; track field; let i = $index) {
           <div>
             <label class="uk-form-label">
-              <input class="uk-radio uk-margin-small-right" type="radio" [name]="fieldData.name" [checked]="i===0"
+              <input class="uk-radio uk-margin-small-right" type="radio" [name]="fieldData().name" [checked]="i===0"
                 (click)="chooseOne(field.name)">
               {{field.label.text}}
             </label>
           </div>
         }
       </div>
-      <div class="uk-width-1-1 uk-display-inline-block" [ngClass]="{'uk-margin-bottom formGroupElement': $safeNavigationMigration(fieldData.form.display?.hasBorder)}">
-        @for (control of fieldData?.subFields; track control; let j = $index) {
+      <div class="uk-width-1-1 uk-display-inline-block" [class.uk-margin-bottom]="$safeNavigationMigration(fieldData().form.display?.hasBorder)" [class.formGroupElement]="$safeNavigationMigration(fieldData().form.display?.hasBorder)">
+        @for (control of fieldData()?.subFields; track control; let j = $index) {
           <div>
             <div class="">
               @if (this.form.contains(control.name) && control.typeInfo.type === 'composite') {
@@ -109,12 +109,12 @@
         }
       </div>
     }
-    @if (fieldData.form.suggestion?.text) {
+    @if (fieldData().form.suggestion?.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}" [innerHTML]="fieldData().form.suggestion.text"></div>
       </div>
     }
   </form>
 }
-<!--<pre>{{fieldData | json}}</pre>-->
+<!--<pre>{{fieldData() | json}}</pre>-->
 <!--<pre>{{form.getRawValue() | json}}</pre>-->

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, input, output, signal } from '@angular/core';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
-import { NgClass } from '@angular/common';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
 import { CompositeFieldComponent } from '../composite-field/composite-field.component';
 import { StringFieldComponent } from '../string-field/string-field.component';
@@ -11,14 +11,16 @@ import { StringFieldComponent } from '../string-field/string-field.component';
     selector: 'app-choose-one',
     templateUrl: './choose-one.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, CompositeFieldComponent, StringFieldComponent]
+    imports: [ReactiveFormsModule, ReadMoreTextComponent, CompositeFieldComponent, StringFieldComponent]
 })
 
 export class ChooseOneComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
   private formService = inject(FormControlService);
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly vocabularies = input<Map<string, object[]>>(undefined);
   readonly subVocabularies = input<Map<string, object[]>>(undefined);
   readonly editMode = input<any>(undefined);
@@ -29,18 +31,19 @@ export class ChooseOneComponent implements OnInit {
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   form: UntypedFormGroup;
-  hideField: boolean = null;
+  readonly hideField = signal<boolean>(null);
 
   ngOnInit() {
     const position = this.position();
     if (position !== null) {
       // console.log(this.rootFormGroup.control.controls[this.position]);
-      // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData.name));
-      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData.name) as UntypedFormGroup;
+      // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData().name));
+      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData().name) as UntypedFormGroup;
     } else {
-      this.form = this.rootFormGroup.control.get(this.fieldData.name) as UntypedFormGroup;
+      this.form = this.rootFormGroup.control.get(this.fieldData().name) as UntypedFormGroup;
     }
-    if (this.fieldData.typeInfo.multiplicity){
+    this.refresh(this.form);
+    if (this.fieldData().typeInfo.multiplicity){
       this.chooseOne(Object.entries((this.form.controls[0] as UntypedFormGroup).controls)[0][0], 0);
     } else {
       this.chooseOne(Object.entries(this.form.controls)[0][0]);
@@ -58,10 +61,10 @@ export class ChooseOneComponent implements OnInit {
     for (const control in tmpGroup.controls) {
       tmpGroup.removeControl(control);
     }
-    if (this.fieldData.subFields.find(field => field.name === name).typeInfo.type === 'composite')
-      tmpGroup.addControl(name, this.formService.createCompositeField(this.fieldData.subFields.find(field => field.name === name)));
-    else if (this.fieldData.subFields.find(field => field.name === name).typeInfo.type === 'string') {
-      tmpGroup.addControl(name, this.formService.createField(this.fieldData.subFields.find(field => field.name === name)));
+    if (this.fieldData().subFields.find(field => field.name === name).typeInfo.type === 'composite')
+      tmpGroup.addControl(name, this.formService.createCompositeField(this.fieldData().subFields.find(field => field.name === name)));
+    else if (this.fieldData().subFields.find(field => field.name === name).typeInfo.type === 'string') {
+      tmpGroup.addControl(name, this.formService.createField(this.fieldData().subFields.find(field => field.name === name)));
     }
   }
 
@@ -123,12 +126,12 @@ export class ChooseOneComponent implements OnInit {
     // console.log(value);
     if (value === 'Applicable') {
       this.form.enable();
-      this.hideField = false;
+      this.hideField.set(false);
 
     } else {
       this.form.disable();
       this.form.reset();
-      this.hideField = true;
+      this.hideField.set(true);
       // maybe add this if the remaining empty fields are a problem
       // (this.formControl as unknown as FormArray).clear();
 

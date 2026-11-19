@@ -1,33 +1,33 @@
-<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData.form.display.cssClasses}}" [ngClass]="{'uk-hidden clear-style': hideField}" >
-  @if (fieldData.label.text) {
-    <div class="uk-form-label uk-margin-bottom {{fieldData.label.cssClasses}}"
-      [attr.for]="fieldData.name" [ngClass]="{'uk-subLabel': fieldData.form.dependsOn !== null}"
-      style="{{fieldData.label.style}}" [innerHTML]="fieldData.label.text + (fieldData.form.mandatory ? ' (*)' : '')">
+<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData().form.display.cssClasses}}" [class.uk-hidden]="hideField()" [class.clear-style]="hideField()" >
+  @if (fieldData().label.text) {
+    <div class="uk-form-label uk-margin-bottom {{fieldData().label.cssClasses}}"
+      [attr.for]="fieldData().name" [class.uk-subLabel]="fieldData().form.dependsOn !== null"
+      style="{{fieldData().label.style}}" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
     </div>
   }
-  @if (fieldData.form.description.text) {
-    <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}} "
-      [innerHTML]="fieldData.form.description.text" style="{{fieldData.form.description.style}}">
+  @if (fieldData().form.description.text) {
+    <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}} "
+      [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}">
     </div>
   }
 
-  @if (fieldData.typeInfo.multiplicity) {
-    <div [formArrayName]="fieldData.name">
+  @if (fieldData().typeInfo.multiplicity) {
+    <div [formArrayName]="fieldData().name">
       <!--    add multiplicity here-->
     </div>
   } @else {
-    <input [formControlName]="fieldData.name" [id]="fieldData.id" class="uk-input uk-width-9-10 uk-animation-scale-up"
-      (input)="updateBitSet(fieldData); unsavedChangesPrompt()" [step]='step'
-      placeholder="{{fieldData.form.placeholder}}" [ngClass]="{'uk-form-danger': checkFormValidity()}">
+    <input [formControlName]="fieldData().name" [id]="fieldData().id" class="uk-input uk-width-9-10 uk-animation-scale-up"
+      (input)="updateBitSet(fieldData()); unsavedChangesPrompt()" [step]='step'
+      placeholder="{{fieldData().form.placeholder}}" [class.uk-form-danger]="checkFormValidity()">
     @if (checkFormValidity()) {
       <p class="uk-form-danger uk-animation-fade uk-text-italic">
         Value should be numeric{{getNumberOfDecimals() ? ' with up to ' + getNumberOfDecimals() + ' decimals seperated with \'.\'' : ''}}
       </p>
     }
-    @if (fieldData.form.suggestion.text) {
+    @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}"
-          [innerHTML]="fieldData.form.suggestion.text">
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+          [innerHTML]="fieldData().form.suggestion.text">
         </div>
       </div>
     }
