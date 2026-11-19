@@ -43,7 +43,12 @@ export class SearchAireComponent {
   /** The filters of the current query string, which the page edits before it navigates. */
   private parameters = SearchParameters.fromQueryParams({});
   private readonly parameters$ = this.route.queryParams.pipe(
-    map(params => this.parameters = SearchParameters.fromQueryParams(params)),
+    map(params => {
+      const parameters = SearchParameters.fromQueryParams(params);
+      // The API reads the search text as `keyword`; links made before that still say `query`.
+      parameters.rename('query', 'keyword');
+      return this.parameters = parameters;
+    }),
     shareReplay({bufferSize: 1, refCount: true})
   );
 
@@ -85,7 +90,7 @@ export class SearchAireComponent {
 
   constructor() {
     this.typed.pipe(debounceTime(500), distinctUntilChanged(), takeUntilDestroyed()).subscribe(text => {
-      this.parameters.set('query', text);
+      this.parameters.set('keyword', text);
       this.navigate();
     });
   }

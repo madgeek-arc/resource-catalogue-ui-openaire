@@ -30,6 +30,15 @@ describe('search state', () => {
     expect(parameters.toQueryParams()).toEqual({from: '0', users: 'a,b', portfolios: 'p'});
   });
 
+  it('renames a parameter, keeping the new name when both are there', () => {
+    const old = SearchParameters.fromQueryParams({query: 'graph', from: '0'});
+    old.rename('query', 'keyword');
+    expect(old.toQueryParams()).toEqual({keyword: 'graph', from: '0'});
+    const both = SearchParameters.fromQueryParams({query: 'old', keyword: 'new'});
+    both.rename('query', 'keyword');
+    expect(both.toQueryParams()).toEqual({keyword: 'new'});
+  });
+
   it('removes a facet value, and the facet once it has none', () => {
     const parameters = SearchParameters.fromQueryParams({users: 'a,b', trl: '1'});
     parameters.removeValue('users', 'a');
@@ -166,7 +175,12 @@ describe('SearchAireComponent', () => {
     vi.advanceTimersByTime(1);
     vi.useRealTimers();
     await new Promise(resolve => setTimeout(resolve));
-    expect(router.url).toBe('/search?query=graph');
+    expect(router.url).toBe('/search?keyword=graph');
+  });
+
+  it('reads an old link with query as keyword', async () => {
+    await open('/search?query=graph&users=researchers');
+    expect(searched[0]).toEqual([{key: 'keyword', values: ['graph']}, {key: 'users', values: ['researchers']}]);
   });
 });
 
