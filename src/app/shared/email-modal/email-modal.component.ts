@@ -1,29 +1,25 @@
-import {Component, Input} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {NavigationService} from '../../services/navigation.service';
-import {ActivatedRoute} from '@angular/router';
-import {ResourceService} from '../../services/resource.service';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ComparisonService} from '../../services/comparison.service';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject, input, signal } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import {EmailService} from '../../services/email.service';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
-  selector: 'app-email-modal',
-  templateUrl: './email-modal.component.html',
-  providers: [EmailService]
+    selector: 'app-email-modal',
+    templateUrl: './email-modal.component.html',
+    providers: [EmailService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule]
 })
 export class EmailModalComponent {
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly emailService = inject(EmailService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  @Input() serviceIdsArray;
-  public emailErrorMessage = '';
-
-  constructor(public fb: FormBuilder, public router: NavigationService, public route: ActivatedRoute,
-              public resourceService: ResourceService,
-              public authenticationService: AuthenticationService, public comparisonService: ComparisonService,
-              public navigationService: NavigationService, public emailService: EmailService) {
-  }
+  readonly serviceIdsArray = input(undefined);
+  // A signal, because a failed send sets it when the response arrives, after the click's check.
+  readonly emailErrorMessage = signal('');
 
   emailForm = this.fb.group({
     recipientEmail: '',
@@ -36,18 +32,20 @@ export class EmailModalComponent {
   resetForm() {
     this.emailForm.get('subject').reset('');
     this.emailForm.get('message').reset('');
-    this.emailErrorMessage = '';
+    this.emailErrorMessage.set('');
   }
 
   sendMail() {
-    this.emailErrorMessage = '';
+    this.emailErrorMessage.set('');
     if (this.emailForm.valid) {
-      this.emailService.sendMail(this.serviceIdsArray, this.emailForm.value).subscribe(
-        res => UIkit.modal('#email-modal').hide(),
-        err =>  this.emailErrorMessage = 'Something went bad, server responded: ' + err.error
-      );
+      this.emailService.sendMail(this.serviceIdsArray(), this.emailForm.value)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => UIkit.modal('#email-modal').hide(),
+          error: err => this.emailErrorMessage.set('Something went bad, server responded: ' + err.error)
+        });
     } else {
-      this.emailErrorMessage = 'Please fill the red outlined fields';
+      this.emailErrorMessage.set('Please fill the red outlined fields');
       for (const i in this.emailForm.controls) {
         this.emailForm.controls[i].markAsDirty();
       }

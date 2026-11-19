@@ -6,135 +6,86 @@
  * @author: @andreasonny83 <andreasonny83@gmail.com>
  */
 
-import {
-  DomSanitizer,
-  SafeHtml,
-} from '@angular/platform-browser';
+import {CookieLawService} from './cookie-law.service';
+import {ChangeDetectionStrategy, Component, computed, inject, input, output, signal} from '@angular/core';
+import {animate, AnimationEvent, state, style, transition, trigger} from '@angular/animations';
 
-import {
-  CookieLawService,
-} from './cookie-law.service';
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
-import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-
-// import {
-//   closeIcon,
-// } from './icons';
 
 export type CookieLawPosition = 'top' | 'bottom';
 export type CookieLawAnimation = 'topIn' | 'bottomIn' | 'topOut' | 'bottomOut';
 export type CookieLawTarget = '_blank' | '_self';
 
 @Component({
-  selector: 'cookie-law',
-  // encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger('state', [
-      state('bottomOut', style({ transform: 'translateY(100%)' })),
-      state('topOut', style({ transform: 'translateY(-100%)' })),
-      state('*', style({ transform: 'translateY(0)' })),
-
-      transition('void => topIn', [
-        style({ transform: 'translateY(-100%)' }),
-        animate('1000ms ease-in-out'),
-      ]),
-
-      transition('void => bottomIn', [
-        style({ transform: 'translateY(100%)' }),
-        animate('1000ms ease-in-out'),
-      ]),
-
-      transition('* => *', animate('1000ms ease-out')),
-    ])
-  ],
-  styleUrls: [ './cookie-law.css' ],
-  templateUrl: './cookie-law.html',
+    selector: 'cookie-law',
+    animations: [
+        trigger('state', [
+            state('bottomOut', style({ transform: 'translateY(100%)' })),
+            state('topOut', style({ transform: 'translateY(-100%)' })),
+            state('*', style({ transform: 'translateY(0)' })),
+            transition('void => topIn', [
+                style({ transform: 'translateY(-100%)' }),
+                animate('1000ms ease-in-out'),
+            ]),
+            transition('void => bottomIn', [
+                style({ transform: 'translateY(100%)' }),
+                animate('1000ms ease-in-out'),
+            ]),
+            transition('* => *', animate('1000ms ease-out')),
+        ])
+    ],
+    styleUrls: ['./cookie-law.css'],
+    templateUrl: './cookie-law.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {'[attr.seen]': 'seen() || null'}
 })
-export class CookieLawComponent implements OnInit {
-  public cookieLawSeen: boolean;
+export class CookieLawComponent {
+  private _service = inject(CookieLawService);
 
-  @Input('learnMore')
-  get learnMore() { return this._learnMore; }
-  set learnMore(value: string) {
-    this._learnMore = (value !== null && `${value}` !== 'false') ? value : null;
-  }
+  /** Read once: a dismissed banner slides out and stays in the DOM until the next page load. */
+  readonly cookieLawSeen = this._service.seen();
 
-  @Input('target')
-  get target() { return this._target; }
-  set target(value: CookieLawTarget) {
-    this._target = (value !== null && `${value}` !== 'false' &&
-                      (`${value}` === '_blank' || `${value}` === '_self')
-                     ) ? value : '_blank';
-  }
+  readonly learnMore = input(null, {
+    transform: (value: string | null) => (value !== null && `${value}` !== 'false') ? value : null
+  });
 
-  @Input('position')
-  get position() { return this._position; }
-  set position(value: CookieLawPosition) {
-    this._position = (value !== null && `${value}` !== 'false' &&
-                      (`${value}` === 'top' || `${value}` === 'bottom')
-                     ) ? value : 'bottom';
-  }
+  readonly target = input('_blank', {
+    transform: (value: CookieLawTarget | null): CookieLawTarget =>
+      (value === '_blank' || value === '_self') ? value : '_blank'
+  });
 
-  @Output('isSeen')
-  private isSeenEvt: EventEmitter<boolean>;
+  readonly position = input('bottom', {
+    transform: (value: CookieLawPosition | null): CookieLawPosition =>
+      (value === 'top' || value === 'bottom') ? value : 'bottom'
+  });
 
-  @HostBinding('attr.seen')
-  public isSeen: boolean;
+  readonly isSeen = output<boolean>();
 
-  private animation: CookieLawAnimation;
-  private closeSvg: SafeHtml;
-  private currentStyles: {};
-  private _learnMore: string;
-  private _target: CookieLawTarget;
-  private _position: CookieLawPosition;
+  /** Bound to the host's `seen` attribute. */
+  readonly seen = signal(this.cookieLawSeen);
 
-  constructor(
-    private _service: CookieLawService,
-    private domSanitizer: DomSanitizer,
-  ) {
-    this.isSeenEvt = new EventEmitter<boolean>();
-    this.animation = 'topIn';
-    this._position = 'bottom';
-    this.cookieLawSeen = this._service.seen();
-  }
+  private readonly dismissed = signal(false);
 
-  ngOnInit(): void {
-    if (typeof document !== 'undefined') {
-      this.animation = this.position === 'bottom' ? 'bottomIn' : 'topIn';
-
-      this.closeSvg = `
-            <span class="clickable uk-icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" icon="close" ratio="1">
-                <path fill="none" stroke="#000" stroke-width="1.06" d="M16,16 L4,4"></path>
-                <path fill="none" stroke="#000" stroke-width="1.06" d="M16,4 L4,16"></path>
-              </svg>
-            </span>`;
-
-      if (this.cookieLawSeen) {
-        this.isSeen = true;
-      }
-
-      this.currentStyles = {
-        'top': this.position === 'top' ? '0' : null,
-        'bottom': this.position === 'top' ? 'initial' : null,
-      };
+  readonly animation = computed<CookieLawAnimation>(() => {
+    const top = this.position() === 'top';
+    if (this.dismissed()) {
+      return top ? 'topOut' : 'bottomOut';
     }
-  }
+    return top ? 'topIn' : 'bottomIn';
+  });
+
+  readonly top = computed(() => this.position() === 'top' ? '0' : null);
+  readonly bottom = computed(() => this.position() === 'top' ? 'initial' : null);
 
   afterDismissAnimation(evt: AnimationEvent) {
-    if (evt.toState === 'topOut' ||
-        evt.toState === 'bottomOut') {
-      this.isSeen = true;
-      this.isSeenEvt.emit(this.isSeen);
+    if (evt.toState === 'topOut' || evt.toState === 'bottomOut') {
+      this.seen.set(true);
+      this.isSeen.emit(true);
     }
   }
 
-  public dismiss(evt?: MouseEvent): void {
-    if (evt) {
-      evt.preventDefault();
-    }
-
+  dismiss(evt?: MouseEvent): void {
+    evt?.preventDefault();
     this._service.storeCookie();
-    this.animation = this.position === 'top' ? 'topOut' : 'bottomOut';
+    this.dismissed.set(true);
   }
 }

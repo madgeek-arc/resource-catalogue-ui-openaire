@@ -1,17 +1,18 @@
-import {Component, Input} from '@angular/core';
-import {Service, URL} from '../../../../entities/eic-model';
+import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
+import {ROUTER_OUTLET_DATA} from '@angular/router';
+import {URL} from '../../../../entities/eic-model';
+import {ServiceLandingData} from '../service-landing-data';
 
 @Component({
   selector: 'app-service-landing-page-misc',
   templateUrl: 'miscellaneous.component.html',
-  // styleUrls: ['../../landing-page.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MiscellaneousComponent {
-
-  @Input() resourcePayload: Service;
+  private data = inject(ROUTER_OUTLET_DATA) as Signal<ServiceLandingData | null>;
+  readonly payload = computed(() => this.data()?.service ?? null);
 
   navigateTo(url: URL) {
     window.open(url.toString(), '_blank');
   }
-
 }

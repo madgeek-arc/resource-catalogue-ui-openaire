@@ -1,28 +1,40 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, inject} from '@angular/core';
 import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {Paging} from '../../../../entities/paging';
 import {URLParameter} from '../../../../entities/url-parameter';
-import {zip} from 'rxjs/internal/observable/zip';
+import {zip} from 'rxjs';
 import {ResourceService} from '../../../../services/resource.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
-  selector: 'app-provider-services',
-  templateUrl: 'provider-services.component.html'
+    selector: 'app-provider-services',
+    templateUrl: 'provider-services.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class ProviderServicesComponent implements OnInit {
+  private providerService = inject(ProviderService);
+  private resourceService = inject(ResourceService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  @Input() providerBundle: ProviderBundle = null
+
+  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
+  // so it stays a plain field (a signal input would be overwritten by that assignment).
+  providerBundle: ProviderBundle = null;
 
   services: Paging<Bundle<Service | Datasource>> = null;
   selectedService: Bundle<Service | Datasource> = null;
   vocabularies: Vocabulary[] = null;
   resourceState: Vocabulary[] = null;
-  queryParams: URLParameter[] = []
+  queryParams: URLParameter[] = [];
 
   // Paging
   pages: number[] = [];
@@ -39,10 +51,6 @@ export class ProviderServicesComponent implements OnInit {
   showLoader = false;
   errorMessage: string;
   loadingMessage = '';
-
-  constructor(private providerService: ProviderService, private resourceService: ResourceService, private router: Router,
-              private route: ActivatedRoute) {
-  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -93,7 +101,7 @@ export class ProviderServicesComponent implements OnInit {
       value = value['$ngOptionValue'];
     }
     if (value === null) {
-      this.queryParams = this.queryParams.filter(params => {return params.key != key});
+      this.queryParams = this.queryParams.filter(params => {return params.key != key;});
       return;
     }
     for (const urlParameter of this.queryParams) {
@@ -102,11 +110,11 @@ export class ProviderServicesComponent implements OnInit {
         return;
       }
     }
-    this.queryParams.push({key: key, values: [value]});
+    this.queryParams.push({key, values: [value]});
   }
 
   navigateUsingParameters() {
-    const map: { [name: string]: string; } = {};
+    const map: { [name: string]: string } = {};
     for (const urlParameter of this.queryParams) {
       map[urlParameter.key] = urlParameter.values.join(',');
     }
@@ -193,7 +201,7 @@ export class ProviderServicesComponent implements OnInit {
   /** <------------- Set filters  **/
 
   toggleServiceActive(bundle: Bundle<Service | Datasource>) {
-    if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
+    if (bundle.status === 'pending' || bundle.status === 'rejected') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
       return;
@@ -236,14 +244,10 @@ export class ProviderServicesComponent implements OnInit {
   }
 
   getVocabularyName(id: string) {
-    for (const vocabulary of this.vocabularies) {
-      if (vocabulary.id === id) {
-        return vocabulary.name;
-      }
-    }
+    return this.vocabularies.find(vocabulary => vocabulary.id === id)?.name;
   }
 
-  getPayload(bundle : Bundle<Service | Datasource>): Service | Datasource {
+  getPayload(bundle: Bundle<Service | Datasource>): Service | Datasource {
     return bundle.service != null ? bundle.service : bundle.datasource;
   }
 }

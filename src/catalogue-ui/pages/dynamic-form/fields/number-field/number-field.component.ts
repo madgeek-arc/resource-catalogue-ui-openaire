@@ -1,39 +1,43 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
-import {FormControlService} from "../../../../services/form-control.service";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-number-field',
-  templateUrl: './number-field.component.html',
-  styles: ['.clear-style { height: 0 !important;}']
+    selector: 'app-number-field',
+    templateUrl: './number-field.component.html',
+    styles: ['.clear-style { height: 0 !important;}'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class NumberFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+
   @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  step: string = '';
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
+  step = '';
 
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
 
     if (this.fieldData.form.dependsOn) {
       // console.log(this.fieldData.form.dependsOn);
@@ -45,14 +49,14 @@ export class NumberFieldComponent implements OnInit {
     }
 
     if (this.fieldData.typeInfo.values) {
-      this.step = this.fieldData.typeInfo.values[0]
+      this.step = this.fieldData.typeInfo.values[0];
     }
   }
 
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   remove(field: string, i: number) {
@@ -92,7 +96,7 @@ export class NumberFieldComponent implements OnInit {
     if (this.fieldData.typeInfo.values) {
       return this.fieldData.typeInfo.values[0].split('.')[1].length;
     }
-    return 0
+    return 0;
   }
 
   enableDisableField(value, enableValue) {

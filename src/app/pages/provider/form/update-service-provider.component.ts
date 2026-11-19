@@ -1,33 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Provider, Type} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
-import {FormBuilder} from '@angular/forms';
-import {AuthenticationService} from '../../../services/authentication.service';
-import {ProviderService} from '../../../services/provider.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
+import {RouterLink} from '@angular/router';
+import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
+import { NgClass, LowerCasePipe } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
-  selector: 'app-update-service-provider',
-  templateUrl: './service-provider-form.component.html',
-  styleUrls: ['./service-provider-form.component.css']
+    selector: 'app-update-service-provider',
+    templateUrl: './service-provider-form.component.html',
+    styleUrls: ['./service-provider-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
-  errorMessage: string;
+  override errorMessage: string;
   provider: Provider;
 
-  constructor(public fb: FormBuilder,
-              public authService: AuthenticationService,
-              public providerService: ProviderService,
-              public resourceService: ResourceService,
-              public router: Router,
-              public route: ActivatedRoute) {
-    super(fb, authService, providerService, resourceService, router, route);
-  }
-
-  ngOnInit() {
+  override ngOnInit() {
     this.edit = true;
     this.providerId = this.route.snapshot.paramMap.get('providerId');
     const path = this.route.snapshot.routeConfig.path;
@@ -67,7 +62,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     }
   }
 
-  registerProvider(tempSave: boolean) {
+  override registerProvider(tempSave: boolean) {
     super.registerProvider(tempSave);
   }
 
@@ -210,11 +205,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         this.providerName = this.newProviderForm.get('name').value;
       }
     );
-  }
-
-  toggleDisable() {
-    this.disable = !this.disable;
-    this.newProviderForm.enable();
   }
 
 }

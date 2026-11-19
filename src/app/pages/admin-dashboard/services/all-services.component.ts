@@ -1,25 +1,34 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {Paging} from '../../../entities/paging';
 import {Bundle, Service, Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {URLParameter} from '../../../entities/url-parameter';
 import {FacetValue} from '../../../entities/facet';
+import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass, DatePipe } from '@angular/common';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
-  selector: 'app-admin-all-services-dashboard',
-  templateUrl: 'all-services.component.html'
+    selector: 'app-admin-all-services-dashboard',
+    templateUrl: 'all-services.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
 })
 
 export class AllServicesDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private resourceService = inject(ResourceService);
+
 
   services: Paging<Bundle<Service>> = null;
   selectedService: Bundle<Service> = null;
   resourceState: Vocabulary[] = null;
-  providerFacet: FacetValue[] = []
-  queryParams: URLParameter[] = []
+  providerFacet: FacetValue[] = [];
+  queryParams: URLParameter[] = [];
 
   // Paging
   pages: number[] = [];
@@ -30,15 +39,13 @@ export class AllServicesDashboardComponent implements OnInit {
 
   // Filter
   order: string = null;
-  activeStatus: string = '';
+  activeStatus = '';
   status: string = null;
   provider: string = null;
 
   showLoader = false;
   errorMessage: string;
   loadingMessage = '';
-
-  constructor(private route: ActivatedRoute, private router: Router, private resourceService: ResourceService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -163,7 +170,7 @@ export class AllServicesDashboardComponent implements OnInit {
       value = value['$ngOptionValue'];
     }
     if (value === null) {
-      this.queryParams = this.queryParams.filter(params => {return params.key != key});
+      this.queryParams = this.queryParams.filter(params => {return params.key != key;});
       return;
     }
     for (const urlParameter of this.queryParams) {
@@ -172,11 +179,11 @@ export class AllServicesDashboardComponent implements OnInit {
         return;
       }
     }
-    this.queryParams.push({key: key, values: [value]});
+    this.queryParams.push({key, values: [value]});
   }
 
   navigateUsingParameters() {
-    const map: { [name: string]: string; } = {};
+    const map: { [name: string]: string } = {};
     for (const urlParameter of this.queryParams) {
       map[urlParameter.key] = urlParameter.values.join(',');
     }
@@ -213,7 +220,7 @@ export class AllServicesDashboardComponent implements OnInit {
   }
 
   toggleServiceActive(bundle: Bundle<Service>) {
-    if (bundle.status === 'pending resource' || bundle.status === 'rejected resource') {
+    if (bundle.status === 'pending' || bundle.status === 'rejected') {
       this.errorMessage = `You cannot activate a ${bundle.status}.`;
       window.scrollTo(0, 0);
       return;

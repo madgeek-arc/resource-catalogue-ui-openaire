@@ -1,48 +1,51 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-checkbox-field',
-  templateUrl: './checkbox-field.component.html'
+    selector: 'app-checkbox-field',
+    templateUrl: './checkbox-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class CheckboxFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+
   @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
-
-  constructor(private rootFormGroup: FormGroupDirective) {
-  }
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
 
   ngOnInit() {
     // console.log(this.fieldData);
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
     // console.log(this.form);
 
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
     // console.log(this.formControl);
   }
 
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   push(field: string, required: boolean) {
-    this.fieldAsFormArray().push(required ? new FormControl(null, Validators.required) : new FormControl(null));
+    this.fieldAsFormArray().push(required ? new UntypedFormControl(null, Validators.required) : new UntypedFormControl(null));
   }
 
   remove(field: string, i: number) {

@@ -1,36 +1,40 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
-  selector: 'app-date-field',
-  templateUrl: 'date-field.component.html'
+    selector: 'app-date-field',
+    templateUrl: 'date-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, DpDatePickerModule]
 })
 
 export class DateFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+
 
   @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  constructor(private rootFormGroup: FormGroupDirective) {
-  }
-
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
 
     if (this.fieldData.form.dependsOn) {
       // console.log(this.fieldData.form.dependsOn);
@@ -40,12 +44,15 @@ export class DateFieldComponent implements OnInit {
         value => {
           this.enableDisableField(value, this.fieldData.form.dependsOn.value);
         },
-        error => {console.log(error)}
+        error => {console.log(error);}
       );
     }
 
-    if (this.formControl.value?.includes('T')) { //parse Date
-      this.formControl.setValue(this.formControl.value.split('T')[0]);
+    const value = this.formControl.value;
+    if (typeof value === 'number') { // the new API sends dates as epoch milliseconds
+      this.formControl.setValue(new Date(value).toISOString().split('T')[0]);
+    } else if (typeof value === 'string' && value.includes('T')) { //parse Date
+      this.formControl.setValue(value.split('T')[0]);
     }
     // console.log(this.fieldData);
     // console.log(this.form);
@@ -55,11 +62,11 @@ export class DateFieldComponent implements OnInit {
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   push(field: string, required: boolean, type?: string) {
-    this.fieldAsFormArray().push(required ? new FormControl('', Validators.required) : new FormControl(''));
+    this.fieldAsFormArray().push(required ? new UntypedFormControl('', Validators.required) : new UntypedFormControl(''));
   }
 
   remove(field: string, i: number) {

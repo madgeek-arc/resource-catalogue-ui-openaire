@@ -1,18 +1,22 @@
 import {NavigationEnd, Router} from '@angular/router';
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SmoothScroll {
+  private router = inject(Router);
+
   private interval;
   private readonly sub;
   private lastRoute;
   private whitelist = [];
 
-  constructor(private router: Router) {
-    if(typeof window !== "undefined") {
+  constructor() {
+    const router = this.router;
+
+    if(typeof window !== 'undefined') {
       this.sub = router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           if (this.interval) {
@@ -33,7 +37,7 @@ export class SmoothScroll {
                 }
                 const yOffset = -100;
                 let position = 0;
-                let interval = setInterval(() => {
+                const interval = setInterval(() => {
                   if (position !== element.getBoundingClientRect().top) {
                     position = element.getBoundingClientRect().top;
                   } else {
@@ -57,8 +61,8 @@ export class SmoothScroll {
   }
 
   private getUrl(url: string): string {
-    let full = url.split('?')[0].split('#')[0];
-    let route = this.whitelist.find(_ => full.includes(_));
+    const full = url.split('?')[0].split('#')[0];
+    const route = this.whitelist.find(_ => full.includes(_));
     return (route)?(route):full;
   }
 

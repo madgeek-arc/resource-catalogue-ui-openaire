@@ -1,8 +1,9 @@
-import { enableProdMode, ErrorHandler } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import * as Sentry from '@sentry/angular-ivy';
+import { enableProdMode } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import * as Sentry from '@sentry/angular';
 
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 import { environment } from './environments/environment';
 
 if (!environment.disableSentry)
@@ -10,13 +11,11 @@ if (!environment.disableSentry)
     dsn: environment.sentry.dsn,
     environment: environment.sentry.environment,
     integrations: [
-      new Sentry.BrowserTracing({
-        routingInstrumentation: Sentry.routingInstrumentation,
-      }),
-      new Sentry.Integrations.Breadcrumbs({
+      Sentry.browserTracingIntegration(),
+      Sentry.breadcrumbsIntegration({
         console: true,
       }),
-      new Sentry.Replay(),
+      Sentry.replayIntegration(),
     ],
     // Performance Monitoring
     tracesSampleRate: environment.sentry.tracesSampleRate, // Capture 100% of the transactions
@@ -29,5 +28,5 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));

@@ -1,37 +1,42 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import {AbstractControl, FormArray, FormControl, FormGroup, FormGroupDirective} from "@angular/forms";
-import {FormControlService} from "../../../../services/form-control.service";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { SafeUrlPipe } from '../../../../shared/pipes/safeUrlPipe';
 
 @Component({
-  selector: 'app-string-url-email-field',
-  templateUrl: './string-field.component.html',
-  styles: ['.clear-style { height: 0 !important;}']
+    selector: 'app-string-url-email-field',
+    templateUrl: './string-field.component.html',
+    styles: ['.clear-style { height: 0 !important;}'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, SafeUrlPipe]
 })
 
 export class StringFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+
   @Input() fieldData: Field;
-  @Input() editMode: boolean = false;
-  @Input() position?: number = null;
+  readonly editMode = input(false);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
-
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
 
     if(this.fieldData.form.dependsOn) {
       // console.log(this.fieldData.form.dependsOn);
@@ -41,7 +46,7 @@ export class StringFieldComponent implements OnInit {
         value => {
             this.enableDisableField(value, this.fieldData.form.dependsOn.value);
           },
-        error => {console.log(error)}
+        error => {console.log(error);}
       );
     }
 
@@ -53,7 +58,7 @@ export class StringFieldComponent implements OnInit {
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   push() {
@@ -65,7 +70,7 @@ export class StringFieldComponent implements OnInit {
   }
 
   movedElement(e) {
-    let newOrder: number[] = [];
+    const newOrder: number[] = [];
     e.target.childNodes.forEach(child => {
       if (Number.isInteger((parseInt(child.id))))
         newOrder.push(child.id);
@@ -79,11 +84,11 @@ export class StringFieldComponent implements OnInit {
   }
 
   move(newIndex: number, currentIndex: number) {
-    const formArray: FormArray = this.fieldAsFormArray();
+    const formArray: UntypedFormArray = this.fieldAsFormArray();
     const currentControl: AbstractControl = formArray.at(currentIndex);
 
     formArray.removeAt(currentIndex);
-    formArray.insert(newIndex, currentControl)
+    formArray.insert(newIndex, currentControl);
   }
 
   /** check fields validity--> **/
@@ -99,7 +104,7 @@ export class StringFieldComponent implements OnInit {
     if (formControl)
       return (!formControl.valid && (formControl.touched || formControl.dirty));
     else
-      return false
+      return false;
 
     // return ((this.fieldAsFormArray().get([position]).invalid && this.fieldAsFormArray().get([position]).touched)
     //   && (this.editMode || this.fieldAsFormArray().get([position]).dirty));

@@ -1,19 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {UserInfo} from '../../entities/userInfo';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 
 @Component({
-  selector: 'app-admin-dashboard',
-  templateUrl: 'admin-dashboard.component.html',
+    selector: 'app-admin-dashboard',
+    templateUrl: 'admin-dashboard.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [NgClass, RouterLink, RouterOutlet, ReactiveFormsModule, FormsModule]
 })
 
 export class AdminDashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private userService = inject(UserService);
+  private fb = inject(UntypedFormBuilder);
+
 
   userInfo: UserInfo = null;
-  inviteeEmail: FormControl = this.fb.control(null, [Validators.email, Validators.required]);
+  inviteeEmail: UntypedFormControl = this.fb.control(null, [Validators.email, Validators.required]);
   invitationUrl: string = null;
 
   path: string = null;
@@ -21,7 +29,7 @@ export class AdminDashboardComponent implements OnInit {
   titleIcon: string = null;
   title: string = null;
 
-  constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private fb: FormBuilder) {
+  constructor() {
     this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           if (event.url.includes('services')) {
@@ -45,7 +53,7 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit() {
     this.userService.getUserInfo().subscribe(
       res => {this.userInfo = res;},
-      error => {console.error(error)}
+      error => {console.error(error);}
     );
     // this.route.params.subscribe(
     //   params => {
@@ -93,7 +101,7 @@ export class AdminDashboardComponent implements OnInit {
         this.invitationUrl = location.origin + '/join/' + res;
         // console.log(this.invitationUrl);
       },
-      error => {console.error(error)}
+      error => {console.error(error);}
     );
   }
 
@@ -117,13 +125,13 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   fallbackCopyTextToClipboard(text) { // this is deprecated support is not guaranteed
-    const textArea = document.createElement("textarea");
+    const textArea = document.createElement('textarea');
     textArea.value = text;
 
     // Avoid scrolling to bottom
-    textArea.style.top = "0";
-    textArea.style.left = "0";
-    textArea.style.position = "fixed";
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.position = 'fixed';
 
     document.body.appendChild(textArea);
     textArea.focus();

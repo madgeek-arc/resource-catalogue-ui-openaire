@@ -1,29 +1,40 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import * as sd from '../../../entities/services.description';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
 import {Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
+import { NgClass, LowerCasePipe } from '@angular/common';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
-declare var UIkit: any;
+declare let UIkit: any;
 
 @Component({
-  selector: 'app-new-service-provider',
-  templateUrl: './service-provider-form.component.html',
-  styleUrls: ['./service-provider-form.component.css']
+    selector: 'app-new-service-provider',
+    templateUrl: './service-provider-form.component.html',
+    styleUrls: ['./service-provider-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class ServiceProviderFormComponent implements OnInit {
+  fb = inject(UntypedFormBuilder);
+  authService = inject(UserSessionService);
+  providerService = inject(ProviderService);
+  resourceService = inject(ResourceService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
 
   private _hasUserConsent = environment.hasUserConsent;
 
-  public editor = ClassicEditor;
 
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
@@ -33,7 +44,7 @@ export class ServiceProviderFormComponent implements OnInit {
   providerName = '';
   errorMessage = '';
   userInfo = {family_name: '', given_name: '', email: ''};
-  newProviderForm: FormGroup;
+  newProviderForm: UntypedFormGroup;
   logoUrl = '';
   vocabularies: Map<string, Vocabulary[]> = null;
   premiumSort = new PremiumSortPipe();
@@ -43,8 +54,8 @@ export class ServiceProviderFormComponent implements OnInit {
   disable = false;
   showLoader = false;
   tabsError: boolean[] = [false, false, false, false, false, false, false, false];
-  selectedTab: number = 0;
-  selectTab(index: number): void {this.selectedTab = index}
+  selectedTab = 0;
+  selectTab(index: number): void {this.selectedTab = index;}
   isPortalAdmin = false;
 
   codeOfConduct = false;
@@ -170,12 +181,10 @@ export class ServiceProviderFormComponent implements OnInit {
     ])
   };
 
-  constructor(public fb: FormBuilder,
-              public authService: AuthenticationService,
-              public providerService: ProviderService,
-              public resourceService: ResourceService,
-              public router: Router,
-              public route: ActivatedRoute) {
+  /** Leaves the read-only view (the Edit button) and makes the form editable. */
+  toggleDisable() {
+    this.disable = !this.disable;
+    this.newProviderForm.enable();
   }
 
   ngOnInit() {
@@ -253,7 +262,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   registerProvider(saveDraft: boolean) {
     // console.log('Submit');
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isSignedIn()) {
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
       this.authService.login();
     }
@@ -312,7 +321,7 @@ export class ServiceProviderFormComponent implements OnInit {
       this.showLoader = true;
       window.scrollTo(0, 0);
 
-      let token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         this.providerService.createNewServiceProviderWithToken(this.newProviderForm.value, token).subscribe(
           res => {
@@ -465,7 +474,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** Categorization --> **/
-  newScientificDomain(): FormGroup {
+  newScientificDomain(): UntypedFormGroup {
     return this.fb.group({
       scientificDomain: [''],
       scientificSubdomain: ['']
@@ -473,7 +482,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   get domainArray() {
-    return this.newProviderForm.get('scientificDomains') as FormArray;
+    return this.newProviderForm.get('scientificDomains') as UntypedFormArray;
   }
 
   pushDomain() {
@@ -493,7 +502,7 @@ export class ServiceProviderFormComponent implements OnInit {
   /** <-- Categorization **/
 
   /** MERIL scientificDomains --> **/
-  newMerilScientificDomain(): FormGroup {
+  newMerilScientificDomain(): UntypedFormGroup {
     return this.fb.group({
       merilScientificDomain: [''],
       merilScientificSubdomain: ['']
@@ -501,7 +510,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   get merilDomainArray() {
-    return this.newProviderForm.get('merilScientificDomains') as FormArray;
+    return this.newProviderForm.get('merilScientificDomains') as UntypedFormArray;
   }
 
   pushMerilDomain() {
@@ -522,7 +531,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** handle form arrays--> **/
   getFieldAsFormArray(field: string) {
-    return this.newProviderForm.get(field) as FormArray;
+    return this.newProviderForm.get(field) as UntypedFormArray;
   }
 
   remove(field: string, i: number) {
@@ -546,7 +555,7 @@ export class ServiceProviderFormComponent implements OnInit {
   /** <--handle form arrays**/
 
   /** Multimedia -->**/
-  newMultimedia(): FormGroup {
+  newMultimedia(): UntypedFormGroup {
     return this.fb.group({
       multimediaURL: ['', Validators.compose([Validators.required, URLValidator])],
       multimediaName: ['']
@@ -554,7 +563,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   get multimediaArray() {
-    return this.newProviderForm.get('multimedia') as FormArray;
+    return this.newProviderForm.get('multimedia') as UntypedFormArray;
   }
 
   pushMultimedia() {
@@ -568,7 +577,7 @@ export class ServiceProviderFormComponent implements OnInit {
   /** <--Multimedia**/
 
   /** Contact Info -->**/
-  newContact(): FormGroup {
+  newContact(): UntypedFormGroup {
     return this.fb.group({
       firstName: [''],
       lastName: [''],
@@ -579,7 +588,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   get publicContactArray() {
-    return this.newProviderForm.get('publicContacts') as FormArray;
+    return this.newProviderForm.get('publicContacts') as UntypedFormArray;
   }
 
   pushPublicContact() {
@@ -593,7 +602,7 @@ export class ServiceProviderFormComponent implements OnInit {
   /** <--Contact Info **/
 
   /** User Array -->**/
-  user(): FormGroup {
+  user(): UntypedFormGroup {
     return this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       id: [''],
@@ -603,7 +612,7 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   get usersArray() { // return form fields as array
-    return this.newProviderForm.get('users') as FormArray;
+    return this.newProviderForm.get('users') as UntypedFormArray;
   }
 
   addUser() {

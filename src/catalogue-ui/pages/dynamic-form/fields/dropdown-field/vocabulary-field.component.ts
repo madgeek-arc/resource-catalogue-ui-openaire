@@ -1,43 +1,51 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import {FormArray, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
-import {FormControlService} from "../../../../services/form-control.service";
-import {URLValidator} from "../../../../shared/validators/generic.validator";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import {Field, HandleBitSet, vocabularyName} from '../../../../domain/dynamic-form-model';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import {FormControlService} from '../../../../services/form-control.service';
+import {URLValidator} from '../../../../shared/validators/generic.validator';
 import {ActivatedRoute} from '@angular/router';
-import {edit} from 'brace';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-vocabulary-field',
-  templateUrl: './vocabulary-field.component.html',
-  styleUrls: ['./vocabulary-field.component.scss']
+    selector: 'app-vocabulary-field',
+    templateUrl: './vocabulary-field.component.html',
+    styleUrls: ['./vocabulary-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgSelectComponent, NgClass]
 })
 
 export class VocabularyFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+  private route = inject(ActivatedRoute);
+
   @Input() fieldData: Field;
-  @Input() vocabularies: Map<string, object[]> = null;
-  @Input() subVocabularies: Map<string, object[]> = null;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly vocabularies = input<Map<string, object[]>>(null);
+  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
 
   dynamicVoc: object[] = [];
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService, private route: ActivatedRoute) {
-  }
+  /** Key of this field's options in `vocabularies`. */
+  vocabularyKey: string = null;
 
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
+    this.vocabularyKey = vocabularyName(this.fieldData.typeInfo);
 
     if(this.fieldData.name === 'resourceOrganisation' && this.route.snapshot.paramMap.get('providerId')!==null){
         this.form.get('resourceOrganisation').setValue(this.route.snapshot.paramMap.get('providerId'));
@@ -59,17 +67,17 @@ export class VocabularyFieldComponent implements OnInit {
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   push(field: string, required: boolean, type: string) {
     switch (type) {
       case 'url':
-        this.fieldAsFormArray().push(required ? new FormControl('', Validators.compose([Validators.required, URLValidator]))
-          : new FormControl('', URLValidator));
+        this.fieldAsFormArray().push(required ? new UntypedFormControl('', Validators.compose([Validators.required, URLValidator]))
+          : new UntypedFormControl('', URLValidator));
         break;
       default:
-        this.fieldAsFormArray().push(required ? new FormControl('', Validators.required) : new FormControl(''));
+        this.fieldAsFormArray().push(required ? new UntypedFormControl('', Validators.required) : new UntypedFormControl(''));
     }
   }
 
@@ -123,7 +131,7 @@ export class VocabularyFieldComponent implements OnInit {
         this.formControl.reset();
       }
     } else if (value) {
-      this.dynamicVoc = this.subVocabularies[value];
+      this.dynamicVoc = this.subVocabularies()[value];
       this.formControl.enable();
     } else {
       this.formControl.disable();

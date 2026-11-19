@@ -33,13 +33,15 @@
 
                 <div class="uk-panel" id="module-menu-mobile">
 
-                  <div [ngClass]="portfolioItemActive==null?'uk-display-block':'uk-display-none'">
+                  <div [class.uk-display-block]="portfolioItemActive() === null" [class.uk-display-none]="portfolioItemActive() !== null">
                     <h5 class="uk-text-center">Browse Services</h5>
 
-                    <div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between" *ngFor="let portfolio of resources | keyvalue">
+                    @for (portfolio of resources() | keyvalue; track portfolio.key) {
+<div class="uk-margin-medium-top uk-flex uk-flex-middle uk-flex-between">
                       <h6 class="uk-text-normal uk-margin-remove">{{portfolio.key}}</h6>
                       <a (click)="portfolioActive(portfolio.key)"><i class="fa fa-2x fa-angle-right"></i></a>
                     </div>
+}
                   </div>
 
 <!--                  <ng-container *ngFor="let portfolio of services | keyvalue">-->
@@ -94,7 +96,7 @@
 
 <!--NO MOBILE-->
 <div id="">
-  <div class="main-menu tm-header uk-visible@m tm-header-transparent" [ngClass]="{'fixed-navbar':dashboardMode}">
+  <div class="main-menu tm-header uk-visible@m tm-header-transparent" [class.fixed-navbar]="dashboardMode()">
     <div class="uk-navbar-container uk-navbar-transparent" style="background-color: rgb(255, 255, 255);">
       <div class="uk-container uk-container-xlarge">
 <!--        <nav id="topNavBar" class="uk-navbar" uk-navbar="dropbar: false; mode: click; delay-hide: 0;">-->
@@ -124,15 +126,21 @@
                       </div>
                       <hr>
                       <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
-                        <div class="" *ngFor="let portfolio of resources | keyvalue">
-                          <ng-container *ngIf="portfolio.value.length > 0">
+                        @for (portfolio of resources() | keyvalue; track portfolio.key) {
+<div class="">
+                          @if (portfolio.value.length > 0) {
+
                             <h6>{{portfolio.key}}</h6>
 <!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
-                            <div *ngFor="let service of portfolio.value" class=" uk-navbar-dropdown-close">
+                            @for (service of portfolio.value; track service) {
+<div class=" uk-navbar-dropdown-close">
                               <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
                             </div>
-                          </ng-container>
+}
+                          
+}
                         </div>
+}
                       </div>
                     </div>
                     <div class="uk-width-1-4 help-section">
@@ -159,51 +167,68 @@
 <!--                </li>-->
             </ul>
           </div>
-          <div *ngIf="isLoggedIn; else loginButton" class="uk-navbar-right user_actions">
-            <a *ngIf="user" class="uk-icon text-decoration-none" aria-expanded="false">
+          @if (isLoggedIn()) {
+<div class="uk-navbar-right user_actions">
+            @if (user(); as user) {
+<a class="uk-icon text-decoration-none" aria-expanded="false">
 <!--              <span class="uk-text-small uk-margin-small-right ">{{user.name}}</span>-->
               <svg height="60" width="60">
                 <circle cx="30" cy="30" r="20" stroke-width="1"></circle>
                 <text dy=".4em" font-size="16" text-anchor="middle" x="50%" y="50%" class="">
-                  {{getInitials(user.fullname)}}
+                  {{getInitials(session.displayName)}}
                 </text>
               </svg>
             </a>
-            <div *ngIf="user" id="userActions" class="browse-dropdown-menu uk-navbar-dropdown"
+}
+            @if (user(); as user) {
+<div id="userActions" class="browse-dropdown-menu uk-navbar-dropdown"
                  uk-drop="mode: click; delay-hide: 0; pos: bottom; offset: 15">
               <ul class="uk-nav uk-padding-small">
                 <li class="">
                   <div>
-                    <div class="uk-text-bold">{{user.fullname}}</div>
+                    <div class="uk-text-bold">{{session.displayName}}</div>
                     <div class="uk-text-meta">{{user.email}}</div>
                   </div>
                 </li>
-                <hr *ngIf="myProviders.length > 0">
-                <li class="groups" *ngFor="let provider of myProviders" (click)="hideDrop('#userActions')">
+                @if (myProviders().length > 0) {
+<hr>
+}
+                @for (provider of myProviders(); track provider.id) {
+<li class="groups" (click)="hideDrop('#userActions')">
                   <a [routerLink]="['/provider', provider.id, 'dashboard', 'home']" class="text-black">
                     <span class="material-icons uk-margin-right">group</span>{{provider.name}}
                   </a>
                 </li>
-                <ng-container *ngIf="user.roles.includes('ADMIN') || user.roles.includes('ONBOARDING_TEAM')">
+}
+                @if (user.roles?.includes('ADMIN') || user.roles?.includes('ONBOARDING_TEAM')) {
+
                   <hr>
                   <li class="groups" (click)="hideDrop('#userActions')">
                     <a [routerLink]="['/admin/providers']" class="text-black">
                       <span class="material-icons uk-margin-right">admin_panel_settings</span>Admin pages
                     </a>
                   </li>
-                </ng-container>
+                
+}
                 <hr>
                 <li>
                   <a id="logout" (click)="logout()"><span class="material-icons uk-margin-right">logout</span>Log out</a>
                 </li>
               </ul>
             </div>
+}
           </div>
-          <ng-template #loginButton>
-            <div class="uk-navbar-right">
+} @else {
+
+            <!-- Hidden while the user-info call is pending, so "Login" does not flash for a signed-in user. -->
+            @if (!loading()) {
+<div class="uk-navbar-right">
               <a class="uk-navbar-item" (click)="this.login()"><span class="material-icons uk-margin-right">login</span>Login</a>
             </div>
-          </ng-template>
+}
+          
+}
+          
         </nav>
       </div>
     </div>

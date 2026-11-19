@@ -1,26 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
+import {AireFooterComponent} from './shared/footer/footer.component';
+import {CookieLawComponent} from './shared/reusablecomponents/cookie-law/cookie-law.component';
 import {SmoothScroll} from './services/smooth-scroll';
-import {AuthenticationService} from './services/authentication.service';
-import {NavigationService} from './services/navigation.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [AuthenticationService, NavigationService]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieLawComponent],
 })
 export class AppComponent implements OnInit {
+  router = inject(Router);
+
   isLoginOrRegister = false;
 
   breadcrumbs: string[] = [];
 
   cleanView = false;
   dashboardView = false;
-
-  constructor(public router: Router, private auth: AuthenticationService) {
-    this.auth.redirect();
-  }
 
   ngOnInit() {
     this.router.events.subscribe((evt: any) => {

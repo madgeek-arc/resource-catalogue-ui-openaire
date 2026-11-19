@@ -1,38 +1,41 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormControl, FormGroup, FormGroupDirective} from "@angular/forms";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-large-text-field',
-  templateUrl: './large-text-field.component.html'
+    selector: 'app-large-text-field',
+    templateUrl: './large-text-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass]
 })
 
 export class LargeTextFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+
   @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() readonly: boolean = null;
-  @Input() position?: number = null;
+  readonly editMode = input<any>(undefined);
+  readonly readonly = input<boolean>(null);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  constructor(private rootFormGroup: FormGroupDirective) {
-  }
-
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
     // console.log(this.form);
 
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
     // console.log(this.formControl);
 
     if(this.fieldData.form.dependsOn) {
@@ -43,7 +46,7 @@ export class LargeTextFieldComponent implements OnInit {
         value => {
           this.enableDisableField(value, this.fieldData.form.dependsOn.value);
         },
-        error => {console.log(error)}
+        error => {console.log(error);}
       );
     }
   }

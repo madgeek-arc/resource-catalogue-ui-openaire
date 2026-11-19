@@ -1,21 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
-import {SearchQuery} from '../../entities/search-query';
-import {NavigationService} from '../../services/navigation.service';
-import {ResourceService} from '../../services/resource.service';
-import {DataSharingService} from '../../services/data-sharing.service';
-import {PortfolioMap} from '../../entities/portfolioMap';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {RouterLink} from '@angular/router';
+import {SlicePipe} from '@angular/common';
 import * as uikit from 'uikit';
+import {ResourceService} from '../../services/resource.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.aire.component.html',
-  styleUrls: ['./home.aire.component.css']
+  styleUrls: ['./home.aire.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, SlicePipe]
 })
-export class HomeAireComponent implements OnInit {
-  public searchForm: FormGroup;
-  public categories: Category[] = [
+export class HomeAireComponent {
+  private resourceService = inject(ResourceService);
+
+  readonly categories: Category[] = [
     {
       value: 'Authentication and authorization infrastructure',
       icon: 'fingerprint_scanning_authorization.svg',
@@ -32,64 +34,44 @@ export class HomeAireComponent implements OnInit {
     {value: 'Data storage', icon: 'database_security.svg', hover: 'database_security_hover.svg'}
   ];
 
-  resources: Map<string, Service[] | Datasource[]> = null;
-  public portfolios: Vocabulary[] = null;
-  public users: Vocabulary[] = null;
-  public slide = 0;
-  public slideMobile = 0;
+  readonly portfolioList = toSignal(orNull(this.resourceService.getNewVocabulariesByType('Portfolios')), {initialValue: null});
+  readonly userList = toSignal(orNull(this.resourceService.getNewVocabulariesByType('Users')), {initialValue: null});
+  readonly resourceMap = toSignal(orNull(this.resourceService.getResourcesGroupedByField('portfolios', true)), {initialValue: null});
 
-  constructor(public fb: FormBuilder, public router: NavigationService,  public resourceService: ResourceService,
-              private dataSharingService: DataSharingService) {
-    this.searchForm = fb.group({'query': ['']});
-  }
+  /** The user type each slideshow shows, for its dot navigation. */
+  readonly slide = signal(0);
+  readonly slideMobile = signal(0);
 
-  ngOnInit() {
-    // fetch categories, check size, skip unpopulated ones here
-
-    this.resourceService.getNewVocabulariesByType('Portfolios').subscribe(
-      suc => {
-        this.portfolios = suc;
-      }
-    );
-
-    this.resourceService.getNewVocabulariesByType('Users').subscribe(
-      suc => {
-        this.users = suc;
-      }
-    );
-
-    this.resourceService.getResourcesGroupedByField('portfolios', true).subscribe(
-      res => {this.resources = res; },
-      error => {console.log(error); }
-    );
-
-  }
-
-  onSubmit(searchValue: SearchQuery) {
-    return this.router.search({query: searchValue.query});
-  }
-
+  /** On UIkit's beforeitemshow; reads the first slideshow on the page, as before. */
   dragSlide() {
-    this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+    this.slide.set(currentSlide());
   }
 
   showSlide(index: number) {
     uikit.slideshow('#slideShow').show(index);
-    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
-    this.slide = index;
-
+    this.slide.set(index);
   }
 
   dragSlideMobile() {
-    this.slideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+    this.slideMobile.set(currentSlide());
   }
 
   showSlideMobile(index: number) {
     uikit.slideshow('#slideShowMobile').show(index);
-    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
-    this.slideMobile = index;
-
+    this.slideMobile.set(index);
   }
+}
+
+/** A failed load leaves its section hidden, as before. */
+function orNull<T>(source: Observable<T>): Observable<T | null> {
+  return source.pipe(catchError(error => {
+    console.log(error);
+    return of(null);
+  }));
+}
+
+function currentSlide(): number {
+  return uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
 }
 
 class Category {

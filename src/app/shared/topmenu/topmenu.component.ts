@@ -1,73 +1,82 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router} from '@angular/router';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import {UserSessionService} from '../../services/user-session.service';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {Datasource, Provider, Service} from '../../entities/eic-model';
-import {UserInfo} from '../../entities/userInfo';
 import {UserService} from '../../services/user.service';
 import * as UIkit from 'uikit';
-import {filter, map} from 'rxjs/operators';
+import {EMPTY, of} from 'rxjs';
+import {catchError, filter, map, switchMap} from 'rxjs/operators';
+import { KeyValuePipe } from '@angular/common';
 
 
 @Component({
-  selector: 'app-top-menu-aire',
-  templateUrl: './topmenu.component.html',
-  styleUrls: ['./topmenu.component.css'],
+    selector: 'app-top-menu-aire',
+    templateUrl: './topmenu.component.html',
+    styleUrls: ['./topmenu.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RouterLink, KeyValuePipe]
 })
 
-export class AireTopMenuComponent implements OnInit {
+export class AireTopMenuComponent {
+  session = inject(UserSessionService);
+  router = inject(Router);
+  private resourceService = inject(ResourceService);
+  private dataSharingService = inject(DataSharingService);
+  private userService = inject(UserService);
 
-  resources: Map<string, Service[] | Datasource[]> = null;
-  refresh = false;
-  user: UserInfo = null;
-  myProviders: Provider[] = [];
-  isLoggedIn: boolean = false;
+  // Login state comes only from the user-info call (see UserSessionService); there is no cookie to read.
+  readonly user = toSignal(this.session.user$, {initialValue: null});
+  readonly loading = toSignal(this.session.loading$, {initialValue: true});
+  readonly isLoggedIn = computed(() => this.user() !== null);
 
-  dashboardMode: boolean = false;
+  /** The signed-in user's providers; switchMap drops a pending answer that belongs to a previous user. */
+  readonly myProviders = toSignal(this.session.user$.pipe(
+    switchMap(user => user === null ? of([] as Provider[]) : this.userService.getMyProviders().pipe(
+      catchError(error => {
+        console.error(error);
+        return of([] as Provider[]);
+      })
+    ))
+  ), {initialValue: [] as Provider[]});
 
-  public portfolioItemActive: string = null;
-
-  constructor(public authenticationService: AuthenticationService, public router: Router, public resourceService: ResourceService,
-              private dataSharingService: DataSharingService, private userService: UserService, private route: ActivatedRoute) {}
-
-  ngOnInit() {
-
-    this.isInDashboardMode();
-
-    this.dataSharingService.refreshRequired.subscribe( value => {
-      this.refresh = value;
-      if (this.refresh) {
-        // this.resourceService.getServicesByIndexedField('portfolios', 'Portfolios').subscribe(
-        this.resourceService.getResourcesGroupedByField('portfolios', true).subscribe(
-          res => {this.resources = res; },
-          error => {console.log(error); },
-          () => {this.dataSharingService.refreshRequired.next(false); }
-        );
+  /**
+   * True on routes whose deepest snapshot has `data: {dashboardMode: true}`.
+   * Reads the router's current state rather than an injected ActivatedRoute: ProviderHomeComponent turns off
+   * route reuse, after which each navigation builds a new root and an injected one keeps the old snapshot.
+   */
+  readonly dashboardMode = toSignal(this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(() => {
+      let route = this.router.routerState.snapshot.root;
+      while (route.firstChild) {
+        route = route.firstChild;
       }
+      return !!route.data['dashboardMode'];
+    })
+  ), {initialValue: false});
+
+  readonly resources = signal<Map<string, Service[] | Datasource[]> | null>(null);
+
+  readonly portfolioItemActive = signal<string | null>(null);
+
+  constructor() {
+    this.dataSharingService.refreshRequired.pipe(
+      filter(refresh => refresh),
+      // A failed load is caught here so that the next refresh still loads; refreshRequired stays true, as before.
+      switchMap(() => this.resourceService.getResourcesGroupedByField('portfolios', true).pipe(
+        catchError(error => {
+          console.error(error);
+          return EMPTY;
+        })
+      )),
+      takeUntilDestroyed()
+    ).subscribe(res => {
+      this.resources.set(res);
+      this.dataSharingService.refreshRequired.next(false);
     });
-
-    this.authenticationService.userLoggedIn.subscribe(
-      next => {
-        this.isLoggedIn = next;
-        if (this.isLoggedIn) {
-          this.userService.getUserInfo().subscribe(
-            res => {this.user = res},
-            error => {
-              this.isLoggedIn = false;
-              console.error(error);
-            }
-          )
-          this.userService.getMyProviders().subscribe(
-            res => {this.myProviders = res},
-            error => {console.error(error)}
-          )
-        } else {
-          this.user = null;
-        }
-      }
-    );
-
   }
 
   redirectTo(url: string) {
@@ -76,41 +85,23 @@ export class AireTopMenuComponent implements OnInit {
       this.router.navigate([url]));
   }
 
-  hideDrop(elementId) {
+  hideDrop(elementId: string) {
     UIkit.drop(elementId).hide(false);
   }
 
   portfolioActive(portfolioItem: string) {
-    this.portfolioItemActive = portfolioItem;
+    this.portfolioItemActive.set(portfolioItem);
   }
 
   login() {
-    this.authenticationService.tryLogin(true);
+    this.session.login();
   }
 
   logout() {
-    this.authenticationService.logout();
-    this.isLoggedIn = false;
+    this.session.logout();
   }
 
   getInitials(fullName: string) {
-    return fullName.split(" ").map((n)=>n[0]).join("")
-  }
-
-  isInDashboardMode() {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => this.route.snapshot),
-        map(route => {
-          while (route.firstChild) {
-            route = route.firstChild;
-          }
-          return route;
-        })
-      )
-      .subscribe((route: ActivatedRouteSnapshot) => {
-        this.dashboardMode = route.data['dashboardMode'];
-      });
+    return fullName.split(' ').map((n)=>n[0]).join('');
   }
 }

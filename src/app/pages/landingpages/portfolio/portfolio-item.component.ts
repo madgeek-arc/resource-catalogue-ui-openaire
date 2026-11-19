@@ -1,41 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {EMPTY, zip} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {ResourceService} from '../../../services/resource.service';
-import {ActivatedRoute} from '@angular/router';
-import {Service, Vocabulary} from '../../../entities/eic-model';
-import {zip} from 'rxjs/internal/observable/zip';
-import {Paging} from '../../../entities/paging';
-
 
 @Component({
   selector: 'app-portfolio-item',
   templateUrl: './portfolio-item.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink]
 })
-export class PortfolioItemComponent implements OnInit{
+export class PortfolioItemComponent {
+  private resourceService = inject(ResourceService);
+  private portfolioId = inject(ActivatedRoute).snapshot.paramMap.get('id');
 
-  response: Paging<Service>;
-  portfolioVoc: Vocabulary;
-  portfolioId: string;
-  ready = false;
-
-  constructor(protected resourceService: ResourceService, protected route: ActivatedRoute) {
-  }
-
-  ngOnInit() {
-    this.portfolioId = this.route.snapshot.paramMap.get('id');
-    zip(
-      this.resourceService.getVocabularyById(this.portfolioId),
-      this.resourceService.getServicesByVocabularyTypeAndId('portfolios', this.portfolioId)
-    ).subscribe(
-      res => {
-        this.portfolioVoc = res[0];
-        this.response = res[1];
-      },
-      error => {console.log(error)},
-      () => {
-        // console.log(this.services);
-        this.ready = true
-      }
-    );
-  }
-
+  /** The portfolio and its services; null while loading, and after a failed load, as before. */
+  readonly data = toSignal(zip(
+    this.resourceService.getVocabularyById(this.portfolioId),
+    this.resourceService.getServicesByVocabularyTypeAndId('portfolios', this.portfolioId)
+  ).pipe(
+    map(([portfolioVoc, response]) => ({portfolioVoc, response})),
+    catchError(error => {
+      console.log(error);
+      return EMPTY;
+    })
+  ), {initialValue: null});
 }

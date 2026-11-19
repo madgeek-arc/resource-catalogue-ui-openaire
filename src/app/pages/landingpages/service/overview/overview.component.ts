@@ -1,77 +1,52 @@
-import {Component, Input} from '@angular/core';
-import {Router} from '@angular/router';
-import {UiVocabulary} from '../../../../entities/dynamic-form-model';
-import {Service, URL} from '../../../../entities/eic-model';
+import {ChangeDetectionStrategy, Component, computed, inject, signal, Signal} from '@angular/core';
+import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
+import {URL} from '../../../../entities/eic-model';
 import * as uikit from 'uikit';
-
+import {ServiceLandingData} from '../service-landing-data';
 
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: 'overview.component.html',
-  // styleUrls: ['../../landing-page.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink]
 })
 export class OverviewComponent {
+  private router = inject(Router);
+  private data = inject(ROUTER_OUTLET_DATA) as Signal<ServiceLandingData | null>;
 
-  @Input() vocabularies: Map<string, UiVocabulary[]>;
-  @Input() relatedServices: Service[] = null;
-  @Input() resourcePayload: Service = null;
+  readonly payload = computed(() => this.data()?.service ?? null);
+  readonly vocabularyMap = computed(() => this.data()?.vocabularies ?? null);
+  readonly related = computed(() => this.data()?.relatedServices ?? null);
 
-
-  slide = 0;
-  benefitSlide = 0;
-
-  slideMobile = 0;
-  benefitSlideMobile = 0;
-
-  constructor(private router: Router) {}
+  /** The use case each slideshow shows, for its dot navigation. */
+  readonly slide = signal(0);
+  readonly slideMobile = signal(0);
 
   getVocabularyName(vocabularyType: string, id: string): string {
-    // console.log(this.vocabularies);
-    for (const vocabulary of this.vocabularies[vocabularyType]) {
-      if (vocabulary.id === id)
-        return vocabulary.name;
-    }
+    return this.vocabularyMap()[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
 
-  dragSlide(id: string) {
-    if (id === 'slideShow') {
-      this.slide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
-    } else {
-      this.benefitSlide = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
-    }
+  /** On UIkit's beforeitemshow; reads the first slideshow on the page, as before. */
+  dragSlide() {
+    this.slide.set(currentSlide());
+  }
+
+  dragSlideMobile() {
+    this.slideMobile.set(currentSlide());
   }
 
   showSlide(id: string, index: number) {
     uikit.slideshow('#' + id).show(index);
-    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
-    if (id === 'slideShow') {
-      this.slide = index;
-    } else {
-      this.benefitSlide = index;
-    }
-  }
-
-  dragSlideMobile(id: string) {
-    if (id === 'slideShowMobile') {
-      this.slideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
-    } else {
-      this.benefitSlideMobile = uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
-    }
+    this.slide.set(index);
   }
 
   showSlideMobile(id: string, index: number) {
     uikit.slideshow('#' + id).show(index);
-    // console.log(UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index);
-    if (id === 'slideShowMobile') {
-      this.slideMobile = index;
-    } else {
-      this.benefitSlideMobile = index;
-    }
-
+    this.slideMobile.set(index);
   }
 
   reloadOnSamePage(url: string) {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then( () => {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate([url]);
     });
   }
@@ -79,5 +54,8 @@ export class OverviewComponent {
   goto(url: string | URL) {
     window.open(url.toString(), '_blank');
   }
+}
 
+function currentSlide(): number {
+  return uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
 }

@@ -9,9 +9,10 @@ export const environment = {
   MATOMO_SITE: -1,
   FAQ_ENDPOINT: 'https://dl105.madgik.di.uoa.gr/faq/api',
   // API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
-  API_ENDPOINT: '/openaire', // to change the end point go to proxy.conf.json file
-  AAI_LOGIN: '/login',
-  AAI_LOGOUT: 'https://aai.openaire.eu/proxy/saml2/idp/SingleLogoutService.php?ReturnTo=',
+  // API_ENDPOINT: '/openaire', // old API
+  API_ENDPOINT: '/api', // to change the end point go to proxy.conf.json file
+  AAI_LOGIN: '/oauth2/authorization/openaire',
+  AAI_LOGOUT: '/logout',
   STATS_ENDPOINT: 'https://providers.eosc-portal.eu/stats-api/',
   API_TOKEN_ENDPOINT: '',
   projectName: 'OpenAIRE Catalogue',

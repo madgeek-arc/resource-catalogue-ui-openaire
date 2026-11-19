@@ -1,41 +1,45 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {FormArray, FormControl, FormGroup, FormGroupDirective} from "@angular/forms";
-import {Field, HandleBitSet} from "../../../../domain/dynamic-form-model";
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {FormControlService} from "../../../../services/form-control.service";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
+import {FormControlService} from '../../../../services/form-control.service';
+import { NgClass } from '@angular/common';
+import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
+import {RichTextEditorComponent} from '../../../../shared/rich-text-editor/rich-text-editor.component';
 
 @Component({
-  selector: 'app-rich-text-field',
-  templateUrl: './rich-text-field.component.html'
+    selector: 'app-rich-text-field',
+    templateUrl: './rich-text-field.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, RichTextEditorComponent]
 })
 
 export class RichTextFieldComponent implements OnInit {
+  private rootFormGroup = inject(FormGroupDirective);
+  private formControlService = inject(FormControlService);
+
   @Input() fieldData: Field;
-  @Input() editMode: any;
-  @Input() position?: number = null;
+  readonly editMode = input<any>(undefined);
+  readonly position = input<number>(null);
 
-  @Output() hasChanges = new EventEmitter<boolean>();
-  @Output() handleBitSets = new EventEmitter<Field>();
-  @Output() handleBitSetsOfComposite = new EventEmitter<HandleBitSet>();
+  readonly hasChanges = output<boolean>();
+  readonly handleBitSets = output<Field>();
+  readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  formControl!: FormControl;
-  form!: FormGroup;
+  formControl!: UntypedFormControl;
+  form!: UntypedFormGroup;
   hideField: boolean = null;
 
-  public editor = ClassicEditor;
-
-  constructor(private rootFormGroup: FormGroupDirective, private formControlService: FormControlService) {
-  }
 
   ngOnInit() {
-    if (this.position !== null) {
-      this.form = this.rootFormGroup.control.controls[this.position] as FormGroup;
+    const position = this.position();
+    if (position !== null) {
+      this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
     } else {
       this.form = this.rootFormGroup.control;
     }
     // console.log(this.form);
 
-    this.formControl = this.form.get(this.fieldData.name) as FormControl;
+    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
     // console.log(this.formControl);
 
     if(this.fieldData.form.dependsOn) {
@@ -46,7 +50,7 @@ export class RichTextFieldComponent implements OnInit {
         value => {
           this.enableDisableField(value, this.fieldData.form.dependsOn.value);
         },
-        error => {console.log(error)}
+        error => {console.log(error);}
       );
     }
   }
@@ -54,7 +58,7 @@ export class RichTextFieldComponent implements OnInit {
   /** Handle Arrays --> **/
 
   fieldAsFormArray() {
-    return this.formControl as unknown as FormArray;
+    return this.formControl as unknown as UntypedFormArray;
   }
 
   push() {
