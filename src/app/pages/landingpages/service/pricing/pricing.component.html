@@ -1,3 +1,4 @@
+@let resourcePayload = payload();
 <div class="uk-section uk-section-primary uk-preserve-color">
   <div class="uk-container uk-container-large uk-margin-large-top uk-margin-large-bottom">
 
@@ -9,7 +10,7 @@
         @for (paymentCategory of resourcePayload?.extras?.['paymentCategories']; track paymentCategory) {
           <div class="uk-margin-medium-bottom">
             <div class="el-item uk-margin-auto uk-width-large uk-card uk-card-large uk-card-body uk-margin-remove-first-child uk-flex uk-flex-column uk-flex-between"
-              [ngClass]="{'uk-card-default': paymentCategory.paymentHighlight != 'true', 'uk-card-primary': paymentCategory.paymentHighlight === 'true'}">
+              [class.uk-card-default]="paymentCategory.paymentHighlight != 'true'" [class.uk-card-primary]="paymentCategory.paymentHighlight === 'true'">
               <div>
                 <h5 class="el-meta uk-margin-top uk-margin-remove-bottom uk-text-center">{{paymentCategory['paymentTitle']}}</h5>
                 @if (paymentCategory['paymentSubtitle']) {

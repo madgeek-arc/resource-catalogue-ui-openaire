@@ -99,6 +99,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   }
 
   onOutletLoaded(component) {
+    // The fields are for OverviewComponent, which is still Eager. The OnPush tabs read [routerOutletData] instead.
     if (!this.ready) {
       this.timeOut(300).then(() => this.onOutletLoaded(component));
       return;

@@ -67,6 +67,6 @@
     </div>
   </div>
 
-  <router-outlet (activate)="onActivate($event)" />
+  <router-outlet [routerOutletData]="serviceBundle" (activate)="onActivate($event)" />
 </div>
 }

@@ -51,6 +51,8 @@ export class ServiceDashboardComponent implements OnInit {
   }
 
   onActivate(componentReference) {
+    // For the pages that are still Eager. The OnPush history pages read [routerOutletData] instead, which also
+    // reaches them when the bundle loads after they are shown.
     componentReference.serviceBundle = this.serviceBundle;
   }
 
