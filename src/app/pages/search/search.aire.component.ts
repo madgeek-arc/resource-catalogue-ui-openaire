@@ -1,295 +1,135 @@
-import { Component, ElementRef, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
-import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
-import {URLParameter} from '../../entities/url-parameter';
+import {ChangeDetectionStrategy, Component, computed, inject, linkedSignal, signal} from '@angular/core';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import {FormsModule} from '@angular/forms';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {EMPTY, Subject, zip} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {Paging} from '../../entities/paging';
-import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
-import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
-import {UserSessionService} from '../../services/user-session.service';
 import {ComparisonService} from '../../services/comparison.service';
+import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
+import {canEditOpenAireServices} from '../../shared/can-edit-openaire-services';
+import {HelpContentComponent, AsideHelpContentComponent} from '../../shared/reusablecomponents/help-content.component';
+import {ReadMoreComponent} from '../../shared/reusablecomponents/read-more.component';
+import {EmailModalComponent} from '../../shared/email-modal/email-modal.component';
 import {environment} from '../../../environments/environment';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {fromEvent, zip} from 'rxjs';
-import { HelpContentComponent, AsideHelpContentComponent } from '../../shared/reusablecomponents/help-content.component';
-import { NgClass } from '@angular/common';
-import { ReadMoreComponent } from '../../shared/reusablecomponents/read-more.component';
-import { EmailModalComponent } from '../../shared/email-modal/email-modal.component';
-
+import {checkSelectedFacets, paging, SearchParameters} from './search-state';
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.aire.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [HelpContentComponent, NgClass, ReactiveFormsModule, FormsModule, ReadMoreComponent, RouterLink, AsideHelpContentComponent, EmailModalComponent]
+  selector: 'app-search',
+  templateUrl: './search.aire.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [HelpContentComponent, FormsModule, ReadMoreComponent, RouterLink, AsideHelpContentComponent, EmailModalComponent]
 })
+export class SearchAireComponent {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private resourceService = inject(ResourceService);
+  readonly comparisonService = inject(ComparisonService);
 
-export class SearchAireComponent implements OnInit {
-  fb = inject(UntypedFormBuilder);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  resourceService = inject(ResourceService);
-  session = inject(UserSessionService);
-  comparisonService = inject(ComparisonService);
+  readonly projectName = environment.projectName;
+  readonly canAddOrEditService = canEditOpenAireServices();
+  readonly listViewActive = true;
+  /** Never filled on this page, so the email modal and its button stay unused. */
+  readonly serviceIdsArray: string[] = [];
+  readonly errorMessage: string | null = null;
+  readonly pageSize = 10;
 
+  /** The search box; what the user types reaches the URL after a 500 ms pause. */
+  readonly searchQuery = signal('');
+  readonly typed = new Subject<string>();
 
-  readonly searchInput = viewChild<ElementRef>('searchInput');
+  /** The filters of the current query string, which the page edits before it navigates. */
+  private parameters = SearchParameters.fromQueryParams({});
+  private readonly parameters$ = this.route.queryParams.pipe(
+    map(params => this.parameters = SearchParameters.fromQueryParams(params)),
+    shareReplay({bufferSize: 1, refCount: true})
+  );
 
-  public projectName = environment.projectName;
-  canAddOrEditService: boolean;
-  myProviders:  Provider[] = [];
-  searchResults: Paging<Service | Datasource> = null;
-  private sortFacets = new PremiumSortFacetsPipe();
-  advanced = false;
-  listViewActive = true;
-  public showSearchFieldDropDown = true;
-  public searchFields: string[] = ['name', 'description', 'tagline', 'user value', 'user base', 'use cases'];
-  public serviceIdsArray: string[] = [];
-  vocabularies: Vocabulary[] = null;
-  searchQuery: string = null;
+  /** True while the vocabularies load again, on every query; they name the portfolios and user types. */
+  readonly loading = signal(false);
+  readonly vocabularies = toSignal(this.parameters$.pipe(
+    tap(() => this.loading.set(true)),
+    switchMap(() => zip(
+      this.resourceService.getNewVocabulariesByType('Users'),
+      this.resourceService.getNewVocabulariesByType('Portfolios')
+    ).pipe(catchError(error => {
+      console.log(error);
+      return EMPTY;
+    }))),
+    map(([users, portfolios]) => users.concat(portfolios)),
+    tap(() => this.loading.set(false))
+  ), {initialValue: null as Vocabulary[] | null});
 
-  // Paging
-  pages: number[] = [];
-  offset = 2;
-  pageSize = 10;
-  totalPages = 0;
-  currentPage = 0;
+  /** The results of the current query, with the facet values it selects ticked; null before the first. */
+  readonly results = toSignal(this.parameters$.pipe(
+    switchMap(parameters => this.resourceService.searchWithDatasource([...parameters.all]).pipe(
+      map(results => {
+        if (results.results.length > 0) {
+          new PremiumSortFacetsPipe().transform(results.facets, ['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation']);
+        }
+        checkSelectedFacets(results.facets, parameters);
+        return results;
+      }),
+      catchError(() => EMPTY)
+    ))
+  ), {initialValue: null as Paging<Service | Datasource> | null});
 
-  public searchForm: UntypedFormGroup;
-  errorMessage: string;
-  filtersMobileShown = false;
-  urlParameters: URLParameter[] = [];
-  loading = false;
-
+  readonly paging = computed(() => {
+    const results = this.results();
+    return results ? paging(results.total, results.from, this.pageSize) : {pages: [] as number[], totalPages: 0, currentPage: 0};
+  });
+  /** Moves at once on previous and next, before the next results arrive, as before. */
+  readonly currentPage = linkedSignal(() => this.paging().currentPage);
 
   constructor() {
-    const fb = this.fb;
-
-    this.searchForm = fb.group({query: [''], searchFields: ['']});
-  }
-
-  ngOnInit() {
-    this.listViewActive = true;
-    this.route.queryParams.subscribe(params => {
-      this.urlParameters.splice(0, this.urlParameters.length);
-      for (const obj in params) {
-        if (params.hasOwnProperty(obj)) {
-          const urlParameter: URLParameter = {
-            key: obj,
-            values: params[obj].split(',')
-          };
-          this.urlParameters.push(urlParameter);
-        }
-      }
-
-      this.loading = true;
-      zip(
-        this.resourceService.getNewVocabulariesByType('Users'),
-        this.resourceService.getNewVocabulariesByType('Portfolios')).subscribe(
-          value => {
-            this.vocabularies = value[0].concat(value[1]);
-            this.loading = false;
-          },
-          error => {console.log(error);}
-      );
-
-      this.resourceService.searchWithDatasource(this.urlParameters).subscribe(
-        searchResults => {
-          this.updateSearchResultsSnippets(searchResults);
-        },
-      error => {},
-      () => {this.paginationInit();}
-      );
-    });
-
-    fromEvent(this.searchInput().nativeElement, 'keyup').pipe(
-      map((event: any) => { // get value
-        return event.target.value;
-      })
-      // , filter(res => res.length > 2) // if character length greater then 2
-      , debounceTime(500) // Time in milliseconds between key events
-      , distinctUntilChanged() // If previous query is different from current
-    ).subscribe((text: string) => {
-        this.updateURLParameters('query', text);
-        this.navigateUsingParameters();
-      }
-    );
-
-    this.canAddOrEditService = false;
-    this.session.ready$.subscribe(user => {
-      if (user && this.projectName === 'OpenAIRE Catalogue') {
-        this.myProviders = [];
-        this.resourceService.getMyServiceProviders().subscribe(
-          res => this.myProviders = res,
-          error => console.log(error),
-          () => {
-            this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-          }
-        );
-      }
+    this.typed.pipe(debounceTime(500), distinctUntilChanged(), takeUntilDestroyed()).subscribe(text => {
+      this.parameters.set('query', text);
+      this.navigate();
     });
   }
 
-  updateSearchResultsSnippets(searchResults: Paging<Service | Datasource>) {
-    // INITIALISATIONS
-    this.errorMessage = null;
-    this.searchResults = searchResults;
-
-    if (this.searchResults.results.length > 0 ) {
-      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus', 'resourceOrganisation']);
-    }
-    // update form values using URLParameters
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === 'searchFields') {
-        this.searchForm.get('searchFields').setValue(urlParameter.values[0]);
-      }
-      if (urlParameter.key === 'query') {
-        this.searchForm.get('query').setValue(urlParameter.values[0]);
-      } else if (urlParameter.key === 'advanced') {
-        this.advanced = urlParameter.values[0] === 'true';
-      } else {
-        for (const facet of this.searchResults.facets) {
-          if (facet.field === urlParameter.key) {
-            for (const parameterValue of urlParameter.values) {
-              for (const facetValue of facet.values) {
-                if (parameterValue === facetValue.value) {
-                  facetValue.isChecked = true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    // this.updateURLParameters('quantity', this.pageSize);
+  private navigate() {
+    return this.router.navigate(['/search/'], {queryParams: this.parameters.toQueryParams()});
   }
-
-  paginationInit() {
-    let addToEndCounter = 0;
-    let addToStartCounter = 0;
-    this.totalPages = Math.ceil(this.searchResults.total/this.pageSize);
-    this.currentPage = Math.ceil(this.searchResults.from/this.pageSize) + 1;
-    this.pages = [];
-    for (let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
-      if ( i < 1 ) { addToEndCounter++; }
-      if ( i > this.totalPages ) { addToStartCounter++; }
-      if ((i >= 1) && (i <= this.totalPages)) {
-        this.pages.push(i);
-      }
-    }
-    for ( let i = 0; i < addToEndCounter; ++i ) {
-      if (this.pages.length < this.totalPages) {
-        this.pages.push(this.pages.length + 1);
-      }
-    }
-    for ( let i = 0; i < addToStartCounter; ++i ) {
-      if (this.pages[0] > 1) {
-        this.pages.unshift(this.pages[0] - 1 );
-      }
-    }
-  }
-
-  updateURLParameters(key, value) {
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === key) {
-        urlParameter.values = [value];
-        return;
-      }
-    }
-    this.urlParameters.push({key, values: [value]});
-  }
-
-  navigateUsingParameters() {
-    const map: { [name: string]: string } = {};
-    for (const urlParameter of this.urlParameters) {
-      map[urlParameter.key] = urlParameter.values.join(',');
-    }
-    return this.router.navigate([`/search/`], {queryParams: map});
-  }
-
 
   goToPage(page: number) {
-    this.updateURLParameters('from', (page) * this.pageSize);
-    return this.navigateUsingParameters();
+    this.parameters.set('from', page * this.pageSize);
+    return this.navigate();
   }
 
   previousPage() {
-    if (this.currentPage > 0) {
-      this.currentPage--;
-      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
-      this.navigateUsingParameters();
+    if (this.currentPage() > 0) {
+      this.currentPage.update(page => page - 1);
+      this.parameters.set('from', (this.currentPage() - 1) * this.pageSize);
+      this.navigate();
     }
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
-      this.navigateUsingParameters();
+    if (this.currentPage() < this.paging().totalPages) {
+      this.currentPage.update(page => page + 1);
+      this.parameters.set('from', (this.currentPage() - 1) * this.pageSize);
+      this.navigate();
     }
   }
 
-  showFiltersMobile(show: boolean) {
-    this.filtersMobileShown = show;
+  clearSelections(event: Event, category: string) {
+    this.parameters.remove(category);
+    return this.navigate();
   }
 
-
-  clearSelections(e, category: string) {
-    let categoryIndex = 0;
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === category) {
-        this.urlParameters.splice(categoryIndex, 1);
-      }
-      categoryIndex++;
-    }
-    return this.navigateUsingParameters();
-  }
-
-  onSelection(e, category: string, value: string) {
-    if (e.target.checked) {
-      this.addParameterToURL(category, value);
+  onSelection(event: Event, category: string, value: string) {
+    if ((event.target as HTMLInputElement).checked) {
+      this.parameters.addValue(category, value);
     } else {
-      let categoryIndex = 0;
-      for (const urlParameter of this.urlParameters) {
-        if (urlParameter.key === category) {
-          const valueIndex = urlParameter.values.indexOf(value, 0);
-          if (valueIndex > -1) {
-            urlParameter.values.splice(valueIndex, 1);
-            if (urlParameter.values.length === 0) {
-              this.urlParameters.splice(categoryIndex, 1);
-            }
-          }
-        }
-        categoryIndex++;
-      }
+      this.parameters.removeValue(category, value);
     }
-    return this.navigateUsingParameters();
-  }
-
-  private addParameterToURL(category: string, value: string) {
-    let foundCategory = false;
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === category) {
-        foundCategory = true;
-        const valueIndex = urlParameter.values.indexOf(value, 0);
-        if (valueIndex < 0) {
-          urlParameter.values.push(value);
-          this.updateURLParameters('from', 0);
-        }
-      }
-    }
-    if (!foundCategory) {
-      this.updateURLParameters('from', 0);
-      const newParameter: URLParameter = {
-        key: category,
-        values: [value]
-      };
-      this.urlParameters.push(newParameter);
-    }
+    return this.navigate();
   }
 
   getVocabularyName(id: string) {
-    return this.vocabularies.find(vocabulary => vocabulary.id === id)?.name;
+    return this.vocabularies()?.find(vocabulary => vocabulary.id === id)?.name;
   }
-
 }

@@ -1,263 +1,133 @@
-import { Component, ElementRef, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {ChangeDetectionStrategy, Component, computed, inject, linkedSignal, signal} from '@angular/core';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import {FormsModule} from '@angular/forms';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {EMPTY, Subject} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
 import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
-import {URLParameter} from '../../../entities/url-parameter';
 import {Paging} from '../../../entities/paging';
-import {PremiumSortFacetsPipe} from '../../../shared/pipes/premium-sort.pipe';
 import {DatasourceService} from '../../../services/datasource.service';
+import {PremiumSortFacetsPipe} from '../../../shared/pipes/premium-sort.pipe';
+import {HelpContentComponent, AsideHelpContentComponent} from '../../../shared/reusablecomponents/help-content.component';
+import {ReadMoreComponent} from '../../../shared/reusablecomponents/read-more.component';
 import {environment} from '../../../../environments/environment';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {fromEvent} from 'rxjs';
-import { HelpContentComponent, AsideHelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
-import { NgClass } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ReadMoreComponent } from '../../../shared/reusablecomponents/read-more.component';
-
+import {checkSelectedFacets, paging, SearchParameters} from '../search-state';
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './datasourceSearch.component.html',
-    providers: [DatasourceService],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [HelpContentComponent, NgClass, ReactiveFormsModule, FormsModule, RouterLink, AsideHelpContentComponent, ReadMoreComponent]
+  selector: 'app-search',
+  templateUrl: './datasourceSearch.component.html',
+  providers: [DatasourceService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [HelpContentComponent, FormsModule, RouterLink, AsideHelpContentComponent, ReadMoreComponent]
 })
+export class DatasourceSearchComponent {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private datasourceService = inject(DatasourceService);
 
-export class DatasourceSearchComponent implements OnInit {
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  datasourceService = inject(DatasourceService);
+  readonly projectName = environment.projectName;
+  readonly errorMessage: string | null = null;
+  readonly loading = false;
+  readonly pageSize = 20;
 
+  /** The search box and the selects; each takes the value of the query string when results arrive. */
+  readonly searchQuery = signal('');
+  readonly eoscDatasourceType = signal('');
+  readonly orderField = signal('registrationdate');
+  readonly order = signal('desc');
+  readonly typed = new Subject<string>();
 
-  readonly searchInput = viewChild<ElementRef>('searchInput');
+  /** The filters of the current query string, which the page edits before it navigates. */
+  private parameters = SearchParameters.fromQueryParams({});
 
-  public projectName = environment.projectName;
-  searchResults: Paging<DatasourceDetails> = null;
-  datasourceTypes: DatasourceTypes = null;
-  private sortFacets = new PremiumSortFacetsPipe();
-  searchQuery: string = null;
-  eoscDatasourceType = '';
-  orderField = 'registrationdate';
-  order = 'desc';
+  readonly datasourceTypes = toSignal(this.datasourceService.getDatasourceTypes().pipe(
+    catchError(error => {
+      console.log(error);
+      return EMPTY;
+    })
+  ), {initialValue: null as DatasourceTypes | null});
 
-  // Paging
-  pages: number[] = [];
-  offset = 2;
-  pageSize = 20;
-  totalPages = 0;
-  currentPage = 0;
-
-  errorMessage: string;
-  filtersMobileShown = false;
-  urlParameters: URLParameter[] = [];
-  loading = false;
-
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.urlParameters.splice(0, this.urlParameters.length);
-      for (const obj in params) {
-        if (params.hasOwnProperty(obj)) {
-          const urlParameter: URLParameter = {
-            key: obj,
-            values: params[obj].split(',')
-          };
-          this.urlParameters.push(urlParameter);
+  /** The results of the current query, with the facet values it selects ticked; null before the first. */
+  readonly results = toSignal(this.route.queryParams.pipe(
+    map(params => this.parameters = SearchParameters.fromQueryParams(params)),
+    switchMap(parameters => this.datasourceService.getDatasources([...parameters.all]).pipe(
+      map(results => {
+        if (results.results.length > 0) {
+          new PremiumSortFacetsPipe().transform(results.facets, ['portfolios', 'users', 'trl', 'lifeCycleStatus']);
         }
-      }
+        this.showParameters(parameters);
+        checkSelectedFacets(results.facets, parameters);
+        return results;
+      }),
+      catchError(() => EMPTY)
+    ))
+  ), {initialValue: null as Paging<DatasourceDetails> | null});
 
-      this.datasourceService.getDatasources(this.urlParameters).subscribe(
-        searchResults => {
-          this.updateSearchResultsSnippets(searchResults);
-        },
-      error => {},
-      () => {this.paginationInit();}
-      );
+  readonly paging = computed(() => {
+    const results = this.results();
+    return results ? paging(results.total, results.from, this.pageSize) : {pages: [] as number[], totalPages: 0, currentPage: 0};
+  });
+  /** Moves at once on previous and next, before the next results arrive, as before. */
+  readonly currentPage = linkedSignal(() => this.paging().currentPage);
+
+  constructor() {
+    this.typed.pipe(debounceTime(500), distinctUntilChanged(), takeUntilDestroyed()).subscribe(text => {
+      this.parameters.set('query', text);
+      this.navigate();
     });
-
-    this.datasourceService.getDatasourceTypes().subscribe(
-      res => {this.datasourceTypes = res;},
-      error => {console.log(error);}
-    );
-
-    fromEvent(this.searchInput().nativeElement, 'keyup').pipe(
-      map((event: any) => { // get value
-        return event.target.value;
-      })
-      // , filter(res => res.length > 2) // if character length greater then 2
-      , debounceTime(500) // Time in milliseconds between key events
-      , distinctUntilChanged() // If previous query is different from current
-    ).subscribe((text: string) => {
-        this.updateURLParameters('query', text);
-        this.navigateUsingParameters();
-      }
-    );
   }
 
-  updateSearchResultsSnippets(searchResults: Paging<DatasourceDetails>) {
-    // INITIALISATIONS
-    this.errorMessage = null;
-    this.searchResults = searchResults;
-
-    if (this.searchResults.results.length > 0 ) {
-      this.sortFacets.transform(this.searchResults.facets,['portfolios', 'users', 'trl', 'lifeCycleStatus']);
-    }
-    // update form values using URLParameters
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === 'eoscDatasourceType') {
-        this.eoscDatasourceType = urlParameter.values[0];
-      }
-      if (urlParameter.key === 'orderField') {
-        this.orderField = urlParameter.values[0];
-      }
-      if (urlParameter.key === 'order') {
-        this.order = urlParameter.values[0];
-      }
-      if (urlParameter.key === 'query') {
-        this.searchQuery = urlParameter.values[0];
-      } else {
-        for (const facet of this.searchResults.facets) {
-          if (facet.field === urlParameter.key) {
-            for (const parameterValue of urlParameter.values) {
-              for (const facetValue of facet.values) {
-                if (parameterValue === facetValue.value) {
-                  facetValue.isChecked = true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    // this.updateURLParameters('quantity', this.pageSize);
-  }
-
-  paginationInit() {
-    let addToEndCounter = 0;
-    let addToStartCounter = 0;
-    this.totalPages = Math.ceil(this.searchResults.total/this.pageSize);
-    this.currentPage = Math.ceil(this.searchResults.from/this.pageSize) + 1;
-    this.pages = [];
-    for (let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
-      if ( i < 1 ) { addToEndCounter++; }
-      if ( i > this.totalPages ) { addToStartCounter++; }
-      if ((i >= 1) && (i <= this.totalPages)) {
-        this.pages.push(i);
-      }
-    }
-    for ( let i = 0; i < addToEndCounter; ++i ) {
-      if (this.pages.length < this.totalPages) {
-        this.pages.push(this.pages.length + 1);
-      }
-    }
-    for ( let i = 0; i < addToStartCounter; ++i ) {
-      if (this.pages[0] > 1) {
-        this.pages.unshift(this.pages[0] - 1 );
+  private showParameters(parameters: SearchParameters) {
+    const fields = [['eoscDatasourceType', this.eoscDatasourceType], ['orderField', this.orderField], ['order', this.order], ['query', this.searchQuery]] as const;
+    for (const [key, field] of fields) {
+      const value = parameters.value(key);
+      if (value !== undefined) {
+        field.set(value);
       }
     }
   }
 
-  updateURLParameters(key, value) {
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === key) {
-        urlParameter.values = [value];
-        return;
-      }
-    }
-    this.urlParameters.push({key, values: [value]});
+  private navigate() {
+    return this.router.navigate(['/datasources/search'], {queryParams: this.parameters.toQueryParams()});
   }
-
-  navigateUsingParameters() {
-    const map: { [name: string]: string } = {};
-    for (const urlParameter of this.urlParameters) {
-      map[urlParameter.key] = urlParameter.values.join(',');
-    }
-    return this.router.navigate([`/datasources/search`], {queryParams: map});
-  }
-
 
   goToPage(page: number) {
-    this.updateURLParameters('from', (page) * this.pageSize);
-    return this.navigateUsingParameters();
+    this.parameters.set('from', page * this.pageSize);
+    return this.navigate();
   }
 
   previousPage() {
-    if (this.currentPage > 0) {
-      this.currentPage--;
-      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
-      this.navigateUsingParameters();
+    if (this.currentPage() > 0) {
+      this.currentPage.update(page => page - 1);
+      this.parameters.set('from', (this.currentPage() - 1) * this.pageSize);
+      this.navigate();
     }
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
-      this.navigateUsingParameters();
+    if (this.currentPage() < this.paging().totalPages) {
+      this.currentPage.update(page => page + 1);
+      this.parameters.set('from', (this.currentPage() - 1) * this.pageSize);
+      this.navigate();
     }
-  }
-
-  showFiltersMobile(show: boolean) {
-    this.filtersMobileShown = show;
   }
 
   onSelect(key: string, value: string) {
-    console.log(key);
-    console.log(value);
-    this.updateURLParameters(key, value);
-    return this.navigateUsingParameters();
+    this.parameters.set(key, value);
+    return this.navigate();
   }
 
-  clearSelections(e, category: string) {
-    let categoryIndex = 0;
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === category) {
-        this.urlParameters.splice(categoryIndex, 1);
-      }
-      categoryIndex++;
-    }
-    return this.navigateUsingParameters();
+  clearSelections(event: Event, category: string) {
+    this.parameters.remove(category);
+    return this.navigate();
   }
 
-  onSelection(e, category: string, value: string) {
-    if (e.target.checked) {
-      this.addParameterToURL(category, value);
+  onSelection(event: Event, category: string, value: string) {
+    if ((event.target as HTMLInputElement).checked) {
+      this.parameters.addValue(category, value);
     } else {
-      let categoryIndex = 0;
-      for (const urlParameter of this.urlParameters) {
-        if (urlParameter.key === category) {
-          const valueIndex = urlParameter.values.indexOf(value, 0);
-          if (valueIndex > -1) {
-            urlParameter.values.splice(valueIndex, 1);
-            if (urlParameter.values.length === 0) {
-              this.urlParameters.splice(categoryIndex, 1);
-            }
-          }
-        }
-        categoryIndex++;
-      }
+      this.parameters.removeValue(category, value);
     }
-    return this.navigateUsingParameters();
+    return this.navigate();
   }
-
-  private addParameterToURL(category: string, value: string) {
-    let foundCategory = false;
-    for (const urlParameter of this.urlParameters) {
-      if (urlParameter.key === category) {
-        foundCategory = true;
-        const valueIndex = urlParameter.values.indexOf(value, 0);
-        if (valueIndex < 0) {
-          urlParameter.values.push(value);
-          this.updateURLParameters('from', 0);
-        }
-      }
-    }
-    if (!foundCategory) {
-      this.updateURLParameters('from', 0);
-      const newParameter: URLParameter = {
-        key: category,
-        values: [value]
-      };
-      this.urlParameters.push(newParameter);
-    }
-  }
-
 }

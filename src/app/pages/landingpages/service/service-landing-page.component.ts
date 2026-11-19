@@ -5,7 +5,7 @@ import {EMPTY, Observable, of, zip} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import {Service, URL} from '../../../entities/eic-model';
 import {UiVocabulary} from '../../../entities/dynamic-form-model';
-import {UserSessionService} from '../../../services/user-session.service';
+import {canEditOpenAireServices} from '../../../shared/can-edit-openaire-services';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
 import {ServiceLandingData} from './service-landing-data';
@@ -21,7 +21,6 @@ export class ServiceLandingPageComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private resourceService = inject(ResourceService);
-  private session = inject(UserSessionService);
 
   readonly projectName = environment.projectName;
   readonly cleanView = this.router.url.includes('/changeLogClean');
@@ -58,16 +57,7 @@ export class ServiceLandingPageComponent {
   ), {initialValue: tabOf(this.router.url)});
 
   /** Only OpenAIRE's own members may edit a service from here. */
-  readonly canAddOrEditService = toSignal(this.session.ready$.pipe(
-    switchMap(user => user && this.projectName === 'OpenAIRE Catalogue'
-      ? this.resourceService.getMyServiceProviders().pipe(
-        map(providers => providers.some(provider => provider.id === 'openaire')),
-        catchError(error => {
-          console.log(error.error);
-          return of(false);
-        }))
-      : of(false))
-  ), {initialValue: false});
+  readonly canAddOrEditService = canEditOpenAireServices();
 
   readonly showLogo = signal(false);
 
