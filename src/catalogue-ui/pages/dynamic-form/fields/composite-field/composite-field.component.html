@@ -1,39 +1,39 @@
 @if (form) {
-  <form [formGroup]="form" class="{{fieldData.form.display?.cssClasses}}" [ngClass]="{'uk-hidden clear-style': (hideField || !fieldData.form.display.visible)}">
-    <!--  {{fieldData.name | json}}-->
-    @if (fieldData.label?.text) {
-      <div class="uk-form-label uk-margin-bottom {{fieldData.label?.cssClasses}}"
-        [attr.for]="fieldData.name" style="{{fieldData.label.style}}">
-        {{fieldData.label?.text + (fieldData.form.mandatory ? ' (*)' : '')}}
+  <form [formGroup]="form" class="{{fieldData().form.display?.cssClasses}}" [class.uk-hidden]="(hideField() || !fieldData().form.display.visible)" [class.clear-style]="(hideField() || !fieldData().form.display.visible)">
+    <!--  {{fieldData().name | json}}-->
+    @if (fieldData().label?.text) {
+      <div class="uk-form-label uk-margin-bottom {{fieldData().label?.cssClasses}}"
+        [attr.for]="fieldData().name" style="{{fieldData().label.style}}">
+        {{fieldData().label?.text + (fieldData().form.mandatory ? ' (*)' : '')}}
       </div>
     }
-    @if (fieldData.form.description?.showLess) {
-      @if (fieldData.form.description.text) {
-        <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
-          style="{{fieldData.form.description.style}}">
-          <read-more-text [maxHeight]="46" [text]="fieldData.form.description.text" />
+    @if (fieldData().form.description?.showLess) {
+      @if (fieldData().form.description.text) {
+        <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
+          style="{{fieldData().form.description.style}}">
+          <read-more-text [maxHeight]="46" [text]="fieldData().form.description.text" />
         </div>
       }
     } @else {
-      @if (fieldData.form.description?.text) {
-        <div [innerHTML]="fieldData.form.description.text" style="{{fieldData.form.description.style}}"
-          class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}">
+      @if (fieldData().form.description?.text) {
+        <div [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}"
+          class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}">
         </div>
       }
     }
-    @if (fieldData.typeInfo.multiplicity) {
+    @if (fieldData().typeInfo.multiplicity) {
       <div>
         <div uk-sortable="handle: .uk-sortable-handle" (moved)="movedElement($event)">
           @for (control of fieldAsFormArray().controls; track control; let i = $index) {
             <div id="{{i}}" class="uk-width-expand uk-grid">
               <div [formGroupName]="i" class="uk-width-9-10 uk-margin-medium-left"
-                [ngClass]="{'uk-margin-bottom formGroupElement': $safeNavigationMigration(fieldData.form.display?.hasBorder)}">
+                [class.uk-margin-bottom]="$safeNavigationMigration(fieldData().form.display?.hasBorder)" [class.formGroupElement]="$safeNavigationMigration(fieldData().form.display?.hasBorder)">
                 @if (fieldAsFormArray().length > 1) {
                   <div class="uk-flex uk-flex-right">
                     <span class="uk-sortable-handle uk-text-center" uk-icon="icon: move"></span>
                   </div>
                 }
-                @for (control of fieldData?.subFields; track control; let j = $index) {
+                @for (control of fieldData()?.subFields; track control; let j = $index) {
                   <div>
                     <div class="">
                       @if (control.typeInfo.type === 'composite') {
@@ -127,7 +127,7 @@
                   </div>
                   <div class="uk-padding-small">
                     <a class="remove-element"
-                      (click)="remove(i); updateBitSetOfComposite(fieldData, i); unsavedChangesPrompt();">
+                      (click)="remove(i); updateBitSetOfComposite(fieldData(), i); unsavedChangesPrompt();">
                       <span class="material-icons">clear</span>
                     </a>
                   </div>
@@ -138,15 +138,15 @@
         </div>
         @if (form.enabled) {
           <div class="uk-width-9-10 uk-text-center uk-margin-top uk-margin-bottom">
-            <a class="add-new-element uk-flex uk-flex-middle uk-flex-center" (click)="pushComposite(fieldData)">
-              <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData.label.text"></span>
+            <a class="add-new-element uk-flex uk-flex-middle uk-flex-center" (click)="pushComposite(fieldData())">
+              <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData().label.text"></span>
             </a>
           </div>
         }
       </div>
     } @else {
-      <div class="uk-width-1-1 uk-display-inline-block" [ngClass]="{'uk-margin-bottom formGroupElement': $safeNavigationMigration(fieldData.form.display?.hasBorder)}">
-        @for (control of fieldData?.subFields; track control; let j = $index) {
+      <div class="uk-width-1-1 uk-display-inline-block" [class.uk-margin-bottom]="$safeNavigationMigration(fieldData().form.display?.hasBorder)" [class.formGroupElement]="$safeNavigationMigration(fieldData().form.display?.hasBorder)">
+        @for (control of fieldData()?.subFields; track control; let j = $index) {
           <div>
             <div class="">
               @if (control.typeInfo.type === 'composite') {
@@ -232,13 +232,13 @@
         }
       </div>
     }
-    @if (fieldData.form.suggestion?.text) {
+    @if (fieldData().form.suggestion?.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}"
-          [innerHTML]="fieldData.form.suggestion.text">
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+          [innerHTML]="fieldData().form.suggestion.text">
         </div>
       </div>
     }
   </form>
 }
-<!--<pre>{{fieldData | json}}</pre>-->
+<!--<pre>{{fieldData() | json}}</pre>-->

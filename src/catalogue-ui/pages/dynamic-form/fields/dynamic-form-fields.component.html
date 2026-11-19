@@ -1,72 +1,72 @@
-@if (form) {
-  <ng-container [formGroup]="form">
-    @if (fieldData.form.display?.visible) {
+@if (form()) {
+  <ng-container [formGroup]="form()">
+    @if (fieldData().form.display?.visible) {
       <div>
         <div class="">
           <div class="uk-form-controls">
-            @if (fieldData.typeInfo.type === 'composite') {
+            @if (fieldData().typeInfo.type === 'composite') {
               <div>
-                <app-composite-field [fieldData]="fieldData" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
+                <app-composite-field [fieldData]="fieldData()" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                   [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'chooseOne') {
+            @if (fieldData().typeInfo.type === 'chooseOne') {
               <div>
-                <app-choose-one [fieldData]="fieldData" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
+                <app-choose-one [fieldData]="fieldData()" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                   (hasChanges)="unsavedChangesPrompt()" (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'string' || fieldData.typeInfo.type === 'url' ||
-              fieldData.typeInfo.type === 'email' || fieldData.typeInfo.type === 'phone' ||
-              fieldData.typeInfo.type === 'double') {
+            @if (fieldData().typeInfo.type === 'string' || fieldData().typeInfo.type === 'url' ||
+              fieldData().typeInfo.type === 'email' || fieldData().typeInfo.type === 'phone' ||
+              fieldData().typeInfo.type === 'double') {
               <div>
-                <app-string-url-email-field [fieldData]="fieldData"
+                <app-string-url-email-field [fieldData]="fieldData()"
                   (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'number') {
+            @if (fieldData().typeInfo.type === 'number') {
               <div>
-                <app-number-field [fieldData]="fieldData" (hasChanges)="unsavedChangesPrompt()"
+                <app-number-field [fieldData]="fieldData()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'vocabulary' || fieldData.typeInfo.type === 'select') {
+            @if (fieldData().typeInfo.type === 'vocabulary' || fieldData().typeInfo.type === 'select') {
               <div>
-                <app-vocabulary-field [fieldData]="fieldData" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
+                <app-vocabulary-field [fieldData]="fieldData()" [subVocabularies]="subVocabularies()" [vocabularies]="vocabularies()"
                   (handleBitSets)="handleBitsetOfChildren($event)" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'largeText') {
+            @if (fieldData().typeInfo.type === 'largeText') {
               <div>
-                <app-large-text-field [fieldData]="fieldData" (hasChanges)="unsavedChangesPrompt()"
+                <app-large-text-field [fieldData]="fieldData()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'radio') {
+            @if (fieldData().typeInfo.type === 'radio') {
               <div>
-                <app-radio-button-field [fieldData]="fieldData" [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
+                <app-radio-button-field [fieldData]="fieldData()" [readonly]="readonly()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'richText') {
+            @if (fieldData().typeInfo.type === 'richText') {
               <div>
-                <app-rich-text-field [fieldData]="fieldData" (hasChanges)="unsavedChangesPrompt()"
+                <app-rich-text-field [fieldData]="fieldData()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
-            @if (fieldData.typeInfo.type === 'date') {
+            @if (fieldData().typeInfo.type === 'date') {
               <div>
-                <app-date-field [fieldData]="fieldData" (hasChanges)="unsavedChangesPrompt()"
+                <app-date-field [fieldData]="fieldData()" (hasChanges)="unsavedChangesPrompt()"
                   (handleBitSets)="handleBitsetOfChildren($event)"
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>

@@ -1,21 +1,25 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
 import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
     selector: 'app-date-field',
     templateUrl: 'date-field.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass, DpDatePickerModule]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, DpDatePickerModule]
 })
 
 export class DateFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
+  private destroyRef = inject(DestroyRef);
 
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
   readonly position = input<number>(null);
 
@@ -25,7 +29,7 @@ export class DateFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-  hideField: boolean = null;
+  readonly hideField = signal<boolean>(null);
 
   ngOnInit() {
     const position = this.position();
@@ -34,15 +38,16 @@ export class DateFieldComponent implements OnInit {
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
+    this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
+    this.refresh(this.formControl);
 
-    if (this.fieldData.form.dependsOn) {
-      // console.log(this.fieldData.form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData.form.dependsOn.name).value, this.fieldData.form.dependsOn.value);
+    if (this.fieldData().form.dependsOn) {
+      // console.log(this.fieldData().form.dependsOn);
+      this.enableDisableField(this.form.get(this.fieldData().form.dependsOn.name).value, this.fieldData().form.dependsOn.value);
 
-      this.form.get(this.fieldData.form.dependsOn.name).valueChanges.subscribe(
+      this.form.get(this.fieldData().form.dependsOn.name).valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
         value => {
-          this.enableDisableField(value, this.fieldData.form.dependsOn.value);
+          this.enableDisableField(value, this.fieldData().form.dependsOn.value);
         },
         error => {console.log(error);}
       );
@@ -54,7 +59,7 @@ export class DateFieldComponent implements OnInit {
     } else if (typeof value === 'string' && value.includes('T')) { //parse Date
       this.formControl.setValue(value.split('T')[0]);
     }
-    // console.log(this.fieldData);
+    // console.log(this.fieldData());
     // console.log(this.form);
     // console.log(this.formControl);
   }
@@ -98,11 +103,11 @@ export class DateFieldComponent implements OnInit {
   enableDisableField(value, enableValue) {
     if (value?.toString() == enableValue) {
       this.formControl.enable();
-      this.hideField = false;
+      this.hideField.set(false);
     } else {
       this.formControl.disable();
       this.formControl.reset();
-      this.hideField = true;
+      this.hideField.set(true);
       // maybe add this if the remaining empty fields are a problem
       // (this.formControl as unknown as FormArray).clear();
     }

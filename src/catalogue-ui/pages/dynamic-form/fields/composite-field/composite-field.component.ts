@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, FormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
-import { NgClass } from '@angular/common';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
 import { ChooseOneComponent } from '../choose-one-composite/choose-one.component';
 import { VocabularyFieldComponent } from '../dropdown-field/vocabulary-field.component';
@@ -18,15 +19,18 @@ import { RadioGridFieldComponent } from '../radio-grid-field/radio-grid-field.co
 @Component({
     selector: 'app-composite-field',
     templateUrl: './composite-field.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, ChooseOneComponent, VocabularyFieldComponent, StringFieldComponent, NumberFieldComponent, CheckboxFieldComponent, LargeTextFieldComponent, RadioButtonFieldComponent, RichTextFieldComponent, DateFieldComponent, RadioGridFieldComponent]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, ReadMoreTextComponent, ChooseOneComponent, VocabularyFieldComponent, StringFieldComponent, NumberFieldComponent, CheckboxFieldComponent, LargeTextFieldComponent, RadioButtonFieldComponent, RichTextFieldComponent, DateFieldComponent, RadioGridFieldComponent]
 })
 
 export class CompositeFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
+  private destroyRef = inject(DestroyRef);
   private formService = inject(FormControlService);
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly vocabularies = input<Map<string, object[]>>(undefined);
   readonly subVocabularies = input<Map<string, object[]>>(null);
   readonly editMode = input<any>(undefined);
@@ -38,24 +42,25 @@ export class CompositeFieldComponent implements OnInit {
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   form: UntypedFormGroup;
-  hideField: boolean = null;
+  readonly hideField = signal<boolean>(null);
 
   ngOnInit() {
-    // console.log(this.fieldData.name);
+    // console.log(this.fieldData().name);
     const position = this.position();
     if (position !== null) {
       // console.log(this.rootFormGroup.control.controls[this.position]);
-      // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData.name));
-      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData.name) as UntypedFormGroup;
+      // console.log(this.rootFormGroup.control.controls[this.position].get(this.fieldData().name));
+      this.form = this.rootFormGroup.control.controls[position].get(this.fieldData().name) as UntypedFormGroup;
     } else {
-      this.form = this.rootFormGroup.control.get(this.fieldData.name) as UntypedFormGroup;
+      this.form = this.rootFormGroup.control.get(this.fieldData().name) as UntypedFormGroup;
       // console.log(this.form);
     }
+    this.refresh(this.form);
     // console.log(this.form);
-    if(this.fieldData.form.dependsOn) { // specific changes for composite field, maybe revise it
-      this.enableDisableField(this.rootFormGroup.form.get(this.fieldData.form.dependsOn.name).value);
+    if(this.fieldData().form.dependsOn) { // specific changes for composite field, maybe revise it
+      this.enableDisableField(this.rootFormGroup.form.get(this.fieldData().form.dependsOn.name).value);
 
-      this.rootFormGroup.form.get(this.fieldData.form.dependsOn.name).valueChanges.subscribe(value => {
+      this.rootFormGroup.form.get(this.fieldData().form.dependsOn.name).valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
         this.enableDisableField(value);
       });
     }
@@ -165,12 +170,12 @@ export class CompositeFieldComponent implements OnInit {
     // console.log(value);
     if (value === 'Applicable' || value === 'Yes') {
       this.form.enable();
-      this.hideField = false;
+      this.hideField.set(false);
 
     } else {
       this.form.disable();
       this.form.reset();
-      this.hideField = true;
+      this.hideField.set(true);
       // maybe add this if the remaining empty fields are a problem
       // (this.formControl as unknown as FormArray).clear();
 

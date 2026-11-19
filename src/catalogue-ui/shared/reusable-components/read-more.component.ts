@@ -1,16 +1,16 @@
 /**
  * Created by stefania on 4/6/17.
  */
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, viewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, signal, viewChild } from '@angular/core';
 
 @Component({
     selector: 'read-more',
     template: `
-    <div [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight()+'px' : 'auto'" #readMoreDiv>
+    <div [class.collapsed]="isCollapsed()" [style.height]="isCollapsed() ? maxHeight()+'px' : 'auto'" #readMoreDiv>
       <ng-content />
     </div>
-    @if (isCollapsable) {
-      <a (click)="isCollapsed =! isCollapsed">View {{isCollapsed ? 'more' : 'less'}}...</a>
+    @if (isCollapsable()) {
+      <a (click)="isCollapsed.set(!isCollapsed())">View {{isCollapsed() ? 'more' : 'less'}}...</a>
     }
     `,
     styles: [`
@@ -18,7 +18,7 @@ import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, Simp
       overflow: hidden;
     }
   `],
-    changeDetection: ChangeDetectionStrategy.Eager
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReadMoreComponent implements AfterContentInit {
   elementRef = inject(ElementRef);
@@ -29,16 +29,16 @@ export class ReadMoreComponent implements AfterContentInit {
   readonly maxHeight = input(100);
   readonly readMoreDiv = viewChild<ElementRef>('readMoreDiv');
   //set these to false to get the height of the expended container
-  public isCollapsed = false;
-  public isCollapsable = false;
+  readonly isCollapsed = signal(false);
+  readonly isCollapsable = signal(false);
 
   ngAfterContentInit() {
     setTimeout(_ => {
       const currentHeight = this.readMoreDiv().nativeElement.offsetHeight;
       //collapsable only if the contents make container exceed the max height
       if (currentHeight > this.maxHeight() || currentHeight === 0) {
-        this.isCollapsed = true;
-        this.isCollapsable = true;
+        this.isCollapsed.set(true);
+        this.isCollapsable.set(true);
       } else {
       }
     }, 200);
@@ -48,12 +48,12 @@ export class ReadMoreComponent implements AfterContentInit {
 @Component({
     selector: 'read-more-text',
     template: `
-    <div [innerHTML]="text()" [class.collapsed]="isCollapsed" [style.height]="isCollapsed ? maxHeight()+'px' : 'auto'"
+    <div [innerHTML]="text()" [class.collapsed]="isCollapsed()" [style.height]="isCollapsed() ? maxHeight()+'px' : 'auto'"
       #readMoreDiv>
       <!--{{text}}-->
     </div>
-    @if (isCollapsable) {
-      <a (click)="isCollapsed =! isCollapsed">View {{isCollapsed ? 'more' : 'less'}}...</a>
+    @if (isCollapsable()) {
+      <a (click)="isCollapsed.set(!isCollapsed())">View {{isCollapsed() ? 'more' : 'less'}}...</a>
     }
     `,
     // The application builder never exits after a build when two components in one file have identical inline
@@ -65,7 +65,7 @@ export class ReadMoreComponent implements AfterContentInit {
       overflow: hidden;
     }
   `],
-    changeDetection: ChangeDetectionStrategy.Eager
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReadMoreTextComponent extends ReadMoreComponent implements OnChanges, AfterViewInit {
 
