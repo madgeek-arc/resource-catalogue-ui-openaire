@@ -1,3 +1,6 @@
+@let ready = data() !== null;
+@let portfolioVoc = data()?.portfolioVoc;
+@let response = data()?.response;
 @if (!ready) {
   <div class="uk-margin-large-top" style="height: 400px">
     <div class="loader-big"></div>

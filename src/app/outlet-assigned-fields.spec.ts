@@ -5,14 +5,13 @@ import {isSignal, Type} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {ActivatedRoute, provideRouter} from '@angular/router';
 import {describe, expect, it} from 'vitest';
-import {OverviewComponent} from './pages/landingpages/service/overview/overview.component';
 import {ProviderInfoComponent} from './pages/provider/dashboard/provider-Info/provider-info.component';
 import {ProviderHomeComponent} from './pages/provider/dashboard/provider-home/provider-home.component';
 import {ProviderServicesComponent} from './pages/provider/dashboard/provider-services/provider-services.component';
 
 /**
  * Some pages get their data from the parent page: the parent's (activate) handler on its router outlet assigns
- * fields of the routed component (ServiceLandingPageComponent.onOutletLoaded, ProviderDashboardComponent.onActivate).
+ * fields of the routed component (ProviderDashboardComponent.onActivate).
  * Those fields must stay plain properties. A signal input there is replaced by the plain value, and the page then
  * fails as soon as it calls it (the signal-input migration cannot see these untyped assignments).
  * A page that moves to OnPush reads ROUTER_OUTLET_DATA instead (see pages/outlet-data-pages.spec.ts), under a
@@ -20,9 +19,6 @@ import {ProviderServicesComponent} from './pages/provider/dashboard/provider-ser
  */
 describe('fields assigned by a router outlet', () => {
   it.each([
-    [OverviewComponent, 'vocabularies'],
-    [OverviewComponent, 'resourcePayload'],
-    [OverviewComponent, 'relatedServices'],
     [ProviderHomeComponent, 'providerBundle'],
     [ProviderInfoComponent, 'providerBundle'],
     [ProviderServicesComponent, 'providerBundle'],

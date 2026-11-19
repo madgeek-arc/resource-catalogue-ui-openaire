@@ -1,3 +1,7 @@
+@let ready = data() !== null;
+@let userVoc = data()?.userVoc;
+@let portfolios = data()?.portfolios;
+@let portfoliosMap = data()?.portfoliosMap;
 @if (!ready) {
   <div class="uk-margin-large-top" style="height: 400px">
     <div class="loader-big"></div>
@@ -24,7 +28,7 @@
 }
 
 
-@if (ready && portfoliosMap.size === portfolios.length + 1) {
+@if (portfoliosMap?.size === portfolios?.length + 1) {
   <div class="uk-section uk-section-default uk-margin-xlarge-bottom">
     <div class="uk-container uk-container-medium">
       <h1>Which service is right for you?</h1>

@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
 import {ROUTER_OUTLET_DATA} from '@angular/router';
-import {Service} from '../../../../entities/eic-model';
+import {ServiceLandingData} from '../service-landing-data';
 
 @Component({
   selector: 'app-service-landing-page-pricing',
@@ -8,8 +8,8 @@ import {Service} from '../../../../entities/eic-model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PricingComponent {
-  /** ServiceLandingPageComponent passes the service through its router outlet; null until it has loaded. */
-  readonly payload = inject(ROUTER_OUTLET_DATA) as Signal<Service | null>;
+  private data = inject(ROUTER_OUTLET_DATA) as Signal<ServiceLandingData | null>;
+  readonly payload = computed(() => this.data()?.service ?? null);
 
   goto(url: string) {
     window.open(url, '_blank');

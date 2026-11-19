@@ -1,3 +1,6 @@
+@let resourcePayload = payload();
+@let vocabularies = vocabularyMap();
+@let relatedServices = related();
 @if (resourcePayload && resourcePayload['extras']) {
   <div class="uk-section uk-section-primary uk-preserve-color uk-padding-remove" uk-height-viewport="offset-bottom: 30">
     <div class="uk-width-1-1">
@@ -315,7 +318,7 @@
                   <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
                     <h4>Used in</h4>
                   </div>
-                  <div id="slideShow" class="uk-position-relative" (beforeitemshow)="dragSlide('slideShow')"
+                  <div id="slideShow" class="uk-position-relative" (beforeitemshow)="dragSlide()"
                     uk-slideshow="ratio: 16:9; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
                     <ul class="uk-slideshow-items">
                       @for (useCase of resourcePayload.extras['useCasesExtras']; track useCase) {
@@ -345,7 +348,7 @@
                     <div class="uk-position-bottom-center uk-position-small">
                       <ul class="uk-dotnav">
                         @for (useCase of  resourcePayload.extras['useCasesExtras']; track useCase; let i = $index) {
-                          <li [ngClass]="{'uk-active': slide === i}">
+                          <li [class.uk-active]="slide() === i">
                             <a (click)="showSlide('slideShow', i)">Item {{i}}</a>
                           </li>
                         }
@@ -397,7 +400,7 @@
               <div class="uk-section uk-section-primary uk-section-large uk-preserve-color uk-hidden@m">
                 <div class="uk-container">
                   <h1 class="uk-margin-medium-bottom">Use Cases</h1>
-                  <div id="slideShowMobile" class="uk-position-relative" (beforeitemshow)="dragSlideMobile('slideShowMobile')"
+                  <div id="slideShowMobile" class="uk-position-relative" (beforeitemshow)="dragSlideMobile()"
                     uk-slideshow="ratio: 12:4; min-height: 750; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
                     <ul class="uk-slideshow-items">
                       @for (useCase of resourcePayload.extras['useCasesExtras']; track useCase) {
@@ -429,7 +432,7 @@
                     <div class="uk-position-bottom-center uk-position-small">
                       <ul class="uk-dotnav">
                         @for (useCase of resourcePayload.extras['useCasesExtras']; track useCase; let i = $index) {
-                          <li [ngClass]="{'uk-active': slideMobile === i}">
+                          <li [class.uk-active]="slideMobile() === i">
                             <a (click)="showSlideMobile('slideShowMobile', i)">Item {{i}}</a>
                           </li>
                         }

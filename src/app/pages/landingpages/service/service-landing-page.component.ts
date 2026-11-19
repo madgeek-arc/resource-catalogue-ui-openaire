@@ -1,140 +1,99 @@
-import { Component, HostListener, OnDestroy, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Subscription, zip } from 'rxjs';
-import { Provider, Service, URL } from '../../../entities/eic-model';
-import { UserSessionService } from '../../../services/user-session.service';
-import { ResourceService } from '../../../services/resource.service';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {EMPTY, Observable, of, zip} from 'rxjs';
+import {catchError, filter, map, switchMap} from 'rxjs/operators';
+import {Service, URL} from '../../../entities/eic-model';
+import {UiVocabulary} from '../../../entities/dynamic-form-model';
+import {UserSessionService} from '../../../services/user-session.service';
+import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
-import { NgClass } from '@angular/common';
+import {ServiceLandingData} from './service-landing-data';
 
 @Component({
-    selector: 'app-service-landing-page',
-    templateUrl: './service-static-landing-page.component.html',
-    // styleUrls: ['../landing-page.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgClass, RouterLink, RouterOutlet]
+  selector: 'app-service-landing-page',
+  templateUrl: './service-static-landing-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, RouterOutlet],
+  host: {'(window:scroll)': 'checkNavbarSticky()'}
 })
-export class ServiceLandingPageComponent implements OnInit, OnDestroy {
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  resourceService = inject(ResourceService);
+export class ServiceLandingPageComponent {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private resourceService = inject(ResourceService);
   private session = inject(UserSessionService);
 
+  readonly projectName = environment.projectName;
+  readonly cleanView = this.router.url.includes('/changeLogClean');
 
-  private subscriptions: Subscription[] = [];
-  projectName = environment.projectName;
-  vocabularies: Map<string, object[]>;
-  id: string;
-  ready = false;
+  readonly id = toSignal(this.route.params.pipe(map(params => params['id'] as string)));
 
-  path: string;
-  myProviders:  Provider[] = [];
-  canAddOrEditService = false;
+  /**
+   * The service, the vocabularies and the related services, passed to the tabs through the router outlet.
+   * Stays on the previous service while the next one loads; a failed related-services call shows none.
+   */
+  readonly data = toSignal(this.route.params.pipe(
+    switchMap(params => zip(
+      this.resourceService.getServiceOrDatasource(params['id']) as Observable<Service>,
+      this.resourceService.getUiVocabularies() as unknown as Observable<Map<string, UiVocabulary[]>>
+    ).pipe(
+      switchMap(([service, vocabularies]) => {
+        service.extras['openAireChangeLog'].reverse();
+        return this.relatedServices(service).pipe(map(relatedServices => ({service, vocabularies, relatedServices})));
+      }),
+      catchError(error => {
+        console.log(error);
+        return EMPTY;
+      })
+    ))
+  ), {initialValue: null as ServiceLandingData | null});
 
-  relatedServices: Service[] = null;
-  resourcePayload: Service = null;
-  cleanView = false;
-  showLogo = false;
+  readonly ready = computed(() => this.data() !== null);
+  readonly payload = computed(() => this.data()?.service ?? null);
 
-  ngOnInit() {
-    this.ready = false;
-    this.cleanView = this.router.url.includes('/changeLogClean');
+  /** The tab in the menu to highlight. */
+  readonly path = toSignal(this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(event => tabOf(event.urlAfterRedirects))
+  ), {initialValue: tabOf(this.router.url)});
 
-    this.subscriptions.push(
-      this.route.params.subscribe(
-        params => {
-          this.id = params['id'];
-          this.subscriptions.push(
-            zip(this.resourceService.getServiceOrDatasource(this.id),
-              this.resourceService.getUiVocabularies()).subscribe(
-              next => {
-                  this.resourcePayload = next[0];
-                  this.resourcePayload.extras['openAireChangeLog'].reverse();
-                  this.vocabularies = next[1];
-                  if(this.resourcePayload.relatedResources == null
-                    || this.resourcePayload.relatedResources.length === 0
-                    || (this.resourcePayload.relatedResources.length === 1 && this.resourcePayload.relatedResources[0] === null)) {
-                    this.relatedServices = [];
-                    this.ready = true;
-                  }
-                  else {
-                    this.resourceService.getServicesByIdArray(this.resourcePayload.relatedResources).subscribe(
-                      next => {this.relatedServices = next;},
-                      error => {console.log(error);},
-                      () => {this.ready = true;}
-                    );
-                  }
-                },
-              error => {console.log(error);},
-              () => {}
-            )
-          );
-        }
-      )
+  /** Only OpenAIRE's own members may edit a service from here. */
+  readonly canAddOrEditService = toSignal(this.session.ready$.pipe(
+    switchMap(user => user && this.projectName === 'OpenAIRE Catalogue'
+      ? this.resourceService.getMyServiceProviders().pipe(
+        map(providers => providers.some(provider => provider.id === 'openaire')),
+        catchError(error => {
+          console.log(error.error);
+          return of(false);
+        }))
+      : of(false))
+  ), {initialValue: false});
+
+  readonly showLogo = signal(false);
+
+  private relatedServices(service: Service): Observable<Service[]> {
+    const ids = service.relatedResources;
+    if (ids == null || ids.length === 0 || (ids.length === 1 && ids[0] === null)) {
+      return of([]);
+    }
+    return this.resourceService.getServicesByIdArray(ids).pipe(
+      catchError(error => {
+        console.log(error);
+        return of([]);
+      })
     );
-
-    this.canAddOrEditService = false;
-    this.session.ready$.subscribe(user => {
-      if (user && this.projectName === 'OpenAIRE Catalogue') {
-        this.myProviders = [];
-        this.resourceService.getMyServiceProviders().subscribe(
-          res => this.myProviders = res,
-          error => console.log(error.error),
-          () => {
-            this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
-          }
-        );
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    for (let i = 0; i < this.subscriptions.length; i++) {
-      this.subscriptions[i].unsubscribe();
-    }
-  }
-
-  timeOut(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  onOutletLoaded(component) {
-    // The fields are for OverviewComponent, which is still Eager. The OnPush tabs read [routerOutletData] instead.
-    if (!this.ready) {
-      this.timeOut(300).then(() => this.onOutletLoaded(component));
-      return;
-    } else {
-      component.resourcePayload = this.resourcePayload;
-      component.vocabularies = this.vocabularies;
-      component.relatedServices = this.relatedServices;
-    }
-    if (window.location.toString().includes('overview')) {
-      this.path = 'overview';
-    } else if (window.location.toString().includes('subscriptions')) {
-      this.path = 'subscriptions';
-    } else if (window.location.toString().includes('resourcesAndSupport')) {
-      this.path = 'resourcesAndSupport';
-    } else if (window.location.toString().includes('miscellaneous')) {
-      this.path = 'miscellaneous';
-    }
-
-    return;
   }
 
   goto(url: URL) {
     window.open(url.toString(), '_blank');
   }
 
-  protected readonly document = document;
-
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    this.checkNavbarSticky();
-  }
-
   checkNavbarSticky() {
     const navbar = document.getElementById('myNavBar');
-    this.showLogo = navbar && navbar.classList.contains('uk-active') && navbar.classList.contains('uk-navbar-sticky');
+    this.showLogo.set(!!navbar && navbar.classList.contains('uk-active') && navbar.classList.contains('uk-navbar-sticky'));
   }
+}
 
+function tabOf(url: string): string | undefined {
+  return ['overview', 'subscriptions', 'resourcesAndSupport', 'miscellaneous'].find(tab => url.includes(tab));
 }

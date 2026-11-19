@@ -1,3 +1,6 @@
+@let users = userList();
+@let portfolios = portfolioList();
+@let resources = resourceMap();
 <div class="uk-section-muted uk-cover-container uk-section uk-padding-remove-vertical uk-flex uk-flex-middle" uk-scrollspy="target: [uk-scrollspy-class]; cls: uk-animation-fade; delay: false;" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(-100px + 80vh);">
 
   <video src="assets/media/video/OpenAIRECatalogue-video-hd.mp4" loop="" autoplay="" muted="" playsinline="" uk-cover="" style="height: 100%; width: 100%"></video>
@@ -54,7 +57,7 @@
         <div class="uk-position-bottom-center uk-position-small">
           <ul class="uk-dotnav">
             @for (user of users; track user; let i = $index) {
-              <li [ngClass]="{'uk-active': slide === i}">
+              <li [class.uk-active]="slide() === i">
                 <a (click)="showSlide(i)">Item {{i}}</a>
               </li>
             }
@@ -99,7 +102,7 @@
         <div class="uk-position-bottom-center uk-position-small">
           <ul class="uk-dotnav">
             @for (user of users; track user; let i = $index) {
-              <li [ngClass]="{'uk-active': slideMobile === i}">
+              <li [class.uk-active]="slideMobile() === i">
                 <a (click)="showSlideMobile(i)">Item {{i}}</a>
               </li>
             }

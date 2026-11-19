@@ -4,6 +4,7 @@ import {ActivatedRoute, provideRouter, Router, RouterOutlet} from '@angular/rout
 import {of} from 'rxjs';
 import {afterEach, beforeEach, describe, expect, it} from 'vitest';
 import {ProviderBundle} from '../entities/eic-model';
+import {OverviewComponent} from './landingpages/service/overview/overview.component';
 import {MiscellaneousComponent} from './landingpages/service/miscellaneous/miscellaneous.component';
 import {PricingComponent} from './landingpages/service/pricing/pricing.component';
 import {ChangeLogComponent} from './landingpages/service/resourcesAndSupport/changeLog/change-log.component';
@@ -31,14 +32,26 @@ const providerBundle = {id: 'openaire', loggingInfo: log, metadata: {registeredB
 const serviceBundle = {id: 's1', service: {resourceOrganisation: 'openaire'}, loggingInfo: log, metadata: {registeredBy: 'Ada', registeredAt: '1700000000000'}};
 const service = {
   id: 's1',
+  tagline: 'Plan your data',
+  targetUsers: ['researchers'],
+  relatedResources: ['s2'],
   termsOfUse: 'https://example.org/terms',
   extras: {
     openAireChangeLog: [{changeLogVersion: '2.0', changeDate: '1700000000000', logs: [{type: 'Fixed', value: 'A bug'}, {type: 'Other', value: 'Misc'}]}],
+    benefits: [],
+    features: [],
+    useCasesExtras: [],
     paymentCategories: [
       {paymentTitle: 'Free', paymentHighlight: 'false'},
       {paymentTitle: 'Pro', paymentHighlight: 'true'}
     ]
   }
+};
+// What ServiceLandingPageComponent passes to its tabs.
+const landing = {
+  service,
+  vocabularies: {'Target user': [{id: 'researchers', name: 'Researchers'}]},
+  relatedServices: [{id: 's2', name: 'Zenodo', tagline: 'Research shared', extras: {}}]
 };
 
 describe('pages that get their data through the router outlet', () => {
@@ -78,13 +91,23 @@ describe('pages that get their data through the router outlet', () => {
     const {show, text} = await setUp(MiscellaneousComponent);
     expect(text().trim()).toBe('');
 
-    show(service);
+    show(landing);
     expect(text()).toContain('Important operational and legal service details');
+  });
+
+  it('shows the overview with vocabulary names and related services once the data arrives', async () => {
+    const {show, text} = await setUp(OverviewComponent);
+    expect(text().trim()).toBe('');
+
+    show(landing);
+    expect(text()).toContain('Plan your data');
+    expect(text()).toContain('Researchers');
+    expect(text()).toContain('Zenodo');
   });
 
   it('highlights the pricing plans marked as highlighted', async () => {
     const {root, show} = await setUp(PricingComponent);
-    show(service);
+    show(landing);
     const cards = [...root.querySelectorAll('.uk-card')];
     expect(cards.map(card => card.classList.contains('uk-card-primary'))).toEqual([false, true]);
     expect(cards.map(card => card.classList.contains('uk-card-default'))).toEqual([true, false]);
@@ -95,7 +118,7 @@ describe('pages that get their data through the router outlet', () => {
     [ResourcesAndSupportComponent],
   ] as [Type<unknown>][])('%o colours the change-log badges by type', async component => {
     const {root, show} = await setUp(component);
-    show(service);
+    show(landing);
     const badges = [...root.querySelectorAll<HTMLElement>('.badge-success')];
     expect(badges.map(badge => [badge.textContent!.trim(), badge.style.backgroundColor])).toEqual([
       ['Fixed', 'rgb(240, 80, 110)'],
@@ -105,12 +128,12 @@ describe('pages that get their data through the router outlet', () => {
 
   it('hides the change-log links in the clean view', async () => {
     const full = await setUp(ChangeLogComponent, 'changeLog');
-    full.show(service);
+    full.show(landing);
     const linksInFullView = full.root.querySelectorAll('a, button').length;
     TestBed.resetTestingModule();
 
     const clean = await setUp(ChangeLogComponent, 'changeLogClean');
-    clean.show(service);
+    clean.show(landing);
     expect(clean.root.querySelectorAll('a, button').length).toBeLessThan(linksInFullView);
   });
 });

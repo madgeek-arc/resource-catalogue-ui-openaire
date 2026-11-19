@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, inject, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
 import {RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
 import {SlicePipe, DatePipe} from '@angular/common';
-import {Service, URL} from '../../../../entities/eic-model';
+import {URL} from '../../../../entities/eic-model';
 import {changeLogBadgeColor} from '../changelog-badge';
+import {ServiceLandingData} from '../service-landing-data';
 
 @Component({
   selector: 'app-service-landing-page-resources-and-support',
@@ -11,8 +12,8 @@ import {changeLogBadgeColor} from '../changelog-badge';
   imports: [RouterLink, SlicePipe, DatePipe]
 })
 export class ResourcesAndSupportComponent {
-  /** ServiceLandingPageComponent passes the service through its router outlet; null until it has loaded. */
-  readonly payload = inject(ROUTER_OUTLET_DATA) as Signal<Service | null>;
+  private data = inject(ROUTER_OUTLET_DATA) as Signal<ServiceLandingData | null>;
+  readonly payload = computed(() => this.data()?.service ?? null);
 
   readonly badgeColor = changeLogBadgeColor;
 
