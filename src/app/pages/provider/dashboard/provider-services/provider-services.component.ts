@@ -1,250 +1,183 @@
-import {Component, OnInit, ChangeDetectionStrategy, inject} from '@angular/core';
-import {Bundle, Datasource, ProviderBundle, Service, Vocabulary} from '../../../../entities/eic-model';
-import {ProviderService} from '../../../../services/provider.service';
+import {ChangeDetectionStrategy, Component, computed, inject, linkedSignal, signal, Signal} from '@angular/core';
+import {toObservable, toSignal} from '@angular/core/rxjs-interop';
+import {ActivatedRoute, Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {DatePipe} from '@angular/common';
+import {NgSelectComponent, NgOptionComponent} from '@ng-select/ng-select';
+import {BehaviorSubject, combineLatest, EMPTY, zip} from 'rxjs';
+import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
+import {Bundle, Datasource, ProviderBundle, Service} from '../../../../entities/eic-model';
 import {Paging} from '../../../../entities/paging';
-import {URLParameter} from '../../../../entities/url-parameter';
-import {zip} from 'rxjs';
+import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgSelectComponent, NgOptionComponent } from '@ng-select/ng-select';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgClass, DatePipe } from '@angular/common';
+import {paging, SearchParameters} from '../../../search/search-state';
 
 declare let UIkit: any;
 
 @Component({
-    selector: 'app-provider-services',
-    templateUrl: 'provider-services.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgSelectComponent, ReactiveFormsModule, FormsModule, NgOptionComponent, NgClass, RouterLink, DatePipe]
+  selector: 'app-provider-services',
+  templateUrl: 'provider-services.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgSelectComponent, FormsModule, NgOptionComponent, RouterLink, DatePipe]
 })
-
-export class ProviderServicesComponent implements OnInit {
+export class ProviderServicesComponent {
   private providerService = inject(ProviderService);
   private resourceService = inject(ResourceService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
+  /** ProviderDashboardComponent passes the provider through its router outlet; null until it has loaded. */
+  readonly bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
 
-  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
-  // so it stays a plain field (a signal input would be overwritten by that assignment).
-  providerBundle: ProviderBundle = null;
+  readonly pageSize = 9;
+  readonly loadingMessage = '';
 
-  services: Paging<Bundle<Service | Datasource>> = null;
-  selectedService: Bundle<Service | Datasource> = null;
-  vocabularies: Vocabulary[] = null;
-  resourceState: Vocabulary[] = null;
-  queryParams: URLParameter[] = [];
+  /** The filters, shown in the selects; each takes the value of the query string when it has one. */
+  readonly order = signal<string | null>(null);
+  readonly activeStatus = signal<string | null>(null);
+  readonly status = signal<string | null>(null);
 
-  // Paging
-  pages: number[] = [];
-  offset = 2;
-  pageSize = 9;
-  totalPages = 0;
-  currentPage = 0;
+  readonly selectedService = signal<Bundle<Service | Datasource> | null>(null);
+  readonly showLoader = signal(false);
+  readonly errorMessage = signal<string | null>(null);
 
-  // Filter
-  order: string = null;
-  activeStatus: string = null;
-  status: string = null;
+  /** The filters of the current query string, which the page edits before it navigates. */
+  private parameters = SearchParameters.fromQueryParams({});
+  private readonly reload = new BehaviorSubject<void>(undefined);
 
-  showLoader = false;
-  errorMessage: string;
-  loadingMessage = '';
+  /** The provider's services for the current filters and page; null until they have loaded. */
+  readonly services = toSignal(combineLatest([
+    toObservable(this.bundle).pipe(map(bundle => bundle?.provider.id), filter(id => !!id), distinctUntilChanged()),
+    this.route.queryParams.pipe(map(params => this.readParameters(params))),
+    this.reload
+  ]).pipe(
+    switchMap(([providerId, parameters]) => this.providerService.getServicesOfProvider(providerId, [...parameters.all]).pipe(
+      catchError(error => {
+        console.error(error);
+        return EMPTY;
+      })
+    ))
+  ), {initialValue: null as Paging<Bundle<Service | Datasource>> | null});
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      let found = false;
-      this.queryParams.splice(0, this.queryParams.length);
-      for (const obj in params) {
-        if (params.hasOwnProperty(obj)) {
-          if (obj === 'quantity')
-            found = true;
-          const urlParameter: URLParameter = {
-            key: obj,
-            values: params[obj].split(',')
-          };
-          this.queryParams.push(urlParameter);
-        }
+  readonly paging = computed(() => {
+    const services = this.services();
+    return services ? paging(services.total, services.from, this.pageSize) : {pages: [] as number[], totalPages: 0, currentPage: 0};
+  });
+  /** Moves at once on previous and next, before the next page arrives, as before. */
+  readonly currentPage = linkedSignal(() => this.paging().currentPage);
+
+  readonly vocabularies = toSignal(zip(
+    this.resourceService.getNewVocabulariesByType('Users'),
+    this.resourceService.getNewVocabulariesByType('Portfolios'),
+    this.resourceService.getNewVocabulariesByType('Resource state')
+  ).pipe(
+    map(([users, portfolios, resourceState]) => ({names: users.concat(portfolios), resourceState})),
+    catchError(error => {
+      console.log(error);
+      return EMPTY;
+    })
+  ), {initialValue: null});
+
+  private readParameters(params: Record<string, string>): SearchParameters {
+    const parameters = SearchParameters.fromQueryParams(params);
+    if (parameters.value('quantity') === undefined) {
+      parameters.set('quantity', this.pageSize);
+    }
+    const shown = [['active', this.activeStatus], ['status', this.status], ['order', this.order]] as const;
+    for (const [key, field] of shown) {
+      const value = parameters.value(key);
+      if (value !== undefined) {
+        field.set(value);
       }
-      if (!found) {
-        this.updateURLParameters('quantity', this.pageSize);
-      }
-      this.setFilters();
-      this.getResources();
-    });
-
-    zip(
-      this.resourceService.getNewVocabulariesByType('Users'),
-      this.resourceService.getNewVocabulariesByType('Portfolios'),
-      this.resourceService.getNewVocabulariesByType('Resource state')).subscribe(
-      value => {
-        this.vocabularies = value[0].concat(value[1]);
-        this.resourceState = value[2];
-        // this.loading = false;
-      },
-      error => {console.log(error);}
-    );
+    }
+    return this.parameters = parameters;
   }
 
-  getResources(){
-    this.providerService.getServicesOfProvider(this.providerBundle.provider.id, this.queryParams).subscribe(
-      res => {this.services = res;},
-      error => console.error(error),
-      () => this.paginationInit()
-    );
-  }
-
-  /** Handle query params and navigation ---------------> **/
-  updateURLParameters(key: string, value) {
+  /** Called by the template too; null removes the parameter, and ng-select option objects give their value. */
+  updateURLParameters(key: string, value: unknown) {
     if (value instanceof Object) {
       value = value['$ngOptionValue'];
     }
     if (value === null) {
-      this.queryParams = this.queryParams.filter(params => {return params.key != key;});
-      return;
+      this.parameters.remove(key);
+    } else {
+      this.parameters.set(key, value as string);
     }
-    for (const urlParameter of this.queryParams) {
-      if (urlParameter.key === key) {
-        urlParameter.values = [value];
-        return;
-      }
-    }
-    this.queryParams.push({key, values: [value]});
   }
 
-  navigateUsingParameters() {
-    const map: { [name: string]: string } = {};
-    for (const urlParameter of this.queryParams) {
-      map[urlParameter.key] = urlParameter.values.join(',');
-    }
-    return this.router.navigate(['/provider/openaire/dashboard/services'], {queryParams: map});
-  }
-  /** <--------------- Handle query params and navigation **/
-
-  /** Pagination and Paging navigation -------------> **/
-  paginationInit() {
-    let addToEndCounter = 0;
-    let addToStartCounter = 0;
-    this.totalPages = Math.ceil(this.services.total/this.pageSize);
-    this.currentPage = Math.ceil(this.services.from/this.pageSize) + 1;
-    this.pages = [];
-    for (let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
-      if ( i < 1 ) { addToEndCounter++; }
-      if ( i > this.totalPages ) { addToStartCounter++; }
-      if ((i >= 1) && (i <= this.totalPages)) {
-        this.pages.push(i);
-      }
-    }
-    for ( let i = 0; i < addToEndCounter; ++i ) {
-      if (this.pages.length < this.totalPages) {
-        this.pages.push(this.pages.length + 1);
-      }
-    }
-    for ( let i = 0; i < addToStartCounter; ++i ) {
-      if (this.pages[0] > 1) {
-        this.pages.unshift(this.pages[0] - 1 );
-      }
-    }
+  private navigate() {
+    return this.router.navigate([], {relativeTo: this.route, queryParams: this.parameters.toQueryParams()});
   }
 
   goToPage(page: number) {
-    this.updateURLParameters('from', (page) * this.pageSize);
-    return this.navigateUsingParameters();
+    this.updateURLParameters('from', page * this.pageSize);
+    return this.navigate();
   }
 
   previousPage() {
-    if (this.currentPage > 0) {
-      this.currentPage--;
-      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
-      this.navigateUsingParameters();
+    if (this.currentPage() > 0) {
+      this.currentPage.update(page => page - 1);
+      this.updateURLParameters('from', (this.currentPage() - 1) * this.pageSize);
+      this.navigate();
     }
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateURLParameters('from', (this.currentPage-1)*this.pageSize);
-      this.navigateUsingParameters();
+    if (this.currentPage() < this.paging().totalPages) {
+      this.currentPage.update(page => page + 1);
+      this.updateURLParameters('from', (this.currentPage() - 1) * this.pageSize);
+      this.navigate();
     }
   }
 
   filterSelection(key: string, value: string | string[]) {
-    if (key === 'order' && value === null)
+    if (key === 'order' && value === null) {
       this.updateURLParameters('orderField', null);
-
+    }
     this.updateURLParameters(key, value);
     this.updateURLParameters('from', '0');
-    return this.navigateUsingParameters();
+    return this.navigate();
   }
-
-  /** <------------- Pagination and Paging navigation **/
-
-  /** Set filters -------------> **/
-
-  setFilters() {
-    for (let i = 0; i < this.queryParams.length; i++) {
-      if (this.queryParams[i].key === 'active') {
-        this.activeStatus = this.queryParams[i].values[0];
-        continue;
-      }
-      if (this.queryParams[i].key === 'status') {
-        this.status = this.queryParams[i].values[0];
-        continue;
-      }
-      if (this.queryParams[i].key === 'order') {
-        this.order = this.queryParams[i].values[0];
-      }
-    }
-  }
-
-  /** <------------- Set filters  **/
 
   toggleServiceActive(bundle: Bundle<Service | Datasource>) {
     if (bundle.status === 'pending' || bundle.status === 'rejected') {
-      this.errorMessage = `You cannot activate a ${bundle.status}.`;
+      this.errorMessage.set(`You cannot activate a ${bundle.status}.`);
       window.scrollTo(0, 0);
       return;
     }
-    this.showLoader = true;
-    this.resourceService.publishService(bundle.id, !bundle.active).subscribe(
-      res => {},
-      error => {
-        this.showLoader = false;
-        this.errorMessage = 'Something went bad. ' + error.error.error ;
+    this.showLoader.set(true);
+    this.resourceService.publishService(bundle.id, !bundle.active).subscribe({
+      error: error => {
+        this.showLoader.set(false);
+        this.errorMessage.set('Something went bad. ' + error.error.error);
       },
-      () => {
-        this.showLoader = false;
-        this.getResources();
+      complete: () => {
+        this.showLoader.set(false);
+        this.reload.next();
       }
-    );
+    });
   }
 
   showDeletionModal(bundle: Bundle<Service | Datasource>) {
-    this.selectedService = bundle;
-    if (this.selectedService) {
+    this.selectedService.set(bundle);
+    if (bundle) {
       UIkit.modal('#deletionModal').show();
     }
   }
 
   deleteService(bundle: Bundle<Service | Datasource>) {
-    this.showLoader = true;
-    this.resourceService.deleteService(bundle.id).subscribe(
-      res => {},
-      error => {
-        this.showLoader = false;
-        this.errorMessage = 'Something went bad. ' + error.error ;
-        // this.getResources();
+    this.showLoader.set(true);
+    this.resourceService.deleteService(bundle.id).subscribe({
+      error: error => {
+        this.showLoader.set(false);
+        this.errorMessage.set('Something went bad. ' + error.error);
       },
-      () => {
-        window.location.reload();
-        // this.showLoader = false;
-      }
-    );
+      complete: () => window.location.reload()
+    });
   }
 
   getVocabularyName(id: string) {
-    return this.vocabularies.find(vocabulary => vocabulary.id === id)?.name;
+    return this.vocabularies()?.names.find(vocabulary => vocabulary.id === id)?.name;
   }
 
   getPayload(bundle: Bundle<Service | Datasource>): Service | Datasource {

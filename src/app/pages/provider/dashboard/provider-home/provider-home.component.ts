@@ -1,79 +1,67 @@
-import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject} from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {Bundle, Datasource, LoggingInfo, Provider, ProviderBundle, Service, ServiceBundle, Vocabulary} from '../../../../entities/eic-model';
+import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
+import {toObservable, toSignal} from '@angular/core/rxjs-interop';
+import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
+import {DatePipe, TitleCasePipe} from '@angular/common';
+import {EMPTY, of} from 'rxjs';
+import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
+import {Datasource, ProviderBundle, Service, ServiceBundle} from '../../../../entities/eic-model';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
-import { DatePipe, TitleCasePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-provider-home',
-    templateUrl: 'provider-home.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [RouterLink, TitleCasePipe, DatePipe]
+  selector: 'app-provider-home',
+  templateUrl: 'provider-home.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, TitleCasePipe, DatePipe]
 })
-
-export class ProviderHomeComponent implements OnInit, OnChanges {
-  private router = inject(Router);
+export class ProviderHomeComponent {
   private providerService = inject(ProviderService);
   private resourceService = inject(ResourceService);
-  private datePipe = inject(DatePipe);
 
+  /** ProviderDashboardComponent passes the provider through its router outlet; null until it has loaded. */
+  private bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
+  readonly currentProvider = computed(() => this.bundle()?.provider ?? null);
+  readonly logs = computed(() => this.bundle()?.loggingInfo ?? null);
 
-  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
-  // so it stays a plain field (a signal input would be overwritten by that assignment).
-  providerBundle: ProviderBundle = null;
-  provider: Provider = null;
-  loggingInfo: LoggingInfo[] = null;
-  vocabularies: Map<string, object[]> = null;
-  resourceBundles: ServiceBundle[] = null;
-  approvedResourceBundles: ServiceBundle[] = null;
-  pendingResourceBundles: ServiceBundle[] = null;
-  rejectedResourceBundles: ServiceBundle[] = null;
+  readonly vocabularyMap = toSignal(this.resourceService.getUiVocabularies().pipe(
+    catchError(() => EMPTY)
+  ), {initialValue: null});
 
-  ngOnInit() {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  /** The provider's services, newest change first; null until they have loaded. */
+  readonly allResources = toSignal(toObservable(this.bundle).pipe(
+    map(bundle => bundle?.provider.id),
+    filter(id => !!id),
+    distinctUntilChanged(),
+    switchMap(id => this.providerService.getServicesOfProvider(id, [
+      {key: 'orderField', values: ['modifiedAt']}, {key: 'order', values: ['desc']}
+    ]).pipe(
+      map(paging => paging.results as ServiceBundle[]),
+      catchError(error => {
+        console.error(error);
+        return of(null);
+      })
+    ))
+  ), {initialValue: null});
 
-    this.resourceService.getUiVocabularies().subscribe(
-      res => {this.vocabularies = res;}
-    );
+  readonly approved = computed(() => this.withStatus('approved'));
+  readonly pending = computed(() => this.withStatus('pending'));
+  readonly rejected = computed(() => this.withStatus('rejected'));
 
-    if (this.providerBundle) {
-      this.provider = this.providerBundle.provider;
-      this.loggingInfo = this.providerBundle.loggingInfo;
-      this.getResourcesOfProvider();
-    }
+  constructor() {
+    // Every later navigation in the app rebuilds its pages instead of reusing them. Kept as it was; see the
+    // dashboard notes before removing it.
+    inject(Router).routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.providerBundle) {
-      this.provider = this.providerBundle.provider;
-      this.loggingInfo = this.providerBundle.loggingInfo;
-    }
+  private withStatus(status: string): ServiceBundle[] | null {
+    return this.allResources()?.filter(bundle => bundle.status === status) ?? null;
   }
 
   getPayload(bundle: ServiceBundle): Service | Datasource {
     return bundle.service != null ? bundle.service : bundle.datasource;
   }
 
-  getResourcesOfProvider() {
-    this.providerService.getServicesOfProvider(this.providerBundle.provider.id, [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values:['desc']}]).subscribe(
-      res => {this.resourceBundles = res.results;},
-      error => {console.error(error);},
-      () => {
-        this.approvedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'approved');
-        this.pendingResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'pending');
-        this.rejectedResourceBundles = this.resourceBundles.filter(bundle => bundle.status === 'rejected');
-      }
-    );
-  }
-
   getVocabularyName(vocabularyType: string, id: string): string {
-    return this.vocabularies[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
+    return this.vocabularyMap()[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
-
-  // formatLogDate(logDate: string): string {
-  //   const dateObject = moment(logDate, 'ddd MMM DD HH:mm:ss Z YYYY');
-  //   return dateObject.format('DD MMM YYYY');
-  // }
-
 }

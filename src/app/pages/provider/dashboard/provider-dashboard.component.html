@@ -1,3 +1,6 @@
+@let providerBundle = bundle();
+@let path = section()?.path;
+@let title = section()?.title;
 <div class="dashboard">
   <div id="sidebar_main_content"  class="sidebar_main_swipe sidebar_main_active">
     <aside id="sidebar_main">
@@ -7,22 +10,22 @@
       <div>
         <div class="menu_section uk-margin-medium-top">
           <ul>
-            <li [ngClass]="{'current_section': path === 'home'}">
+            <li [class.current_section]="path === 'home'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['home']">
                 <span class="material-icons uk-margin-small-right">home</span>Home
               </a>
             </li>
-            <li [ngClass]="{'current_section': path === 'info'}">
+            <li [class.current_section]="path === 'info'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['info']">
                 <span class="material-icons uk-margin-small-right">info</span>Provider's profile
               </a>
             </li>
-            <li [ngClass]="{'current_section': path === 'services'}">
+            <li [class.current_section]="path === 'services'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['services']">
                 <span class="material-icons uk-margin-small-right">reorder</span>Services
               </a>
             </li>
-            <li [ngClass]="{'current_section': path === 'history'}">
+            <li [class.current_section]="path === 'history'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['history']">
                 <span class="material-icons uk-margin-small-right">history</span>History of updates
               </a>
@@ -57,7 +60,7 @@
                     @if (providerBundle.status==='approved') {
 <div>
                       <button class="uk-button uk-button-small uk-button-secondary uk-margin-left uk-flex uk-flex-middle"
-                              [routerLink]="['/provider', providerId, 'service', 'add']">
+                              [routerLink]="['/provider', providerId(), 'service', 'add']">
                         <span class="material-icons uk-margin-small-right">add</span>New Service
                       </button>
                     </div>
@@ -82,7 +85,7 @@
             </div>
           </div>
         </div>
-        <router-outlet [routerOutletData]="providerBundle" (activate)="onActivate($event)" />
+        <router-outlet [routerOutletData]="providerBundle" />
       
 }
     </div>

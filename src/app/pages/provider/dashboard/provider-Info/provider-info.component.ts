@@ -1,77 +1,26 @@
-import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Provider, ProviderBundle, Type, Vocabulary} from '../../../../entities/eic-model';
-import {ProviderService} from '../../../../services/provider.service';
+import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {ROUTER_OUTLET_DATA} from '@angular/router';
+import {EMPTY} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {ProviderBundle} from '../../../../entities/eic-model';
 import {ResourceService} from '../../../../services/resource.service';
 
 @Component({
-    selector: 'app-provider-info',
-    templateUrl: 'provider-info.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager
+  selector: 'app-provider-info',
+  templateUrl: 'provider-info.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+export class ProviderInfoComponent {
+  /** ProviderDashboardComponent passes the provider through its router outlet; null until it has loaded. */
+  private bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
+  readonly currentProvider = computed(() => this.bundle()?.provider ?? null);
 
-export class ProviderInfoComponent implements OnInit, OnChanges {
-  private resourceService = inject(ResourceService);
-
-
-  // Set by ProviderDashboardComponent when the router outlet activates this page, not bound in a template,
-  // so it stays a plain field (a signal input would be overwritten by that assignment).
-  providerBundle: ProviderBundle = null;
-  provider: Provider = null;
-  vocabularies: Map<string, object[]> = null;
-
-  ngOnInit() {
-
-    this.setVocabularies();
-
-    if (this.providerBundle) {
-      this.provider = this.providerBundle.provider;
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.providerBundle) {
-      this.provider = this.providerBundle.provider;
-    }
-  }
+  readonly vocabularyMap = toSignal(inject(ResourceService).getUiVocabularies().pipe(
+    catchError(() => EMPTY)
+  ), {initialValue: null});
 
   getVocabularyName(vocabularyType: string, id: string): string {
-    return this.vocabularies[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
+    return this.vocabularyMap()[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
-
-  setVocabularies() {
-    this.resourceService.getUiVocabularies().subscribe(
-      res => {
-        this.vocabularies = res;
-      }
-    );
-  }
-
-  // setVocabularies() {
-  //   this.resourceService.getAllVocabulariesByType().subscribe(
-  //     res => {
-  //       this.vocabularies = res;
-  //       this.placesVocabulary = this.vocabularies[Type.COUNTRY];
-  //       this.providerTypeVocabulary = this.vocabularies[Type.PROVIDER_STRUCTURE_TYPE];
-  //       this.providerLCSVocabulary = this.vocabularies[Type.PROVIDER_LIFE_CYCLE_STATUS];
-  //       this.domainsVocabulary = this.vocabularies[Type.SCIENTIFIC_DOMAIN];
-  //       this.categoriesVocabulary = this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN];
-  //       this.merilDomainsVocabulary = this.vocabularies[Type.PROVIDER_MERIL_SCIENTIFIC_DOMAIN];
-  //       this.merilCategoriesVocabulary = this.vocabularies[Type.PROVIDER_MERIL_SCIENTIFIC_SUBDOMAIN];
-  //       this.esfriDomainVocabulary = this.vocabularies[Type.PROVIDER_ESFRI_DOMAIN];
-  //       this.legalStatusVocabulary = this.vocabularies[Type.PROVIDER_LEGAL_STATUS];
-  //       this.esfriVocabulary = this.vocabularies[Type.PROVIDER_ESFRI_TYPE];
-  //       this.areasOfActivityVocabulary = this.vocabularies[Type.PROVIDER_AREA_OF_ACTIVITY];
-  //       this.networksVocabulary = this.vocabularies[Type.PROVIDER_NETWORK];
-  //       this.societalGrandChallengesVocabulary = this.vocabularies[Type.PROVIDER_SOCIETAL_GRAND_CHALLENGE];
-  //       // this.hostingLegalEntityVocabulary = this.vocabularies[Type.PROVIDER_HOSTING_LEGAL_ENTITY];
-  //       return this.vocabularies;
-  //     },
-  //     error => console.log(JSON.stringify(error.error)),
-  //     () => {
-  //       return this.vocabularies;
-  //     }
-  //   );
-  // }
-
 }
