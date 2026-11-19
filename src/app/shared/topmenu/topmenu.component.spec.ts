@@ -180,7 +180,7 @@ describe('AireTopMenuComponent', () => {
     const router = TestBed.inject(Router);
     const menu = () => root.querySelector('.main-menu')!;
 
-    // ProviderHomeComponent does this, so every later navigation builds a new root ActivatedRoute.
+    // ProviderHomeComponent used to do this; with it, every later navigation builds a new root ActivatedRoute.
     await router.navigateByUrl('/dashboard');
     router.routeReuseStrategy.shouldReuseRoute = () => false;
     fixture.detectChanges();

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, Signal} from '@angular/core';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
-import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
+import {RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
 import {DatePipe, TitleCasePipe} from '@angular/common';
 import {EMPTY, of} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
@@ -46,12 +46,6 @@ export class ProviderHomeComponent {
   readonly approved = computed(() => this.withStatus('approved'));
   readonly pending = computed(() => this.withStatus('pending'));
   readonly rejected = computed(() => this.withStatus('rejected'));
-
-  constructor() {
-    // Every later navigation in the app rebuilds its pages instead of reusing them. Kept as it was; see the
-    // dashboard notes before removing it.
-    inject(Router).routeReuseStrategy.shouldReuseRoute = () => false;
-  }
 
   private withStatus(status: string): ServiceBundle[] | null {
     return this.allResources()?.filter(bundle => bundle.status === status) ?? null;

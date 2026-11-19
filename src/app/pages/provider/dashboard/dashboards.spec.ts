@@ -4,7 +4,7 @@ import {NgOptionComponent, NgSelectComponent} from '@ng-select/ng-select';
 import {TestBed} from '@angular/core/testing';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
 import {of, Subject, throwError} from 'rxjs';
-import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {URLParameter} from '../../../entities/url-parameter';
 import {NavigationService} from '../../../services/navigation.service';
 import {ProviderService} from '../../../services/provider.service';
@@ -108,8 +108,6 @@ describe('provider and service dashboards', () => {
     });
   });
 
-  afterEach(() => TestBed.inject(Router).routeReuseStrategy.shouldReuseRoute = () => true);
-
   const open = async (url: string) => {
     const fixture = TestBed.createComponent(AppHostComponent);
     const router = TestBed.inject(Router);
@@ -147,6 +145,27 @@ describe('provider and service dashboards', () => {
         expect(text()).toContain(name);
       }
       expect(text()).toContain('Onboard - Approved');
+    });
+
+    it('shows the next provider when the user switches provider, with the dashboard reused', async () => {
+      const {fixture, answer, go, text} = await open('/provider/openaire/dashboard/home');
+      await answer('openaire', providerBundle('openaire', 'OpenAIRE'));
+      const dashboard = () => fixture.debugElement.query(debug => debug.componentInstance instanceof ProviderDashboardComponent).componentInstance;
+      const before = dashboard();
+
+      await go('/provider/cern/dashboard/home');
+      await answer('cern', providerBundle('cern', 'CERN'));
+
+      expect(dashboard()).toBe(before);
+      expect(text()).toContain('Admin - CERN');
+      expect(servicesOf).toHaveBeenLastCalledWith('cern', [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values: ['desc']}]);
+    });
+
+    it('leaves route reuse on for the rest of the app', async () => {
+      const {answer, router} = await open('/provider/openaire/dashboard/home');
+      await answer('openaire', providerBundle('openaire', 'OpenAIRE'));
+      const route = router.routerState.snapshot.root;
+      expect(router.routeReuseStrategy.shouldReuseRoute(route, route)).toBe(true);
     });
 
     it('titles and highlights the section the user moves to', async () => {
