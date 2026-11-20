@@ -166,18 +166,22 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   parentSubmit() {
-    for (let i = 0; i < this.form.value?.Service?.persistentIdentitySystems?.length; i++) {
-      if (!this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityType && !this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityTypeSchemes[i]) {
-        this.form.value.Service.persistentIdentitySystems[i] = null;
+    // The group is named after the model's section: 'service' in the current form models, 'Service' in older ones.
+    const service = this.form.value?.service ?? this.form.value?.Service;
+    if (service) {
+      for (let i = 0; i < service.persistentIdentitySystems?.length; i++) {
+        if (!service.persistentIdentitySystems[i]?.persistentIdentityEntityType && !service.persistentIdentitySystems[i]?.persistentIdentityEntityTypeSchemes[i]) {
+          service.persistentIdentitySystems[i] = null;
+        }
       }
-    }
-    for (let i = 0; i < this.form.value?.Service?.researchProductLicensings?.length; i++) {
-      if (!this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseName && !this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseURL) {
-        this.form.value.Service.researchProductLicensings[i] = null;
+      for (let i = 0; i < service.researchProductLicensings?.length; i++) {
+        if (!service.researchProductLicensings[i]?.researchProductLicenseName && !service.researchProductLicensings[i]?.researchProductLicenseURL) {
+          service.researchProductLicensings[i] = null;
+        }
       }
-    }
-    if(!this.form.value?.Service?.researchProductMetadataLicensing?.researchProductMetadataLicenseName && !this.form.value?.Service?.researchProductMetadataLicensing?.researchProductMetadataLicenseURL){
-      this.form.value.Service.researchProductMetadataLicensing = null;
+      if (!service.researchProductMetadataLicensing?.researchProductMetadataLicenseName && !service.researchProductMetadataLicensing?.researchProductMetadataLicenseURL) {
+        service.researchProductMetadataLicensing = null;
+      }
     }
     // console.log(this.form);
     this.submit.emit([this.form, this.editMode]);

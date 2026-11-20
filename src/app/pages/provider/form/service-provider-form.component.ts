@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import * as sd from '../../../entities/services.description';
 import {UserSessionService} from '../../../services/user-session.service';
@@ -11,7 +11,7 @@ import {environment} from '../../../../environments/environment';
 import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
 
 import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
-import { NgClass, LowerCasePipe } from '@angular/common';
+import { LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
@@ -21,8 +21,8 @@ declare let UIkit: any;
     selector: 'app-new-service-provider',
     templateUrl: './service-provider-form.component.html',
     styleUrls: ['./service-provider-form.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class ServiceProviderFormComponent implements OnInit {
   fb = inject(UntypedFormBuilder);
@@ -41,18 +41,19 @@ export class ServiceProviderFormComponent implements OnInit {
   projectMail = environment.projectMail;
   privacyPolicyURL = environment.privacyPolicyURL;
   providerId: string = null;
-  providerName = '';
-  errorMessage = '';
+  readonly providerName = signal('');
+  readonly errorMessage = signal('');
   userInfo = {family_name: '', given_name: '', email: ''};
   newProviderForm: UntypedFormGroup;
   logoUrl = '';
-  vocabularies: Map<string, Vocabulary[]> = null;
+  /** All vocabularies by type; null until they have loaded, which the template waits for. */
+  readonly vocabularies = signal<Map<string, Vocabulary[]>>(null);
   premiumSort = new PremiumSortPipe();
   edit = false;
   hasChanges = false;
   pendingProvider = false;
   disable = false;
-  showLoader = false;
+  readonly showLoader = signal(false);
   tabsError: boolean[] = [false, false, false, false, false, false, false, false];
   selectedTab = 0;
   selectTab(index: number): void {this.selectedTab = index;}
@@ -105,19 +106,19 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly legalStatusDesc: sd.Description = sd.providerDescMap.get('legalStatusDesc');
   readonly networksDesc: sd.Description = sd.providerDescMap.get('networksDesc');
 
-  placesVocabulary: Vocabulary[] = null;
-  providerTypeVocabulary: Vocabulary[] = null;
-  providerLCSVocabulary: Vocabulary[] = null;
-  domainsVocabulary: Vocabulary[] = null;
-  categoriesVocabulary: Vocabulary[] = null;
-  merilDomainsVocabulary: Vocabulary[] = null;
-  merilCategoriesVocabulary: Vocabulary[] = null;
-  esfriDomainVocabulary: Vocabulary[] = null;
-  legalStatusVocabulary: Vocabulary[] = null;
-  esfriVocabulary: Vocabulary[] = null;
-  areasOfActivityVocabulary: Vocabulary[] = null;
-  networksVocabulary: Vocabulary[] = null;
-  societalGrandChallengesVocabulary: Vocabulary[] = null;
+  readonly placesVocabulary = computed(() => this.vocabularies()?.['Country'] ?? null);
+  readonly providerTypeVocabulary = computed(() => this.vocabularies()?.['Provider structure type'] ?? null);
+  readonly providerLCSVocabulary = computed(() => this.vocabularies()?.['Life cycle status'] ?? null);
+  readonly domainsVocabulary = computed(() => this.vocabularies()?.['Scientific domain'] ?? null);
+  readonly categoriesVocabulary = computed(() => this.vocabularies()?.['Scientific subdomain'] ?? null);
+  readonly merilDomainsVocabulary = computed(() => this.vocabularies()?.['Provider meril scientific domain'] ?? null);
+  readonly merilCategoriesVocabulary = computed(() => this.vocabularies()?.['Provider meril scientific subdomain'] ?? null);
+  readonly esfriDomainVocabulary = computed(() => this.vocabularies()?.['Provider esfri domain'] ?? null);
+  readonly legalStatusVocabulary = computed(() => this.vocabularies()?.['Provider legal status'] ?? null);
+  readonly esfriVocabulary = computed(() => this.vocabularies()?.['Provider esfri type'] ?? null);
+  readonly areasOfActivityVocabulary = computed(() => this.vocabularies()?.['Provider area of activity'] ?? null);
+  readonly networksVocabulary = computed(() => this.vocabularies()?.['Provider network'] ?? null);
+  readonly societalGrandChallengesVocabulary = computed(() => this.vocabularies()?.['Provider societal grand challenge'] ?? null);
 
   readonly formDefinition = {
     id: [''],
@@ -267,7 +268,7 @@ export class ServiceProviderFormComponent implements OnInit {
       this.authService.login();
     }
 
-    this.errorMessage = '';
+    this.errorMessage.set('');
     // this.trimFormWhiteSpaces();
     const path = this.route.snapshot.routeConfig.path;
     let method;
@@ -300,25 +301,25 @@ export class ServiceProviderFormComponent implements OnInit {
     }
 
     if (saveDraft) { //not used
-      this.showLoader = true;
+      this.showLoader.set(true);
       window.scrollTo(0, 0);
       this.providerService.temporarySaveProvider(this.newProviderForm.value, (path !== 'add/:providerId' && this.edit))
         .subscribe(
           res => {
-            this.showLoader = false;
+            this.showLoader.set(false);
             this.router.navigate([`/provider/add/${res.id}`]);
           },
           err => {
-            this.showLoader = false;
+            this.showLoader.set(false);
             window.scrollTo(0, 0);
-            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
           },
           () => {
-            this.showLoader = false;
+            this.showLoader.set(false);
           }
         );
     } else if (this.newProviderForm.valid) {
-      this.showLoader = true;
+      this.showLoader.set(true);
       window.scrollTo(0, 0);
 
       const token = sessionStorage.getItem('token');
@@ -331,21 +332,21 @@ export class ServiceProviderFormComponent implements OnInit {
             }, 3000);
           },
           err => {
-            this.showLoader = false;
+            this.showLoader.set(false);
             window.scrollTo(0, 0);
-            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
           }
         );
       } else {
         this.providerService[method](this.newProviderForm.value, this.providerId).subscribe(
           res => {},
           err => {
-            this.showLoader = false;
+            this.showLoader.set(false);
             window.scrollTo(0, 0);
-            this.errorMessage = 'Something went wrong. ' + JSON.stringify(err.error.error);
+            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
           },
           () => {
-            this.showLoader = false;
+            this.showLoader.set(false);
             if (this.edit) {
             this.router.navigate([`/provider/${this.newProviderForm.value.id}/dashboard/home`]);
             } else { //add new provider
@@ -363,8 +364,8 @@ export class ServiceProviderFormComponent implements OnInit {
       this.markFormAsDirty();
       window.scrollTo(0, 0);
       this.markTabs();
-      this.errorMessage = 'Please fill in all required fields (marked with an asterisk), ' +
-        'and fix the data format in fields underlined with a red colour.';
+      this.errorMessage.set('Please fill in all required fields (marked with an asterisk), ' +
+        'and fix the data format in fields underlined with a red colour.');
     }
   }
 
@@ -450,26 +451,10 @@ export class ServiceProviderFormComponent implements OnInit {
   setVocabularies() {
     this.resourceService.getAllVocabulariesByType().subscribe(
       res => {
-        this.vocabularies = res;
-        this.placesVocabulary = this.vocabularies['Country'];
-        this.providerTypeVocabulary = this.vocabularies['Provider structure type'];
-        this.providerLCSVocabulary = this.vocabularies['Life cycle status'];
-        this.domainsVocabulary = this.vocabularies['Scientific domain'];
-        this.categoriesVocabulary = this.vocabularies['Scientific subdomain'];
-        this.merilDomainsVocabulary = this.vocabularies['Provider meril scientific domain'];
-        this.merilCategoriesVocabulary = this.vocabularies['Provider meril scientific subdomain'];
-        this.esfriDomainVocabulary = this.vocabularies['Provider esfri domain'];
-        this.legalStatusVocabulary = this.vocabularies['Provider legal status'];
-        this.esfriVocabulary = this.vocabularies['Provider esfri type'];
-        this.areasOfActivityVocabulary = this.vocabularies['Provider area of activity'];
-        this.networksVocabulary = this.vocabularies['Provider network'];
-        this.societalGrandChallengesVocabulary = this.vocabularies['Provider societal grand challenge'];
+        this.premiumSort.transform(res['Country'], ['Europe', 'Worldwide']);
+        this.vocabularies.set(res);
       },
-      error => console.log(JSON.stringify(error.error)),
-      () => {
-        this.premiumSort.transform(this.placesVocabulary, ['Europe', 'Worldwide']);
-        return this.vocabularies;
-      }
+      error => console.log(JSON.stringify(error.error))
     );
   }
 
@@ -621,7 +606,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   deleteUser(index) {
     if (this.usersArray.length === 1) {
-      this.errorMessage = 'There must be at least one provider!';
+      this.errorMessage.set('There must be at least one provider!');
       window.scrollTo(0, 0);
       return;
     }
