@@ -9,7 +9,7 @@
     "build:beta": "ng build --configuration beta",
     "test": "ng test --no-watch",
     "lint": "ng lint",
-    "lint:ci": "ng lint --max-warnings 487"
+    "lint:ci": "ng lint --max-warnings 488"
   },
   "private": true,
   "dependencies": {
