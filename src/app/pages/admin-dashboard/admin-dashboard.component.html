@@ -1,3 +1,4 @@
+@let path = section()?.path;
 <div class="dashboard">
   <div id="sidebar_main_content"  class="sidebar_main_swipe sidebar_main_active">
     <aside id="sidebar_main">
@@ -7,17 +8,17 @@
       <div>
         <div class="menu_section uk-margin-medium-top">
           <ul>
-            <li [ngClass]="{'current_section': path === 'providers'}">
+            <li [class.current_section]="path === 'providers'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['providers']">
                 <span class="material-icons uk-margin-small-right">real_estate_agent</span>All Providers
               </a>
             </li>
-            <li [ngClass]="{'current_section': path === 'services'}">
+            <li [class.current_section]="path === 'services'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['services']">
                 <span class="material-icons uk-margin-small-right">grid_view</span>All Services
               </a>
             </li>
-            <li [ngClass]="{'current_section': path === 'datasources'}">
+            <li [class.current_section]="path === 'datasources'">
               <a class="uk-flex uk-flex-middle text-decoration-none" [routerLink]="['datasources']">
                 <span class="material-icons uk-margin-small-right">grid_view</span>All Datasource Subprofiles
               </a>
@@ -35,11 +36,11 @@
               <div class="uk-flex uk-flex-middle uk-flex-between">
                 <div class="uk-flex uk-flex-middle">
                   <div class="titleIcon">
-                    <span class="material-icons uk-margin-small-right">{{titleIcon}}</span>
+                    <span class="material-icons uk-margin-small-right">{{section()?.icon}}</span>
                   </div>
                   <div class="uk-margin-left">
                     <div class="uk-text-meta uk-margin-remove">SuperAdmin Dashboard</div>
-                    <h5>All {{title}}</h5>
+                    <h5>All {{section()?.title}}</h5>
                   </div>
                 </div>
                 <div class="uk-flex">
@@ -69,7 +70,7 @@
     <div class="uk-modal-body">
       <h4 class="uk-modal-title">Invite provider</h4>
       <form class="uk-form-stacked uk-margin-top">
-        @if (!invitationUrl) {
+        @if (!invitationUrl()) {
           <div class="uk-margin">
             <label class="uk-form-label" for="email">Email: </label>
             <div class="uk-form-controls">
@@ -77,11 +78,11 @@
             </div>
           </div>
         }
-        @if (invitationUrl) {
+        @if (invitationUrl()) {
           <div class="uk-margin">
             <label class="uk-form-label" for="email">Invitation url: </label>
             <div class="uk-form-controls">
-              <pre style="word-break: break-word;">{{invitationUrl}}</pre>
+              <pre style="word-break: break-word;">{{invitationUrl()}}</pre>
             </div>
           </div>
         }
@@ -89,13 +90,13 @@
 
       <!--      {{token.value | json}}-->
       <div class="uk-text-right">
-        @if (!invitationUrl) {
+        @if (!invitationUrl()) {
           <button class="uk-button uk-button-primary" type="button"
             [disabled]="inviteeEmail.invalid" (click)="getInvitationToken()">
             Create invitation token
           </button>
         }
-        @if (invitationUrl) {
+        @if (invitationUrl()) {
           <button class="uk-button uk-button-primary" type="button" title="copy to clipboard"
             (click)="copyToClipboard()">
             <span class="material-icons uk-text-middle">content_copy</span>
