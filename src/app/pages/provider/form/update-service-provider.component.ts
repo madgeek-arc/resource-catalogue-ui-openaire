@@ -1,11 +1,11 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {Provider, Type} from '../../../entities/eic-model';
+import {Provider} from '../../../entities/eic-model';
 import {ServiceProviderFormComponent} from './service-provider-form.component';
 import {ResourceService} from '../../../services/resource.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared/reusablecomponents/help-content.component';
-import { NgClass, LowerCasePipe } from '@angular/common';
+import { LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
@@ -15,11 +15,10 @@ declare let UIkit: any;
     selector: 'app-update-service-provider',
     templateUrl: './service-provider-form.component.html',
     styleUrls: ['./service-provider-form.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [AsideHelpContentComponent, NgClass, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
-  override errorMessage: string;
   provider: Provider;
 
   override ngOnInit() {
@@ -33,7 +32,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     if (sessionStorage.getItem('service')) {
       sessionStorage.removeItem('service');
     } else {
-      if (this.vocabularies === null) {
+      if (this.vocabularies() === null) {
         // this.resourceService.getAllVocabulariesByType().subscribe(
         //   res => {
         //     this.vocabularies = res;
@@ -67,14 +66,14 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   }
 
   getProvider() {
-    this.errorMessage = '';
+    this.errorMessage.set('');
     const path = this.route.snapshot.routeConfig.path;
     this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId)
       .subscribe(
       provider => this.provider = provider,
       err => {
         console.log(err);
-        this.errorMessage = 'Something went wrong.';
+        this.errorMessage.set('Something went wrong.');
       },
       () => {
         // console.log(Object.keys(this.provider));
@@ -202,7 +201,8 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
         if (this.disable) {
           this.newProviderForm.disable();
         }
-        this.providerName = this.newProviderForm.get('name').value;
+        // Also refreshes the page, which shows the patched form and the inputs added above.
+        this.providerName.set(this.newProviderForm.get('name').value);
       }
     );
   }
