@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal, Signal} from '@angular/core';
 import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
 import {URL} from '../../../../entities/eic-model';
-import * as uikit from 'uikit';
+import uikit from 'uikit';
 import {ServiceLandingData} from '../service-landing-data';
 
 @Component({

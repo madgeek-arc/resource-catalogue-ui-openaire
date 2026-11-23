@@ -10,7 +10,6 @@ import {zip} from 'rxjs';
 import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 
-import * as uikit from 'uikit';
 
 @Component({
     selector: 'app-form',

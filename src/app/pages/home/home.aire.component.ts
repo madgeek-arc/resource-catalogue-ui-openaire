@@ -4,7 +4,7 @@ import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {RouterLink} from '@angular/router';
 import {SlicePipe} from '@angular/common';
-import * as uikit from 'uikit';
+import uikit from 'uikit';
 import {ResourceService} from '../../services/resource.service';
 
 @Component({

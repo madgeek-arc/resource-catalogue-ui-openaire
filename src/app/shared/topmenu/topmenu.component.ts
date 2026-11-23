@@ -6,7 +6,7 @@ import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {Provider, Service} from '../../entities/eic-model';
 import {UserService} from '../../services/user.service';
-import * as UIkit from 'uikit';
+import UIkit from 'uikit';
 import {EMPTY, of} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import { KeyValuePipe } from '@angular/common';
