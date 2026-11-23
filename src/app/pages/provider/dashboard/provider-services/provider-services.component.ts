@@ -25,8 +25,8 @@ export class ProviderServicesComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  /** ProviderDashboardComponent passes the provider through its router outlet; null until it has loaded. */
-  readonly bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
+  /** ProviderDashboardComponent passes the provider through its router outlet, which it only shows once the provider has loaded. */
+  readonly bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle>;
 
   readonly pageSize = 9;
   readonly loadingMessage = '';
@@ -129,7 +129,8 @@ export class ProviderServicesComponent {
     }
   }
 
-  filterSelection(key: string, value: string | string[]) {
+  /** A cleared select passes null, which removes the parameter. */
+  filterSelection(key: string, value: string | string[] | null) {
     if (key === 'order' && value === null) {
       this.updateURLParameters('orderField', null);
     }

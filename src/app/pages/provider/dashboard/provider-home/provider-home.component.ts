@@ -18,10 +18,10 @@ export class ProviderHomeComponent {
   private providerService = inject(ProviderService);
   private resourceService = inject(ResourceService);
 
-  /** ProviderDashboardComponent passes the provider through its router outlet; null until it has loaded. */
-  private bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
-  readonly currentProvider = computed(() => this.bundle()?.provider ?? null);
-  readonly logs = computed(() => this.bundle()?.loggingInfo ?? null);
+  /** ProviderDashboardComponent passes the provider through its router outlet, which it only shows once the provider has loaded. */
+  private bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle>;
+  readonly currentProvider = computed(() => this.bundle().provider);
+  readonly logs = computed(() => this.bundle().loggingInfo);
 
   readonly vocabularyMap = toSignal(this.resourceService.getUiVocabularies().pipe(
     catchError(() => EMPTY)

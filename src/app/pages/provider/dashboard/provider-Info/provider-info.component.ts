@@ -12,9 +12,9 @@ import {ResourceService} from '../../../../services/resource.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProviderInfoComponent {
-  /** ProviderDashboardComponent passes the provider through its router outlet; null until it has loaded. */
-  private bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
-  readonly currentProvider = computed(() => this.bundle()?.provider ?? null);
+  /** ProviderDashboardComponent passes the provider through its router outlet, which it only shows once the provider has loaded. */
+  private bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle>;
+  readonly currentProvider = computed(() => this.bundle().provider);
 
   readonly vocabularyMap = toSignal(inject(ResourceService).getUiVocabularies().pipe(
     catchError(() => EMPTY)

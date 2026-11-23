@@ -178,9 +178,9 @@
                                     placeholder="use http:// or https://"
                                     (input)="unsavedChangesPrompt()"
                                     [class.uk-form-danger]="checkFormValidity('website', this.edit)">
-                                  @if (this.edit && this.isPortalAdmin && this.newProviderForm.get('website').value) {
+                                  @if (this.edit && this.isPortalAdmin && this.newProviderForm.get('website')!.value) {
                                     <div class="uk-icon">
-                                      <a href="{{this.newProviderForm.get('website').value}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                                      <a href="{{this.newProviderForm.get('website')!.value}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
                                     </div>
                                   }
                                 </div>
@@ -194,8 +194,8 @@
                                     <span class="uk-form-description uk-margin-small-right">{{legalEntityDesc.desc}}</span>
                                     <input class="uk-checkbox" type="checkbox" id="legalEntityYes"
                                       formControlName="legalEntity" value="true"
-                                      (input)="this.newProviderForm.get('legalStatus').setValue(''); unsavedChangesPrompt()"
-                                      [checked]="this.newProviderForm.get('legalEntity').value == true && edit">
+                                      (input)="this.newProviderForm.get('legalStatus')!.setValue(''); unsavedChangesPrompt()"
+                                      [checked]="this.newProviderForm.get('legalEntity')!.value == true && edit">
                                   </label>
                                 </div>
                               </div>
@@ -207,7 +207,7 @@
                                   <div class="uk-form-description uk-margin-top uk-width-9-10">{{legalStatusDesc.desc}}</div>
                                   <div class="uk-form-controls uk-margin-medium-top">
                                     <ng-select class="uk-width-9-10" id="legalStatus"
-                                      [class.uk-disabled]="this.newProviderForm.get('legalEntity').value == false" [class.uk-form-danger]="checkFormValidity('legalStatus', this.edit)"
+                                      [class.uk-disabled]="this.newProviderForm.get('legalEntity')!.value == false" [class.uk-form-danger]="checkFormValidity('legalStatus', this.edit)"
                                       [items]="sortVocabulariesByName(legalStatusVocabulary())"
                                       (change)="unsavedChangesPrompt()"
                                       bindLabel="name"
@@ -258,9 +258,9 @@
                                   placeholder="use http:// or https://"
                                   (input)="unsavedChangesPrompt()"
                                   [class.uk-form-danger]="checkFormValidity('logo', this.edit)">
-                                @if (this.edit && this.isPortalAdmin && this.newProviderForm.get('logo').value) {
+                                @if (this.edit && this.isPortalAdmin && this.newProviderForm.get('logo')!.value) {
                                   <div class="uk-icon">
-                                    <a href="{{this.newProviderForm.get('logo').value}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                                    <a href="{{this.newProviderForm.get('logo')!.value}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
                                   </div>
                                 }
                               </div>
@@ -283,9 +283,9 @@
                                           <input id="multimediaURL" class="uk-input uk-width-9-10" type="text" formControlName="multimediaURL" placeholder="use http:// or https://"
                                             (input)="unsavedChangesPrompt()"
                                             [class.uk-form-danger]="checkFormArrayValidity('multimedia', i, this.edit, 'multimediaURL')">
-                                          @if (this.edit && this.isPortalAdmin && this.newProviderForm.get('multimedia').value[i]['multimediaURL']) {
+                                          @if (this.edit && this.isPortalAdmin && this.newProviderForm.get('multimedia')!.value[i]['multimediaURL']) {
                                             <div class="uk-icon">
-                                              <a href="{{this.newProviderForm.get('multimedia').value[i]['multimediaURL']}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                                              <a href="{{this.newProviderForm.get('multimedia')!.value[i]['multimediaURL']}}" target="_blank">&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
                                             </div>
                                           }
                                         </div>
@@ -364,7 +364,7 @@
                                         <div class="uk-form-controls uk-margin-medium-top">
                                           <ng-select class="uk-width-1-1" id="{{'scientificSubdomain ' + i}}"
                                             [class.uk-form-danger]="checkFormArrayValidity('scientificDomains', i, this.edit, 'scientificDomain')"
-                                            [items]="getSortedChildrenCategories(categoriesVocabulary(), domainArray.controls[i].get('scientificDomain').value)"
+                                            [items]="getSortedChildrenCategories(categoriesVocabulary(), domainArray.controls[i].get('scientificDomain')!.value)"
                                             (change)="unsavedChangesPrompt()"
                                             bindLabel="name"
                                             bindValue="id"
@@ -1000,7 +1000,7 @@
                           <div class="uk-form-controls uk-margin-medium-top">
                             <ng-select class="uk-width-1-1" id="{{'merilScientificSubdomain ' + i}}"
                               [class.uk-form-danger]="checkFormArrayValidity('merilScientificDomains', i, this.edit, 'merilScientificSubdomain')"
-                              [items]="getSortedChildrenCategories(merilCategoriesVocabulary(), merilDomainArray.controls[i].get('merilScientificDomain').value)"
+                              [items]="getSortedChildrenCategories(merilCategoriesVocabulary(), merilDomainArray.controls[i].get('merilScientificDomain')!.value)"
                               (change)="unsavedChangesPrompt()"
                               bindLabel="name"
                               bindValue="id"
@@ -1153,7 +1153,7 @@
                 and {{serviceORresource | lowercase}}s, activate or delete
                 a {{serviceORresource | lowercase}}, add or remove administrators and issue tokens for
               API use).</i></div>
-              @if (newProviderForm.get('users').value) {
+              @if (newProviderForm.get('users')!.value) {
                 <div class="uk-form-controls uk-margin-top">
                   @for (user of usersArray.controls; track user; let i = $index) {
                     <div formArrayName="users">

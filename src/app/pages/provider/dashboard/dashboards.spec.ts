@@ -177,6 +177,17 @@ describe('provider and service dashboards', () => {
       expect(root.querySelector('.current_section')!.textContent).toContain('info');
     });
 
+    // The sections type the outlet data as never null, which relies on this.
+    it('shows no section until the provider has loaded', async () => {
+      const {root, answer, text} = await open('/provider/openaire/dashboard/info');
+      expect(root.querySelector('app-provider-info')).toBeNull();
+
+      await answer('openaire', providerBundle('openaire', 'OpenAIRE'));
+
+      expect(root.querySelector('app-provider-info')).not.toBeNull();
+      expect(text()).toContain('OpenAIRE');
+    });
+
     it('shows the profile of the provider', async () => {
       const {answer, text} = await open('/provider/openaire/dashboard/info');
       await answer('openaire', providerBundle('openaire', 'OpenAIRE'));

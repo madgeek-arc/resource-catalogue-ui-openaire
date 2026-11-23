@@ -10,6 +10,6 @@ import {ProviderBundle} from '../../../../entities/eic-model';
   imports: [RouterLink, TitleCasePipe, DatePipe]
 })
 export class ProviderHistoryComponent {
-  /** ProviderDashboardComponent passes the bundle through its router outlet; null until it has loaded. */
-  readonly bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle | null>;
+  /** ProviderDashboardComponent passes the provider through its router outlet, which it only shows once the provider has loaded. */
+  readonly bundle = inject(ROUTER_OUTLET_DATA) as Signal<ProviderBundle>;
 }
