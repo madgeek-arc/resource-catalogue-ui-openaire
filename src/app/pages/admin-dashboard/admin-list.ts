@@ -125,7 +125,8 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
     }
   }
 
-  filterSelection(key: string, value: string | string[]) {
+  /** A cleared select passes null, which removes the parameter. */
+  filterSelection(key: string, value: string | string[] | null) {
     if (key === 'order' && value === null) {
       this.updateURLParameters('orderField', null);
     }
