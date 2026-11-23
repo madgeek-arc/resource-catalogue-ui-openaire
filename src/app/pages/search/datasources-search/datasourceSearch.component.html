@@ -27,7 +27,7 @@
       <!--FILTERS LAPTOP & PAD LANDSCAPE-->
       <aside id="tm-sidebar" class="tm-sidebar uk-width-1-4@m uk-visible@m">
 
-        @if (types?.terms.length > 0 && searchResults) {
+        @if (types?.terms.length && searchResults) {
           <div class="sidemenu refines">
             <p class="big-text-header">Filters</p>
             <div class="uk-margin-medium-top">
@@ -98,7 +98,7 @@
           </div>
 }
 
-          @if (searchResults?.results.length > 0) {
+          @if (searchResults?.results.length) {
 <div>
 
             <div class="uk-grid uk-row-first uk-margin-bottom uk-margin-top">

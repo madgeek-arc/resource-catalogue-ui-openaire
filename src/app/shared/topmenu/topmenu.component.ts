@@ -4,7 +4,7 @@ import {UserSessionService} from '../../services/user-session.service';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
-import {Datasource, Provider, Service} from '../../entities/eic-model';
+import {Provider, Service} from '../../entities/eic-model';
 import {UserService} from '../../services/user.service';
 import * as UIkit from 'uikit';
 import {EMPTY, of} from 'rxjs';
@@ -58,7 +58,7 @@ export class AireTopMenuComponent {
     })
   ), {initialValue: false});
 
-  readonly resources = signal<Map<string, Service[] | Datasource[]> | null>(null);
+  readonly resources = signal<Record<string, Service[]> | null>(null);
 
   readonly portfolioItemActive = signal<string | null>(null);
 

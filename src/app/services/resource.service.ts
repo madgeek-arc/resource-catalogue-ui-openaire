@@ -139,8 +139,9 @@ export class ResourceService {
    * Active services grouped by the label of a facet value, e.g. 'portfolios' -> {'Assess': [...], ...}.
    * Values with no services are left out. `active` is kept for callers; the endpoint only returns active records.
    */
-  getResourcesGroupedByField(field: string, active?: boolean): Observable<Map<string, Service[] | Datasource[]>> {
-    return this.http.get<Map<string, Service[] | Datasource[]>>(this.oa + `/services/by/${field}`);
+  /** A JSON object from each value of the field to its services (datasources are services too), not a Map. */
+  getResourcesGroupedByField(field: string, active?: boolean): Observable<Record<string, Service[]>> {
+    return this.http.get<Record<string, Service[]>>(this.oa + `/services/by/${field}`);
   }
 
   getMyServiceProviders() {

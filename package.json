@@ -9,8 +9,7 @@
     "build:beta": "ng build --configuration beta",
     "test": "ng test --no-watch",
     "lint": "ng lint",
-    "lint:ci": "ng lint --max-warnings 369",
-    "typecheck:null": "node scripts/check-strict-null.mjs 22"
+    "lint:ci": "ng lint --max-warnings 369"
   },
   "private": true,
   "dependencies": {

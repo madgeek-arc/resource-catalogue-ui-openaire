@@ -15,8 +15,9 @@
       "node_modules/@types"
     ],
     "useDefineForClassFields": false,
-    // The strict flags that are on so far; strictNullChecks and noImplicitAny follow once their errors are fixed.
+    // The strict flags that are on so far; noImplicitAny follows once its errors are fixed.
     "alwaysStrict": true,
+    "strictNullChecks": true,
     "noImplicitThis": true,
     "useUnknownInCatchVariables": true,
     "strictFunctionTypes": true,
