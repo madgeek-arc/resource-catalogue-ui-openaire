@@ -1,4 +1,5 @@
-// Counts the errors strictNullChecks would raise, for the app and the specs, and fails above a limit.
+// Counts the errors strictNullChecks would raise, for the app and the specs, in TypeScript and in templates
+// (ngc checks both, as strictTemplates is on), and fails above a limit.
 // The flag stays off in tsconfig.json until the count reaches 0; the limit in package.json only goes down.
 // Usage: node scripts/check-strict-null.mjs <limit>
 import {execFileSync} from 'node:child_process';
@@ -13,15 +14,16 @@ const errors = new Set();
 for (const project of ['src/tsconfig.app.json', 'src/tsconfig.spec.json']) {
   let output = '';
   try {
-    output = execFileSync('npx', ['tsc', '--noEmit', '--strictNullChecks', '--pretty', 'false', '-p', project], {encoding: 'utf8'});
+    output = execFileSync('npx', ['ngc', '--noEmit', '--strictNullChecks', '-p', project], {encoding: 'utf8', stdio: 'pipe'});
   } catch (error) {
-    // tsc exits non-zero when it reports errors; the report is on stdout.
-    output = error.stdout ?? '';
+    // ngc exits non-zero when it reports errors; the report is on stdout and stderr.
+    output = (error.stdout ?? '') + (error.stderr ?? '');
   }
-  for (const line of output.split('\n')) {
-    const match = line.match(/^(.+?)\((\d+),(\d+)\): error (TS\d+)/);
+  // ngc colours its report and prints paths relative to src/: "app/x.html:12:3 - error TS2531: ...".
+  for (const line of output.replace(/\x1b\[[0-9;]*m/g, '').split('\n')) {
+    const match = line.match(/^(\S+?):(\d+):(\d+) - error ((?:TS|NG)\d+)/);
     if (match) {
-      errors.add(`${match[1]}:${match[2]}:${match[3]} ${match[4]}`);
+      errors.add(`src/${match[1]}:${match[2]}:${match[3]} ${match[4]}`);
     }
   }
 }
