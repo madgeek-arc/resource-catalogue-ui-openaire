@@ -20,7 +20,7 @@ export class Dependent {
 export class TypeInfo {
   type: string;
   values: string[];
-  vocabulary: string;
+  vocabulary: string | null;
   multiplicity: boolean;
   /** Newer form models give a vocabulary field a URL instead of a vocabulary name. */
   properties?: {url?: string; idField?: string; labelField?: string; urlParams?: any};
@@ -52,9 +52,9 @@ export function vocabularyName(typeInfo: TypeInfo): string | null {
 }
 
 export class Form {
-  dependsOn: Dependent;
-  affects: Dependent[];
-  vocabulary: string;
+  dependsOn: Dependent | null;
+  affects: Dependent[] | null;
+  vocabulary: string | null;
   group: string;
   description: StyledText;
   suggestion: StyledText;
@@ -121,7 +121,7 @@ export class Field {
   includedInSnippet: boolean;
   form: Form;
   display: Display;
-  subFields: Field[];
+  subFields: Field[] | null;
 
   constructor() {
     this.id = '';
@@ -139,9 +139,9 @@ export class Field {
 }
 
 export class Section {
-  id: string;
+  id: string | null;
   name: string;
-  description: string;
+  description: string | null;
   subType: string;
   order: number;
   subSections: Section[];

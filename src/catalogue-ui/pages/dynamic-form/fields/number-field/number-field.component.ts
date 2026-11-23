@@ -22,7 +22,7 @@ export class NumberFieldComponent implements OnInit {
 
   readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -30,7 +30,7 @@ export class NumberFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-  readonly hideField = signal<boolean>(null);
+  readonly hideField = signal<boolean | null>(null);
 
   step = '';
 
@@ -44,12 +44,13 @@ export class NumberFieldComponent implements OnInit {
     this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
     this.refresh(this.formControl);
 
-    if (this.fieldData().form.dependsOn) {
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) {
       // console.log(this.fieldData().form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData().form.dependsOn.name).value, this.fieldData().form.dependsOn.value);
+      this.enableDisableField(this.form.get(dependsOn.name)!.value, dependsOn.value);
       // console.log(this.fieldData().name);
-      this.form.get(this.fieldData().form.dependsOn.name).valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
-        this.enableDisableField(value, this.fieldData().form.dependsOn.value);
+      this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+        this.enableDisableField(value, dependsOn.value);
       });
     }
 
@@ -76,12 +77,12 @@ export class NumberFieldComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.fieldAsFormArray()?.get([position])?.get(groupName).valid
-        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName).dirty));
+      return !!(!this.fieldAsFormArray()?.get([position])?.get(groupName)!.valid
+        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName)!.dirty));
 
     }
-    return (!this.fieldAsFormArray().get([position]).valid
-      && (edit || this.fieldAsFormArray().get([position]).dirty));
+    return (!this.fieldAsFormArray().get([position])!.valid
+      && (edit || this.fieldAsFormArray().get([position])!.dirty));
   }
 
   /** Bitsets--> **/

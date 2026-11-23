@@ -31,18 +31,18 @@ export class CompositeFieldComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]>>(undefined);
-  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly vocabularies = input<Map<string, object[]>>();
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
-  readonly readonly = input<boolean>(null);
-  readonly position = input<number>(null);
+  readonly readonly = input<boolean | null>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   form: UntypedFormGroup;
-  readonly hideField = signal<boolean>(null);
+  readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
     // console.log(this.fieldData().name);
@@ -57,10 +57,11 @@ export class CompositeFieldComponent implements OnInit {
     }
     this.refresh(this.form);
     // console.log(this.form);
-    if(this.fieldData().form.dependsOn) { // specific changes for composite field, maybe revise it
-      this.enableDisableField(this.rootFormGroup.form.get(this.fieldData().form.dependsOn.name).value);
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) { // specific changes for composite field, maybe revise it
+      this.enableDisableField(this.rootFormGroup.form.get(dependsOn.name)!.value);
 
-      this.rootFormGroup.form.get(this.fieldData().form.dependsOn.name).valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      this.rootFormGroup.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
         this.enableDisableField(value);
       });
     }
@@ -115,17 +116,17 @@ export class CompositeFieldComponent implements OnInit {
   /** check form fields and tabs validity--> **/
 
   checkFormValidity(name: string, edit: boolean): boolean {
-    return (!this.form.get(name).valid && (edit || this.form.get(name).dirty));
+    return (!this.form.get(name)!.valid && (edit || this.form.get(name)!.dirty));
   }
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.oldFieldAsFormArray(name)?.get([position])?.get(groupName).valid
-        && (edit || this.oldFieldAsFormArray(name)?.get([position])?.get(groupName).dirty));
+      return !!(!this.oldFieldAsFormArray(name)?.get([position])?.get(groupName)!.valid
+        && (edit || this.oldFieldAsFormArray(name)?.get([position])?.get(groupName)!.dirty));
 
     }
-    return (!this.oldFieldAsFormArray(name).get([position]).valid
-      && (edit || this.oldFieldAsFormArray(name).get([position]).dirty));
+    return (!this.oldFieldAsFormArray(name).get([position])!.valid
+      && (edit || this.oldFieldAsFormArray(name).get([position])!.dirty));
   }
 
   /** <-- check form fields and tabs validity **/

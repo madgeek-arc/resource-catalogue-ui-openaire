@@ -20,10 +20,10 @@ import { DateFieldComponent } from './date-field/date-field.component';
 export class DynamicFormFieldsComponent {
   readonly fieldData = input.required<Field>();
   readonly form = input<UntypedFormGroup>();
-  readonly vocabularies = input<Map<string, object[]>>(undefined);
-  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly vocabularies = input<Map<string, object[]>>();
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
-  readonly readonly = input<boolean>(null);
+  readonly readonly = input<boolean | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();

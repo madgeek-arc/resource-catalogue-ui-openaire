@@ -15,7 +15,7 @@ export class RadioGridFieldComponent implements OnInit {
   readonly fieldData = input.required<Field>();
 
   form!: UntypedFormGroup;
-  readonly hideField = signal<boolean>(null);
+  readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
     this.form = this.rootFormGroup.control;

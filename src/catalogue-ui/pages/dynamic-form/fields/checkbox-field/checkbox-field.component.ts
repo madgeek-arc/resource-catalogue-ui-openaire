@@ -17,7 +17,7 @@ export class CheckboxFieldComponent implements OnInit {
 
   readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -64,12 +64,12 @@ export class CheckboxFieldComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.fieldAsFormArray()?.get([position])?.get(groupName).valid
-        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName).dirty));
+      return !!(!this.fieldAsFormArray()?.get([position])?.get(groupName)!.valid
+        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName)!.dirty));
 
     }
-    return (!this.fieldAsFormArray().get([position]).valid
-      && (edit || this.fieldAsFormArray().get([position]).dirty));
+    return (!this.fieldAsFormArray().get([position])!.valid
+      && (edit || this.fieldAsFormArray().get([position])!.dirty));
   }
 
   /** Bitsets--> **/

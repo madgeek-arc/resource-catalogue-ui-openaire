@@ -21,17 +21,17 @@ export class ChooseOneComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]>>(undefined);
-  readonly subVocabularies = input<Map<string, object[]>>(undefined);
+  readonly vocabularies = input<Map<string, object[]>>();
+  readonly subVocabularies = input<Map<string, object[]>>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
   form: UntypedFormGroup;
-  readonly hideField = signal<boolean>(null);
+  readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
     const position = this.position();
@@ -61,10 +61,12 @@ export class ChooseOneComponent implements OnInit {
     for (const control in tmpGroup.controls) {
       tmpGroup.removeControl(control);
     }
-    if (this.fieldData().subFields.find(field => field.name === name).typeInfo.type === 'composite')
-      tmpGroup.addControl(name, this.formService.createCompositeField(this.fieldData().subFields.find(field => field.name === name)));
-    else if (this.fieldData().subFields.find(field => field.name === name).typeInfo.type === 'string') {
-      tmpGroup.addControl(name, this.formService.createField(this.fieldData().subFields.find(field => field.name === name)));
+    // The name is one of this field's own sub-fields.
+    const subField = this.fieldData().subFields!.find(field => field.name === name)!;
+    if (subField.typeInfo.type === 'composite')
+      tmpGroup.addControl(name, this.formService.createCompositeField(subField));
+    else if (subField.typeInfo.type === 'string') {
+      tmpGroup.addControl(name, this.formService.createField(subField));
     }
   }
 

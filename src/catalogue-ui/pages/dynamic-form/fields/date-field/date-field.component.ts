@@ -21,7 +21,7 @@ export class DateFieldComponent implements OnInit {
 
   readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -29,7 +29,7 @@ export class DateFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-  readonly hideField = signal<boolean>(null);
+  readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
     const position = this.position();
@@ -41,13 +41,14 @@ export class DateFieldComponent implements OnInit {
     this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
     this.refresh(this.formControl);
 
-    if (this.fieldData().form.dependsOn) {
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) {
       // console.log(this.fieldData().form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData().form.dependsOn.name).value, this.fieldData().form.dependsOn.value);
+      this.enableDisableField(this.form.get(dependsOn.name)!.value, dependsOn.value);
 
-      this.form.get(this.fieldData().form.dependsOn.name).valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
+      this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
         value => {
-          this.enableDisableField(value, this.fieldData().form.dependsOn.value);
+          this.enableDisableField(value, dependsOn.value);
         },
         error => {console.log(error);}
       );

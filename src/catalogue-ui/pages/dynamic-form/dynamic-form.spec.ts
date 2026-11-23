@@ -63,7 +63,7 @@ const model = (): Model => Object.assign(new Model(), {
 })
 class FormPageComponent {
   readonly payload = signal<unknown>(null);
-  readonly model = signal<Model>(null);
+  readonly model = signal<Model | null>(null);
 }
 
 @Component({
