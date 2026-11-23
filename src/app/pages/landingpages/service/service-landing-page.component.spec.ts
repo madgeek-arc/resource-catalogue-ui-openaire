@@ -98,6 +98,18 @@ describe('ServiceLandingPageComponent', () => {
     expect(service.extras.openAireChangeLog).toEqual(['newer', 'older']);
   });
 
+  it('shows a service that has no change log', async () => {
+    const {root, answer, text} = await setUp('/service/argos/overview');
+    const service = makeService('argos', 'Plan your data', ['zenodo']);
+    delete (service.extras as Partial<typeof service.extras>).openAireChangeLog;
+
+    answer('argos', service);
+
+    expect(root.querySelector('.loader-big')).toBeNull();
+    expect(text()).toContain('Plan your data');
+    expect(text()).toContain('Zenodo');
+  });
+
   it('shows the service without related services when they fail to load', async () => {
     related.mockReturnValue(throwError(() => 'server down'));
     vi.spyOn(console, 'log').mockImplementation(() => undefined);

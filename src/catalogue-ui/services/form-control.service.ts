@@ -211,12 +211,18 @@ export class FormControlService implements OnInit{
     return `^(\\d)*(\\.)?([0-9]{${decimals}})?$`;
   }
 
+  /**
+   * Removes null and empty-string values, and lists left empty, at every depth, in place.
+   * A list is walked from its end, so removing an entry doesn't shift the ones still to visit,
+   * and its entries are spliced out rather than deleted, which would leave holes sent as null.
+   */
   static removeNulls(obj: any) {
     const isArray = obj instanceof Array;
-    for (const k in obj) {
+    const keys = isArray ? Object.keys(obj).reverse() : Object.keys(obj);
+    const remove = (k: string) => isArray ? obj.splice(Number(k), 1) : delete obj[k];
+    for (const k of keys) {
       if (obj[k] === null || obj[k] === '') {
-        // TODO: check 'obj.splice(k, 1)', is k supposed to be a number? if not then fix this method
-        isArray ? obj.splice(+k, 1) : delete obj[k];
+        remove(k);
       } else if (typeof obj[k] === 'object') {
         if (typeof obj[k].value !== 'undefined' && typeof obj[k].lang !== 'undefined') {
           if (obj[k].value === '' && obj[k].lang === 'en') {
@@ -224,14 +230,8 @@ export class FormControlService implements OnInit{
           }
         }
         FormControlService.removeNulls(obj[k]);
-      }
-      if (obj[k] instanceof Array && obj[k].length === 0) {
-        delete obj[k];
-      } else if (obj[k] instanceof Array) {
-        for (const l in obj[k]) {
-          if (obj[k][l] === null || obj[k][l] === '') {
-            delete obj[k][l];
-          }
+        if (obj[k] instanceof Array && obj[k].length === 0) {
+          remove(k);
         }
       }
     }

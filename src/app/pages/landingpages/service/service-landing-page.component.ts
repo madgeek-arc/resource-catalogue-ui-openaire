@@ -35,8 +35,8 @@ export class ServiceLandingPageComponent {
       this.resourceService.getUiVocabularies()
     ).pipe(
       switchMap(([service, vocabularies]) => {
-        // Throws for a service without a change log, which catchError below turns into the empty page, as before.
-        service.extras['openAireChangeLog']!.reverse();
+        // Newest first; a service without a change log shows none (the tabs check for it).
+        service.extras['openAireChangeLog']?.reverse();
         return this.relatedServices(service).pipe(map(relatedServices => ({service, vocabularies, relatedServices})));
       }),
       catchError(error => {
