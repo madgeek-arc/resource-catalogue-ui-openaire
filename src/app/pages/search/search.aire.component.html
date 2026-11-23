@@ -1,17 +1,21 @@
+@let searchResults = results();
+@let totalPages = paging().totalPages;
+@let pages = paging().pages;
+@let page = currentPage();
 <div id="tm-main" class="tm-main uk-section uk-section-default" uk-height-viewport="expand: true" style="box-sizing: border-box;">
   <div class="uk-container uk-container-large">
 
     <!-- TOP HELP CONTENT -->
     <app-help-content #topHelperContent [position]="'top'"
-                      [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'" />
+                      [class]="topHelperContent.isPresent() ? 'uk-margin-medium-top uk-margin-medium-bottom' : 'clear-style'" />
 
     <div class="uk-grid uk-margin-medium-bottom uk-margin-medium-top">
       <div class="uk-width-1-1">
         <div class="uk-flex uk-flex-center">
           <div class="uk-inline">
             <span class="uk-form-icon" uk-icon="icon: search"></span>
-            <input type="text" #searchInput class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..."
-                   [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}">
+            <input type="text" class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..."
+                   [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" (keyup)="typed.next($any($event.target).value)">
           </div>
         </div>
       </div>
@@ -77,13 +81,13 @@
           </div>
 }
 
-          @if (loading) {
+          @if (loading()) {
 <div class="whiteFilm">
             <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>
           </div>
 }
 
-          @if (searchResults?.results.length > 0) {
+          @if (searchResults?.results.length) {
 <div>
 
             <div class="uk-grid uk-row-first uk-margin-bottom uk-margin-top">
@@ -92,31 +96,31 @@
                 <div class="uk-flex uk-flex-between uk-flex-middle">
 
                   <p class="big-text uk-margin-remove">
-                    <span class="uk-text-bold">{{searchResults.total}}</span> Services, Page <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
+                    <span class="uk-text-bold">{{searchResults.total}}</span> Services, Page <span class="uk-text-bold">{{page}}</span> of {{totalPages}}
                   </p>
 
                   <ul class="uk-pagination uk-visible@m">
-                    @if (currentPage > 2 && totalPages > 5) {
+                    @if (page > 2 && totalPages > 5) {
 <li>
                       <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
                     </li>
 }
-                    @if (currentPage > 1) {
+                    @if (page > 1) {
 <li>
                       <a (click)="previousPage()"><span uk-pagination-previous></span></a>
                     </li>
 }
                     @for (i of pages; track i) {
-<li [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
+<li [class.uk-active]="i === page" [class.uk-animation-fade]="i === page">
                       <a (click)="goToPage(i - 1)">{{i}}</a>
                     </li>
 }
-                    @if (currentPage !== totalPages) {
+                    @if (page !== totalPages) {
 <li>
                       <a (click)="nextPage()"><span uk-pagination-next></span></a>
                     </li>
 }
-                    @if (currentPage < totalPages && totalPages > 5) {
+                    @if (page < totalPages && totalPages > 5) {
 <li>
                       <a (click)="goToPage(totalPages-1)"><span uk-pagination-next></span><span uk-pagination-next></span></a>
                     </li>
@@ -298,27 +302,27 @@
 }
 
             <ul class="uk-pagination uk-flex-right uk-margin">
-              @if (currentPage > 2 && totalPages > 5) {
+              @if (page > 2 && totalPages > 5) {
 <li>
                 <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
               </li>
 }
-              @if (currentPage > 1) {
+              @if (page > 1) {
 <li>
                 <a (click)="previousPage()"><span uk-pagination-previous></span></a>
               </li>
 }
               @for (i of pages; track i) {
-<li [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
+<li [class.uk-active]="i === page" [class.uk-animation-fade]="i === page">
                 <a (click)="goToPage(i-1)">{{i}}</a>
               </li>
 }
-              @if (currentPage !== totalPages) {
+              @if (page !== totalPages) {
 <li>
                 <a (click)="nextPage()"><span uk-pagination-next></span></a>
               </li>
 }
-              @if (currentPage < totalPages && totalPages > 5) {
+              @if (page < totalPages && totalPages > 5) {
 <li>
                 <a (click)="goToPage(totalPages-1)"><span uk-pagination-next></span><span uk-pagination-next></span></a>
               </li>
@@ -334,13 +338,13 @@
 
       <!-- RIGHT HELP CONTENT -->
       <app-aside-help-content #rightHelperContent [position]="'right'"
-                              [ngClass]="rightHelperContent.isPresent()?'tm-sidebar uk-width-1-4@m uk-first-column':'clear-style'" />
+                              [class]="rightHelperContent.isPresent() ? 'tm-sidebar uk-width-1-4@m uk-first-column' : 'clear-style'" />
 
     </div>
 
     <!-- BOTTOM HELP CONTENT -->
     <app-help-content #bottomHelperContent [position]="'bottom'"
-                      [ngClass]="bottomHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'" />
+                      [class]="bottomHelperContent.isPresent() ? 'uk-margin-medium-top uk-margin-medium-bottom' : 'clear-style'" />
 
   </div>
 </div>
@@ -378,7 +382,7 @@
 <app-email-modal [serviceIdsArray]="this.serviceIdsArray" />
 
 
-@if ((projectName=='OpenAIRE Catalogue') && canAddOrEditService) {
+@if ((projectName=='OpenAIRE Catalogue') && canAddOrEditService()) {
 <div class="uk-float-right" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
   <a href="#modal" uk-toggle class="uk-icon-button uk-button-secondary" style="padding: 30px;" >
     <i class="fa fa-2x fa-plus"></i>

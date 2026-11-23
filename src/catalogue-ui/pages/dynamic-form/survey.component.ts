@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
+import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output, linkedSignal, signal } from '@angular/core';
+import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
 import {Section, Field, Model, Tabs} from '../../domain/dynamic-form-model';
@@ -11,7 +11,6 @@ import BitSet from 'bitset';
 import seedRandom from 'seedrandom';
 
 import UIkit from 'uikit';
-import { NgClass } from '@angular/common';
 import { ChapterEditComponent } from './chapter-edit.component';
 pdfMake.vfs = pdfFonts.vfs;
 
@@ -19,8 +18,8 @@ pdfMake.vfs = pdfFonts.vfs;
     selector: 'app-survey',
     templateUrl: 'survey.component.html',
     providers: [FormControlService],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgClass, ChapterEditComponent]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ChapterEditComponent]
 })
 
 export class SurveyComponent implements OnInit, OnChanges {
@@ -29,14 +28,19 @@ export class SurveyComponent implements OnInit, OnChanges {
   private router = inject(Router);
 
 
-  @Input() payload: any = null; // can't import specific project class in lib file
-  @Input() model: Model = null;
-  readonly subType = input<string>(null);
-  readonly activeUsers = input<any[]>(null);
-  readonly vocabulariesMap = input<Map<string, object[]>>(null);
-  readonly subVocabularies = input<Map<string, object[]>>(null);
-  readonly tabsHeader = input<string>(null);
-  readonly mandatoryFieldsText = input<string>(null);
+  readonly payload = input<any>(null); // can't import specific project class in lib file
+  readonly model = input<Model | null>(null);
+  readonly subType = input<string | null>(null);
+  readonly activeUsers = input<any[] | null>(null);
+  readonly vocabulariesMap = input<Map<string, object[]> | null>(null);
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly tabsHeader = input<string | null>(null);
+  readonly mandatoryFieldsText = input<string | null>(null);
+
+  /** The model, for the methods that only run once the form is shown, which needs a model. */
+  private loadedModel(): Model {
+    return this.model()!;
+  }
   readonly downloadPDF = input(false);
   readonly valid = output<boolean>();
   readonly submit = output<[
@@ -44,10 +48,14 @@ export class SurveyComponent implements OnInit, OnChanges {
     boolean
 ]>();
 
+  /** The answers shown: the payload, then what the server returns after the unsaved-changes prompt submits. */
+  private readonly answers = linkedSignal(() => this.payload());
+
   sectionIndex = 0;
-  chapterChangeMap: Map<string,boolean> = new Map<string, boolean>();
-  currentChapter: Section = null;
-  chapterForSubmission: Section = null;
+  /** Chapters with unsaved changes; the chapter tabs mark them. */
+  readonly chapterChangeMap = signal(new Map<string, boolean>());
+  currentChapter: Section | null = null;
+  chapterForSubmission: Section | null = null;
   sortedSurveyAnswers: object = {};
   editMode = false;
   bitset: Tabs = new Tabs();
@@ -56,8 +64,8 @@ export class SurveyComponent implements OnInit, OnChanges {
   readonly = false;
   freeView = false;
   validate = false;
-  errorMessage = '';
-  successMessage = '';
+  readonly errorMessage = signal('');
+  readonly successMessage = signal('');
 
   form: UntypedFormGroup;
 
@@ -77,38 +85,40 @@ export class SurveyComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.ready = false;
-    if (this.payload)
+    if (this.answers())
       this.editMode = true;
-    if (this.model) {
-      this.currentChapter = this.model.sections[0];
-      this.model.sections = this.model.sections.sort((a, b) => a.order - b.order);
-      for (const section of this.model.sections) {
-        for (const surveyAnswer in this.payload?.answer) {
-          if (section.id === this.payload.answer[surveyAnswer]?.chapterId) {
-            this.chapterChangeMap.set(section.id, false);
-            this.sortedSurveyAnswers[section.id] = this.payload.answer[surveyAnswer].answer;
+    const model = this.model();
+    if (model) {
+      this.currentChapter = model.sections[0];
+      model.sections = model.sections.sort((a, b) => a.order - b.order);
+      for (const section of model.sections) {
+        for (const surveyAnswer in this.answers()?.answer) {
+          if (section.id === this.answers().answer[surveyAnswer]?.chapterId) {
+            // It matched an answer's chapter id, so it is set.
+            this.markChapter(section.id!, false);
+            this.sortedSurveyAnswers[section.id!] = this.answers().answer[surveyAnswer].answer;
             break;
           }
         }
       }
-      for (let i = 0; i < this.model.sections.length; i++) {
-        if (this.model.sections[i].subSections === null) {
-          this.form.addControl(this.model.name, this.formControlService.toFormGroup(this.model.sections, true));
+      for (let i = 0; i < model.sections.length; i++) {
+        if (model.sections[i].subSections === null) {
+          this.form.addControl(model.name, this.formControlService.toFormGroup(model.sections, true));
           break;
         }
-        if (!this.model.sections[i].subType || this.model.sections[i].subType === this.subType()) {
-          this.form.addControl(this.model.sections[i].name, this.formControlService.toFormGroup(this.model.sections[i].subSections, true));
+        if (!model.sections[i].subType || model.sections[i].subType === this.subType()) {
+          this.form.addControl(model.sections[i].name, this.formControlService.toFormGroup(model.sections[i].subSections, true));
         }
       }
-      if (this.payload?.answer) {
-        for (let i = 0; i < this.model.sections.length; i++) {
-          if (this.payload.answer[this.model.sections[i].name])
-            this.prepareForm(this.payload.answer[this.model.sections[i].name], this.model.sections[i].subSections);
+      if (this.answers()?.answer) {
+        for (let i = 0; i < model.sections.length; i++) {
+          if (this.answers().answer[model.sections[i].name])
+            this.prepareForm(this.answers().answer[model.sections[i].name], model.sections[i].subSections);
         }
-        this.form.patchValue(this.payload.answer);
+        this.form.patchValue(this.answers().answer);
         this.form.markAllAsTouched();
       }
-      if (this.payload?.validated) {
+      if (this.answers()?.validated) {
         this.readonly = true;
         this.validate = false;
       } else if (this.validate) {
@@ -120,10 +130,11 @@ export class SurveyComponent implements OnInit, OnChanges {
       }
       this.ready = true;
 
-      if (this.activeUsers()?.length > 0) {
+      const activeUsers = this.activeUsers();
+      if (activeUsers && activeUsers.length > 0) {
         setTimeout(()=> {
-          const users = [];
-          this.activeUsers().forEach(user => {
+          const users: string[] = [];
+          activeUsers.forEach(user => {
             users.push(' '+user.fullname);
           });
           UIkit.tooltip('#concurrentEdit', {title: users.toString(), pos: 'bottom'});
@@ -134,10 +145,10 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   validateForm() {
-    for (const chapterChangeMapElement of this.chapterChangeMap) {
+    for (const chapterChangeMapElement of this.chapterChangeMap()) {
       if (chapterChangeMapElement[1]) {
         UIkit.modal('#validation-modal').hide();
-        this.errorMessage = 'There are unsaved changes, please submit all changes first and then validate.';
+        this.errorMessage.set('There are unsaved changes, please submit all changes first and then validate.');
         return;
       }
     }
@@ -150,31 +161,35 @@ export class SurveyComponent implements OnInit, OnChanges {
       let str = '';
       for (const key in this.form.value) {
         // console.log(this.form.get('extras.'+key));
-        console.log(key + ': '+ this.form.get(key).valid);
-        if (!this.form.get(key).valid) {
+        console.log(key + ': '+ this.form.get(key)!.valid);
+        if (!this.form.get(key)!.valid) {
           str =  str + '\n\t-> ' + key;
         }
-        for (const keyElement in this.form.get(key).value) {
-          console.log(keyElement + ': '+ this.form.get(key+'.'+keyElement).valid);
+        for (const keyElement in this.form.get(key)!.value) {
+          console.log(keyElement + ': '+ this.form.get(key+'.'+keyElement)!.valid);
         }
       }
-      this.errorMessage = 'There are missing fields at chapters ' + str;
+      this.errorMessage.set('There are missing fields at chapters ' + str);
     }
   }
 
   parentSubmit() {
-    for (let i = 0; i < this.form.value?.Service?.persistentIdentitySystems?.length; i++) {
-      if (!this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityType && !this.form.value?.Service?.persistentIdentitySystems[i]?.persistentIdentityEntityTypeSchemes[i]) {
-        this.form.value.Service.persistentIdentitySystems[i] = null;
+    // The group is named after the model's section: 'service' in the current form models, 'Service' in older ones.
+    const service = this.form.value?.service ?? this.form.value?.Service;
+    if (service) {
+      for (let i = 0; i < service.persistentIdentitySystems?.length; i++) {
+        if (!service.persistentIdentitySystems[i]?.persistentIdentityEntityType && !service.persistentIdentitySystems[i]?.persistentIdentityEntityTypeSchemes[i]) {
+          service.persistentIdentitySystems[i] = null;
+        }
       }
-    }
-    for (let i = 0; i < this.form.value?.Service?.researchProductLicensings?.length; i++) {
-      if (!this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseName && !this.form.value?.Service?.researchProductLicensings[i]?.researchProductLicenseURL) {
-        this.form.value.Service.researchProductLicensings[i] = null;
+      for (let i = 0; i < service.researchProductLicensings?.length; i++) {
+        if (!service.researchProductLicensings[i]?.researchProductLicenseName && !service.researchProductLicensings[i]?.researchProductLicenseURL) {
+          service.researchProductLicensings[i] = null;
+        }
       }
-    }
-    if(!this.form.value?.Service?.researchProductMetadataLicensing?.researchProductMetadataLicenseName && !this.form.value?.Service?.researchProductMetadataLicensing?.researchProductMetadataLicenseURL){
-      this.form.value.Service.researchProductMetadataLicensing = null;
+      if (!service.researchProductMetadataLicensing?.researchProductMetadataLicenseName && !service.researchProductMetadataLicensing?.researchProductMetadataLicenseURL) {
+        service.researchProductMetadataLicensing = null;
+      }
     }
     // console.log(this.form);
     this.submit.emit([this.form, this.editMode]);
@@ -187,24 +202,22 @@ export class SurveyComponent implements OnInit, OnChanges {
     // this.formControlService.postItem(this.surveyAnswers.id, this.form.get(this.chapterForSubmission.name).value, this.editMode).subscribe(
     let postMethod = '';
     let firstParam = '';
-    if (this.payload?.id) {
+    if (this.answers()?.id) {
       postMethod = 'postItem';
-      firstParam = this.payload.id;
+      firstParam = this.answers().id;
     } else {
       postMethod = 'postGenericItem';
-      firstParam = this.model.resourceType;
+      firstParam = this.loadedModel().resourceType;
     }
     this.formControlService[postMethod](firstParam, this.form.value, this.editMode).subscribe(
       res => {
-        this.successMessage = 'Updated successfully!';
-        for (const key of this.chapterChangeMap.keys()) {
-          this.chapterChangeMap.set(key, false);
-        }
+        this.successMessage.set('Updated successfully!');
+        this.chapterChangeMap.update(changes => new Map([...changes.keys()].map(key => [key, false])));
         UIkit.modal('#unsaved-changes-modal').hide();
-        this.payload = res;
+        this.answers.set(res);
       },
       error => {
-        this.errorMessage = 'Something went bad, server responded: ' + JSON.stringify(error?.error?.message);
+        this.errorMessage.set('Something went bad, server responded: ' + JSON.stringify(error?.error?.message));
         UIkit.modal('#unsaved-changes-modal').hide();
         // this.showLoader = false;
         // console.log(error);
@@ -219,7 +232,8 @@ export class SurveyComponent implements OnInit, OnChanges {
   showUnsavedChangesPrompt(chapter: Section) {
     if (this.readonly || this.freeView)
       return;
-    if (this.chapterChangeMap.get(this.currentChapter.id)) {
+    // The chapter tabs only show once ngOnChanges has set the current chapter from the model.
+    if (this.chapterChangeMap().get(this.currentChapter!.id!)) {
       this.chapterForSubmission = this.currentChapter;
       UIkit.modal('#unsaved-changes-modal').show();
     }
@@ -227,19 +241,20 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   getFormGroup(sectionIndex: number): UntypedFormGroup {
-    if (this.model.sections[sectionIndex].subSections === null) {
-      return this.form.get(this.model.name) as UntypedFormGroup;
+    if (this.loadedModel().sections[sectionIndex].subSections === null) {
+      return this.form.get(this.loadedModel().name) as UntypedFormGroup;
     } else
       // console.log(this.form.get(this.survey.sections[sectionIndex].name));
-      return this.form.get(this.model.sections[sectionIndex].name) as UntypedFormGroup;
+      return this.form.get(this.loadedModel().sections[sectionIndex].name) as UntypedFormGroup;
   }
 
-  setChapterChangesMap(chapterId: string[]) {
-    if (chapterId[1] === null) {
-      this.chapterChangeMap.set(chapterId[0], true);
-    } else {
-      this.chapterChangeMap.set(chapterId[0], false);
-    }
+  /** The chapter id, and the chapter whose changes were discarded, if any. */
+  setChapterChangesMap(chapterId: (string | null)[]) {
+    this.markChapter(chapterId[0]!, chapterId[1] === null);
+  }
+
+  private markChapter(id: string, changed: boolean) {
+    this.chapterChangeMap.update(changes => new Map(changes).set(id, changed));
   }
 
   /** create additional fields for arrays if needed --> **/
@@ -264,14 +279,16 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   pushToFormArray(name: string, length: number, arrayIndex?: number) {
-    const field = this.getModelData(this.model.sections, name);
-    while (this.getFormControl(this.form, name, arrayIndex).length < length) {
-      this.getFormControl(this.form, name, arrayIndex).push(this.formControlService.createField(field));
+    // Called for the names of answered fields, which the model defines.
+    const field = this.getModelData(this.loadedModel().sections, name)!;
+    // The form has a control for every field the model defines.
+    while (this.getFormControl(this.form, name, arrayIndex)!.length < length) {
+      this.getFormControl(this.form, name, arrayIndex)!.push(this.formControlService.createField(field));
     }
   }
 
-  getModelData(model: Section[], name: string): Field {
-    let field = null;
+  getModelData(model: Section[], name: string): Field | null {
+    let field: Field | null = null;
     for (let i = 0; i < model.length; i++) {
       if (model[i].fields === null) {
         field = this.getModelData(model[i].subSections, name);
@@ -289,12 +306,12 @@ export class SurveyComponent implements OnInit, OnChanges {
   }
 
   searchSubFields(fields: Field[], name): Field | null {
-    let field = null;
+    let field: Field | null = null;
     for (let j = 0; j < fields.length; j++) {
       if(fields[j].name === name) {
         return fields[j];
-      } else if (fields[j].subFields?.length > 0) {
-        field = this.searchSubFields(fields[j].subFields, name);
+      } else if ((fields[j].subFields?.length ?? 0) > 0) {
+        field = this.searchSubFields(fields[j].subFields!, name);
         if (field?.name === name)
           return field;
       }
@@ -302,8 +319,9 @@ export class SurveyComponent implements OnInit, OnChanges {
     return null;
   }
 
-  getFormControl(group: UntypedFormGroup | UntypedFormArray, name: string, position?: number): UntypedFormArray {
-    let abstractControl = null;
+  getFormControl(group: UntypedFormGroup | UntypedFormArray, name: string, position?: number): UntypedFormArray | null {
+    // Callers ask for array fields; the control found under that name is returned as an array, as before.
+    let abstractControl: AbstractControl | null = null;
     for (const key in group.controls) {
       abstractControl = group.controls[key];
       if (abstractControl instanceof UntypedFormGroup || abstractControl instanceof UntypedFormArray) {
@@ -311,45 +329,45 @@ export class SurveyComponent implements OnInit, OnChanges {
           return abstractControl as UntypedFormArray;
         } else if (key !== name) {
           if (abstractControl instanceof UntypedFormArray) {
-            if (abstractControl.controls.length > position) {
+            if (position !== undefined && abstractControl.controls.length > position) {
               abstractControl = this.getFormControl(abstractControl.controls[position] as UntypedFormGroup | UntypedFormArray, name, position);
               if (abstractControl !== null)
-                return abstractControl;
+                return abstractControl as UntypedFormArray;
             } else {
               abstractControl = null;
             }
           } else {
             abstractControl = this.getFormControl(abstractControl, name, position);
             if (abstractControl !== null)
-              return abstractControl;
+              return abstractControl as UntypedFormArray;
           }
         }
       } else {
         if (key === name) {
-          return abstractControl;
+          return abstractControl as UntypedFormArray;
         }
         abstractControl = null;
       }
     }
-    return abstractControl;
+    return abstractControl as UntypedFormArray | null;
   }
   /** <-- create additional fields for arrays if needed **/
 
   /** Generate PDF --> **/
   generatePDF() {
     const docDefinition: DocDefinition = new DocDefinition();
-    docDefinition.content.push(new Content(this.model.name, ['title']));
-    if (this.model.notice)
-      docDefinition.content.push({text: this.strip(this.model.notice), italics: true, alignment: 'justify'});
-    docDefinition.info = new PdfMetadata(this.model.name);
+    docDefinition.content.push(new Content(this.loadedModel().name, ['title']));
+    if (this.loadedModel().notice)
+      docDefinition.content.push({text: this.strip(this.loadedModel().notice), italics: true, alignment: 'justify'});
+    docDefinition.info = new PdfMetadata(this.loadedModel().name);
 
     let description = 'none';
-    if (this.model.name === 'Survey on National Contributions to EOSC 2022') {
+    if (this.loadedModel().name === 'Survey on National Contributions to EOSC 2022') {
       description = 'end';
     }
     this.createDocumentDefinition(this.form, docDefinition, description);
 
-    pdfMake.createPdf(docDefinition).download(this.model.name);
+    pdfMake.createPdf(docDefinition).download(this.loadedModel().name);
   }
 
   documentDefinitionRecursion(fields: Field[], docDefinition: DocDefinition, description: string, descriptionAtEnd?: DocDefinition) {
@@ -361,7 +379,7 @@ export class SurveyComponent implements OnInit, OnChanges {
         && !field.form.description.text.includes('For example on curricula for data stewardship')
       ) {
         if (description === 'end') {
-          let questionNumber = null;
+          let questionNumber: string | null = null;
           if (field.label.text) {
             questionNumber = field.label.text.split('. ')[0];
           }
@@ -378,16 +396,17 @@ export class SurveyComponent implements OnInit, OnChanges {
             ]
           };
           // descriptionAtEnd.content.push(new Content(questionNumber + ' ' + components.shift() + '-' + components.join('-'), ['mt_3']));
-          descriptionAtEnd.content.push(content);
+          // Called with description 'end' only together with a descriptionAtEnd document.
+          descriptionAtEnd!.content.push(content);
         }
         if (description === 'show')
           docDefinition.content.push(new Content(field.form.description.text, ['mt_3']));
       }
-      const answerValues = this.findVal(this.payload?.answer, field.name);
+      const answerValues = this.findVal(this.answers()?.answer, field.name);
       if (field.typeInfo.type === 'radio') {
         const values = field.typeInfo.values;
         // if (field.kind === 'conceal-reveal')
-        //   values = this.getModelData(this.model.sections, field.parent).typeInfo.values;
+        //   values = this.getModelData(this.loadedModel().sections, field.parent).typeInfo.values;
         for (const value of values) {
           const content = new Columns();
           if (value === answerValues?.[0]){
@@ -432,14 +451,14 @@ export class SurveyComponent implements OnInit, OnChanges {
   createDocumentDefinition(group: UntypedFormGroup | UntypedFormArray, docDefinition: DocDefinition, description: string) {
     const descriptionsAtEnd = new DocDefinition();
 
-    if (this.model.name === 'Survey on National Contributions to EOSC 2022') {
+    if (this.loadedModel().name === 'Survey on National Contributions to EOSC 2022') {
       docDefinition.content.push(new Content('Definitions of key terms can be found in Appendix A', ['mt_3']));
     }
 
-    this.model.sections.sort((a, b) => a.order - b.order);
-    for (const section of this.model.sections) {
+    this.loadedModel().sections.sort((a, b) => a.order - b.order);
+    for (const section of this.loadedModel().sections) {
       section.subSections.sort((a, b) => a.order - b.order);
-      if (this.model.sections.length > 1) {
+      if (this.loadedModel().sections.length > 1) {
         docDefinition.content.push(new Content(section.name, ['chapterHeader']));
       }
 
@@ -453,7 +472,7 @@ export class SurveyComponent implements OnInit, OnChanges {
 
     }
 
-    if (this.model.name === 'Survey on National Contributions to EOSC 2022') {
+    if (this.loadedModel().name === 'Survey on National Contributions to EOSC 2022') {
 
       docDefinition.content.push(new Content('Appendix A', ['title']));
       docDefinition.content.push(...descriptionsAtEnd.content);
@@ -481,7 +500,7 @@ export class SurveyComponent implements OnInit, OnChanges {
       return null;
     const seen = new Set(); let active = [obj];
     while (active.length) {
-      const new_active = []; const found = [];
+      const new_active: object[] = []; const found: unknown[] = [];
       for (let i=0; i<active.length; i++) {
         Object.keys(active[i]).forEach(function(k){
           const x = active[i][k];
@@ -511,7 +530,7 @@ export class SurveyComponent implements OnInit, OnChanges {
   closeError() {
     UIkit.alert('#errorAlert').close();
     setTimeout(() => {
-      this.errorMessage = '';
+      this.errorMessage.set('');
     }, 550);
   }
 
@@ -520,7 +539,7 @@ export class SurveyComponent implements OnInit, OnChanges {
       UIkit.alert('#successAlert').close();
     }, 4000);
     setTimeout(() => {
-      this.successMessage = '';
+      this.successMessage.set('');
     }, 4550);
   }
 

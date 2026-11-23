@@ -1,25 +1,29 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import {FormControlService} from '../../../../services/form-control.service';
-import { NgClass } from '@angular/common';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
 import {RichTextEditorComponent} from '../../../../shared/rich-text-editor/rich-text-editor.component';
 
 @Component({
     selector: 'app-rich-text-field',
     templateUrl: './rich-text-field.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass, ReadMoreTextComponent, RichTextEditorComponent]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, ReadMoreTextComponent, RichTextEditorComponent]
 })
 
 export class RichTextFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
+  private destroyRef = inject(DestroyRef);
   private formControlService = inject(FormControlService);
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -27,7 +31,7 @@ export class RichTextFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-  hideField: boolean = null;
+  readonly hideField = signal<boolean | null>(null);
 
 
   ngOnInit() {
@@ -39,16 +43,19 @@ export class RichTextFieldComponent implements OnInit {
     }
     // console.log(this.form);
 
-    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
+    this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
+
+    this.refresh(this.formControl);
     // console.log(this.formControl);
 
-    if(this.fieldData.form.dependsOn) {
-      // console.log(this.fieldData.form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData.form.dependsOn.name).value, this.fieldData.form.dependsOn.value);
-      // console.log(this.fieldData.name);
-      this.form.get(this.fieldData.form.dependsOn.name).valueChanges.subscribe(
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) {
+      // console.log(this.fieldData().form.dependsOn);
+      this.enableDisableField(this.form.get(dependsOn.name)!.value, dependsOn.value);
+      // console.log(this.fieldData().name);
+      this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
         value => {
-          this.enableDisableField(value, this.fieldData.form.dependsOn.value);
+          this.enableDisableField(value, dependsOn.value);
         },
         error => {console.log(error);}
       );
@@ -62,7 +69,7 @@ export class RichTextFieldComponent implements OnInit {
   }
 
   push() {
-    this.fieldAsFormArray().push(this.formControlService.createField(this.fieldData));
+    this.fieldAsFormArray().push(this.formControlService.createField(this.fieldData()));
   }
 
   remove(field: string, i: number) {
@@ -98,11 +105,11 @@ export class RichTextFieldComponent implements OnInit {
   enableDisableField(value, enableValue) {
     if (value?.toString() == enableValue) {
       this.formControl.enable();
-      this.hideField = false;
+      this.hideField.set(false);
     } else {
       this.formControl.disable();
       this.formControl.reset();
-      this.hideField = true;
+      this.hideField.set(true);
       // maybe add this if the remaining empty fields are a problem
       // (this.formControl as unknown as FormArray).clear();
     }

@@ -1,30 +1,34 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, DestroyRef, signal } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet, vocabularyName} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import {URLValidator} from '../../../../shared/validators/generic.validator';
 import {ActivatedRoute} from '@angular/router';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-vocabulary-field',
     templateUrl: './vocabulary-field.component.html',
     styleUrls: ['./vocabulary-field.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgSelectComponent, NgClass]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, NgSelectComponent]
 })
 
 export class VocabularyFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
+  private destroyRef = inject(DestroyRef);
   private formControlService = inject(FormControlService);
   private route = inject(ActivatedRoute);
 
-  @Input() fieldData: Field;
-  readonly vocabularies = input<Map<string, object[]>>(null);
-  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly fieldData = input.required<Field>();
+  readonly vocabularies = input<Map<string, object[]> | null>(null);
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -33,9 +37,10 @@ export class VocabularyFieldComponent implements OnInit {
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
 
-  dynamicVoc: object[] = [];
+  /** The options of a field that depends on another: the sub-vocabulary of the value picked there. */
+  readonly dynamicVoc = signal<object[]>([]);
   /** Key of this field's options in `vocabularies`. */
-  vocabularyKey: string = null;
+  vocabularyKey: string | null = null;
 
   ngOnInit() {
     const position = this.position();
@@ -44,23 +49,25 @@ export class VocabularyFieldComponent implements OnInit {
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
-    this.vocabularyKey = vocabularyName(this.fieldData.typeInfo);
+    this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
+    this.refresh(this.formControl);
+    this.vocabularyKey = vocabularyName(this.fieldData().typeInfo);
 
-    if(this.fieldData.name === 'resourceOrganisation' && this.route.snapshot.paramMap.get('providerId')!==null){
-        this.form.get('resourceOrganisation').setValue(this.route.snapshot.paramMap.get('providerId'));
+    if(this.fieldData().name === 'resourceOrganisation' && this.route.snapshot.paramMap.get('providerId')!==null){
+        this.form.get('resourceOrganisation')!.setValue(this.route.snapshot.paramMap.get('providerId'));
     }
 
-    if(this.fieldData.form.dependsOn) {
-      // console.log(this.fieldData.form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData.form.dependsOn.name).value);
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) {
+      // console.log(this.fieldData().form.dependsOn);
+      this.enableDisableField(this.form.get(dependsOn.name)!.value);
 
-      this.form.get(this.fieldData.form.dependsOn.name).valueChanges.subscribe(value => {
+      this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
         this.enableDisableField(value);
       });
     }
-    // console.log(this.vocabularies[this.fieldData.typeInfo.vocabulary]);
-    // console.log(this.fieldData.name);
+    // console.log(this.vocabularies[this.fieldData().typeInfo.vocabulary]);
+    // console.log(this.fieldData().name);
     // console.log(this.formControl);
   }
 
@@ -93,12 +100,12 @@ export class VocabularyFieldComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.fieldAsFormArray()?.get([position])?.get(groupName).valid
-        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName).dirty));
+      return !!(!this.fieldAsFormArray()?.get([position])?.get(groupName)!.valid
+        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName)!.dirty));
 
     }
-    return (!this.fieldAsFormArray().get([position]).valid
-      && (edit || this.fieldAsFormArray().get([position]).dirty));
+    return (!this.fieldAsFormArray().get([position])!.valid
+      && (edit || this.fieldAsFormArray().get([position])!.dirty));
   }
   /** Bitsets--> **/
 
@@ -120,18 +127,19 @@ export class VocabularyFieldComponent implements OnInit {
   }
 
   enableDisableField(value) {
-    this.dynamicVoc = [];
+    this.dynamicVoc.set([]);
+    // Only called for a field that depends on another.
+    const dependsOn = this.fieldData().form.dependsOn!;
 
-    if (this.fieldData.form.dependsOn.value) {
-      if (value === this.fieldData.form.dependsOn.value) {
-        // this.dynamicVoc = this.subVocabularies[value];
+    if (dependsOn.value) {
+      if (value === dependsOn.value) {
         this.formControl.enable();
       } else {
         this.formControl.disable();
         this.formControl.reset();
       }
     } else if (value) {
-      this.dynamicVoc = this.subVocabularies()[value];
+      this.dynamicVoc.set(this.subVocabularies()![value]);
       this.formControl.enable();
     } else {
       this.formControl.disable();

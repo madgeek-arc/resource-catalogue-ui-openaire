@@ -1,63 +1,63 @@
-<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData.form.display.cssClasses}}" [ngClass]="{'uk-hidden clear-style': hideField}">
+<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData().form.display.cssClasses}}" [class.uk-hidden]="hideField()" [class.clear-style]="hideField()">
 
-  @if (fieldData.label.text) {
-    <div class="uk-form-label uk-width-9-10 uk-margin-bottom {{fieldData.label.cssClasses}}"
-      [attr.for]="fieldData.name" style="{{fieldData.label.style}}" [innerHTML]="fieldData.label.text + (fieldData.form.mandatory ? ' (*)' : '')">
+  @if (fieldData().label.text) {
+    <div class="uk-form-label uk-width-9-10 uk-margin-bottom {{fieldData().label.cssClasses}}"
+      [attr.for]="fieldData().name" style="{{fieldData().label.style}}" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
     </div>
   }
-  @if (fieldData.form.description?.showLess) {
-    @if (fieldData.form.description.text) {
-      <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
-        style="{{fieldData.form.description.style}}">
-        <read-more-text [maxHeight]="46" [text]="fieldData.form.description.text" />
+  @if (fieldData().form.description?.showLess) {
+    @if (fieldData().form.description.text) {
+      <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
+        style="{{fieldData().form.description.style}}">
+        <read-more-text [maxHeight]="46" [text]="fieldData().form.description.text" />
       </div>
     }
   } @else {
-    @if (fieldData.form.description?.text) {
-      <div [innerHTML]="fieldData.form.description.text" style="{{fieldData.form.description.style}}"
-        class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}">
+    @if (fieldData().form.description?.text) {
+      <div [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}"
+        class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}">
       </div>
     }
   }
 
-  @if (fieldData.typeInfo.multiplicity) {
-    <div [formArrayName]="fieldData.name">
+  @if (fieldData().typeInfo.multiplicity) {
+    <div [formArrayName]="fieldData().name">
       @for (input of fieldAsFormArray().controls; track input; let i = $index) {
         <div class="uk-margin-bottom uk-flex uk-flex-middle">
           <div class="uk-margin-medium-top uk-width-9-10">
-            <app-rich-text-editor [id]="fieldData.name" [formControlName]="i" [placeholder]="fieldData.form.placeholder"
-              (ngModelChange)="updateBitSet(fieldData)"
-              [ngClass]="{'uk-form-danger': checkFormValidity()}" />
+            <app-rich-text-editor [id]="fieldData().name" [formControlName]="i" [placeholder]="fieldData().form.placeholder"
+              (ngModelChange)="updateBitSet(fieldData())"
+              [class.uk-form-danger]="checkFormValidity()" />
           </div>
           @if (fieldAsFormArray().length > 1) {
             <a
-              (click)="remove(fieldData.name, i); updateBitSet(fieldData); unsavedChangesPrompt()"
+              (click)="remove(fieldData().name, i); updateBitSet(fieldData()); unsavedChangesPrompt()"
               class="remove-element uk-animation-slide-top-small uk-margin-small-left">
               <span class="material-icons">clear</span>
             </a>
           }
         </div>
       }
-      <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}"
-        [innerHTML]="fieldData.form.suggestion.text">
+      <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+        [innerHTML]="fieldData().form.suggestion.text">
       </div>
       @if (form.enabled) {
         <div class="uk-width-9-10 uk-text-center uk-margin-top">
           <a class="add-new-element uk-flex uk-flex-middle uk-flex-center" (click)="push()">
-            <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData.label.text"></span>
+            <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData().label.text"></span>
           </a>
         </div>
       }
     </div>
   } @else {
     <div class="uk-margin-medium-top uk-width-9-10">
-      <app-rich-text-editor [formControlName]="fieldData.name" (ngModelChange)="updateBitSet(fieldData)"
-        [placeholder]="fieldData.form.placeholder"
-        [ngClass]="{'uk-form-danger': checkFormValidity()}" />
+      <app-rich-text-editor [formControlName]="fieldData().name" (ngModelChange)="updateBitSet(fieldData())"
+        [placeholder]="fieldData().form.placeholder"
+        [class.uk-form-danger]="checkFormValidity()" />
     </div>
-    @if (fieldData.form.suggestion.text) {
+    @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}" [innerHTML]="fieldData().form.suggestion.text"></div>
       </div>
     }
   }

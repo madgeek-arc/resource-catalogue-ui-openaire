@@ -1,4 +1,4 @@
-import {Component, Input, ChangeDetectionStrategy, input, output} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Field, HandleBitSet} from '../../../domain/dynamic-form-model';
 import { CompositeFieldComponent } from './composite-field/composite-field.component';
@@ -14,16 +14,16 @@ import { DateFieldComponent } from './date-field/date-field.component';
 @Component({
     selector: 'app-field',
     templateUrl: './dynamic-form-fields.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ReactiveFormsModule, CompositeFieldComponent, ChooseOneComponent, StringFieldComponent, NumberFieldComponent, VocabularyFieldComponent, LargeTextFieldComponent, RadioButtonFieldComponent, RichTextFieldComponent, DateFieldComponent]
 })
 export class DynamicFormFieldsComponent {
-  @Input() fieldData: Field;
-  @Input() form: UntypedFormGroup;
-  readonly vocabularies = input<Map<string, object[]>>(undefined);
-  readonly subVocabularies = input<Map<string, object[]>>(null);
+  readonly fieldData = input.required<Field>();
+  readonly form = input.required<UntypedFormGroup>();
+  readonly vocabularies = input<Map<string, object[]> | null>(null);
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
-  readonly readonly = input<boolean>(null);
+  readonly readonly = input<boolean | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();

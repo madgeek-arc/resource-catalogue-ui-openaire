@@ -1,27 +1,27 @@
-<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData.form.display.cssClasses}}"
-  [ngClass]="{'uk-hidden clear-style': (hideField || !fieldData.form.display.visible)}">
-  @if (fieldData.label.text) {
-    <div class="uk-form-label uk-margin-bottom {{fieldData.label.cssClasses}}"
-      [attr.for]="fieldData.name" [ngClass]="{'uk-subLabel': fieldData.form.dependsOn !== null}" style="{{fieldData.label.style}}"
-      [innerHTML]="fieldData.label.text + (fieldData.form.mandatory ? ' (*)' : '')">
+<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData().form.display.cssClasses}}"
+  [class.uk-hidden]="(hideField() || !fieldData().form.display.visible)" [class.clear-style]="(hideField() || !fieldData().form.display.visible)">
+  @if (fieldData().label.text) {
+    <div class="uk-form-label uk-margin-bottom {{fieldData().label.cssClasses}}"
+      [attr.for]="fieldData().name" [class.uk-subLabel]="fieldData().form.dependsOn !== null" style="{{fieldData().label.style}}"
+      [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
     </div>
   }
-  @if (fieldData.form.description.text) {
-    <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
-      [innerHTML]="fieldData.form.description.text | safeUrl: 'html'" style="{{fieldData.form.description.style}}">
+  @if (fieldData().form.description.text) {
+    <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
+      [innerHTML]="fieldData().form.description.text | safeUrl: 'html'" style="{{fieldData().form.description.style}}">
     </div>
   }
 
-  @if (fieldData.typeInfo.multiplicity) {
-    <div [formArrayName]="fieldData.name">
+  @if (fieldData().typeInfo.multiplicity) {
+    <div [formArrayName]="fieldData().name">
       <div uk-sortable="handle: .uk-sortable-handle" (moved)="movedElement($event)">
         @for (input of fieldAsFormArray().controls; track input; let i = $index) {
           <div id="{{i}}" class="uk-margin-bottom uk-flex uk-flex-middle">
-            <input [id]="fieldData.name" [formControlName]="i"
+            <input [id]="fieldData().name" [formControlName]="i"
               class="uk-input uk-width-9-10 uk-animation-slide-top-small"
-              [placeholder]="fieldData.form.placeholder ? fieldData.form.placeholder : ''"
-              [ngClass]="{'uk-form-danger': checkFormArrayValidity(i)}"
-              (input)="updateBitSet(fieldData); unsavedChangesPrompt()">
+              [placeholder]="fieldData().form.placeholder ? fieldData().form.placeholder : ''"
+              [class.uk-form-danger]="checkFormArrayValidity(i)"
+              (input)="updateBitSet(fieldData()); unsavedChangesPrompt()">
             @if (fieldAsFormArray().length > 1) {
               <div class="">
                 <span class="uk-sortable-handle uk-text-center uk-margin-small-left" uk-icon="icon: move"></span>
@@ -29,7 +29,7 @@
             }
             @if (fieldAsFormArray().length > 1) {
               <a
-                (click)="remove(fieldData.name, i); updateBitSet(fieldData); unsavedChangesPrompt()"
+                (click)="remove(fieldData().name, i); updateBitSet(fieldData()); unsavedChangesPrompt()"
                 class="remove-element uk-animation-slide-top-small uk-margin-left">
                 <span class="material-icons">clear</span>
               </a>
@@ -37,27 +37,27 @@
           </div>
         }
       </div>
-      <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}"
-        [innerHTML]="fieldData.form.suggestion.text">
+      <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+        [innerHTML]="fieldData().form.suggestion.text">
       </div>
       @if (form.enabled) {
         <div class="uk-width-9-10 uk-text-center uk-margin-top">
           <a class="add-new-element uk-flex uk-flex-middle uk-flex-center" (click)="push()">
-            <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData.label.text"></span>
+            <span class="material-icons">add</span>Add &nbsp;<span [innerHTML]="fieldData().label.text"></span>
           </a>
         </div>
       }
     </div>
   } @else {
-    <input [formControlName]="fieldData.name" [id]="fieldData.id" class="uk-input uk-width-9-10 uk-animation-scale-up"
-      [placeholder]="fieldData.form.placeholder ? fieldData.form.placeholder : ''"
-      (input)="updateBitSet(fieldData); unsavedChangesPrompt()"
-      [ngClass]="{'uk-form-danger': checkFormValidity() }">
+    <input [formControlName]="fieldData().name" [id]="fieldData().id" class="uk-input uk-width-9-10 uk-animation-scale-up"
+      [placeholder]="fieldData().form.placeholder ? fieldData().form.placeholder : ''"
+      (input)="updateBitSet(fieldData()); unsavedChangesPrompt()"
+      [class.uk-form-danger]="checkFormValidity()">
     <!--      {{form.controls[fieldData.name].errors | json}}-->
-    @if (fieldData.form.suggestion.text) {
+    @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}"
-          [innerHTML]="fieldData.form.suggestion.text">
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+          [innerHTML]="fieldData().form.suggestion.text">
         </div>
       </div>
     }

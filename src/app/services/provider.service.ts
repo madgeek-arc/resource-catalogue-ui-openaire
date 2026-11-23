@@ -65,7 +65,7 @@ export class ProviderService {
     return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
   }
 
-  getProviderBundles(urlParameters?: URLParameter[]) {
+  getProviderBundles(urlParameters: URLParameter[] = []) {
     let searchQuery = new HttpParams();
     for (const urlParameter of urlParameters) {
       for (const value of urlParameter.values) {

@@ -1,5 +1,5 @@
 export class DocDefinition {
-  header: Content;
+  header: Content | null;
   content: any[];
   styles: object;
   images: object;

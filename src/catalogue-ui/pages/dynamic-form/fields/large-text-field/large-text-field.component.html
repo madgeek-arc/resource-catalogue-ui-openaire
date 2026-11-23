@@ -1,37 +1,37 @@
-<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData.form.display.cssClasses}}" [ngClass]="{'uk-hidden clear-style': hideField}">
-  @if (fieldData.label.text) {
-    <div class="uk-form-label uk-width-9-10 uk-margin-bottom {{fieldData.label.cssClasses}}"
-      [attr.for]="fieldData.name" style="{{fieldData.label.style}}" [innerHTML]="fieldData.label.text + (fieldData.form.mandatory ? ' (*)' : '')">
+<form [formGroup]="form" class="uk-margin-small-bottom {{fieldData().form.display.cssClasses}}" [class.uk-hidden]="hideField()" [class.clear-style]="hideField()">
+  @if (fieldData().label.text) {
+    <div class="uk-form-label uk-width-9-10 uk-margin-bottom {{fieldData().label.cssClasses}}"
+      [attr.for]="fieldData().name" style="{{fieldData().label.style}}" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
     </div>
   }
-  @if (fieldData.form.description.text) {
-    <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData.form.description.cssClasses}}"
-      [innerHTML]="fieldData.form.description.text" style="{{fieldData.form.description.style}}">
+  @if (fieldData().form.description.text) {
+    <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
+      [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}">
     </div>
   }
 
-  @if (fieldData.typeInfo.multiplicity) {
-    <div [formArrayName]="fieldData.name">
+  @if (fieldData().typeInfo.multiplicity) {
+    <div [formArrayName]="fieldData().name">
       <!--To add multiplicity if needed-->
     </div>
   } @else {
-    <textarea [formControlName]="fieldData.name" [id]="fieldData.name" class="uk-textarea uk-width-9-10 uk-animation-scale-up"
-      [placeholder]="fieldData.form.placeholder ? fieldData.form.placeholder : ''"
-      [maxlength]="fieldData.typeInfo.values ? fieldData.typeInfo.values[0] : null"
-      (input)="updateBitSet(fieldData); unsavedChangesPrompt()"
-      [ngClass]="{'uk-form-danger': checkFormValidity()}">
+    <textarea [formControlName]="fieldData().name" [id]="fieldData().name" class="uk-textarea uk-width-9-10 uk-animation-scale-up"
+      [placeholder]="fieldData().form.placeholder ? fieldData().form.placeholder : ''"
+      [maxlength]="fieldData().typeInfo.values ? fieldData().typeInfo.values[0] : null"
+      (input)="updateBitSet(fieldData()); unsavedChangesPrompt()"
+      [class.uk-form-danger]="checkFormValidity()">
     </textarea>
     <div class="uk-width-9-10">
-      @if (fieldData.typeInfo.values) {
+      @if (fieldData().typeInfo.values) {
         <div class="uk-animation-scale-up" style="float: right;">
-          <span> {{form.get(fieldData.name).value ? form.get(fieldData.name).value.length : 0}}</span>
-          <span>/ {{fieldData.typeInfo.values[0]}}</span>
+          <span> {{form.get(fieldData().name)!.value ? form.get(fieldData().name)!.value.length : 0}}</span>
+          <span>/ {{fieldData().typeInfo.values[0]}}</span>
         </div>
       }
     </div>
-    @if (fieldData.form.suggestion.text) {
+    @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData.form.suggestion.cssClasses}}" style="{{fieldData.form.suggestion.style}}" [innerHTML]="fieldData.form.suggestion.text"></div>
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}" [innerHTML]="fieldData().form.suggestion.text"></div>
       </div>
     }
   }

@@ -290,7 +290,7 @@
             }
 
             <!--FEATURES-->
-            @if (resourcePayload?.extras?.features[0]?.featuresTitle) {
+            @if (resourcePayload?.extras?.features?.[0]?.featuresTitle) {
               <div class="uk-section uk-section-muted uk-section-large">
                 <div class="uk-container">
                   <h2 class="uk-text-left">Features</h2>
@@ -360,7 +360,7 @@
             }
 
             <!--Related services-->
-            @if (relatedServices?.length > 0) {
+            @if (relatedServices?.length) {
               <div class="uk-section-muted uk-section uk-flex uk-flex-middle" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(80vh);">
                 <div class="uk-width-1-1">
                   <div class="uk-container">

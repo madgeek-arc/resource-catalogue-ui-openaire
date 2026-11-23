@@ -1,25 +1,29 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
-import { NgClass } from '@angular/common';
 import { SafeUrlPipe } from '../../../../shared/pipes/safeUrlPipe';
 
 @Component({
     selector: 'app-string-url-email-field',
     templateUrl: './string-field.component.html',
     styles: ['.clear-style { height: 0 !important;}'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass, SafeUrlPipe]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, SafeUrlPipe]
 })
 
 export class StringFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
+  private destroyRef = inject(DestroyRef);
   private formControlService = inject(FormControlService);
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly editMode = input(false);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -27,7 +31,7 @@ export class StringFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-  hideField: boolean = null;
+  readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
     const position = this.position();
@@ -36,21 +40,23 @@ export class StringFieldComponent implements OnInit {
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
+    this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
+    this.refresh(this.formControl);
 
-    if(this.fieldData.form.dependsOn) {
-      // console.log(this.fieldData.form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData.form.dependsOn.name).value, this.fieldData.form.dependsOn.value);
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) {
+      // console.log(this.fieldData().form.dependsOn);
+      this.enableDisableField(this.form.get(dependsOn.name)!.value, dependsOn.value);
 
-      this.form.get(this.fieldData.form.dependsOn.name).valueChanges.subscribe(
+      this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
         value => {
-            this.enableDisableField(value, this.fieldData.form.dependsOn.value);
+            this.enableDisableField(value, dependsOn.value);
           },
         error => {console.log(error);}
       );
     }
 
-    // console.log(this.fieldData);
+    // console.log(this.fieldData());
     // console.log(this.form);
     // console.log(this.formControl);
   }
@@ -62,7 +68,7 @@ export class StringFieldComponent implements OnInit {
   }
 
   push() {
-    this.fieldAsFormArray().push(this.formControlService.createField(this.fieldData));
+    this.fieldAsFormArray().push(this.formControlService.createField(this.fieldData()));
   }
 
   remove(field: string, i: number) {
@@ -98,7 +104,7 @@ export class StringFieldComponent implements OnInit {
   }
 
   checkFormArrayValidity(position: number): boolean {
-    const formControl: AbstractControl = this.fieldAsFormArray()?.get([position]);
+    const formControl: AbstractControl | null = this.fieldAsFormArray()?.get([position]) ?? null;
     // console.log(formControl);
     // console.log(position);
     if (formControl)
@@ -129,11 +135,11 @@ export class StringFieldComponent implements OnInit {
   enableDisableField(value, enableValue) {
     if (value?.toString() == enableValue) {
       this.formControl.enable();
-      this.hideField = false;
+      this.hideField.set(false);
     } else {
       this.formControl.disable();
       this.formControl.reset();
-      this.hideField = true;
+      this.hideField.set(true);
       // maybe add this if the remaining empty fields are a problem
       // (this.formControl as unknown as FormArray).clear();
     }

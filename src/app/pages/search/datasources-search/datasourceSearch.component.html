@@ -1,17 +1,22 @@
+@let searchResults = results();
+@let types = datasourceTypes();
+@let totalPages = paging().totalPages;
+@let pages = paging().pages;
+@let page = currentPage();
 <div id="tm-main" class="tm-main uk-section uk-section-default" uk-height-viewport="expand: true" style="box-sizing: border-box;">
   <div class="uk-container uk-container-large">
 
     <!-- TOP HELP CONTENT -->
     <app-help-content #topHelperContent [position]="'top'"
-      [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'" />
+      [class]="topHelperContent.isPresent() ? 'uk-margin-medium-top uk-margin-medium-bottom' : 'clear-style'" />
 
     <div class="uk-grid uk-margin-medium-bottom uk-margin-medium-top">
       <div class="uk-width-1-1">
         <div class="uk-flex uk-flex-center">
           <div class="uk-inline">
             <span class="uk-form-icon" uk-icon="icon: search"></span>
-            <input type="text" #searchInput class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..."
-              [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}">
+            <input type="text" class="uk-input menuSearch" placeholder="Search OpenAIRE Catalogue..."
+              [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" (keyup)="typed.next($any($event.target).value)">
           </div>
         </div>
       </div>
@@ -22,7 +27,7 @@
       <!--FILTERS LAPTOP & PAD LANDSCAPE-->
       <aside id="tm-sidebar" class="tm-sidebar uk-width-1-4@m uk-visible@m">
 
-        @if (datasourceTypes?.terms.length > 0 && searchResults) {
+        @if (types?.terms.length && searchResults) {
           <div class="sidemenu refines">
             <p class="big-text-header">Filters</p>
             <div class="uk-margin-medium-top">
@@ -30,15 +35,15 @@
               <div class="uk-margin-small-bottom">
                 <label>
                   <input class="uk-margin-small-right uk-radio" type="radio" name="type" value=""
-                    [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType)">
+                    [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType())">
                   All
                 </label>
               </div>
-              @for (type of datasourceTypes.terms; track type) {
+              @for (type of types.terms; track type) {
                 <div class="uk-margin-small-bottom">
                   <label>
                     <input class="uk-margin-small-right uk-radio" type="radio" name="type" value="{{type.code}}"
-                      [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType)">
+                      [(ngModel)]="eoscDatasourceType" (change)="onSelect('eoscDatasourceType', eoscDatasourceType())">
                     {{type.englishName}}
                   </label>
                 </div>
@@ -93,7 +98,7 @@
           </div>
 }
 
-          @if (searchResults?.results.length > 0) {
+          @if (searchResults?.results.length) {
 <div>
 
             <div class="uk-grid uk-row-first uk-margin-bottom uk-margin-top">
@@ -103,31 +108,31 @@
 
                   <p class="big-text uk-margin-remove">
                     <span class="uk-text-bold">{{searchResults?.total}}</span> Datasources, Page
-                    <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
+                    <span class="uk-text-bold">{{page}}</span> of {{totalPages}}
                   </p>
 
                   <ul class="uk-pagination uk-visible@m">
-                    @if (currentPage > 2 && totalPages > 5) {
+                    @if (page > 2 && totalPages > 5) {
 <li>
                       <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
                     </li>
 }
-                    @if (currentPage > 1) {
+                    @if (page > 1) {
 <li>
                       <a (click)="previousPage()"><span uk-pagination-previous></span></a>
                     </li>
 }
                     @for (i of pages; track i) {
-<li [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
+<li [class.uk-active]="i === page" [class.uk-animation-fade]="i === page">
                       <a (click)="goToPage(i - 1)">{{i}}</a>
                     </li>
 }
-                    @if (currentPage !== totalPages) {
+                    @if (page !== totalPages) {
 <li>
                       <a (click)="nextPage()"><span uk-pagination-next></span></a>
                     </li>
 }
-                    @if (currentPage < totalPages && totalPages > 5) {
+                    @if (page < totalPages && totalPages > 5) {
 <li>
                       <a (click)="goToPage(totalPages-1)"><span uk-pagination-next></span><span uk-pagination-next></span></a>
                     </li>
@@ -147,7 +152,7 @@
                   <label class="uk-margin-small-right" for="orderBy">Order by: </label>
                   <div class="uk-inline">
                     <select id="orderBy" [(ngModel)]="orderField" [ngModelOptions]="{standalone: true}"
-                            (change)="onSelect('orderField', orderField)">
+                            (change)="onSelect('orderField', orderField())">
                     <option value="registrationdate" selected="selected">Date</option>
                     <option value="officialname">Name</option>
                   </select>
@@ -157,7 +162,7 @@
                 <label class="uk-margin-small-right" for="sortBy">Sort by: </label>
                 <div class="uk-inline">
                   <select id="sortBy" [(ngModel)]="order" [ngModelOptions]="{standalone: true}"
-                    (change)="onSelect('order', order)">
+                    (change)="onSelect('order', order())">
                     <option value="desc" selected>Descending</option>
                     <option value="asc">Ascending</option>
                   </select>
@@ -237,27 +242,27 @@
           }
         </div>
         <ul class="uk-pagination uk-flex-right uk-margin">
-          @if (currentPage > 2 && totalPages > 5) {
+          @if (page > 2 && totalPages > 5) {
             <li>
               <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
             </li>
           }
-          @if (currentPage > 1) {
+          @if (page > 1) {
             <li>
               <a (click)="previousPage()"><span uk-pagination-previous></span></a>
             </li>
           }
           @for (i of pages; track i) {
-            <li [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
+            <li [class.uk-active]="i === page" [class.uk-animation-fade]="i === page">
               <a (click)="goToPage(i-1)">{{i}}</a>
             </li>
           }
-          @if (currentPage !== totalPages) {
+          @if (page !== totalPages) {
             <li>
               <a (click)="nextPage()"><span uk-pagination-next></span></a>
             </li>
           }
-          @if (currentPage < totalPages && totalPages > 5) {
+          @if (page < totalPages && totalPages > 5) {
             <li>
               <a (click)="goToPage(totalPages-1)"><span uk-pagination-next></span><span uk-pagination-next></span></a>
             </li>
@@ -271,13 +276,13 @@
 
 <!-- RIGHT HELP CONTENT -->
 <app-aside-help-content #rightHelperContent [position]="'right'"
-  [ngClass]="rightHelperContent.isPresent()?'tm-sidebar uk-width-1-4@m uk-first-column':'clear-style'" />
+  [class]="rightHelperContent.isPresent() ? 'tm-sidebar uk-width-1-4@m uk-first-column' : 'clear-style'" />
 
 </div>
 
 <!-- BOTTOM HELP CONTENT -->
 <app-help-content #bottomHelperContent [position]="'bottom'"
-  [ngClass]="bottomHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'" />
+  [class]="bottomHelperContent.isPresent() ? 'uk-margin-medium-top uk-margin-medium-bottom' : 'clear-style'" />
 
 </div>
 </div>

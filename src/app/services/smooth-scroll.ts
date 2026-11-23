@@ -11,7 +11,7 @@ export class SmoothScroll {
   private interval;
   private readonly sub;
   private lastRoute;
-  private whitelist = [];
+  private whitelist: string[] = [];
 
   constructor() {
     const router = this.router;

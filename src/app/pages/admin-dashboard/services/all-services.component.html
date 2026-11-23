@@ -1,24 +1,30 @@
+@let bundles = list();
+@let states = resourceState();
+@let totalPages = paging().totalPages;
+@let pages = paging().pages;
+@let page = currentPage();
+@let chosen = selected();
 <div class="uk-section uk-section-xsmall filters">
   <div class="uk-container uk-container-expand">
 
     <div class="uk-flex uk-flex-middle">
       <div class="uk-margin-small-right uk-text-muted">Filter by: </div>
-      @if (resourceState) {
+      @if (states) {
 <div class="uk-margin-small-right">
-        <ng-select id="provider" (change)="filterSelection('resource_organisation', provider)"
-                   [items]="providerFacet" [(ngModel)]="provider"
+        <ng-select id="provider" (change)="filterSelection('resource_organisation', provider())"
+                   [items]="providerFacet()" [(ngModel)]="provider"
                    placeholder="Provider" bindLabel="label" bindValue="value" clearAllText="Clear" style="width: 180px" />
       </div>
 }
-      @if (resourceState) {
+      @if (states) {
 <div class="uk-margin-small-right">
-        <ng-select id="resourceState" (change)="filterSelection('status', status)"
-                   [items]="resourceState" [(ngModel)]="status"
+        <ng-select id="resourceState" (change)="filterSelection('status', status())"
+                   [items]="states" [(ngModel)]="status"
                    placeholder="Approvement status" bindLabel="name" bindValue="id" clearAllText="Clear" />
       </div>
 }
       <div class="uk-margin-small-right">
-        <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus)"
+        <ng-select id="validationStatus" (change)="filterSelection('active', activeStatus())"
                    placeholder="Activation Status" [(ngModel)]="activeStatus" clearAllText="Clear">
           <ng-option [value]="''">All activation statuses</ng-option>
           <ng-option [value]="'true'">Active</ng-option>
@@ -29,7 +35,7 @@
       <div class="uk-margin-small-right uk-text-muted">Sort by: </div>
       <div class="uk-margin-small-right">
         <ng-select id="order" [(ngModel)]="order" clearAllText="Clear" placeholder="Modification Order"
-                   (change)="this.updateURLParameters('orderField', 'modifiedAt'); filterSelection('order', order)">
+                   (change)="this.updateURLParameters('orderField', 'modifiedAt'); filterSelection('order', order())">
           <ng-option [value]="'desc'">Most recently modified</ng-option>
           <ng-option [value]="'asc'">Least recently modified</ng-option>
         </ng-select>
@@ -42,41 +48,41 @@
 <div class="uk-section uk-section-xsmall">
   <div class="uk-container uk-container-expand">
 
-    @if (showLoader) {
+    @if (showLoader()) {
 <div class="whiteFilm">
       <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>
     </div>
 }
 
-    @if (services?.results.length > 0) {
+    @if (bundles?.results.length) {
 
 
       <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-bottom uk-margin-top">
         <p class="big-text uk-margin-remove">
-          <span class="uk-text-bold">{{services.total}}</span> Services, Page <span class="uk-text-bold">{{this.currentPage}}</span> of {{this.totalPages}}
+          <span class="uk-text-bold">{{bundles.total}}</span> Services, Page <span class="uk-text-bold">{{page}}</span> of {{totalPages}}
         </p>
         <ul class="uk-pagination uk-visible@m">
-          @if (currentPage > 2 && totalPages > 5) {
+          @if (page > 2 && totalPages > 5) {
 <li>
             <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
           </li>
 }
-          @if (currentPage > 1) {
+          @if (page > 1) {
 <li>
             <a (click)="previousPage()"><span uk-pagination-previous></span></a>
           </li>
 }
           @for (i of pages; track i) {
-<li [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
+<li [class.uk-active]="i === page" [class.uk-animation-fade]="i === page">
             <a (click)="goToPage(i - 1)">{{i}}</a>
           </li>
 }
-          @if (currentPage !== totalPages) {
+          @if (page !== totalPages) {
 <li>
             <a (click)="nextPage()"><span uk-pagination-next></span></a>
           </li>
 }
-          @if (currentPage < totalPages && totalPages > 5) {
+          @if (page < totalPages && totalPages > 5) {
 <li>
             <a (click)="goToPage(totalPages-1)"><span uk-pagination-next></span><span uk-pagination-next></span></a>
           </li>
@@ -86,7 +92,7 @@
 
       <div class="uk-grid uk-child-width-1-3 uk-grid-match uk-grid-small" uk-height-match="target: > div > .uk-card > .uk-card-body">
 
-        @for (resourceInfo of services.results ; track resourceInfo; let i = $index) {
+        @for (resourceInfo of bundles.results ; track resourceInfo; let i = $index) {
 <div class="uk-grid-margin">
 
           <div class="uk-card service-list-card-dashboard">
@@ -191,27 +197,27 @@
       </div>
 
       <ul class="uk-pagination uk-flex-right uk-margin">
-        @if (currentPage > 2 && totalPages > 5) {
+        @if (page > 2 && totalPages > 5) {
 <li>
           <a (click)="goToPage(0)"><span uk-pagination-previous></span><span uk-pagination-previous></span></a>
         </li>
 }
-        @if (currentPage > 1) {
+        @if (page > 1) {
 <li>
           <a (click)="previousPage()"><span uk-pagination-previous></span></a>
         </li>
 }
         @for (i of pages; track i) {
-<li [ngClass]="i === currentPage ? 'uk-active uk-animation-fade': ''">
+<li [class.uk-active]="i === page" [class.uk-animation-fade]="i === page">
           <a (click)="goToPage(i-1)">{{i}}</a>
         </li>
 }
-        @if (currentPage !== totalPages) {
+        @if (page !== totalPages) {
 <li>
           <a (click)="nextPage()"><span uk-pagination-next></span></a>
         </li>
 }
-        @if (currentPage < totalPages && totalPages > 5) {
+        @if (page < totalPages && totalPages > 5) {
 <li>
           <a (click)="goToPage(totalPages-1)"><span uk-pagination-next></span><span uk-pagination-next></span></a>
         </li>
@@ -228,16 +234,16 @@
 }
   @if (!loadingMessage) {
 <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
-    @if (selectedService) {
+    @if (chosen) {
 <div>
-      <h6>Are you sure you want to delete "{{ selectedService.service.name }}" ?</h6>
+      <h6>Are you sure you want to delete "{{ chosen.service.name }}" ?</h6>
       <p>Deleting a Service is an irreversible action.</p>
     </div>
 }
     <div class="uk-text-right">
       <button class="uk-button uk-button-secondary uk-modal-close uk-margin-small-right" type="button">Cancel</button>
-      @if (selectedService) {
-<button class="uk-button uk-button-danger uk-modal-close" type="button" (click)="deleteService(selectedService)">Delete</button>
+      @if (chosen) {
+<button class="uk-button uk-button-danger uk-modal-close" type="button" (click)="deleteService(chosen)">Delete</button>
 }
     </div>
   </div>

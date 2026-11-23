@@ -8,11 +8,12 @@ export class PageContent {
     name: string;
 }
 
+/** A page's help texts by position; the API leaves out a position that has none. */
 export interface PositionContents {
-    top: Content[];
-    right: Content[];
-    bottom: Content[];
-    left: Content[];
+    top?: Content[];
+    right?: Content[];
+    bottom?: Content[];
+    left?: Content[];
 }
 
 export interface Content {

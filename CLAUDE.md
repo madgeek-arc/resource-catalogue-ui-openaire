@@ -5,7 +5,12 @@ apply: always
 # Project: resource-catalogue-ui-openaire – Angular
 ## Stack
 - Frontend: Angular 22, TypeScript 6, RxJS 7.8, Node 24 (`.nvmrc`); tests with Vitest (`npm test`)
-- Target: TypeScript strict, Signals, LESS. Today `strictTemplates` and most strict flags are on, but not `strictNullChecks` or `noImplicitAny`, and the styles are still CSS/SCSS
+- Target: TypeScript strict, Signals, LESS. Today `strictTemplates` and most strict flags are on, including `strictNullChecks`, but not `noImplicitAny`, and the styles are still CSS/SCSS
+
+## Web platform guidance
+- This project's Baseline target is Baseline 2025.
+- UIkit-first and the Angular rules below take precedence over modern-web-guidance. Consult modern-web-guidance for custom CSS/HTML that UIkit doesn't cover (before writing a `// UIkit override attempted:` block) and for performance, accessibility and forms platform APIs.
+
 ## [CRITICAL] Rules
 - Use signal() for local component state
 - Use computed() for derived state. 

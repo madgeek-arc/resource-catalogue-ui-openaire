@@ -1,21 +1,23 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-checkbox-field',
     templateUrl: './checkbox-field.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule]
 })
 
 export class CheckboxFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -25,7 +27,7 @@ export class CheckboxFieldComponent implements OnInit {
   form!: UntypedFormGroup;
 
   ngOnInit() {
-    // console.log(this.fieldData);
+    // console.log(this.fieldData());
     const position = this.position();
     if (position !== null) {
       this.form = this.rootFormGroup.control.controls[position] as UntypedFormGroup;
@@ -34,7 +36,9 @@ export class CheckboxFieldComponent implements OnInit {
     }
     // console.log(this.form);
 
-    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
+    this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
+
+    this.refresh(this.formControl);
     // console.log(this.formControl);
   }
 
@@ -60,12 +64,12 @@ export class CheckboxFieldComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.fieldAsFormArray()?.get([position])?.get(groupName).valid
-        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName).dirty));
+      return !!(!this.fieldAsFormArray()?.get([position])?.get(groupName)!.valid
+        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName)!.dirty));
 
     }
-    return (!this.fieldAsFormArray().get([position]).valid
-      && (edit || this.fieldAsFormArray().get([position]).dirty));
+    return (!this.fieldAsFormArray().get([position])!.valid
+      && (edit || this.fieldAsFormArray().get([position])!.dirty));
   }
 
   /** Bitsets--> **/

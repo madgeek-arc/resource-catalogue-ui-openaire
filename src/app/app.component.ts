@@ -1,44 +1,36 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import {Event, NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import {filter, map} from 'rxjs/operators';
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
 import {CookieLawComponent} from './shared/reusablecomponents/cookie-law/cookie-law.component';
-import {SmoothScroll} from './services/smooth-scroll';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieLawComponent],
 })
-export class AppComponent implements OnInit {
-  router = inject(Router);
+export class AppComponent {
+  private router = inject(Router);
 
-  isLoginOrRegister = false;
+  /** The URL of the latest router event that has one, from the start of each navigation on. */
+  private readonly url = toSignal(this.router.events.pipe(
+    map(event => (event as Event & {url?: string}).url),
+    filter((url): url is string => !!url)
+  ), {initialValue: ''});
 
-  breadcrumbs: string[] = [];
+  /** The change log shown without the menu, footer and cookie banner. */
+  readonly cleanView = computed(() => this.url().includes('/changeLogClean'));
+  /** Dashboards have a sidebar, so the footer moves right. */
+  readonly dashboardView = computed(() => this.url().includes('/dashboard'));
 
-  cleanView = false;
-  dashboardView = false;
-
-  ngOnInit() {
-    this.router.events.subscribe((evt: any) => {
-      if (evt.url) {
-        this.cleanView = evt.url.includes('/changeLogClean');
-        this.dashboardView = evt.url.includes('/dashboard');
-        this.breadcrumbs = evt.url.split(/\//);
-      }
-      this.breadcrumbs[0] = 'Home';
-      // this.isLoginOrRegister = ["/signUp", "/signIn"].indexOf(evt.url) >= 0;
-    });
-
-    this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      window.scrollTo(0, 0);
-    });
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    ).subscribe(() => window.scrollTo(0, 0));
   }
-
 }

@@ -1,62 +1,42 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
+import {EMPTY, of} from 'rxjs';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {ResourceService} from '../../services/resource.service';
 import {NavigationService} from '../../services/navigation.service';
-import {Bundle, Datasource, Service} from '../../entities/eic-model';
-import {Subscription} from 'rxjs';
-import { NgClass } from '@angular/common';
-
 
 @Component({
-    selector: 'app-service-dashboard',
-    templateUrl: './service-dashboard.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [RouterLink, NgClass, RouterOutlet]
+  selector: 'app-service-dashboard',
+  templateUrl: './service-dashboard.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, RouterOutlet]
 })
-export class ServiceDashboardComponent implements OnInit {
-  resourceService = inject(ResourceService);
-  router = inject(NavigationService);
+export class ServiceDashboardComponent {
+  private resourceService = inject(ResourceService);
+  private navigation = inject(NavigationService);
   private route = inject(ActivatedRoute);
 
+  /** Follow the route, so another service's dashboard opened from here does not keep the old ids. */
+  readonly providerId = toSignal(this.route.params.pipe(map(params => params['providerId'] as string)));
+  readonly serviceId = toSignal(this.route.params.pipe(map(params => params['resourceId'] as string)));
 
-  public serviceBundle: Bundle<Service | Datasource>;
-  public service: Service;
-  providerId: string;
-  serviceId: string;
-  datasource: Datasource = null;
+  private readonly resourceId$ = this.route.params.pipe(map(params => params['resourceId'] as string));
 
-  private sub: Subscription;
-
-  ngOnInit() {
-    this.providerId = this.route.snapshot.paramMap.get('providerId');
-    this.serviceId = this.route.snapshot.paramMap.get('resourceId');
-
-    this.sub = this.route.params.subscribe(params => {
-      this.resourceService.getServiceOrDatasourceBundle(params['resourceId']).subscribe(
-        suc => {
-          this.serviceBundle = suc;
-        },
-        err => {
-          if (err.status === 404) {
-            this.router.go('/404');
-          }
-          // this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
+  /** The service, also passed to the history pages through the router outlet; undefined until it has loaded. */
+  readonly bundle = toSignal(this.resourceId$.pipe(
+    switchMap(id => this.resourceService.getServiceOrDatasourceBundle(id).pipe(
+      catchError(error => {
+        if (error.status === 404) {
+          this.navigation.go('/404');
         }
-      );
+        return EMPTY;
+      })
+    ))
+  ), {initialValue: undefined});
 
-      this.resourceService.getDatasourceByServiceId(params['resourceId']).subscribe(
-        datasource => this.datasource = datasource
-      );
-    });
-  }
-
-  onActivate(componentReference) {
-    // For the pages that are still Eager. The OnPush history pages read [routerOutletData] instead, which also
-    // reaches them when the bundle loads after they are shown.
-    componentReference.serviceBundle = this.serviceBundle;
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+  /** The service's datasource subprofile, if it has one. */
+  readonly subprofile = toSignal(this.resourceId$.pipe(
+    switchMap(id => this.resourceService.getDatasourceByServiceId(id).pipe(catchError(() => of(null))))
+  ), {initialValue: null});
 }

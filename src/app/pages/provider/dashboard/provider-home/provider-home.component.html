@@ -1,3 +1,10 @@
+@let provider = currentProvider();
+@let loggingInfo = logs();
+@let vocabularies = vocabularyMap();
+@let resourceBundles = allResources();
+@let approvedResourceBundles = approved();
+@let pendingResourceBundles = pending();
+@let rejectedResourceBundles = rejected();
 <div class="uk-section uk-section-small">
   <div class="uk-container uk-container-expand">
     <div class="" style="min-height: 600px">
@@ -131,7 +138,7 @@ No rejected services
               </ul>
             </ul>
             <div class="uk-margin-medium-top">
-              @if (resourceBundles?.length>0) {
+              @if (resourceBundles?.length) {
 <a
                  [routerLink]="['/provider/' + provider.id + '/dashboard/services']"
                  class="uk-link">Show more...</a>

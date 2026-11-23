@@ -1,11 +1,11 @@
 <div class="uk-offcanvas-content">
-  @if (!isLoginOrRegister && !cleanView) {
+  @if (!cleanView()) {
     <app-top-menu-aire />
   }
   <router-outlet />
   <!--  <app-feedback></app-feedback>-->
-  @if (!cleanView) {
-    @if (!dashboardView) {
+  @if (!cleanView()) {
+    @if (!dashboardView()) {
       <app-footer-aire />
     } @else {
       <div style="margin-left: 320px">

@@ -222,8 +222,9 @@ export class Service implements Identifiable {
   description: string;
   tagline: string;
   logo: URL;
-  multimedia: MultimediaPair[];
-  useCases: UseCasesPair[];
+  /** Null when the form leaves them empty, which the API stores as none. */
+  multimedia: MultimediaPair[] | null;
+  useCases: UseCasesPair[] | null;
   scientificDomains: ServiceProviderDomain[];
   categories: ServiceCategory[];
   targetUsers: string[];

@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, viewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, signal } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Model} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
@@ -14,7 +15,7 @@ import * as uikit from 'uikit';
     selector: 'app-form',
     templateUrl: 'forms.component.html',
     providers: [FormControlService],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [SurveyComponent]
 })
 
@@ -23,49 +24,52 @@ export class FormsComponent implements OnInit{
   private resourceService = inject(ResourceService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
-
-  readonly child = viewChild(SurveyComponent);
-
-  tabsHeader: string = null;
-  model: Model = null;
-  vocabulariesMap: Map<string, object[]> = new Map<string, object[]>();
-  subVocabulariesMap: Map<string, object[]> = null;
+  tabsHeader: string | null = null;
+  /** The form model, the resource being edited and the vocabularies, set together once they have all loaded. */
+  readonly model = signal<Model | null>(null);
+  readonly vocabulariesMap = signal<Map<string, object[]>>(new Map<string, object[]>());
+  readonly subVocabulariesMap = signal<Map<string, object[]> | null>(null);
   premiumSort = new PremiumSortPipe();
-  providerId: string = null;
-  resourceId: string = null;
-  datasourceId: string = null;
-  resourceType: string = null;
-  payloadAnswer: object = null; // Find a way to do this better
-  ready = false;
-  errorMessage: string = null;
+  providerId: string | null = null;
+  resourceId: string | null = null;
+  datasourceId: string | null = null;
+  resourceType: string | null = null;
+  readonly payloadAnswer = signal<object | null>(null); // Find a way to do this better
+  readonly ready = signal(false);
+  readonly errorMessage = signal<string | null>(null);
   editMode = false;
 
   ngOnInit() {
-    this.ready = false;
-    this.route.params.subscribe(
+    this.ready.set(false);
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
       params => {
         this.providerId = params['providerId'];
         this.resourceId = params['resourceId'];
         this.datasourceId = params['datasourceId'];
-        if (window.location.pathname.includes('service/add') || window.location.pathname.includes('service/edit')) this.resourceType = 'service';
-        if (window.location.pathname.includes('subprofile/add') || window.location.pathname.includes('subprofile/edit')) this.resourceType = 'datasource';
-        if (window.location.pathname.includes('service/edit') || window.location.pathname.includes('subprofile/edit')) this.editMode = true;
+        // The router has the new URL by the time the route's params arrive.
+        const url = this.router.url;
+        if (url.includes('service/add') || url.includes('service/edit')) this.resourceType = 'service';
+        if (url.includes('subprofile/add') || url.includes('subprofile/edit')) this.resourceType = 'datasource';
+        if (url.includes('service/edit') || url.includes('subprofile/edit')) this.editMode = true;
         if (this.editMode) { // edit
+          // The edit routes are service/edit/:resourceId and :resourceType/subprofile/edit/:datasourceId.
           zip(
-            this.resourceType === 'service' ? this.resourceService.getService(this.resourceId) : this.resourceService.getDatasource(this.datasourceId),
+            this.resourceType === 'service' ? this.resourceService.getService(this.resourceId!) : this.resourceService.getDatasource(this.datasourceId!),
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
-              this.model = next[1].results[0];
-              this.payloadAnswer = {answer: {[this.sectionName]: next[0]}};
-              this.vocabulariesMap = next[2];
+              const model = next[1].results[0];
+              const vocabularies = next[2];
+              const subVocabularies = this.prepareVocabularies(vocabularies);
+              this.vocabulariesMap.set(vocabularies);
+              this.subVocabulariesMap.set(subVocabularies);
+              this.model.set(model);
+              this.payloadAnswer.set({answer: {[this.sectionName]: next[0]}});
             },
             error => {console.log(error);},
-            () => {
-              this.prepareVocabularies();
-              this.ready = true;
-            }
+            () => this.ready.set(true)
           );
         } else { // add new
           // console.log('add new');
@@ -73,14 +77,14 @@ export class FormsComponent implements OnInit{
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
-              this.model = next[0].results[0];
-              this.vocabulariesMap = next[1];
+              const vocabularies = next[1];
+              const subVocabularies = this.prepareVocabularies(vocabularies);
+              this.vocabulariesMap.set(vocabularies);
+              this.subVocabulariesMap.set(subVocabularies);
+              this.model.set(next[0].results[0]);
             },
             error => {console.log(error);},
-            () => {
-              this.prepareVocabularies();
-              this.ready = true;
-            }
+            () => this.ready.set(true)
           );
         }
 
@@ -94,11 +98,11 @@ export class FormsComponent implements OnInit{
    * current form models ('Service' in older ones).
    */
   get sectionName(): string {
-    return this.model?.sections?.[0]?.name || 'Service';
+    return this.model()?.sections?.[0]?.name || 'Service';
   }
 
   submitForm(value) {
-    this.ready = false;
+    this.ready.set(false);
     // console.log(value[0].get('Service').value);
     const service: Service = {...value[0].get(this.sectionName).value};
     // for (const element in value[0].get('Service').controls) {
@@ -106,8 +110,9 @@ export class FormsComponent implements OnInit{
     //   console.log(value[0].get('Service').get(element).value);
     // }
     if (this.resourceType === 'service') {
-      if (!service.multimedia[0].multimediaURL) service.multimedia = null;
-      if (!service.useCases[0].useCaseURL) service.useCases = null;
+      // The form always holds both lists, with at least one entry each; an empty first entry clears the list.
+      if (!service.multimedia![0].multimediaURL) service.multimedia = null;
+      if (!service.useCases![0].useCaseURL) service.useCases = null;
       if (value[1]) {
         this.resourceService.editService(service).subscribe(
           next => {
@@ -115,8 +120,8 @@ export class FormsComponent implements OnInit{
           },
           error => {
             console.log(error);
-            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId;
-            this.ready = true;
+            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId);
+            this.ready.set(true);
           }
         );
       } else {
@@ -126,16 +131,16 @@ export class FormsComponent implements OnInit{
           },
           error => {
             console.log(error);
-            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId;
-            this.ready = true;
+            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId);
+            this.ready.set(true);
           }
         );
       }
     }
     if (this.resourceType === 'datasource') {
       const datasource: Datasource = {...value[0].get(this.sectionName).value};
-      let id = this.resourceId;
-      if (!id) id = this.datasourceId;
+      // Subprofile routes have a resourceId (add) or a datasourceId (edit).
+      const id = (this.resourceId || this.datasourceId)!;
       datasource.id = id;
       datasource.serviceId = id;
       datasource.catalogueId = 'openaire';
@@ -146,8 +151,8 @@ export class FormsComponent implements OnInit{
           },
           error => {
             console.log(error);
-            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
-            this.ready = true;
+            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId);
+            this.ready.set(true);
           }
         );
       } else {
@@ -157,32 +162,34 @@ export class FormsComponent implements OnInit{
           },
           error => {
             console.log(error);
-            this.errorMessage = error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId;
-            this.ready = true;
+            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId);
+            this.ready.set(true);
           }
         );
       }
     }
   }
 
-  prepareVocabularies() {
-    this.sortVocabulariesByName(this.vocabulariesMap['Scientific domain']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Scientific subdomain']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Category']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Subcategory']);
-    const voc: Vocabulary[] = this.vocabulariesMap['Subcategory'].concat(this.vocabulariesMap['Scientific subdomain']);
-    this.subVocabulariesMap = this.groupByKey(voc, 'parentId');
-    this.sortVocabulariesByName(this.vocabulariesMap['Access type']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Access mode']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Target user']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Language']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Country']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Technology readiness level']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Life cycle status']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Funding body']);
-    this.sortVocabulariesByName(this.vocabulariesMap['Funding program']);
-    this.vocabulariesMap['RegionOrCountry'] = this.vocabulariesMap['Country'].concat(this.vocabulariesMap['Region']);
-    this.premiumSort.transform(this.vocabulariesMap['RegionOrCountry'], ['Europe', 'Worldwide']);
+  /** Sorts the vocabularies in place, adds RegionOrCountry, and returns the sub-vocabularies grouped by parent. */
+  prepareVocabularies(vocabulariesMap: Map<string, object[]>): Map<string, object[]> {
+    this.sortVocabulariesByName(vocabulariesMap['Scientific domain']);
+    this.sortVocabulariesByName(vocabulariesMap['Scientific subdomain']);
+    this.sortVocabulariesByName(vocabulariesMap['Category']);
+    this.sortVocabulariesByName(vocabulariesMap['Subcategory']);
+    const voc: Vocabulary[] = vocabulariesMap['Subcategory'].concat(vocabulariesMap['Scientific subdomain']);
+    const subVocabularies = this.groupByKey(voc, 'parentId');
+    this.sortVocabulariesByName(vocabulariesMap['Access type']);
+    this.sortVocabulariesByName(vocabulariesMap['Access mode']);
+    this.sortVocabulariesByName(vocabulariesMap['Target user']);
+    this.sortVocabulariesByName(vocabulariesMap['Language']);
+    this.sortVocabulariesByName(vocabulariesMap['Country']);
+    this.sortVocabulariesByName(vocabulariesMap['Technology readiness level']);
+    this.sortVocabulariesByName(vocabulariesMap['Life cycle status']);
+    this.sortVocabulariesByName(vocabulariesMap['Funding body']);
+    this.sortVocabulariesByName(vocabulariesMap['Funding program']);
+    vocabulariesMap['RegionOrCountry'] = vocabulariesMap['Country'].concat(vocabulariesMap['Region']);
+    this.premiumSort.transform(vocabulariesMap['RegionOrCountry'], ['Europe', 'Worldwide']);
+    return subVocabularies;
   }
 
   groupByKey(array, key) {

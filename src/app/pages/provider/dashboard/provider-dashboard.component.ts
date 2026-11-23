@@ -1,156 +1,62 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {EMPTY} from 'rxjs';
+import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import {ProviderService} from '../../../services/provider.service';
-import {ProviderBundle} from '../../../entities/eic-model';
-import {UserService} from '../../../services/user.service';
-import {UserInfo} from '../../../entities/userInfo';
-import {UntypedFormBuilder, UntypedFormControl, Validators} from '@angular/forms';
-import { NgClass } from '@angular/common';
 
+/** The section of the dashboard a URL is in, with its title and icon. */
+const sections = [
+  {path: 'home', icon: 'home', title: 'Home'},
+  {path: 'info', icon: 'info', title: 'Provider\'s profile'},
+  {path: 'history', icon: 'history', title: 'History of updates'},
+  {path: 'services', icon: 'reorder', title: 'Services'},
+];
 
 @Component({
-    selector: 'app-provider-dashboard',
-    templateUrl: 'provider-dashboard.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgClass, RouterLink, RouterOutlet]
+  selector: 'app-provider-dashboard',
+  templateUrl: 'provider-dashboard.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, RouterOutlet]
 })
-
-export class ProviderDashboardComponent implements OnInit {
+export class ProviderDashboardComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private providerService = inject(ProviderService);
-  private userService = inject(UserService);
-  private fb = inject(UntypedFormBuilder);
 
+  readonly providerId = toSignal(this.route.params.pipe(map(params => params['providerId'] as string)));
 
-  providerId: string = null;
-  providerBundle: ProviderBundle = null;
-  userInfo: UserInfo = null;
-  inviteeEmail: UntypedFormControl = this.fb.control(null, [Validators.email, Validators.required]);
-  invitationUrl: string = null;
-  path: string = null;
+  /** The provider, also passed to every section through the router outlet; null until it has loaded. */
+  readonly bundle = toSignal(this.route.params.pipe(
+    map(params => params['providerId'] as string),
+    filter(providerId => !!providerId),
+    switchMap(providerId => this.providerService.getProviderBundleById(providerId).pipe(
+      catchError(error => {
+        console.error(error);
+        return EMPTY;
+      })
+    ))
+  ), {initialValue: null});
 
-  titleIcon: string = null;
-  title: string = null;
-
-  constructor() {
-    this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          if (event.url.includes('home')) {
-            this.path = 'home';
-            this.titleIcon = 'home';
-            this.title = 'Home';
-          } else if (event.url.includes('info')) {
-            this.path = 'info';
-            this.titleIcon = 'info';
-            this.title = 'Provider\'s profile';
-          } else if (event.url.includes('history')) {
-            this.path = 'history';
-            this.titleIcon = 'history';
-            this.title = 'History of updates';
-          } else if (event.url.includes('services')) {
-            this.path = 'services';
-            this.titleIcon = 'reorder';
-            this.title = 'Services';
-          }
-        }
-      }
-    );
-  }
-
-  ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-        this.providerId = params['providerId'];
-        if (this.providerId) {
-          this.providerService.getProviderBundleById(this.providerId).subscribe(
-            res => {this.providerBundle = res;},
-            error => {console.error(error);}
-          );
-        }
-      }
-    );
-
-    this.userService.getUserInfo().subscribe(
-      res => {this.userInfo = res;},
-      error => {console.error(error);}
-    );
-  }
-
-  onActivate(componentReference) {
-    // For the pages that are still Eager. The OnPush history pages read [routerOutletData] instead, which also
-    // reaches them when the bundle loads after they are shown.
-    componentReference.providerBundle = this.providerBundle;
-  }
+  /** Set on each navigation; a URL in none of the sections keeps the previous one, as before. */
+  readonly section = toSignal(this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(event => sections.find(section => event.url.includes(section.path))),
+    filter(section => section !== undefined)
+  ), {initialValue: null});
 
   toggleSidebar() {
-    const el: HTMLElement = document.getElementById('sidebar_toggle');
-    if(!el.classList.contains('closed')) {
+    // Both are in this component's template, which is shown whenever the toggle can be clicked.
+    const el = document.getElementById('sidebar_toggle')!;
+    const content = document.getElementById('sidebar_main_content')!;
+    if (!el.classList.contains('closed')) {
       el.classList.add('closed');
-      const el1: HTMLElement = document.getElementById('sidebar_main_content');
-      el1.classList.remove('sidebar_main_active');
-      el1.classList.add('sidebar_main_inactive');
+      content.classList.remove('sidebar_main_active');
+      content.classList.add('sidebar_main_inactive');
     } else {
       el.classList.remove('closed');
-      const el1: HTMLElement = document.getElementById('sidebar_main_content');
-      el1.classList.add('sidebar_main_active');
-      el1.classList.remove('sidebar_main_inactive');
+      content.classList.add('sidebar_main_active');
+      content.classList.remove('sidebar_main_inactive');
     }
   }
-
-  // getInvitationToken() {
-  //   this.userService.getInvitationToken(this.inviteeEmail.value).subscribe(
-  //     res=> {
-  //       this.invitationUrl = location.origin + '/join/' + res;
-  //       console.log(this.invitationUrl);
-  //     },
-  //     error => {console.error(error)}
-  //   );
-  // }
-  //
-  // clearData() {
-  //   this.inviteeEmail.reset(null);
-  //   this.invitationUrl = null;
-  // }
-  //
-  // copyToClipboard() {
-  //   // navigator clipboard api needs a secure context (https)
-  //   if (!navigator.clipboard) {
-  //     this.fallbackCopyTextToClipboard(this.invitationUrl);
-  //     return;
-  //   }
-  //   navigator.clipboard.writeText(this.invitationUrl).then( ()=> {
-  //     this.title = 'copied to clipboard';
-  //     // console.log('Async: Copying to clipboard was successful!');
-  //   }).catch((err)=> {
-  //     console.error('Async: Could not copy text: ', err);
-  //   });
-  // }
-  //
-  // fallbackCopyTextToClipboard(text) { // this is deprecated support is not guaranteed
-  //   const textArea = document.createElement("textarea");
-  //   textArea.value = text;
-  //
-  //   // Avoid scrolling to bottom
-  //   textArea.style.top = "0";
-  //   textArea.style.left = "0";
-  //   textArea.style.position = "fixed";
-  //
-  //   document.body.appendChild(textArea);
-  //   textArea.focus();
-  //   textArea.select();
-  //
-  //   try {
-  //     const successful = document.execCommand('copy');
-  //     if (successful)
-  //       this.title = 'copied to clipboard';
-  //     // const msg = successful ? 'successful' : 'unsuccessful';
-  //     // console.log('Fallback: Copying text command was ' + msg);
-  //   } catch (err) {
-  //     console.error('Fallback: Oops, unable to copy', err);
-  //   }
-  //
-  //   document.body.removeChild(textArea);
-  // }
-
 }

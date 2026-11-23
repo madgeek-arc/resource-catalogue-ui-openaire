@@ -11,12 +11,12 @@ import {UserSessionService} from '../../services/user-session.service';
 import {UserService} from '../../services/user.service';
 import {AireTopMenuComponent} from './topmenu.component';
 
-// The host is Eager like AppComponent, so a host check refreshes the menu only when it marked itself
-// for check (OnPush) or read a changed signal.
+// The host is OnPush like AppComponent, so a host check refreshes the menu only when it marked itself
+// for check or read a changed signal.
 @Component({
   imports: [AireTopMenuComponent],
   template: '<app-top-menu-aire />',
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class HostComponent {}
 
@@ -180,7 +180,7 @@ describe('AireTopMenuComponent', () => {
     const router = TestBed.inject(Router);
     const menu = () => root.querySelector('.main-menu')!;
 
-    // ProviderHomeComponent does this, so every later navigation builds a new root ActivatedRoute.
+    // ProviderHomeComponent used to do this; with it, every later navigation builds a new root ActivatedRoute.
     await router.navigateByUrl('/dashboard');
     router.routeReuseStrategy.shouldReuseRoute = () => false;
     fixture.detectChanges();

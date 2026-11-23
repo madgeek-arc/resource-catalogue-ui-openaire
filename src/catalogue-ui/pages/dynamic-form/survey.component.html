@@ -1,3 +1,4 @@
+@let model = this.model();
 @if (model) {
   <div class="uk-grid">
     <!--  <div class="uk-width-1-1 uk-flex uk-flex-middle uk-flex-right">-->
@@ -35,13 +36,13 @@
 
 <!--Chapter Selection-->
 @if (model && ready) {
-  <div [ngClass]="{'uk-display-none': (model.sections.length === 1 || !model.sections[0].subSections)}">
+  <div [class.uk-display-none]="model.sections.length === 1 || !model.sections[0].subSections">
     <ul class="chapter-tabs uk-tab" uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
       @for (section of model.sections; track section) {
         <li class="">
           @if ((!section.subType || section.subType===subType())) {
             <a (click)="showUnsavedChangesPrompt(section)">{{section.name}}
-              @if (chapterChangeMap.get(section.id)) {
+              @if (chapterChangeMap().get(section.id!)) {
                 <span class="material-icons md-10 uk-margin-small-left">circle</span>
               }
             </a>
@@ -52,20 +53,20 @@
   </div>
 }
 
-@if (errorMessage) {
+@if (errorMessage()) {
   <pre id="errorAlert" class="uk-alert uk-alert-danger" uk-alert="duration: 500" style="border-width: 0">
     <a (click)="closeError()" class="uk-alert-close" uk-close></a>
-    {{errorMessage}}
+    {{errorMessage()}}
   </pre>
 }
 
-@if (successMessage) {
+@if (successMessage()) {
   <div id="successAlert" class="uk-alert uk-alert-success" uk-alert="duration: 500">
-    <p>{{successMessage}}</p>
+    <p>{{successMessage()}}</p>
   </div>
 }
 
-@if (ready) {
+@if (ready && model) {
   <div>
     <ul id="top-navigation-tabs" class="uk-switcher">
       @for (section of model.sections; let i = $index; track section) {

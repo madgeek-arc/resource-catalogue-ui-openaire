@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output, signal } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -6,15 +6,14 @@ import {Section, Field, HandleBitSet, Tab, Tabs} from '../../domain/dynamic-form
 import BitSet from 'bitset';
 
 import UIkit from 'uikit';
-import { NgStyle, NgClass } from '@angular/common';
 import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.component';
 
 @Component({
     selector: 'app-chapter-edit',
     templateUrl: './chapter.component.html',
     providers: [FormControlService],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgStyle, NgClass, ReactiveFormsModule, DynamicFormFieldsComponent]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule, DynamicFormFieldsComponent]
 })
 export class ChapterEditComponent implements OnChanges{
   route = inject(ActivatedRoute);
@@ -22,17 +21,18 @@ export class ChapterEditComponent implements OnChanges{
   protected router = inject(Router);
 
 
-  @Input() form: any = null;
-  @Input() tabsHeader: string;
-  @Input() mandatoryFieldsText: string = null;
-  readonly readonly = input<boolean>(null);
-  readonly validate = input<boolean>(null);
-  readonly vocabularies = input<Map<string, object[]>>(null);
-  readonly subVocabularies = input<Map<string, object[]>>(null);
-  @Input() chapter: Section = null;
-  readonly fields = input<Section[]>(null);
+  readonly form = input<any>(null);
+  readonly tabsHeader = input<string | null>(null);
+  readonly mandatoryFieldsText = input<string | null>(null);
+  readonly readonly = input<boolean | null>(null);
+  readonly validate = input<boolean | null>(null);
+  readonly vocabularies = input<Map<string, object[]> | null>(null);
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly chapter = input.required<Section>();
+  readonly fields = input.required<Section[]>();
 
-  readonly chapterHasChanges = output<string[]>();
+  /** The chapter id, and the chapter whose changes were discarded, if any. */
+  readonly chapterHasChanges = output<(string | null)[]>();
   readonly submit = output();
 
   editMode = true;
@@ -48,7 +48,7 @@ export class ChapterEditComponent implements OnChanges{
   showBitsets = false;
   loaderBitSet = new BitSet();
   loaderPercentage = 0;
-  tabIndex= 0;
+  readonly tabIndex = signal(0);
 
   isEdit = false;
   isService = false;
@@ -56,7 +56,8 @@ export class ChapterEditComponent implements OnChanges{
   datasourceId = '';
 
   ngOnInit() {
-    const path = this.route.snapshot.routeConfig.path;
+    // A routed component always has its route config, and these routes all have a path.
+    const path = this.route.snapshot.routeConfig!.path!;
     if (path.includes('/edit/')) {
       this.isEdit = true;
     }
@@ -67,7 +68,7 @@ export class ChapterEditComponent implements OnChanges{
       this.isDatasource = true;
     }
     if (path.includes(':datasourceId')) {
-      this.datasourceId = this.route.snapshot.paramMap.get('datasourceId');
+      this.datasourceId = this.route.snapshot.paramMap.get('datasourceId')!;
     }
   }
 
@@ -79,9 +80,9 @@ export class ChapterEditComponent implements OnChanges{
   }
 
   onSubmit(tempSave: boolean, pendingService?: boolean) {
-    // if (this.form.valid) {
+    // if (this.form().valid) {
     window.scrollTo(0, 0);
-    this.submit.emit(null);
+    this.submit.emit();
   }
 
   initializations() {
@@ -116,15 +117,17 @@ export class ChapterEditComponent implements OnChanges{
   handleBitSetOfComposite(data: HandleBitSet) {
     const field = data.field;
     const pos = data.position;
+    // Only composite fields report here, and they have sub-fields.
+    const subFields = field.subFields!;
     // console.log(field.name);
 
     if (field.typeInfo.multiplicity) {
-      const formArray = this.form.get(field.accessPath) as UntypedFormArray;
+      const formArray = this.form().get(field.accessPath) as UntypedFormArray;
       let flag = false;
       for (let i = 0; i < formArray.length; i++) {
         if (formArray.controls[i].valid) {
           flag = true;
-          field.subFields.forEach(f => {
+          subFields.forEach(f => {
             if (f.form.mandatory)
               this.loaderBitSet.set(parseInt(f.id), 1);
           });
@@ -134,10 +137,10 @@ export class ChapterEditComponent implements OnChanges{
       }
       if (!flag) {
         // console.log('didn't find valid array field')
-        const found = new Array(field.subFields.length);
-        for (let j = 0; j < field.subFields.length; j++) {
+        const found = new Array(subFields.length);
+        for (let j = 0; j < subFields.length; j++) {
           for (let i = 0; i < formArray.length; i++) {
-            if (field.subFields[j].form.mandatory && formArray.controls[i].get(field.subFields[j].name).valid) {
+            if (subFields[j].form.mandatory && formArray.controls[i].get(subFields[j].name)!.valid) {
               found[j] = true;
               break;
             }
@@ -145,24 +148,24 @@ export class ChapterEditComponent implements OnChanges{
         }
         for (let i = 0; i < found.length; i++) {
           if (!found[i]) {
-            this.loaderBitSet.set(parseInt(field.subFields[i].id), 0);
+            this.loaderBitSet.set(parseInt(subFields[i].id), 0);
           } else {
-            this.loaderBitSet.set(parseInt(field.subFields[i].id), 1);
+            this.loaderBitSet.set(parseInt(subFields[i].id), 1);
           }
         }
         this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
       }
-    } else if (field.subFields[pos].form.mandatory) {
-      if (this.form.get(field.subFields[pos].accessPath).valid) {
-        this.loaderBitSet.set(parseInt(field.subFields[pos].id), 1);
-        if (this.form.get(field.accessPath).valid) {
+    } else if (subFields[pos].form.mandatory) {
+      if (this.form().get(subFields[pos].accessPath).valid) {
+        this.loaderBitSet.set(parseInt(subFields[pos].id), 1);
+        if (this.form().get(field.accessPath).valid) {
           this.decreaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         } else {
           this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         }
       } else {
-        this.loaderBitSet.set(parseInt(field.subFields[pos].id), 0);
-        if (this.form.get(field.accessPath).valid) {
+        this.loaderBitSet.set(parseInt(subFields[pos].id), 0);
+        if (this.form().get(field.accessPath).valid) {
           this.decreaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         } else {
           this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
@@ -178,14 +181,14 @@ export class ChapterEditComponent implements OnChanges{
       this.handleBitSetOfGroup(data);
       return;
     }
-    // console.log(this.form.get(data.accessPath).valid);
-    if (this.form.get(data.accessPath).valid) {
+    // console.log(this.form().get(data.accessPath).valid);
+    if (this.form().get(data.accessPath).valid) {
       this.decreaseRemainingFieldsPerTab(data.form.group, data.form.display.order);
       this.loaderBitSet.set(parseInt(data.id), 1);
-    } else if (this.form.get(data.accessPath).invalid) {
+    } else if (this.form().get(data.accessPath).invalid) {
       this.increaseRemainingFieldsPerTab(data.form.group, data.form.display.order);
       this.loaderBitSet.set(parseInt(data.id), 0);
-    } else if (this.form.get(data.accessPath).pending) {
+    } else if (this.form().get(data.accessPath).pending) {
       this.timeOut(300).then(() => this.handleBitSet(data));
       return;
     }
@@ -193,7 +196,7 @@ export class ChapterEditComponent implements OnChanges{
   }
 
   handleBitSetOfGroup(data: Field) {
-    const formArray = this.form.get(data.accessPath) as UntypedFormArray;
+    const formArray = this.form().get(data.accessPath) as UntypedFormArray;
     let flag = false;
     for (let i = 0; i < formArray.length; i++) {
       if (formArray.controls[i].valid) {
@@ -221,24 +224,24 @@ export class ChapterEditComponent implements OnChanges{
   }
 
   decreaseRemainingFieldsPerTab(tabId: string, bitIndex: number) {
-    this.bitset.tabs.get(tabId).bitSet.set(bitIndex, 1);
-    this.bitset.tabs.get(tabId).remainingOnTab = this.bitset.tabs.get(tabId).requiredOnTab - this.bitset.tabs.get(tabId).bitSet.cardinality();
-    if (this.bitset.tabs.get(tabId).remainingOnTab === 0 && this.bitset.completedTabsBitSet.get(this.bitset.tabs.get(tabId).order) !== 1) {
+    this.bitset.tabs.get(tabId)!.bitSet.set(bitIndex, 1);
+    this.bitset.tabs.get(tabId)!.remainingOnTab = this.bitset.tabs.get(tabId)!.requiredOnTab - this.bitset.tabs.get(tabId)!.bitSet.cardinality();
+    if (this.bitset.tabs.get(tabId)!.remainingOnTab === 0 && this.bitset.completedTabsBitSet.get(this.bitset.tabs.get(tabId)!.order) !== 1) {
       this.calcCompletedTabs(tabId, 1);
     }
   }
 
   increaseRemainingFieldsPerTab(tabId: string, bitIndex: number) {
-    this.bitset.tabs.get(tabId).bitSet.set(bitIndex, 0);
-    this.bitset.tabs.get(tabId).remainingOnTab = this.bitset.tabs.get(tabId).requiredOnTab - this.bitset.tabs.get(tabId).bitSet.cardinality();
-    if (this.bitset.completedTabsBitSet.get(this.bitset.tabs.get(tabId).order) !== 0) {
+    this.bitset.tabs.get(tabId)!.bitSet.set(bitIndex, 0);
+    this.bitset.tabs.get(tabId)!.remainingOnTab = this.bitset.tabs.get(tabId)!.requiredOnTab - this.bitset.tabs.get(tabId)!.bitSet.cardinality();
+    if (this.bitset.completedTabsBitSet.get(this.bitset.tabs.get(tabId)!.order) !== 0) {
       this.calcCompletedTabs(tabId, 0);
     }
   }
 
   calcCompletedTabs(tabId: string, setValue: number) {
-    if (tabId && this.bitset.tabs.get(tabId).order) {
-      this.bitset.completedTabsBitSet.set(this.bitset.tabs.get(tabId).order, setValue);
+    if (tabId && this.bitset.tabs.get(tabId)!.order) {
+      this.bitset.completedTabsBitSet.set(this.bitset.tabs.get(tabId)!.order, setValue);
       this.bitset.completedTabs = this.bitset.completedTabsBitSet.cardinality();
     }
   }
@@ -247,23 +250,23 @@ export class ChapterEditComponent implements OnChanges{
 
   /** tab prev next buttons **/
   setTabIndex(i: number) {
-    this.tabIndex = i;
+    this.tabIndex.set(i);
   }
 
   goToTab(i: number) {
     if (i === -1 || i === this.bitset.tabs.size) {
       return;
     }
-    this.tabIndex = i;
-    const element: HTMLElement = document.getElementById(this.chapter.id + '-tab' + i) as HTMLElement;
+    this.tabIndex.set(i);
+    const element: HTMLElement = document.getElementById(this.chapter().id + '-tab' + i) as HTMLElement;
     element.click();
     // console.log(element)
   }
 
   /** emit changes-->**/
-  unsavedChangesPrompt(e: boolean, removeChanges: string = null){
+  unsavedChangesPrompt(e: boolean, removeChanges: string | null = null){
     if (e) {
-      this.chapterHasChanges.emit([this.chapter.id, removeChanges]);
+      this.chapterHasChanges.emit([this.chapter().id, removeChanges]);
     }
   }
   /** <--emit changes**/

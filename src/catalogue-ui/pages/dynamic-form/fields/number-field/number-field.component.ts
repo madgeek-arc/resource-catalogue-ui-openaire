@@ -1,24 +1,28 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject, input, output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
-import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-number-field',
     templateUrl: './number-field.component.html',
     styles: ['.clear-style { height: 0 !important;}'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ReactiveFormsModule, NgClass]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ReactiveFormsModule]
 })
 
 export class NumberFieldComponent implements OnInit {
   private rootFormGroup = inject(FormGroupDirective);
+  /** Refreshes this field when its controls change, whoever changes them. */
+  private readonly refresh = formFieldRefresher();
+  private destroyRef = inject(DestroyRef);
   private formControlService = inject(FormControlService);
 
-  @Input() fieldData: Field;
+  readonly fieldData = input.required<Field>();
   readonly editMode = input<any>(undefined);
-  readonly position = input<number>(null);
+  readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
   readonly handleBitSets = output<Field>();
@@ -26,7 +30,7 @@ export class NumberFieldComponent implements OnInit {
 
   formControl!: UntypedFormControl;
   form!: UntypedFormGroup;
-  hideField: boolean = null;
+  readonly hideField = signal<boolean | null>(null);
 
   step = '';
 
@@ -37,19 +41,21 @@ export class NumberFieldComponent implements OnInit {
     } else {
       this.form = this.rootFormGroup.control;
     }
-    this.formControl = this.form.get(this.fieldData.name) as UntypedFormControl;
+    this.formControl = this.form.get(this.fieldData().name) as UntypedFormControl;
+    this.refresh(this.formControl);
 
-    if (this.fieldData.form.dependsOn) {
-      // console.log(this.fieldData.form.dependsOn);
-      this.enableDisableField(this.form.get(this.fieldData.form.dependsOn.name).value, this.fieldData.form.dependsOn.value);
-      // console.log(this.fieldData.name);
-      this.form.get(this.fieldData.form.dependsOn.name).valueChanges.subscribe(value => {
-        this.enableDisableField(value, this.fieldData.form.dependsOn.value);
+    const dependsOn = this.fieldData().form.dependsOn;
+    if (dependsOn) {
+      // console.log(this.fieldData().form.dependsOn);
+      this.enableDisableField(this.form.get(dependsOn.name)!.value, dependsOn.value);
+      // console.log(this.fieldData().name);
+      this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+        this.enableDisableField(value, dependsOn.value);
       });
     }
 
-    if (this.fieldData.typeInfo.values) {
-      this.step = this.fieldData.typeInfo.values[0];
+    if (this.fieldData().typeInfo.values) {
+      this.step = this.fieldData().typeInfo.values[0];
     }
   }
 
@@ -71,12 +77,12 @@ export class NumberFieldComponent implements OnInit {
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.fieldAsFormArray()?.get([position])?.get(groupName).valid
-        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName).dirty));
+      return !!(!this.fieldAsFormArray()?.get([position])?.get(groupName)!.valid
+        && (edit || this.fieldAsFormArray()?.get([position])?.get(groupName)!.dirty));
 
     }
-    return (!this.fieldAsFormArray().get([position]).valid
-      && (edit || this.fieldAsFormArray().get([position]).dirty));
+    return (!this.fieldAsFormArray().get([position])!.valid
+      && (edit || this.fieldAsFormArray().get([position])!.dirty));
   }
 
   /** Bitsets--> **/
@@ -93,8 +99,8 @@ export class NumberFieldComponent implements OnInit {
   }
 
   getNumberOfDecimals() {
-    if (this.fieldData.typeInfo.values) {
-      return this.fieldData.typeInfo.values[0].split('.')[1].length;
+    if (this.fieldData().typeInfo.values) {
+      return this.fieldData().typeInfo.values[0].split('.')[1].length;
     }
     return 0;
   }
@@ -102,12 +108,12 @@ export class NumberFieldComponent implements OnInit {
   enableDisableField(value, enableValue) {
     if (value?.toString() == enableValue) {
       this.formControl.enable();
-      this.hideField = false;
+      this.hideField.set(false);
 
     } else {
       this.formControl.disable();
       this.formControl.reset();
-      this.hideField = true;
+      this.hideField.set(true);
       // maybe add this if the remaining empty fields are a problem
       // (this.formControl as unknown as FormArray).clear();
 

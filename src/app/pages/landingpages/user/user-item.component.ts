@@ -14,7 +14,7 @@ import {Service} from '../../../entities/eic-model';
 })
 export class UserItemComponent {
   private resourceService = inject(ResourceService);
-  private userVocId = inject(ActivatedRoute).snapshot.paramMap.get('id');
+  private userVocId = inject(ActivatedRoute).snapshot.paramMap.get('id')!; // The route is portfolios/:id or users/:id.
 
   /**
    * The user type and the portfolios; null while loading, and after a failed load, as before.

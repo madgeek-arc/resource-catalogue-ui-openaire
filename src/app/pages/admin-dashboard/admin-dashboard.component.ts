@@ -1,153 +1,107 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import {EMPTY} from 'rxjs';
+import {catchError, filter, map} from 'rxjs/operators';
 import {UserService} from '../../services/user.service';
-import {UserInfo} from '../../entities/userInfo';
-import { UntypedFormBuilder, UntypedFormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
 
+const sections = [
+  {path: 'services', icon: 'grid_view', title: 'Services'},
+  {path: 'datasources', icon: 'grid_view', title: 'Datasource Subprofiles'},
+  {path: 'providers', icon: 'real_estate_agent', title: 'Providers'}
+];
 
 @Component({
-    selector: 'app-admin-dashboard',
-    templateUrl: 'admin-dashboard.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [NgClass, RouterLink, RouterOutlet, ReactiveFormsModule, FormsModule]
+  selector: 'app-admin-dashboard',
+  templateUrl: 'admin-dashboard.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, RouterOutlet, ReactiveFormsModule]
 })
-
-export class AdminDashboardComponent implements OnInit {
-  private route = inject(ActivatedRoute);
+export class AdminDashboardComponent {
   private router = inject(Router);
   private userService = inject(UserService);
-  private fb = inject(UntypedFormBuilder);
 
+  /** Set on each navigation; any URL that names neither services nor datasources shows the providers. */
+  readonly section = toSignal(this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd),
+    map(event => sections.find(section => section.path === 'providers' || event.url.includes(section.path)))
+  ), {initialValue: null});
 
-  userInfo: UserInfo = null;
-  inviteeEmail: UntypedFormControl = this.fb.control(null, [Validators.email, Validators.required]);
-  invitationUrl: string = null;
+  private readonly userInfo = toSignal(this.userService.getUserInfo().pipe(
+    catchError(error => {
+      console.error(error);
+      return EMPTY;
+    })
+  ), {initialValue: null});
 
-  path: string = null;
+  readonly canInvite = computed(() => {
+    const roles: string[] = this.userInfo()?.roles ?? [];
+    return roles.includes('ADMIN') || roles.includes('ONBOARDING_TEAM');
+  });
 
-  titleIcon: string = null;
-  title: string = null;
-
-  constructor() {
-    this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          if (event.url.includes('services')) {
-            this.path = 'services';
-            this.titleIcon = 'grid_view';
-            this.title = 'Services';
-          } else if (event.url.includes('datasources')) {
-            this.path = 'datasources';
-            this.titleIcon = 'grid_view';
-            this.title = 'Datasource Subprofiles';
-          } else {
-            this.path = 'providers';
-            this.titleIcon = 'real_estate_agent';
-            this.title = 'Providers';
-          }
-        }
-      }
-    );
-  }
-
-  ngOnInit() {
-    this.userService.getUserInfo().subscribe(
-      res => {this.userInfo = res;},
-      error => {console.error(error);}
-    );
-    // this.route.params.subscribe(
-    //   params => {
-    //     this.providerId = params['providerId'];
-    //     if (this.providerId) {
-    //       this.providerService.getProviderBundle(this.providerId).subscribe(
-    //         res => {this.providerBundle = res},
-    //         error => {console.error(error)}
-    //       );
-    //     }
-    //   }
-    // );
-  }
-
-  // onActivate(componentReference) {
-  //   componentReference.providerBundle = this.providerBundle;
-  // }
+  readonly inviteeEmail = new FormControl<string | null>(null, [Validators.email, Validators.required]);
+  readonly invitationUrl = signal<string | null>(null);
 
   toggleSidebar() {
-    const el: HTMLElement = document.getElementById('sidebar_toggle');
-    if(!el.classList.contains('closed')) {
-      el.classList.add('closed');
-      const el1: HTMLElement = document.getElementById('sidebar_main_content');
-      el1.classList.remove('sidebar_main_active');
-      el1.classList.add('sidebar_main_inactive');
-    } else {
-      el.classList.remove('closed');
-      const el1: HTMLElement = document.getElementById('sidebar_main_content');
-      el1.classList.add('sidebar_main_active');
-      el1.classList.remove('sidebar_main_inactive');
-    }
-  }
-
-  canInvite() {
-    if (this.userInfo) {
-      if (this.userInfo.roles.includes('ADMIN') || this.userInfo.roles.includes('ONBOARDING_TEAM'))
-        return true;
-    }
-    return false;
+    // Both are in this component's template, which is shown whenever the toggle can be clicked.
+    const toggle = document.getElementById('sidebar_toggle')!;
+    const content = document.getElementById('sidebar_main_content')!;
+    const closing = !toggle.classList.contains('closed');
+    toggle.classList.toggle('closed', closing);
+    content.classList.toggle('sidebar_main_active', !closing);
+    content.classList.toggle('sidebar_main_inactive', closing);
   }
 
   getInvitationToken() {
-    this.userService.getInvitationToken(this.inviteeEmail.value).subscribe(
-      res=> {
-        this.invitationUrl = location.origin + '/join/' + res;
-        // console.log(this.invitationUrl);
-      },
-      error => {console.error(error);}
-    );
+    const email = this.inviteeEmail.value;
+    // The button is disabled while the email is invalid, and a required email is never null.
+    if (!email) {
+      return;
+    }
+    this.userService.getInvitationToken(email).subscribe({
+      next: token => this.invitationUrl.set(location.origin + '/join/' + token),
+      error: error => console.error(error)
+    });
   }
 
   clearData() {
     this.inviteeEmail.reset(null);
-    this.invitationUrl = null;
+    this.invitationUrl.set(null);
   }
 
   copyToClipboard() {
-    // navigator clipboard api needs a secure context (https)
-    if (!navigator.clipboard) {
-      this.fallbackCopyTextToClipboard(this.invitationUrl);
+    const url = this.invitationUrl();
+    // The copy button only shows once there is a link.
+    if (!url) {
       return;
     }
-    navigator.clipboard.writeText(this.invitationUrl).then( ()=> {
-      // this.title = 'copied to clipboard';
-      // console.log('Async: Copying to clipboard was successful!');
-    }).catch((err)=> {
-      console.error('Async: Could not copy text: ', err);
-    });
+    // The clipboard API needs a secure context (https).
+    if (!navigator.clipboard) {
+      this.fallbackCopyTextToClipboard(url);
+      return;
+    }
+    navigator.clipboard.writeText(url).catch(error => console.error('Async: Could not copy text: ', error));
   }
 
-  fallbackCopyTextToClipboard(text) { // this is deprecated support is not guaranteed
+  /** execCommand('copy') is deprecated, so this may not work everywhere. */
+  private fallbackCopyTextToClipboard(text: string) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
-
-    // Avoid scrolling to bottom
+    // Avoid scrolling to the bottom.
     textArea.style.top = '0';
     textArea.style.left = '0';
     textArea.style.position = 'fixed';
-
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-
     try {
-      const successful = document.execCommand('copy');
-      if (successful) console.log('copied');
-      // this.title = 'copied to clipboard';
-      // const msg = successful ? 'successful' : 'unsuccessful';
-      // console.log('Fallback: Copying text command was ' + msg);
-    } catch (err) {
-      console.error('Fallback: Oops, unable to copy', err);
+      if (document.execCommand('copy')) {
+        console.log('copied');
+      }
+    } catch (error) {
+      console.error('Fallback: Oops, unable to copy', error);
     }
-
     document.body.removeChild(textArea);
   }
-
 }
