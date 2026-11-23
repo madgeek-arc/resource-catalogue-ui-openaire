@@ -75,11 +75,14 @@ export class StringFieldComponent implements OnInit {
     this.fieldAsFormArray().removeAt(i);
   }
 
-  movedElement(e) {
+  /** UIkit's sortable fires moved on the list; its children carry their old position as id. */
+  movedElement(e: Event) {
     const newOrder: number[] = [];
-    e.target.childNodes.forEach(child => {
-      if (Number.isInteger((parseInt(child.id))))
-        newOrder.push(child.id);
+    (e.target as HTMLElement).childNodes.forEach(child => {
+      const id = (child as Element).id;
+      if (Number.isInteger((parseInt(id))))
+        // Number() compares and moves exactly as the id string did before.
+        newOrder.push(Number(id));
     });
     for (let i = 0; i < newOrder.length; i++) {
       if (newOrder[i] != i && (newOrder[i] > i+1 || newOrder[i] < i)) {
@@ -132,7 +135,8 @@ export class StringFieldComponent implements OnInit {
     this.hasChanges.emit(true);
   }
 
-  enableDisableField(value, enableValue) {
+  /** value is the form value of the field this one depends on. */
+  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string) {
     if (value?.toString() == enableValue) {
       this.formControl.enable();
       this.hideField.set(false);

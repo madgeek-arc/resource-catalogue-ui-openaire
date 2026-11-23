@@ -84,7 +84,8 @@ export class LargeTextFieldComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  enableDisableField(value, enableValue) {
+  /** value is the form value of the field this one depends on. */
+  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string) {
     if (value?.toString() == enableValue) {
       this.formControl.enable();
       this.hideField.set(false);

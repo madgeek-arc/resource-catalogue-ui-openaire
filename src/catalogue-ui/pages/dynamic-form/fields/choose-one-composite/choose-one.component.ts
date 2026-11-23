@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, input, output, signal } from '@angular/core';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
-import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
+import {Field, HandleBitSet, UiVocabulary, VocabularyLookup} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
@@ -21,8 +21,8 @@ export class ChooseOneComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]> | null>(null);
-  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly vocabularies = input<VocabularyLookup | null>(null);
+  readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly editMode = input<any>(undefined);
   readonly position = input<number | null>(null);
 
@@ -124,7 +124,7 @@ export class ChooseOneComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  enableDisableField(value) {
+  enableDisableField(value: unknown) {
     // console.log(value);
     if (value === 'Applicable') {
       this.form.enable();

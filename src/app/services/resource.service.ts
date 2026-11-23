@@ -112,8 +112,9 @@ export class ResourceService {
     return this.http.get<Vocabulary[]>(this.base + `/vocabularies/byType/${type}`);
   }
 
+  /** Vocabularies by type: a JSON object, not a Map. */
   getUiVocabularies() {
-    return this.http.get<Map<string, object[]>>(this.base + `/vocabularies/mappings`);
+    return this.http.get<Record<string, Vocabulary[]>>(this.base + `/vocabularies/mappings`);
   }
 
   getServicesByVocabularyTypeAndId(type: string, id?: string) {

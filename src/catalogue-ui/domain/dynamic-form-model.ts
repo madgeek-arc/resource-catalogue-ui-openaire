@@ -1,5 +1,8 @@
 import BitSet from 'bitset';
 
+/** Vocabularies by type (or sub-vocabularies by parent id): a JSON object from the API, indexed by name, not a Map. */
+export type VocabularyLookup = Record<string, object[]>;
+
 export class Required {
   topLevel: number;
   total: number;

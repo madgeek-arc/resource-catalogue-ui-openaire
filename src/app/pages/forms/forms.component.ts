@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, signal } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Model} from '../../../catalogue-ui/domain/dynamic-form-model';
+import {Model, VocabularyLookup} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
@@ -29,8 +30,8 @@ export class FormsComponent implements OnInit{
   tabsHeader: string | null = null;
   /** The form model, the resource being edited and the vocabularies, set together once they have all loaded. */
   readonly model = signal<Model | null>(null);
-  readonly vocabulariesMap = signal<Map<string, object[]>>(new Map<string, object[]>());
-  readonly subVocabulariesMap = signal<Map<string, object[]> | null>(null);
+  readonly vocabulariesMap = signal<VocabularyLookup>({});
+  readonly subVocabulariesMap = signal<VocabularyLookup | null>(null);
   premiumSort = new PremiumSortPipe();
   providerId: string | null = null;
   resourceId: string | null = null;
@@ -101,10 +102,12 @@ export class FormsComponent implements OnInit{
     return this.model()?.sections?.[0]?.name || 'Service';
   }
 
-  submitForm(value) {
+  /** The survey emits its form and whether it was editing. */
+  submitForm(value: [UntypedFormGroup, boolean]) {
     this.ready.set(false);
     // console.log(value[0].get('Service').value);
-    const service: Service = {...value[0].get(this.sectionName).value};
+    // The survey's form has a group named after the model's section (see sectionName).
+    const service: Service = {...value[0].get(this.sectionName)!.value};
     // for (const element in value[0].get('Service').controls) {
     //   console.log(element+' is '+ value[0].get('Service').get(element).valid);
     //   console.log(value[0].get('Service').get(element).value);
@@ -138,7 +141,7 @@ export class FormsComponent implements OnInit{
       }
     }
     if (this.resourceType === 'datasource') {
-      const datasource: Datasource = {...value[0].get(this.sectionName).value};
+      const datasource: Datasource = {...value[0].get(this.sectionName)!.value};
       // Subprofile routes have a resourceId (add) or a datasourceId (edit).
       const id = (this.resourceId || this.datasourceId)!;
       datasource.id = id;
@@ -171,7 +174,7 @@ export class FormsComponent implements OnInit{
   }
 
   /** Sorts the vocabularies in place, adds RegionOrCountry, and returns the sub-vocabularies grouped by parent. */
-  prepareVocabularies(vocabulariesMap: Map<string, object[]>): Map<string, object[]> {
+  prepareVocabularies(vocabulariesMap: Record<string, Vocabulary[]>): VocabularyLookup {
     this.sortVocabulariesByName(vocabulariesMap['Scientific domain']);
     this.sortVocabulariesByName(vocabulariesMap['Scientific subdomain']);
     this.sortVocabulariesByName(vocabulariesMap['Category']);
@@ -192,12 +195,14 @@ export class FormsComponent implements OnInit{
     return subVocabularies;
   }
 
-  groupByKey(array, key) {
-    return array.reduce((hash, obj) => {
+  groupByKey(array: Vocabulary[], key: keyof Vocabulary): Record<string, Vocabulary[]> {
+    return array.reduce<Record<string, Vocabulary[]>>((hash, obj) => {
       if (obj[key] === undefined) {
         return hash;
       }
-      return Object.assign(hash, {[obj[key]]: (hash[obj[key]] || []).concat(obj)});
+      // Object keys are strings, so the value is the key as it was before.
+      const group = String(obj[key]);
+      return Object.assign(hash, {[group]: (hash[group] || []).concat(obj)});
     }, {});
   }
 
