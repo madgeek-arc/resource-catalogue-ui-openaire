@@ -8,9 +8,9 @@ import {Subscription} from 'rxjs';
 export class SmoothScroll {
   private router = inject(Router);
 
-  private interval;
+  private interval: ReturnType<typeof setInterval> | undefined;
   private readonly sub;
-  private lastRoute;
+  private lastRoute: string | undefined;
   private whitelist: string[] = [];
 
   constructor() {

@@ -7,8 +7,9 @@ export class Bundle<T> implements Identifiable {
   metadata: Metadata;
   active: boolean;
   suspended: boolean;
-  identifiers
-  migrationStatus
+  // Sent by the API, not read by the UI.
+  identifiers: unknown;
+  migrationStatus: unknown;
   loggingInfo: LoggingInfo[];
   latestAuditInfo: LoggingInfo;
   latestOnboardingInfo: LoggingInfo;

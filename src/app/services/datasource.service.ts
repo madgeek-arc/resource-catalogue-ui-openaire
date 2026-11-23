@@ -23,7 +23,7 @@ export class DatasourceService {
     return this.http.get<Paging<DatasourceDetails>>(this.base + '/dsm/datasources', {params: queryParams});
   }
 
-  getDatasourceById(id) {
+  getDatasourceById(id: string) {
     let queryParams = new HttpParams();
     queryParams = queryParams.append('id', id);
     return this.http.get<Paging<DatasourceDetails>>(this.base + '/dsm/datasources', {params: queryParams});

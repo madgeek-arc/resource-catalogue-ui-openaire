@@ -7,7 +7,7 @@ export class DocDefinition {
   defaultStyle: object;
   // pageMargins: [ 40, 60, 40, 60 ];
   // pageSize: 'A4';
-  footer(currentPage, pageCount) {
+  footer(currentPage: number, pageCount: number) {
     return {
       layout: 'noBorders',
       fontSize: 8,

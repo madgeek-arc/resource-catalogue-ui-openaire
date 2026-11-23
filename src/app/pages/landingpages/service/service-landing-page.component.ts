@@ -4,7 +4,6 @@ import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from '@
 import {EMPTY, Observable, of, zip} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import {Service, URL} from '../../../entities/eic-model';
-import {UiVocabulary} from '../../../entities/dynamic-form-model';
 import {canEditOpenAireServices} from '../../../shared/can-edit-openaire-services';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
@@ -33,7 +32,7 @@ export class ServiceLandingPageComponent {
   readonly data = toSignal(this.route.params.pipe(
     switchMap(params => zip(
       this.resourceService.getServiceOrDatasource(params['id']) as Observable<Service>,
-      this.resourceService.getUiVocabularies() as unknown as Observable<Map<string, UiVocabulary[]>>
+      this.resourceService.getUiVocabularies()
     ).pipe(
       switchMap(([service, vocabularies]) => {
         // Throws for a service without a change log, which catchError below turns into the empty page, as before.

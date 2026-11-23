@@ -15,9 +15,10 @@
       "node_modules/@types"
     ],
     "useDefineForClassFields": false,
-    // The strict flags that are on so far; noImplicitAny follows once its errors are fixed.
+    // The strict flags that are on so far; strictPropertyInitialization is the one strict still adds.
     "alwaysStrict": true,
     "strictNullChecks": true,
+    "noImplicitAny": true,
     "noImplicitThis": true,
     "useUnknownInCatchVariables": true,
     "strictFunctionTypes": true,

@@ -1,3 +1,4 @@
+import {FormControlService} from '../../catalogue-ui/services/form-control.service';
 import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {skipNotFoundRedirect} from './authentication-interceptor';
@@ -19,30 +20,9 @@ export class ResourceService {
   private oa = this.base + '/oa';
   private options = {withCredentials: true};
 
-  static removeNulls(obj) {
-    const isArray = obj instanceof Array;
-    for (const k in obj) {
-      if (obj[k] === null || obj[k] === '') {
-        isArray ? obj.splice(Number(k), 1) : delete obj[k];
-      } else if (typeof obj[k] === 'object') {
-        if (typeof obj[k].value !== 'undefined' && typeof obj[k].lang !== 'undefined') {
-          if (obj[k].value === '' && obj[k].lang === 'en') {
-            obj[k].lang = '';
-          }
-        }
-        ResourceService.removeNulls(obj[k]);
-      }
-      if (obj[k] instanceof Array && obj[k].length === 0) {
-        delete obj[k];
-      } else if (obj[k] instanceof Array) {
-        for (const l in obj[k]) {
-          if (obj[k][l] === null || obj[k][l] === '') {
-            delete obj[k][l];
-          }
-        }
-      }
-    }
-  }
+  /** The same walk as FormControlService.removeNulls, which this used to copy. */
+  static removeNulls = FormControlService.removeNulls;
+
 
   getServiceOrDatasource(resourceId: string): Observable<Service | Datasource> { //todo: get rid of this
     return this.http.get<Service>(this.oa + `/services/${resourceId}`, {...this.options, context: skipNotFoundRedirect()}).pipe(

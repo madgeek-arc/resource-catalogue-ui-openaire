@@ -38,7 +38,8 @@ export class FormControlService implements OnInit{
     return this.http[edit ? 'put' : 'post'](this.base + `/answers/${surveyId}/answer`, item, this.options);
   }
 
-  postGenericItem(resourceType: string, item, edit: boolean) {
+  /** item is the survey's form value: one group, named after the model's section, holding the resource. */
+  postGenericItem(resourceType: string, item: Record<string, unknown>, edit: boolean) {
     // console.log(item[Object.keys(item)[0]]);
     return this.http.post(this.base + `/items?resourceType=${resourceType}`, item[Object.keys(item)[0]]);
   }
