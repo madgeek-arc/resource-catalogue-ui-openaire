@@ -4,7 +4,6 @@ import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {EMPTY} from 'rxjs';
 import {catchError, filter, map} from 'rxjs/operators';
-import {UserInfo} from '../../entities/userInfo';
 import {UserService} from '../../services/user.service';
 
 const sections = [
@@ -34,7 +33,7 @@ export class AdminDashboardComponent {
       console.error(error);
       return EMPTY;
     })
-  ), {initialValue: null as UserInfo | null});
+  ), {initialValue: null});
 
   readonly canInvite = computed(() => {
     const roles: string[] = this.userInfo()?.roles ?? [];
@@ -45,8 +44,9 @@ export class AdminDashboardComponent {
   readonly invitationUrl = signal<string | null>(null);
 
   toggleSidebar() {
-    const toggle = document.getElementById('sidebar_toggle');
-    const content = document.getElementById('sidebar_main_content');
+    // Both are in this component's template, which is shown whenever the toggle can be clicked.
+    const toggle = document.getElementById('sidebar_toggle')!;
+    const content = document.getElementById('sidebar_main_content')!;
     const closing = !toggle.classList.contains('closed');
     toggle.classList.toggle('closed', closing);
     content.classList.toggle('sidebar_main_active', !closing);
@@ -54,7 +54,12 @@ export class AdminDashboardComponent {
   }
 
   getInvitationToken() {
-    this.userService.getInvitationToken(this.inviteeEmail.value).subscribe({
+    const email = this.inviteeEmail.value;
+    // The button is disabled while the email is invalid, and a required email is never null.
+    if (!email) {
+      return;
+    }
+    this.userService.getInvitationToken(email).subscribe({
       next: token => this.invitationUrl.set(location.origin + '/join/' + token),
       error: error => console.error(error)
     });
@@ -67,6 +72,10 @@ export class AdminDashboardComponent {
 
   copyToClipboard() {
     const url = this.invitationUrl();
+    // The copy button only shows once there is a link.
+    if (!url) {
+      return;
+    }
     // The clipboard API needs a secure context (https).
     if (!navigator.clipboard) {
       this.fallbackCopyTextToClipboard(url);

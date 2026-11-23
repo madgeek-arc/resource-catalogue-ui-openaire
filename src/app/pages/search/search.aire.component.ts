@@ -4,8 +4,6 @@ import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {EMPTY, Subject, zip} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, shareReplay, switchMap, tap} from 'rxjs/operators';
-import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
-import {Paging} from '../../entities/paging';
 import {ResourceService} from '../../services/resource.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
@@ -65,7 +63,7 @@ export class SearchAireComponent {
     }))),
     map(([users, portfolios]) => users.concat(portfolios)),
     tap(() => this.loading.set(false))
-  ), {initialValue: null as Vocabulary[] | null});
+  ), {initialValue: null});
 
   /** The results of the current query, with the facet values it selects ticked; null before the first. */
   readonly results = toSignal(this.parameters$.pipe(
@@ -79,7 +77,7 @@ export class SearchAireComponent {
       }),
       catchError(() => EMPTY)
     ))
-  ), {initialValue: null as Paging<Service | Datasource> | null});
+  ), {initialValue: null});
 
   readonly paging = computed(() => {
     const results = this.results();

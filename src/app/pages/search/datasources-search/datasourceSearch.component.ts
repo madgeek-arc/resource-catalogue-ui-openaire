@@ -4,8 +4,6 @@ import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {EMPTY, Subject} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
-import {DatasourceDetails, DatasourceTypes} from '../../../entities/datasource';
-import {Paging} from '../../../entities/paging';
 import {DatasourceService} from '../../../services/datasource.service';
 import {PremiumSortFacetsPipe} from '../../../shared/pipes/premium-sort.pipe';
 import {HelpContentComponent, AsideHelpContentComponent} from '../../../shared/reusablecomponents/help-content.component';
@@ -45,7 +43,7 @@ export class DatasourceSearchComponent {
       console.log(error);
       return EMPTY;
     })
-  ), {initialValue: null as DatasourceTypes | null});
+  ), {initialValue: null});
 
   /** The results of the current query, with the facet values it selects ticked; null before the first. */
   readonly results = toSignal(this.route.queryParams.pipe(
@@ -61,7 +59,7 @@ export class DatasourceSearchComponent {
       }),
       catchError(() => EMPTY)
     ))
-  ), {initialValue: null as Paging<DatasourceDetails> | null});
+  ), {initialValue: null});
 
   readonly paging = computed(() => {
     const results = this.results();

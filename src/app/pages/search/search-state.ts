@@ -64,8 +64,8 @@ export class SearchParameters {
   /** Removes a facet value, and the parameter once it has none. */
   removeValue(key: string, value: string) {
     const parameter = this.list.find(p => p.key === key);
-    const index = parameter?.values.indexOf(value) ?? -1;
-    if (index > -1) {
+    const index = parameter ? parameter.values.indexOf(value) : -1;
+    if (parameter && index > -1) {
       parameter.values.splice(index, 1);
       if (parameter.values.length === 0) {
         this.remove(key);

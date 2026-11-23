@@ -7,7 +7,6 @@ import {NgSelectComponent, NgOptionComponent} from '@ng-select/ng-select';
 import {BehaviorSubject, combineLatest, EMPTY, zip} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
 import {Bundle, Datasource, ProviderBundle, Service} from '../../../../entities/eic-model';
-import {Paging} from '../../../../entities/paging';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {paging, SearchParameters} from '../../../search/search-state';
@@ -57,7 +56,7 @@ export class ProviderServicesComponent {
         return EMPTY;
       })
     ))
-  ), {initialValue: null as Paging<Bundle<Service | Datasource>> | null});
+  ), {initialValue: null});
 
   readonly paging = computed(() => {
     const services = this.services();

@@ -13,7 +13,7 @@ import {ResourceService} from '../../../services/resource.service';
 })
 export class PortfolioItemComponent {
   private resourceService = inject(ResourceService);
-  private portfolioId = inject(ActivatedRoute).snapshot.paramMap.get('id');
+  private portfolioId = inject(ActivatedRoute).snapshot.paramMap.get('id')!; // The route is portfolios/:id or users/:id.
 
   /** The portfolio and its services; null while loading, and after a failed load, as before. */
   readonly data = toSignal(zip(

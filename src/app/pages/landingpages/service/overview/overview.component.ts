@@ -22,8 +22,8 @@ export class OverviewComponent {
   readonly slide = signal(0);
   readonly slideMobile = signal(0);
 
-  getVocabularyName(vocabularyType: string, id: string): string {
-    return this.vocabularyMap()[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
+  getVocabularyName(vocabularyType: string, id: string): string | undefined {
+    return this.vocabularyMap()?.[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
 
   /** On UIkit's beforeitemshow; reads the first slideshow on the page, as before. */

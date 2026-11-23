@@ -5,7 +5,6 @@ import {JsonPipe} from '@angular/common';
 import {EMPTY} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import {DatasourceService} from '../../../services/datasource.service';
-import {DatasourceDetails} from '../../../entities/datasource';
 
 @Component({
   selector: 'app-datasource-landing',
@@ -28,5 +27,5 @@ export class Datasource {
     )),
     filter(page => page.results.length === 1),
     map(page => page.results[0])
-  ), {initialValue: null as DatasourceDetails | null});
+  ), {initialValue: null});
 }

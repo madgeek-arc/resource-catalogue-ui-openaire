@@ -4,7 +4,6 @@ import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet} from '@
 import {EMPTY} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import {ProviderService} from '../../../services/provider.service';
-import {ProviderBundle} from '../../../entities/eic-model';
 
 /** The section of the dashboard a URL is in, with its title and icon. */
 const sections = [
@@ -37,7 +36,7 @@ export class ProviderDashboardComponent {
         return EMPTY;
       })
     ))
-  ), {initialValue: null as ProviderBundle | null});
+  ), {initialValue: null});
 
   /** Set on each navigation; a URL in none of the sections keeps the previous one, as before. */
   readonly section = toSignal(this.router.events.pipe(

@@ -8,7 +8,6 @@ import {UiVocabulary} from '../../../entities/dynamic-form-model';
 import {canEditOpenAireServices} from '../../../shared/can-edit-openaire-services';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
-import {ServiceLandingData} from './service-landing-data';
 
 @Component({
   selector: 'app-service-landing-page',
@@ -37,7 +36,8 @@ export class ServiceLandingPageComponent {
       this.resourceService.getUiVocabularies() as unknown as Observable<Map<string, UiVocabulary[]>>
     ).pipe(
       switchMap(([service, vocabularies]) => {
-        service.extras['openAireChangeLog'].reverse();
+        // Throws for a service without a change log, which catchError below turns into the empty page, as before.
+        service.extras['openAireChangeLog']!.reverse();
         return this.relatedServices(service).pipe(map(relatedServices => ({service, vocabularies, relatedServices})));
       }),
       catchError(error => {
@@ -45,7 +45,7 @@ export class ServiceLandingPageComponent {
         return EMPTY;
       })
     ))
-  ), {initialValue: null as ServiceLandingData | null});
+  ), {initialValue: null});
 
   readonly ready = computed(() => this.data() !== null);
   readonly payload = computed(() => this.data()?.service ?? null);
