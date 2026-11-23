@@ -27,7 +27,7 @@ export class ReadMoreComponent implements AfterContentInit {
   //@Input() text: string;
   //maximum height of the container
   readonly maxHeight = input(100);
-  readonly readMoreDiv = viewChild<ElementRef>('readMoreDiv');
+  readonly readMoreDiv = viewChild.required<ElementRef<HTMLElement>>('readMoreDiv');
   //set these to false to get the height of the expended container
   readonly isCollapsed = signal(false);
   readonly isCollapsable = signal(false);

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, input, signal } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Router} from '@angular/router';
-import {Content} from '../../entities/page-content';
+import {Content, PositionContents} from '../../entities/page-content';
 import {HelpContentService} from '../../services/help-content.service';
 import {environment} from '../../../environments/environment';
 
@@ -19,7 +19,7 @@ export class HelpContentComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly position = input<string>(undefined);
+  readonly position = input.required<keyof PositionContents>();
 
   readonly contents = signal<Content[]>([]);
 

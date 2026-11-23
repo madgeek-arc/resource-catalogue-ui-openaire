@@ -17,7 +17,7 @@ export class EmailModalComponent {
   private readonly emailService = inject(EmailService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly serviceIdsArray = input(undefined);
+  readonly serviceIdsArray = input.required<string[]>();
   // A signal, because a failed send sets it when the response arrives, after the click's check.
   readonly emailErrorMessage = signal('');
 
@@ -30,8 +30,8 @@ export class EmailModalComponent {
   });
 
   resetForm() {
-    this.emailForm.get('subject').reset('');
-    this.emailForm.get('message').reset('');
+    this.emailForm.controls.subject.reset('');
+    this.emailForm.controls.message.reset('');
     this.emailErrorMessage.set('');
   }
 

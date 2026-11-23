@@ -17,7 +17,7 @@ export function URLListValidator(control: AbstractControl) {
 
 export class UrlValidator {
   static createValidator(service: ProviderService): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors> => {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return service.validateUrl(control.value).pipe(
         map((result: boolean) => (result ? null : {invalidAsync: true}))
       );
@@ -27,7 +27,7 @@ export class UrlValidator {
 
 /** Increase time var to reduce server calls **/
 export const urlAsyncValidator = (service: ProviderService, time = 0) => {
-  return (control: AbstractControl): Observable<ValidationErrors> => {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
     if (control.value === '') {
       return timer(time).pipe(map(res => {
         return null;
@@ -52,7 +52,7 @@ export function CommaSeparatedPatternValidator(control: AbstractControl, pattern
 }
 
 export function validateArray(array: Array<string>, pattern: RegExp) {
-    let ret = null;
+    let ret: ValidationErrors | null = null;
     for (const e of array) {
         if (('' + e).match(pattern) === null) {
             ret = {validationFailed: true};

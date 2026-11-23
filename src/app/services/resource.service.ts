@@ -60,7 +60,7 @@ export class ResourceService {
     return this.http.get<Paging<Service>>(this.oa + `/services?${searchQuery.toString()}`, this.options);
   }
 
-  getBundleOfServices(urlParameters?: URLParameter[]) {
+  getBundleOfServices(urlParameters: URLParameter[] = []) {
     let searchQuery = new HttpParams();
     for (const urlParameter of urlParameters) {
       for (const value of urlParameter.values) {
@@ -70,7 +70,7 @@ export class ResourceService {
     return this.http.get<Paging<Bundle<Service>>>(this.oa + '/services/bundles', {params: searchQuery, withCredentials: true});
   }
 
-  getBundleOfDatasources(urlParameters?: URLParameter[]) {
+  getBundleOfDatasources(urlParameters: URLParameter[] = []) {
     let searchQuery = new HttpParams();
     for (const urlParameter of urlParameters) {
       for (const value of urlParameter.values) {

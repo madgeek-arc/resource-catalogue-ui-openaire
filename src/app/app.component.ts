@@ -19,7 +19,7 @@ export class AppComponent {
   /** The URL of the latest router event that has one, from the start of each navigation on. */
   private readonly url = toSignal(this.router.events.pipe(
     map(event => (event as Event & {url?: string}).url),
-    filter(url => !!url)
+    filter((url): url is string => !!url)
   ), {initialValue: ''});
 
   /** The change log shown without the menu, footer and cookie banner. */

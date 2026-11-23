@@ -190,7 +190,8 @@ export class FormControlService implements OnInit{
   }
 
   calculateNumberOfDecimals(values: string[]): string {
-    let decimals: string;
+    // Every branch below sets it (or throws on a value without a decimal point, as before).
+    let decimals = '0';
     if (values) {
       const str = values[0].split('.');
 
