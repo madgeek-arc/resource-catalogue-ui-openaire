@@ -16,11 +16,11 @@ import {ProviderHomeComponent} from './provider-home/provider-home.component';
 import {ProviderInfoComponent} from './provider-Info/provider-info.component';
 import {ProviderServicesComponent} from './provider-services/provider-services.component';
 
-// Eager like AppComponent, so a check refreshes the dashboards only when they read a changed signal.
+// OnPush like AppComponent, so a check refreshes the dashboards only when they read a changed signal or marked themselves for check.
 @Component({
   imports: [RouterOutlet],
   template: '<router-outlet />',
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class AppHostComponent {}
 

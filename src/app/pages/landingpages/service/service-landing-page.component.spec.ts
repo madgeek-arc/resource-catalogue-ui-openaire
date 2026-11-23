@@ -10,11 +10,11 @@ import {MiscellaneousComponent} from './miscellaneous/miscellaneous.component';
 import {OverviewComponent} from './overview/overview.component';
 import {ServiceLandingPageComponent} from './service-landing-page.component';
 
-// Eager like AppComponent, so a check refreshes the landing page only when it read a changed signal.
+// OnPush like AppComponent, so a check refreshes the landing page only when it read a changed signal or marked itself for check.
 @Component({
   imports: [RouterOutlet],
   template: '<router-outlet />',
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class AppHostComponent {}
 

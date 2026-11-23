@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {provideHttpClient} from '@angular/common/http';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
@@ -55,21 +55,21 @@ const model = (): Model => Object.assign(new Model(), {
   })]
 });
 
-// Eager like FormsComponent, the page that hosts the survey.
+// OnPush like FormsComponent, the page that hosts the survey.
 @Component({
   imports: [SurveyComponent],
-  template: '<app-survey [payload]="payload" [model]="model" />',
-  changeDetection: ChangeDetectionStrategy.Eager
+  template: '<app-survey [payload]="payload()" [model]="model()" />',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class FormPageComponent {
-  payload: unknown = null;
-  model: Model = null;
+  readonly payload = signal<unknown>(null);
+  readonly model = signal<Model>(null);
 }
 
 @Component({
   imports: [RouterOutlet],
   template: '<router-outlet />',
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class AppHostComponent {}
 
@@ -82,8 +82,8 @@ describe('dynamic form', () => {
     await TestBed.inject(Router).navigateByUrl('/service/edit/argos');
     fixture.detectChanges();
     const page = fixture.debugElement.query(debug => debug.componentInstance instanceof FormPageComponent).componentInstance as FormPageComponent;
-    page.payload = payload;
-    page.model = model();
+    page.payload.set(payload);
+    page.model.set(model());
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();

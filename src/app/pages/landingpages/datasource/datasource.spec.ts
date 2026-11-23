@@ -6,11 +6,11 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {DatasourceService} from '../../../services/datasource.service';
 import {Datasource} from './datasource';
 
-// Eager like AppComponent, so a check refreshes the page only when it read a changed signal.
+// OnPush like AppComponent, so a check refreshes the page only when it read a changed signal or marked itself for check.
 @Component({
   imports: [RouterOutlet],
   template: '<router-outlet />',
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class AppHostComponent {}
 

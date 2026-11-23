@@ -4,8 +4,8 @@ import {provideNoopAnimations} from '@angular/platform-browser/animations';
 import {afterEach, beforeEach, describe, expect, it} from 'vitest';
 import {CookieLawComponent, CookieLawPosition} from './cookie-law.component';
 
-// The host is Eager like AppComponent, so a host check refreshes the banner only when it
-// marked itself for check (OnPush) or read a changed signal.
+// The host is OnPush like AppComponent, so a host check refreshes the banner only when it
+// marked itself for check or read a changed signal.
 @Component({
   imports: [CookieLawComponent],
   template: `
@@ -13,7 +13,7 @@ import {CookieLawComponent, CookieLawPosition} from './cookie-law.component';
       <span class="projected">Projected text</span>
     </cookie-law>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class HostComponent {
   readonly position = signal<CookieLawPosition>('bottom');
@@ -24,7 +24,7 @@ class HostComponent {
 @Component({
   imports: [CookieLawComponent],
   template: `<cookie-law learnMore="/privacy" />`,
-  changeDetection: ChangeDetectionStrategy.Eager
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 class EmptyHostComponent {}
 
