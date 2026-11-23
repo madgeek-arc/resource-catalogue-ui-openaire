@@ -252,7 +252,7 @@
       <img src="../../../../../assets/images/icons/Icon%20material-change-history@2x.png" width="50">
     </div>
     <h5 class="uk-margin-medium-bottom">Change Log</h5>
-    @if (resourcePayload.extras['openAireChangeLog']?.length > 0) {
+    @if (resourcePayload.extras['openAireChangeLog']?.length) {
       @for (changeLog of resourcePayload.extras['openAireChangeLog'] | slice:0:1; track changeLog) {
         <div>
           <div class="uk-child-width-1-1" uk-grid>
