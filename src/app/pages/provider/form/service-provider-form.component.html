@@ -537,7 +537,7 @@
                             <!--                                  </select>-->
                             <ng-select class="uk-width-9-10" id="country"
                               [class.uk-form-danger]="checkFormValidity('location.country', this.edit)"
-                              [items]="placesVocabulary()"
+                              [items]="placesVocabulary() ?? []"
                               (change)="unsavedChangesPrompt()"
                               bindLabel="name"
                               bindValue="id"
@@ -795,7 +795,7 @@
                           <div class="uk-flex uk-flex-left">
                             <ng-select class="uk-width-9-10" id="participatingCountries"
                               [class.uk-form-danger]="checkFormArrayValidity('participatingCountries', i, this.edit)"
-                              [items]="placesVocabulary()"
+                              [items]="placesVocabulary() ?? []"
                               (change)="unsavedChangesPrompt()"
                               bindLabel="name"
                               bindValue="id"

@@ -32,7 +32,7 @@ export class ProviderService {
     return url;
   }
 
-  createNewServiceProvider(newProvider: any, providerId?: string) {
+  createNewServiceProvider(newProvider: any, providerId?: string | null) {
     return this.http.post(this.oa + '/providers', newProvider, this.options);
   }
 
@@ -42,13 +42,13 @@ export class ProviderService {
     return this.http.post<Provider>(this.oa + '/providers', newProvider, {params, withCredentials: true});
   }
 
-  updateServiceProvider(updatedFields: any, providerId?: string): Observable<Provider> {
+  updateServiceProvider(updatedFields: any, providerId?: string | null): Observable<Provider> {
     // console.log(`knocking on: ${this.base}/provider`);
     return this.http.put<Provider>(this.oa + `/providers/${providerId}`, updatedFields, this.options);
   }
 
   // TODO: no pendingProvider endpoint in new API
-  updateAndPublishPendingProvider(updatedFields: any, providerId?: string): Observable<Provider> {
+  updateAndPublishPendingProvider(updatedFields: any, providerId?: string | null): Observable<Provider> {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {skipNotFoundRedirect} from './authentication-interceptor';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource, Bundle} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
@@ -104,8 +104,9 @@ export class ResourceService {
     return this.http.get<Vocabulary>(this.base + `/vocabularies/${id}`);
   }
 
+  /** Vocabularies by type: a JSON object, not a Map. */
   getAllVocabulariesByType() {
-    return this.http.get<Map<Type, Vocabulary[]>>(this.base + `/vocabularies/byType`);
+    return this.http.get<Record<string, Vocabulary[]>>(this.base + `/vocabularies/byType`);
   }
 
   getNewVocabulariesByType(type: string) {
