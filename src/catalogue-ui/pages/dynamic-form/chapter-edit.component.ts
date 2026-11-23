@@ -22,14 +22,14 @@ export class ChapterEditComponent implements OnChanges{
 
 
   readonly form = input<any>(null);
-  readonly tabsHeader = input<string>();
+  readonly tabsHeader = input<string | null>(null);
   readonly mandatoryFieldsText = input<string | null>(null);
   readonly readonly = input<boolean | null>(null);
   readonly validate = input<boolean | null>(null);
   readonly vocabularies = input<Map<string, object[]> | null>(null);
   readonly subVocabularies = input<Map<string, object[]> | null>(null);
-  readonly chapter = input<Section | null>(null);
-  readonly fields = input<Section[] | null>(null);
+  readonly chapter = input.required<Section>();
+  readonly fields = input.required<Section[]>();
 
   /** The chapter id, and the chapter whose changes were discarded, if any. */
   readonly chapterHasChanges = output<(string | null)[]>();
@@ -89,8 +89,7 @@ export class ChapterEditComponent implements OnChanges{
     /** Initialize tab bitsets **/
     let requiredTabs = 0; let requiredTotal = 0;
     const obj = new Map();
-    // ngOnChanges calls this only once the fields are set.
-    this.fields()!.forEach(group => {
+    this.fields().forEach(group => {
       const tab = new Tab();
       tab.requiredOnTab = tab.remainingOnTab = group.required.topLevel;
       tab.valid = false;
@@ -259,7 +258,7 @@ export class ChapterEditComponent implements OnChanges{
       return;
     }
     this.tabIndex.set(i);
-    const element: HTMLElement = document.getElementById(this.chapter()!.id + '-tab' + i) as HTMLElement;
+    const element: HTMLElement = document.getElementById(this.chapter().id + '-tab' + i) as HTMLElement;
     element.click();
     // console.log(element)
   }
@@ -267,7 +266,7 @@ export class ChapterEditComponent implements OnChanges{
   /** emit changes-->**/
   unsavedChangesPrompt(e: boolean, removeChanges: string | null = null){
     if (e) {
-      this.chapterHasChanges.emit([this.chapter()!.id, removeChanges]);
+      this.chapterHasChanges.emit([this.chapter().id, removeChanges]);
     }
   }
   /** <--emit changes**/

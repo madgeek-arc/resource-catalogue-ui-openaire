@@ -31,7 +31,7 @@ export class CompositeFieldComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]>>();
+  readonly vocabularies = input<Map<string, object[]> | null>(null);
   readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
   readonly readonly = input<boolean | null>(null);

@@ -19,8 +19,8 @@ import { DateFieldComponent } from './date-field/date-field.component';
 })
 export class DynamicFormFieldsComponent {
   readonly fieldData = input.required<Field>();
-  readonly form = input<UntypedFormGroup>();
-  readonly vocabularies = input<Map<string, object[]>>();
+  readonly form = input.required<UntypedFormGroup>();
+  readonly vocabularies = input<Map<string, object[]> | null>(null);
   readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
   readonly readonly = input<boolean | null>(null);

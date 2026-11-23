@@ -21,8 +21,8 @@ export class ChooseOneComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]>>();
-  readonly subVocabularies = input<Map<string, object[]>>();
+  readonly vocabularies = input<Map<string, object[]> | null>(null);
+  readonly subVocabularies = input<Map<string, object[]> | null>(null);
   readonly editMode = input<any>(undefined);
   readonly position = input<number | null>(null);
 

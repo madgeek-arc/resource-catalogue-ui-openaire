@@ -17,7 +17,7 @@
       <ng-select class="uk-width-9-10" [id]="fieldData().name" [formControlName]="i"
                  [class.uk-form-danger]="checkFormArrayValidity(fieldData().name, i, this.editMode())"
                  [items]="dynamicVoc()?.length > 0 ? dynamicVoc() :
-                 fieldData().typeInfo.values ? fieldData().typeInfo.values : vocabularies()[vocabularyKey]"
+                 fieldData().typeInfo.values ? fieldData().typeInfo.values : vocabularies()![vocabularyKey!]"
                  (change)="updateBitSet(fieldData()); unsavedChangesPrompt()"
                  bindLabel="name"
                  bindValue="id"
@@ -47,7 +47,7 @@
                (change)="updateBitSet(fieldData()); unsavedChangesPrompt()"
                [class.uk-form-danger]="checkFormValidity()"
                [items]="dynamicVoc()?.length > 0 ? dynamicVoc() :
-                 fieldData().typeInfo.values ? fieldData().typeInfo.values : vocabularies()[vocabularyKey]"
+                 fieldData().typeInfo.values ? fieldData().typeInfo.values : vocabularies()![vocabularyKey!]"
                bindLabel="name"
                bindValue="id"
                clearAllText="Clear" />

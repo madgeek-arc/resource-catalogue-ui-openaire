@@ -248,8 +248,9 @@ export class SurveyComponent implements OnInit, OnChanges {
       return this.form.get(this.loadedModel().sections[sectionIndex].name) as UntypedFormGroup;
   }
 
-  setChapterChangesMap(chapterId: string[]) {
-    this.markChapter(chapterId[0], chapterId[1] === null);
+  /** The chapter id, and the chapter whose changes were discarded, if any. */
+  setChapterChangesMap(chapterId: (string | null)[]) {
+    this.markChapter(chapterId[0]!, chapterId[1] === null);
   }
 
   private markChapter(id: string, changed: boolean) {

@@ -69,14 +69,14 @@
                           @for (tab of fields(); track tab; let i = $index) {
                             <li  (click)="setTabIndex(i)">
                               <a id="{{chapter().id}}-tab{{i}}" href="#" class="remove-text-decoration uk-flex uk-flex-between"
-                                [class.form-error]="bitset.tabs.get(tab.id).valid">
+                                [class.form-error]="bitset.tabs.get(tab.id!)!.valid">
                                 <span>{{tab.name + (tab.required.topLevel > 0 ? ' *' : '')}}</span>
-                                @if (bitset.tabs.get(tab.id).requiredOnTab !== 0 && showBitsets) {
+                                @if (bitset.tabs.get(tab.id!)!.requiredOnTab !== 0 && showBitsets) {
                                   <span class="circle-number">
-                                    @if (bitset.tabs.get(tab.id).remainingOnTab === 0) {
+                                    @if (bitset.tabs.get(tab.id!)!.remainingOnTab === 0) {
                                       <i aria-hidden="true" class="fa fa-check"></i>
                                     }
-                                    {{bitset.tabs.get(tab.id).remainingOnTab != 0 ? bitset.tabs.get(tab.id).remainingOnTab + '*' : ''}}
+                                    {{bitset.tabs.get(tab.id!)!.remainingOnTab != 0 ? bitset.tabs.get(tab.id!)!.remainingOnTab + '*' : ''}}
                                   </span>
                                 }
                               </a>
