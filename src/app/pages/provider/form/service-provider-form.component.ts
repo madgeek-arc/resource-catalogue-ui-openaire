@@ -40,14 +40,14 @@ export class ServiceProviderFormComponent implements OnInit {
   projectName = environment.projectName;
   projectMail = environment.projectMail;
   privacyPolicyURL = environment.privacyPolicyURL;
-  providerId: string = null;
+  providerId: string | null = null;
   readonly providerName = signal('');
   readonly errorMessage = signal('');
   userInfo = {family_name: '', given_name: '', email: ''};
   newProviderForm: UntypedFormGroup;
   logoUrl = '';
   /** All vocabularies by type; null until they have loaded, which the template waits for. */
-  readonly vocabularies = signal<Map<string, Vocabulary[]>>(null);
+  readonly vocabularies = signal<Map<string, Vocabulary[]> | null>(null);
   premiumSort = new PremiumSortPipe();
   edit = false;
   hasChanges = false;
@@ -190,7 +190,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   ngOnInit() {
 
-    const path = this.route.snapshot.routeConfig.path;
+    const path = this.route.snapshot.routeConfig!.path!;
     if (path.includes('add/:providerId')) {
       this.pendingProvider = true;
     }
@@ -203,11 +203,12 @@ export class ServiceProviderFormComponent implements OnInit {
       this.pushDomain();
       this.pushMerilDomain();
       this.addDefaultUser();  // Admin + mainContact
-      this.newProviderForm.get('legalEntity').setValue(false);
+      this.newProviderForm.get('legalEntity')!.setValue(false);
     }
 
-    if (sessionStorage.getItem('provider')) {
-      const data = JSON.parse(sessionStorage.getItem('provider'));
+    const stored = sessionStorage.getItem('provider');
+    if (stored) {
+      const data = JSON.parse(stored);
       for (const i in data) {
         if (data.hasOwnProperty(i)) {
           if (Array.isArray(data[i])) {
@@ -270,7 +271,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
     this.errorMessage.set('');
     // this.trimFormWhiteSpaces();
-    const path = this.route.snapshot.routeConfig.path;
+    const path = this.route.snapshot.routeConfig!.path!;
     let method;
     if (path === 'add/:providerId') {
       method = 'updateAndPublishPendingProvider';
@@ -279,23 +280,23 @@ export class ServiceProviderFormComponent implements OnInit {
     }
 
     for (let i = 0; i < this.domainArray.length ; i++) {
-      if (this.domainArray.controls[i].get('scientificDomain').value === ''
-        || this.domainArray.controls[i].get('scientificDomain').value === null) {
+      if (this.domainArray.controls[i].get('scientificDomain')!.value === ''
+        || this.domainArray.controls[i].get('scientificDomain')!.value === null) {
         this.removeDomain(i);
       }
     }
 
     for (let i = 0; i < this.merilDomainArray.length ; i++) {
-      if (this.merilDomainArray.controls[i].get('merilScientificDomain').value === ''
-        || this.merilDomainArray.controls[i].get('merilScientificDomain').value === null) {
+      if (this.merilDomainArray.controls[i].get('merilScientificDomain')!.value === ''
+        || this.merilDomainArray.controls[i].get('merilScientificDomain')!.value === null) {
         // console.log(this.merilDomainArray.controls[i]);
         this.removeMerilDomain(i);
       }
     }
 
     for (let i = 0; i < this.multimediaArray.length; i++) {
-      if (this.multimediaArray.controls[i].get('multimediaURL').value === ''
-        || this.multimediaArray.controls[i].get('multimediaURL').value === null) {
+      if (this.multimediaArray.controls[i].get('multimediaURL')!.value === ''
+        || this.multimediaArray.controls[i].get('multimediaURL')!.value === null) {
         this.removeMultimedia(i);
       }
     }
@@ -371,27 +372,27 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** check form fields and tabs validity--> **/
   checkFormValidity(name: string, edit: boolean): boolean {
-    return (!this.newProviderForm.get(name).valid && (edit || this.newProviderForm.get(name).dirty));
+    return (!this.newProviderForm.get(name)!.valid && (edit || this.newProviderForm.get(name)!.dirty));
   }
 
   checkFormArrayValidity(name: string, position: number, edit: boolean, groupName?: string): boolean {
     if (groupName) {
-      return (!this.getFieldAsFormArray(name).get([position]).get(groupName).valid
-        && (edit || this.getFieldAsFormArray(name).get([position]).get(groupName).dirty));
+      return (!this.getFieldAsFormArray(name).get([position])!.get(groupName)!.valid
+        && (edit || this.getFieldAsFormArray(name).get([position])!.get(groupName)!.dirty));
     }
-    return (!this.getFieldAsFormArray(name).get([position]).valid
-      && (edit || this.getFieldAsFormArray(name).get([position]).dirty));
+    return (!this.getFieldAsFormArray(name).get([position])!.valid
+      && (edit || this.getFieldAsFormArray(name).get([position])!.dirty));
   }
 
   checkEveryArrayFieldValidity(name: string, edit: boolean, groupName?: string): boolean {
     for (let i = 0; i < this.getFieldAsFormArray(name).length; i++) {
       if (groupName) {
-        if (!this.getFieldAsFormArray(name).get([i]).get(groupName).valid
-          && (edit || this.getFieldAsFormArray(name).get([i]).get(groupName).dirty)) {
+        if (!this.getFieldAsFormArray(name).get([i])!.get(groupName)!.valid
+          && (edit || this.getFieldAsFormArray(name).get([i])!.get(groupName)!.dirty)) {
           return true;
         }
-      } else if (!this.getFieldAsFormArray(name).get([i]).valid
-        && (edit || this.getFieldAsFormArray(name).get([i]).dirty)) {
+      } else if (!this.getFieldAsFormArray(name).get([i])!.valid
+        && (edit || this.getFieldAsFormArray(name).get([i])!.dirty)) {
         return true;
       }
     }
@@ -472,7 +473,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   pushDomain() {
     this.domainArray.push(this.newScientificDomain());
-    this.domainArray.controls[this.domainArray.length - 1].get('scientificSubdomain').disable();
+    this.domainArray.controls[this.domainArray.length - 1].get('scientificSubdomain')!.disable();
   }
 
   removeDomain(index: number) {
@@ -480,8 +481,8 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   onDomainChange(index: number) {
-    this.domainArray.controls[index].get('scientificSubdomain').enable();
-    this.domainArray.controls[index].get('scientificSubdomain').reset();
+    this.domainArray.controls[index].get('scientificSubdomain')!.enable();
+    this.domainArray.controls[index].get('scientificSubdomain')!.reset();
   }
 
   /** <-- Categorization **/
@@ -500,7 +501,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   pushMerilDomain() {
     this.merilDomainArray.push(this.newMerilScientificDomain());
-    this.merilDomainArray.controls[this.merilDomainArray.length - 1].get('merilScientificSubdomain').disable();
+    this.merilDomainArray.controls[this.merilDomainArray.length - 1].get('merilScientificSubdomain')!.disable();
   }
 
   removeMerilDomain(index: number) {
@@ -508,13 +509,15 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   onMerilDomainChange(index: number) {
-    this.merilDomainArray.controls[index].get('merilScientificSubdomain').enable();
-    this.merilDomainArray.controls[index].get('merilScientificSubdomain').reset();
+    this.merilDomainArray.controls[index].get('merilScientificSubdomain')!.enable();
+    this.merilDomainArray.controls[index].get('merilScientificSubdomain')!.reset();
   }
 
   /** <-- MERIL Categorization **/
 
   /** handle form arrays--> **/
+  // Form controls are looked up by the names in formDefinition and the groups built here, so the
+  // `.get(name)!` lookups in this form always find their control.
   getFieldAsFormArray(field: string) {
     return this.newProviderForm.get(field) as UntypedFormArray;
   }
@@ -523,7 +526,7 @@ export class ServiceProviderFormComponent implements OnInit {
     this.getFieldAsFormArray(field).removeAt(i);
   }
 
-  push(field: string, required: boolean, url?: boolean) {
+  push(field: string, required: boolean | undefined, url?: boolean) {
     if (required) {
       if (url) {
         this.getFieldAsFormArray(field).push(this.fb.control('', Validators.compose([Validators.required, URLValidator])));
@@ -617,12 +620,12 @@ export class ServiceProviderFormComponent implements OnInit {
     // this.userInfo.given_name = this.authService.getUserProperty('given_name');
     // this.userInfo.family_name = this.authService.getUserProperty('family_name');
     // this.userInfo.email = this.authService.getUserProperty('email');
-    this.usersArray.controls[0].get('name').setValue(this.userInfo.given_name);
-    this.usersArray.controls[0].get('surname').setValue(this.userInfo.family_name);
-    this.usersArray.controls[0].get('email').setValue(this.userInfo.email);
-    this.newProviderForm.controls['mainContact'].get('firstName').setValue(this.userInfo.given_name);
-    this.newProviderForm.controls['mainContact'].get('lastName').setValue(this.userInfo.family_name);
-    this.newProviderForm.controls['mainContact'].get('email').setValue(this.userInfo.email);
+    this.usersArray.controls[0].get('name')!.setValue(this.userInfo.given_name);
+    this.usersArray.controls[0].get('surname')!.setValue(this.userInfo.family_name);
+    this.usersArray.controls[0].get('email')!.setValue(this.userInfo.email);
+    this.newProviderForm.controls['mainContact'].get('firstName')!.setValue(this.userInfo.given_name);
+    this.newProviderForm.controls['mainContact'].get('lastName')!.setValue(this.userInfo.family_name);
+    this.newProviderForm.controls['mainContact'].get('email')!.setValue(this.userInfo.email);
   }
 
   /** <-- User Array**/
@@ -649,9 +652,9 @@ export class ServiceProviderFormComponent implements OnInit {
         // console.log(this.newProviderForm.controls[i].value);
         if (this.newProviderForm.controls[i].value.hasOwnProperty(j)) {
           if (this.newProviderForm.controls[i].get(j)) {
-            if (this.newProviderForm.controls[i].get(j).value.constructor !== Array) {
-              this.newProviderForm.controls[i].get(j).markAsDirty();
-              this.newProviderForm.controls[i].get(j).markAsTouched();
+            if (this.newProviderForm.controls[i].get(j)!.value.constructor !== Array) {
+              this.newProviderForm.controls[i].get(j)!.markAsDirty();
+              this.newProviderForm.controls[i].get(j)!.markAsTouched();
             }
           }
         }
@@ -661,8 +664,8 @@ export class ServiceProviderFormComponent implements OnInit {
           const keys = Object.keys(this.newProviderForm.controls[i].value[j]);
           for (let k = 0; k < keys.length; k++) {
             if (this.getFieldAsFormArray(i).controls[j].get(keys[k])) {
-              this.getFieldAsFormArray(i).controls[j].get(keys[k]).markAsTouched();
-              this.getFieldAsFormArray(i).controls[j].get(keys[k]).markAsDirty();
+              this.getFieldAsFormArray(i).controls[j].get(keys[k])!.markAsTouched();
+              this.getFieldAsFormArray(i).controls[j].get(keys[k])!.markAsDirty();
             }
           }
         }
@@ -695,7 +698,8 @@ export class ServiceProviderFormComponent implements OnInit {
 
   acceptTerms() {
     if (this._hasUserConsent && this.edit) {
-      this.providerService.adminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
+      // In edit mode the provider id comes from the :providerId route parameter.
+      this.providerService.adminAcceptedTerms(this.providerId!, this.pendingProvider).subscribe(
         res => {},
         error => { console.log(error); },
         () => {}

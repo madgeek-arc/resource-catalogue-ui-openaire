@@ -30,7 +30,7 @@ export class ProviderHomeComponent {
   /** The provider's services, newest change first; null until they have loaded. */
   readonly allResources = toSignal(toObservable(this.bundle).pipe(
     map(bundle => bundle?.provider.id),
-    filter(id => !!id),
+    filter((id): id is string => !!id),
     distinctUntilChanged(),
     switchMap(id => this.providerService.getServicesOfProvider(id, [
       {key: 'orderField', values: ['modifiedAt']}, {key: 'order', values: ['desc']}
@@ -55,7 +55,7 @@ export class ProviderHomeComponent {
     return bundle.service != null ? bundle.service : bundle.datasource;
   }
 
-  getVocabularyName(vocabularyType: string, id: string): string {
-    return this.vocabularyMap()[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
+  getVocabularyName(vocabularyType: string, id: string): string | undefined {
+    return this.vocabularyMap()?.[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
 }

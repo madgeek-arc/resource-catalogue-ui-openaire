@@ -24,7 +24,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   override ngOnInit() {
     this.edit = true;
     this.providerId = this.route.snapshot.paramMap.get('providerId');
-    const path = this.route.snapshot.routeConfig.path;
+    const path = this.route.snapshot.routeConfig!.path!;
     if (path === 'info/:providerId') {
       this.disable = true;
     }
@@ -67,8 +67,9 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
 
   getProvider() {
     this.errorMessage.set('');
-    const path = this.route.snapshot.routeConfig.path;
-    this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId)
+    const path = this.route.snapshot.routeConfig!.path!;
+    // ngOnInit sets providerId from the :providerId route parameter.
+    this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId!)
       .subscribe(
       provider => this.provider = provider,
       err => {
@@ -202,7 +203,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
           this.newProviderForm.disable();
         }
         // Also refreshes the page, which shows the patched form and the inputs added above.
-        this.providerName.set(this.newProviderForm.get('name').value);
+        this.providerName.set(this.newProviderForm.get('name')!.value);
       }
     );
   }

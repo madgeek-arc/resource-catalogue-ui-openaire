@@ -46,8 +46,9 @@ export class ProviderDashboardComponent {
   ), {initialValue: null});
 
   toggleSidebar() {
-    const el: HTMLElement = document.getElementById('sidebar_toggle');
-    const content: HTMLElement = document.getElementById('sidebar_main_content');
+    // Both are in this component's template, which is shown whenever the toggle can be clicked.
+    const el = document.getElementById('sidebar_toggle')!;
+    const content = document.getElementById('sidebar_main_content')!;
     if (!el.classList.contains('closed')) {
       el.classList.add('closed');
       content.classList.remove('sidebar_main_active');

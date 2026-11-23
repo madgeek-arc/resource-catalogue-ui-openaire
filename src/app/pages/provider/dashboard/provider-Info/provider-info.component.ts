@@ -20,7 +20,7 @@ export class ProviderInfoComponent {
     catchError(() => EMPTY)
   ), {initialValue: null});
 
-  getVocabularyName(vocabularyType: string, id: string): string {
-    return this.vocabularyMap()[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
+  getVocabularyName(vocabularyType: string, id: string): string | undefined {
+    return this.vocabularyMap()?.[vocabularyType].find(vocabulary => vocabulary.id === id)?.name;
   }
 }

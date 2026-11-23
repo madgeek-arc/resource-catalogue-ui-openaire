@@ -46,7 +46,7 @@ export class ProviderServicesComponent {
 
   /** The provider's services for the current filters and page; null until they have loaded. */
   readonly services = toSignal(combineLatest([
-    toObservable(this.bundle).pipe(map(bundle => bundle?.provider.id), filter(id => !!id), distinctUntilChanged()),
+    toObservable(this.bundle).pipe(map(bundle => bundle?.provider.id), filter((id): id is string => !!id), distinctUntilChanged()),
     this.route.queryParams.pipe(map(params => this.readParameters(params))),
     this.reload
   ]).pipe(

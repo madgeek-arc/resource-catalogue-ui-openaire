@@ -25,7 +25,8 @@ export class FormControlService implements OnInit{
     return this.http.get<Model>(this.base + `/forms/models/${id}`);
   }
 
-  getFormModelByResourceType(type: string) {
+  /** On /form the type is null, which the request sends as "null", as before. */
+  getFormModelByResourceType(type: string | null) {
     return this.http.get<Paging<Model>>(this.base + `/forms/models?resourceType=${type}`);
   }
 

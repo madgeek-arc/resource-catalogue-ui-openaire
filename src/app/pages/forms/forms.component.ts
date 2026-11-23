@@ -26,19 +26,19 @@ export class FormsComponent implements OnInit{
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
 
-  tabsHeader: string = null;
+  tabsHeader: string | null = null;
   /** The form model, the resource being edited and the vocabularies, set together once they have all loaded. */
-  readonly model = signal<Model>(null);
+  readonly model = signal<Model | null>(null);
   readonly vocabulariesMap = signal<Map<string, object[]>>(new Map<string, object[]>());
-  readonly subVocabulariesMap = signal<Map<string, object[]>>(null);
+  readonly subVocabulariesMap = signal<Map<string, object[]> | null>(null);
   premiumSort = new PremiumSortPipe();
-  providerId: string = null;
-  resourceId: string = null;
-  datasourceId: string = null;
-  resourceType: string = null;
-  readonly payloadAnswer = signal<object>(null); // Find a way to do this better
+  providerId: string | null = null;
+  resourceId: string | null = null;
+  datasourceId: string | null = null;
+  resourceType: string | null = null;
+  readonly payloadAnswer = signal<object | null>(null); // Find a way to do this better
   readonly ready = signal(false);
-  readonly errorMessage = signal<string>(null);
+  readonly errorMessage = signal<string | null>(null);
   editMode = false;
 
   ngOnInit() {
@@ -54,8 +54,9 @@ export class FormsComponent implements OnInit{
         if (url.includes('subprofile/add') || url.includes('subprofile/edit')) this.resourceType = 'datasource';
         if (url.includes('service/edit') || url.includes('subprofile/edit')) this.editMode = true;
         if (this.editMode) { // edit
+          // The edit routes are service/edit/:resourceId and :resourceType/subprofile/edit/:datasourceId.
           zip(
-            this.resourceType === 'service' ? this.resourceService.getService(this.resourceId) : this.resourceService.getDatasource(this.datasourceId),
+            this.resourceType === 'service' ? this.resourceService.getService(this.resourceId!) : this.resourceService.getDatasource(this.datasourceId!),
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
@@ -109,8 +110,9 @@ export class FormsComponent implements OnInit{
     //   console.log(value[0].get('Service').get(element).value);
     // }
     if (this.resourceType === 'service') {
-      if (!service.multimedia[0].multimediaURL) service.multimedia = null;
-      if (!service.useCases[0].useCaseURL) service.useCases = null;
+      // The form always holds both lists, with at least one entry each; an empty first entry clears the list.
+      if (!service.multimedia![0].multimediaURL) service.multimedia = null;
+      if (!service.useCases![0].useCaseURL) service.useCases = null;
       if (value[1]) {
         this.resourceService.editService(service).subscribe(
           next => {
@@ -137,8 +139,8 @@ export class FormsComponent implements OnInit{
     }
     if (this.resourceType === 'datasource') {
       const datasource: Datasource = {...value[0].get(this.sectionName).value};
-      let id = this.resourceId;
-      if (!id) id = this.datasourceId;
+      // Subprofile routes have a resourceId (add) or a datasourceId (edit).
+      const id = (this.resourceId || this.datasourceId)!;
       datasource.id = id;
       datasource.serviceId = id;
       datasource.catalogueId = 'openaire';

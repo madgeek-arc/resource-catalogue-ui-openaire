@@ -17,7 +17,7 @@ import {FormsComponent} from './forms.component';
 })
 class AppHostComponent {}
 
-const field = (id: string, name: string, type: string, subFields: Field[] = null, multiplicity = false): Field => {
+const field = (id: string, name: string, type: string, subFields: Field[] | null = null, multiplicity = false): Field => {
   const result = new Field();
   Object.assign(result, {id, name, accessPath: name, subFields});
   result.label.text = name;
