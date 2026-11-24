@@ -34,13 +34,6 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'datasources/search',
-    loadComponent: () => import('./pages/search/datasources-search/datasourceSearch.component').then(m => m.DatasourceSearchComponent),
-    data: {
-      breadcrumb: 'Datasources'
-    }
-  },
-  {
     path: 'provider/:providerId/service/add',
     loadComponent: () => import('./pages/forms/forms.component').then(m => m.FormsComponent),
     canActivate: [authGuard],
@@ -92,13 +85,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landingpages/user/user-item.component').then(m => m.UserItemComponent),
     data: {
       breadcrumb: 'Users'
-    }
-  },
-  {
-    path: 'datasource/:datasourceId',
-    loadComponent: () => import('./pages/landingpages/datasource/datasource').then(m => m.Datasource),
-    data: {
-      breadcrumb: 'Datasource'
     }
   },
   {

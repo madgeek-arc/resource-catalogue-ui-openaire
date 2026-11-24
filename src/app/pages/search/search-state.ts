@@ -3,8 +3,8 @@ import {Facet} from '../../entities/facet';
 import {URLParameter} from '../../entities/url-parameter';
 
 /**
- * The search filters, read from and written back to the URL query string. Shared by the service and datasource
- * search pages; the page edits a copy and navigates, and the next query string becomes the next copy.
+ * The search filters, read from and written back to the URL query string. Shared by the search page and the admin
+ * and provider lists; the page edits a copy and navigates, and the next query string becomes the next copy.
  */
 export class SearchParameters {
   private constructor(private readonly list: URLParameter[]) {}
