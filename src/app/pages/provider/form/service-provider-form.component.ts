@@ -19,7 +19,7 @@ import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text
 @Component({
     selector: 'app-new-service-provider',
     templateUrl: './service-provider-form.component.html',
-    styleUrls: ['./service-provider-form.component.css'],
+    styleUrls: ['./service-provider-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
@@ -53,7 +53,8 @@ export class ServiceProviderFormComponent implements OnInit {
   hasChanges = false;
   disable = false;
   readonly showLoader = signal(false);
-  tabsError: boolean[] = [false, false, false, false, false, false, false, false];
+  /** One entry per tab, in tab order: whether the tab holds a field in error. */
+  tabsError: boolean[] = new Array(9).fill(false);
   isPortalAdmin = false;
 
   codeOfConduct = false;

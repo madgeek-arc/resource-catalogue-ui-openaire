@@ -119,6 +119,8 @@ describe('provider forms', () => {
       const {fixture, root, answer, text, name} = await open('/provider/add');
       answer(vocabularies, noVocabularies());
       vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+      const marked = () => [...root.querySelectorAll('ul.form-tabs .form-error')];
+      expect(marked()).toEqual([]);
 
       [...root.querySelectorAll('button')].find(button => button.textContent!.trim() === 'Submit')!.click();
       fixture.detectChanges();
@@ -126,7 +128,11 @@ describe('provider forms', () => {
       expect(text()).toContain('Please fill in all required fields');
       expect(name()!.classList).toContain('uk-form-danger');
       expect(root.querySelector('#top-navigation-tabs')).not.toBeNull();
-      expect([...root.querySelectorAll('a.form-error')].map(a => a.textContent!.trim())[0]).toContain('Basic');
+      // Only the links of the tabs with a missing field are marked, never every tab's item.
+      expect(marked().every(element => element.tagName === 'A')).toBe(true);
+      const tabs = marked().map(a => a.textContent!.trim());
+      expect(tabs[0]).toContain('Basic');
+      expect(tabs).not.toContain('3. Classification');
       expect(create).not.toHaveBeenCalled();
     });
   });

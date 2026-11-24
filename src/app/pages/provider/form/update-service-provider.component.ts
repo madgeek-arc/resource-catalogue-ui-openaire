@@ -12,7 +12,7 @@ import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text
 @Component({
     selector: 'app-update-service-provider',
     templateUrl: './service-provider-form.component.html',
-    styleUrls: ['./service-provider-form.component.css'],
+    styleUrls: ['./service-provider-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
