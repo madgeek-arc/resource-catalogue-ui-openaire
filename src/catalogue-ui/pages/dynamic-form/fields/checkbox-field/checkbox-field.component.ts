@@ -16,7 +16,7 @@ export class CheckboxFieldComponent implements OnInit {
   private readonly refresh = formFieldRefresher();
 
   readonly fieldData = input.required<Field>();
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();

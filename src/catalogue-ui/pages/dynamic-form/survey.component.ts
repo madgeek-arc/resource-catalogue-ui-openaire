@@ -32,7 +32,7 @@ export class SurveyComponent implements OnInit, OnChanges {
   readonly payload = input<any>(null); // can't import specific project class in lib file
   readonly model = input<Model | null>(null);
   readonly subType = input<string | null>(null);
-  readonly activeUsers = input<any[] | null>(null);
+  readonly activeUsers = input<{fullname: string}[] | null>(null);
   readonly vocabulariesMap = input<VocabularyLookup | null>(null);
   readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly tabsHeader = input<string | null>(null);

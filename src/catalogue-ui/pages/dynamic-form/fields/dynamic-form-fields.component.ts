@@ -22,7 +22,7 @@ export class DynamicFormFieldsComponent {
   readonly form = input.required<UntypedFormGroup>();
   readonly vocabularies = input<VocabularyLookup | null>(null);
   readonly subVocabularies = input<VocabularyLookup | null>(null);
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly readonly = input<boolean | null>(null);
 
   readonly hasChanges = output<boolean>();

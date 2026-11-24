@@ -33,7 +33,7 @@ export class CompositeFieldComponent implements OnInit {
   readonly fieldData = input.required<Field>();
   readonly vocabularies = input<VocabularyLookup | null>(null);
   readonly subVocabularies = input<VocabularyLookup | null>(null);
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly readonly = input<boolean | null>(null);
   readonly position = input<number | null>(null);
 

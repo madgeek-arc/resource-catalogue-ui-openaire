@@ -23,7 +23,7 @@ export class ChooseOneComponent implements OnInit {
   readonly fieldData = input.required<Field>();
   readonly vocabularies = input<VocabularyLookup | null>(null);
   readonly subVocabularies = input<VocabularyLookup | null>(null);
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();

@@ -1,7 +1,7 @@
 import { Component, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output, signal } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Section, Field, HandleBitSet, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Tab, Tabs} from '../../domain/tabs';
 import BitSet from 'bitset';
@@ -22,7 +22,7 @@ export class ChapterEditComponent implements OnChanges{
   protected router = inject(Router);
 
 
-  readonly form = input<any>(null);
+  readonly form = input.required<UntypedFormGroup>();
   readonly tabsHeader = input<string | null>(null);
   readonly mandatoryFieldsText = input<string | null>(null);
   readonly readonly = input<boolean | null>(null);
@@ -156,16 +156,16 @@ export class ChapterEditComponent implements OnChanges{
         this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
       }
     } else if (subFields[pos].form.mandatory) {
-      if (this.form().get(subFields[pos].accessPath).valid) {
+      if (this.form().get(subFields[pos].accessPath)!.valid) {
         this.loaderBitSet.set(parseInt(subFields[pos].id), 1);
-        if (this.form().get(field.accessPath).valid) {
+        if (this.form().get(field.accessPath)!.valid) {
           this.decreaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         } else {
           this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         }
       } else {
         this.loaderBitSet.set(parseInt(subFields[pos].id), 0);
-        if (this.form().get(field.accessPath).valid) {
+        if (this.form().get(field.accessPath)!.valid) {
           this.decreaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         } else {
           this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
@@ -175,20 +175,21 @@ export class ChapterEditComponent implements OnChanges{
     this.updateLoaderPercentage();
   }
 
+  // Every field's accessPath names a control: toFormGroup built the form from these same fields.
   handleBitSet(data: Field) {
     // console.log(data.name);
     if (data.typeInfo.multiplicity) {
       this.handleBitSetOfGroup(data);
       return;
     }
-    // console.log(this.form().get(data.accessPath).valid);
-    if (this.form().get(data.accessPath).valid) {
+    // console.log(this.form().get(data.accessPath)!.valid);
+    if (this.form().get(data.accessPath)!.valid) {
       this.decreaseRemainingFieldsPerTab(data.form.group, data.form.display.order);
       this.loaderBitSet.set(parseInt(data.id), 1);
-    } else if (this.form().get(data.accessPath).invalid) {
+    } else if (this.form().get(data.accessPath)!.invalid) {
       this.increaseRemainingFieldsPerTab(data.form.group, data.form.display.order);
       this.loaderBitSet.set(parseInt(data.id), 0);
-    } else if (this.form().get(data.accessPath).pending) {
+    } else if (this.form().get(data.accessPath)!.pending) {
       this.timeOut(300).then(() => this.handleBitSet(data));
       return;
     }

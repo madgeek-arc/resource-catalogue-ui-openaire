@@ -18,7 +18,7 @@ export class LargeTextFieldComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   readonly fieldData = input.required<Field>();
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly readonly = input<boolean | null>(null);
   readonly position = input<number | null>(null);
 
