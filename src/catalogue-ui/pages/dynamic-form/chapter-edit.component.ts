@@ -79,7 +79,7 @@ export class ChapterEditComponent implements OnChanges{
     }
   }
 
-  onSubmit(tempSave: boolean, pendingService?: boolean) {
+  onSubmit() {
     // if (this.form().valid) {
     window.scrollTo(0, 0);
     this.submit.emit();

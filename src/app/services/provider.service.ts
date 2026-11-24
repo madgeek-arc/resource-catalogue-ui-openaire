@@ -32,7 +32,7 @@ export class ProviderService {
     return url;
   }
 
-  createNewServiceProvider(newProvider: Provider, providerId?: string | null) {
+  createNewServiceProvider(newProvider: Provider) {
     return this.http.post<Provider>(this.oa + '/providers', newProvider, this.options);
   }
 
@@ -48,7 +48,7 @@ export class ProviderService {
   }
 
   // TODO: no pendingProvider endpoint in new API
-  updateAndPublishPendingProvider(updatedFields: Provider, providerId?: string | null): Observable<Provider> {
+  updateAndPublishPendingProvider(updatedFields: Provider): Observable<Provider> {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 

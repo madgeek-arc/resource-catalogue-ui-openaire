@@ -102,11 +102,11 @@ export class SurveyComponent implements OnInit, OnChanges {
       }
       for (let i = 0; i < model.sections.length; i++) {
         if (model.sections[i].subSections === null) {
-          this.form.addControl(model.name, this.formControlService.toFormGroup(model.sections, true));
+          this.form.addControl(model.name, this.formControlService.toFormGroup(model.sections));
           break;
         }
         if (!model.sections[i].subType || model.sections[i].subType === this.subType()) {
-          this.form.addControl(model.sections[i].name, this.formControlService.toFormGroup(model.sections[i].subSections, true));
+          this.form.addControl(model.sections[i].name, this.formControlService.toFormGroup(model.sections[i].subSections));
         }
       }
       if (this.answers()?.answer) {

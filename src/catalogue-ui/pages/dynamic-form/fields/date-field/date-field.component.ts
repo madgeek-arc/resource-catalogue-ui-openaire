@@ -71,7 +71,7 @@ export class DateFieldComponent implements OnInit {
     return this.formControl as unknown as UntypedFormArray;
   }
 
-  push(field: string, required: boolean, type?: string) {
+  push(field: string, required: boolean) {
     this.fieldAsFormArray().push(required ? new UntypedFormControl('', Validators.required) : new UntypedFormControl(''));
   }
 

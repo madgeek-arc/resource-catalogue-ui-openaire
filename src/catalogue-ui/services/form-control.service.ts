@@ -49,7 +49,7 @@ export class FormControlService implements OnInit{
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
   }
 
-  toFormGroup(form: Section[], checkImmutable: boolean) {
+  toFormGroup(form: Section[]) {
     const group: Record<string, AbstractControl> = {};
     form.forEach(groups => {
       groups.fields.sort((a, b) => a.form.display?.order - b.form.display?.order);
