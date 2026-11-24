@@ -11,7 +11,6 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import seedRandom from 'seedrandom';
 
-import UIkit from 'uikit';
 import { ChapterEditComponent } from './chapter-edit.component';
 pdfMake.addVirtualFileSystem(pdfFonts);
 

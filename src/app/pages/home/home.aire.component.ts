@@ -4,7 +4,6 @@ import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {RouterLink} from '@angular/router';
 import {SlicePipe} from '@angular/common';
-import uikit from 'uikit';
 import {ResourceService} from '../../services/resource.service';
 
 @Component({
@@ -48,7 +47,7 @@ export class HomeAireComponent {
   }
 
   showSlide(index: number) {
-    uikit.slideshow('#slideShow').show(index);
+    UIkit.slideshow('#slideShow').show(index);
     this.slide.set(index);
   }
 
@@ -57,7 +56,7 @@ export class HomeAireComponent {
   }
 
   showSlideMobile(index: number) {
-    uikit.slideshow('#slideShowMobile').show(index);
+    UIkit.slideshow('#slideShowMobile').show(index);
     this.slideMobile.set(index);
   }
 }
@@ -71,7 +70,7 @@ function orNull<T>(source: Observable<T>): Observable<T | null> {
 }
 
 function currentSlide(): number {
-  return uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  return UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
 }
 
 interface Category {

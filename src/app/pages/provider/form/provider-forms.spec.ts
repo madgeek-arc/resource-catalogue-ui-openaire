@@ -102,7 +102,7 @@ describe('provider forms', () => {
       const tabs = [...root.querySelectorAll('ul.form-tabs > li')];
       // In the app zone.js checks the view after each listener: after Angular's on the link, before UIkit's on the list.
       // The tab is read right after that check, on its way up to the list: specs share one window
-      // (isolate is off), so UIkit may be running here too, and on the list it would mark the tab itself.
+      // (isolate is off), so a spec that loads UIkit would leave it running here, and on the list it would mark the tab itself.
       let activeWhenUIkitRuns: boolean | undefined;
       tabs[2].addEventListener('click', event => {
         event.preventDefault();

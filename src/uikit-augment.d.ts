@@ -4,8 +4,8 @@ import 'uikit';
 
 declare global {
   /**
-   * The UIkit that angular.json loads as a script (window.UIkit). `import UIkit from 'uikit'` bundles a second
-   * copy instead, so a file that uses the global keeps doing so: the two hold their components apart.
+   * The UIkit that angular.json loads as a script (window.UIkit), the only copy the app runs. Use this global:
+   * `import UIkit from 'uikit'` would bundle and boot a second copy (about 137 kB) into the importing chunk.
    */
   const UIkit: typeof import('uikit').default;
 }
