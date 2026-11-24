@@ -47,22 +47,12 @@ export class ProviderService {
     return this.http.put<Provider>(this.oa + `/providers/${providerId}`, updatedFields, this.options);
   }
 
-  // TODO: no pendingProvider endpoint in new API
-  updateAndPublishPendingProvider(updatedFields: Provider): Observable<Provider> {
-    return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
-  }
-
   getProviderById(id: string) {
     return this.http.get<Provider>(this.oa + `/providers/${id}`, this.options);
   }
 
   getProviderBundleById(id: string) {
     return this.http.get<ProviderBundle>(this.oa + `/providers/bundles/${id}`, this.options);
-  }
-
-  // TODO: no pendingProvider endpoint in new API
-  getPendingProviderById(id: string) {
-    return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
   }
 
   getProviderBundles(urlParameters: URLParameter[] = []) {
@@ -86,28 +76,13 @@ export class ProviderService {
     );
   }
 
-  // TODO: no pendingProvider (draft) endpoint in new API
-  temporarySaveProvider(provider: Provider, providerExists: boolean) {
-    // console.log('providerExists ', providerExists);
-    if (providerExists) {
-      return this.http.put<Provider>(this.base + '/pendingProvider/provider', provider, this.options);
-    }
-    return this.http.put<Provider>(this.base + '/pendingProvider/pending', provider, this.options);
-  }
-
   // TODO: no terms endpoint in new API
-  hasAdminAcceptedTerms(id: string, pendingProvider: boolean) {
-    if (pendingProvider) {
-      return this.http.get<boolean>(this.base + `/pendingProvider/hasAdminAcceptedTerms?providerId=${id}`);
-    }
+  hasAdminAcceptedTerms(id: string) {
     return this.http.get<boolean>(this.base + `/providers/hasAdminAcceptedTerms?providerId=${id}`);
   }
 
   // TODO: no terms endpoint in new API
-  adminAcceptedTerms(id: string, pendingProvider: boolean) {
-    if (pendingProvider) {
-      return this.http.put(this.base + `/pendingProvider/adminAcceptedTerms?providerId=${id}`, this.options);
-    }
+  adminAcceptedTerms(id: string) {
     return this.http.put(this.base + `/provider/adminAcceptedTerms?providerId=${id}`, this.options);
   }
 

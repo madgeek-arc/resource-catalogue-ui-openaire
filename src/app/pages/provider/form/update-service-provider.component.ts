@@ -60,15 +60,10 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     }
   }
 
-  override registerProvider(tempSave: boolean) {
-    super.registerProvider(tempSave);
-  }
-
   getProvider() {
     this.errorMessage.set('');
-    const path = this.route.snapshot.routeConfig!.path!;
     // ngOnInit sets providerId from the :providerId route parameter.
-    this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId!)
+    this.providerService.getProviderById(this.providerId!)
       .subscribe(
       provider => this.provider = provider,
       err => {
@@ -101,8 +96,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
           for (let i = 0; i < this.provider.users.length - 1; i++) {
             this.addUser();
           }
-        } else if (path === 'add/:providerId') {
-          this.addDefaultUser();
         }
         if (this.provider.multimedia && this.provider.multimedia.length > 1) {
           for (let i = 0; i < this.provider.multimedia.length - 1; i++) {

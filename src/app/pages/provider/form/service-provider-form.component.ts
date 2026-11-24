@@ -51,7 +51,6 @@ export class ServiceProviderFormComponent implements OnInit {
   premiumSort = new PremiumSortPipe();
   edit = false;
   hasChanges = false;
-  pendingProvider = false;
   disable = false;
   readonly showLoader = signal(false);
   tabsError: boolean[] = [false, false, false, false, false, false, false, false];
@@ -187,14 +186,6 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    const path = this.route.snapshot.routeConfig!.path!;
-    if (path.includes('add/:providerId')) {
-      this.pendingProvider = true;
-    }
-    // if (path.includes('info/:providerId')) {
-    //   this.pendingProvider = true;
-    // }
     this.setVocabularies();
     this.newProviderForm = this.fb.group(this.formDefinition);
     if (this.edit === false) {
@@ -240,7 +231,7 @@ export class ServiceProviderFormComponent implements OnInit {
     // fixme: hasAdminAcceptedTerms 404
     // if (this._hasUserConsent) {
     //   if (this.edit) {
-    //     this.providerService.hasAdminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
+    //     this.providerService.hasAdminAcceptedTerms(this.providerId).subscribe(
     //       boolean => { this.agreedToTerms = boolean; },
     //       error => console.log(error),
     //       () => {
@@ -260,7 +251,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   }
 
-  registerProvider(saveDraft: boolean) {
+  registerProvider() {
     // console.log('Submit');
     if (!this.authService.isSignedIn()) {
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
@@ -269,13 +260,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
     this.errorMessage.set('');
     // this.trimFormWhiteSpaces();
-    const path = this.route.snapshot.routeConfig!.path!;
-    let method: 'updateAndPublishPendingProvider' | 'updateServiceProvider' | 'createNewServiceProvider';
-    if (path === 'add/:providerId') {
-      method = 'updateAndPublishPendingProvider';
-    } else {
-      method = this.edit ? 'updateServiceProvider' : 'createNewServiceProvider';
-    }
+    const method = this.edit ? 'updateServiceProvider' : 'createNewServiceProvider';
 
     for (let i = 0; i < this.domainArray.length ; i++) {
       if (this.domainArray.controls[i].get('scientificDomain')!.value === ''
@@ -299,25 +284,7 @@ export class ServiceProviderFormComponent implements OnInit {
       }
     }
 
-    if (saveDraft) { //not used
-      this.showLoader.set(true);
-      window.scrollTo(0, 0);
-      this.providerService.temporarySaveProvider(this.newProviderForm.value, (path !== 'add/:providerId' && this.edit))
-        .subscribe(
-          res => {
-            this.showLoader.set(false);
-            this.router.navigate([`/provider/add/${res.id}`]);
-          },
-          err => {
-            this.showLoader.set(false);
-            window.scrollTo(0, 0);
-            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
-          },
-          () => {
-            this.showLoader.set(false);
-          }
-        );
-    } else if (this.newProviderForm.valid) {
+    if (this.newProviderForm.valid) {
       this.showLoader.set(true);
       window.scrollTo(0, 0);
 
@@ -704,7 +671,7 @@ export class ServiceProviderFormComponent implements OnInit {
   acceptTerms() {
     if (this._hasUserConsent && this.edit) {
       // In edit mode the provider id comes from the :providerId route parameter.
-      this.providerService.adminAcceptedTerms(this.providerId!, this.pendingProvider).subscribe(
+      this.providerService.adminAcceptedTerms(this.providerId!).subscribe(
         () => {},
         error => { console.error(error); },
         () => {}
