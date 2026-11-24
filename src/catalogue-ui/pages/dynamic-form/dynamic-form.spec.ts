@@ -152,6 +152,21 @@ describe('dynamic form', () => {
     expect(tags()).toBe(2);
   });
 
+  it('submits the chapter once from its Submit button, without the DOM event leaving the chapter', async () => {
+    const {root, survey, input} = await open(null);
+    const submitted: unknown[] = [];
+    survey.submit.subscribe(value => submitted.push(value));
+    const bubbled = vi.fn();
+    root.addEventListener('submit', bubbled);
+
+    const submit = [...root.querySelectorAll<HTMLButtonElement>('button')].find(button => button.textContent!.trim() === 'Submit')!;
+    expect(submit.form!.contains(input('1'))).toBe(true);
+    submit.click();
+
+    expect(submitted).toEqual([[survey.form, false]]);
+    expect(bubbled).not.toHaveBeenCalled();
+  });
+
   describe('when validation finds missing fields', () => {
     afterEach(() => vi.unstubAllGlobals());
 

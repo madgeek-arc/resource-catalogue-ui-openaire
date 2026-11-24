@@ -1,4 +1,4 @@
-import { Component, OnChanges, ChangeDetectionStrategy, inject, input, output, signal } from '@angular/core';
+import { Component, OnChanges, ChangeDetectionStrategy, computed, inject, input, output, signal } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +34,9 @@ export class ChapterEditComponent implements OnChanges{
   /** The chapter id, and the chapter whose changes were discarded, if any. */
   readonly chapterHasChanges = output<(string | null)[]>();
   readonly submit = output();
+
+  /** The Submit button sits in the title bar, outside the form, and joins it by this id. */
+  readonly formId = computed(() => 'chapter-form-' + this.chapter().id);
 
   editMode = true;
 
@@ -79,7 +82,10 @@ export class ChapterEditComponent implements OnChanges{
     }
   }
 
-  onSubmit() {
+  onSubmit(event: Event) {
+    // This component's and the survey's outputs are named submit too, so Angular also binds `(submit)` on their hosts
+    // to the DOM event: left to bubble, it would run those handlers a second time, with the event as their value.
+    event.stopPropagation();
     // if (this.form().valid) {
     window.scrollTo(0, 0);
     this.submit.emit();
