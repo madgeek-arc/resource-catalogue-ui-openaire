@@ -123,10 +123,13 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
     }
   }
 
-  /** A cleared select passes null, which removes the parameter. */
+  /**
+   * A cleared select passes null, which removes the parameter. The order select sets sort=modifiedAt beside order, the
+   * names the API sorts by: it reads any other key, such as the orderField of old, as a filter and finds nothing.
+   */
   filterSelection(key: string, value: string | string[] | null) {
     if (key === 'order' && value === null) {
-      this.updateURLParameters('orderField', null);
+      this.updateURLParameters('sort', null);
     }
     this.updateURLParameters(key, value);
     this.updateURLParameters('from', '0');

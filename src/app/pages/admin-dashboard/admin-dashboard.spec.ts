@@ -204,6 +204,30 @@ describe('admin dashboard', () => {
     });
   });
 
+  describe('the order select of each list', () => {
+    const lists = [
+      ['providers', AllProvidersDashboardComponent],
+      ['services', AllServicesDashboardComponent],
+      ['datasources', AllDatasourcesDashboardComponent],
+    ] as const;
+    for (const [path, type] of lists) {
+      it(`sorts the ${path} with sort=modifiedAt, the name the API sorts by, and clears it with the order`, async () => {
+        const {router, list, root, fixture} = await open(`/admin/${path}`);
+        const select = root.querySelector('#order')!;
+
+        list<{order: {set(value: string | null): void}}>(type).order.set('desc');
+        select.dispatchEvent(new Event('change'));
+        await fixture.whenStable();
+        expect(router.url).toBe(`/admin/${path}?quantity=9&sort=modifiedAt&order=desc&from=0`);
+
+        list<{order: {set(value: string | null): void}}>(type).order.set(null);
+        select.dispatchEvent(new Event('change'));
+        await fixture.whenStable();
+        expect(router.url).toBe(`/admin/${path}?quantity=9&from=0`);
+      });
+    }
+  });
+
   describe('AllProvidersDashboardComponent', () => {
     it('asks for the first page of 9 and shows the providers with their status', async () => {
       const {root, text} = await open('/admin/providers');
