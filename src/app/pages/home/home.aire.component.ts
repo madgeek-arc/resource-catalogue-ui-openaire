@@ -74,7 +74,7 @@ function currentSlide(): number {
   return uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
 }
 
-class Category {
+interface Category {
   value: string;
   icon: string;
   hover: string;

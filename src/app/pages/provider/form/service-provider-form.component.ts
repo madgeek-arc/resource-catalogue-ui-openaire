@@ -45,7 +45,8 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly providerName = signal('');
   readonly errorMessage = signal('');
   userInfo = {family_name: '', given_name: '', email: ''};
-  newProviderForm: UntypedFormGroup;
+  /** Built in ngOnInit from formDefinition. */
+  newProviderForm!: UntypedFormGroup;
   logoUrl = '';
   /** All vocabularies by type; null until they have loaded, which the template waits for. */
   readonly vocabularies = signal<Record<string, Vocabulary[]> | null>(null);
@@ -63,7 +64,7 @@ export class ServiceProviderFormComponent implements OnInit {
   codeOfConduct = false;
   privacyPolicy = false;
   authorizedRepresentative = false;
-  agreedToTerms: boolean;
+  agreedToTerms = false;
 
   readonly fullNameDesc: sd.Description = sd.providerDescMap.get('fullNameDesc');
   readonly abbreviationDesc: sd.Description = sd.providerDescMap.get('abbreviationDesc');

@@ -5,7 +5,7 @@ apply: always
 # Project: resource-catalogue-ui-openaire – Angular
 ## Stack
 - Frontend: Angular 22, TypeScript 6, RxJS 7.8, Node 24 (`.nvmrc`); tests with Vitest (`npm test`)
-- Target: TypeScript strict, Signals, LESS. Today `strictTemplates` and every strict flag but `strictPropertyInitialization` is on (`strict` itself is still off), and the styles are still CSS/SCSS
+- Target: TypeScript strict, Signals, LESS. Today `strict` and `strictTemplates` are on; the styles are still CSS/SCSS
 
 ## Web platform guidance
 - This project's Baseline target is Baseline 2025.

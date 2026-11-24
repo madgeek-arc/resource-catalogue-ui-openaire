@@ -30,7 +30,8 @@ export class ChooseOneComponent implements OnInit {
   readonly handleBitSets = output<Field>();
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  form: UntypedFormGroup;
+  /** The field's group in the parent form, looked up in ngOnInit. */
+  form!: UntypedFormGroup;
   readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
