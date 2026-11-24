@@ -1,15 +1,16 @@
+import type {Content as PdfContent, ContentColumns, Style, StyleDictionary} from 'pdfmake/interfaces';
+
 export class DocDefinition {
-  header: Content | null;
-  content: any[];
-  styles: object;
-  images: object;
+  content: PdfContent[];
+  styles: StyleDictionary;
+  images: Record<string, string>;
   info?: PdfMetadata;
-  defaultStyle: object;
+  defaultStyle: Style;
   // pageMargins: [ 40, 60, 40, 60 ];
   // pageSize: 'A4';
-  footer(currentPage: number, pageCount: number) {
+  // A columns node takes no layout (that is for tables): the footer used to set layout: 'noBorders', which pdfmake ignored.
+  footer(currentPage: number, pageCount: number): ContentColumns {
     return {
-      layout: 'noBorders',
       fontSize: 8,
       margin: [25, 20, 5, 0],
       columns: [
@@ -19,7 +20,6 @@ export class DocDefinition {
   }
 
   constructor() {
-    this.header = null;
     this.content = [];
     this.styles = {
       title: {

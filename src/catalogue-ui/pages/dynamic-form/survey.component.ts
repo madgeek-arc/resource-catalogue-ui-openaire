@@ -6,13 +6,14 @@ import {FormControlService} from '../../services/form-control.service';
 import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Columns, Content, DocDefinition, PdfImage, PdfMetadata, PdfTable, TableDefinition} from '../../domain/PDFclasses';
 import pdfMake from 'pdfmake/build/pdfmake';
+import type {Content as PdfContent, ContentText} from 'pdfmake/interfaces';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import seedRandom from 'seedrandom';
 
 import UIkit from 'uikit';
 import { ChapterEditComponent } from './chapter-edit.component';
-pdfMake.vfs = pdfFonts.vfs;
+pdfMake.addVirtualFileSystem(pdfFonts);
 
 @Component({
     selector: 'app-survey',
@@ -373,18 +374,19 @@ export class SurveyComponent implements OnInit, OnChanges {
         && !field.form.description.text.includes('For example on curricula for data stewardship')
       ) {
         if (description === 'end') {
-          let questionNumber: string | null = null;
+          // pdfmake renders an empty string as it rendered null or undefined here: nothing.
+          let questionNumber = '';
           if (field.label.text) {
             questionNumber = field.label.text.split('. ')[0];
           }
           // let term = field.form.description.text.split('-')[0]
           const components = this.strip(field.form.description.text).split(' - ');
-          const content = {
+          const content: ContentText = {
             style: ['mt_3'],
             text: [
               questionNumber,
               ' ',
-              {text:  components.shift(), bold: true},
+              {text: components.shift() ?? '', bold: true},
               ' - ',
               components.join('-')
             ]
@@ -472,7 +474,7 @@ export class SurveyComponent implements OnInit, OnChanges {
       docDefinition.content.push(...descriptionsAtEnd.content);
 
       docDefinition.content.push(new Content('Appendix B', ['title']));
-      const content = [
+      const content: PdfContent[] = [
         {
           style: ['mt_3'],
           text: ['Visit the ',
