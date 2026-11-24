@@ -9,7 +9,8 @@
     "build:beta": "ng build --configuration beta",
     "test": "ng test --no-watch",
     "lint": "ng lint",
-    "lint:ci": "ng lint --max-warnings 365"
+    "lint:ci": "ng lint --max-warnings 365",
+    "typecheck:strict": "node scripts/check-strict-flag.mjs strictPropertyInitialization 455"
   },
   "private": true,
   "dependencies": {
