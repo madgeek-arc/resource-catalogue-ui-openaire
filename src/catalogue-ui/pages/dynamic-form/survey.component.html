@@ -54,17 +54,20 @@
 }
 
 @if (errorMessage()) {
-  <pre id="errorAlert" class="uk-alert uk-alert-danger" uk-alert="duration: 500" style="border-width: 0">
-    <a (click)="closeError()" class="uk-alert-close" uk-close></a>
+  <pre #errorAlert id="errorAlert" tabindex="-1" class="uk-alert uk-alert-danger" uk-alert="duration: 500" style="border-width: 0">
+    <button type="button" class="uk-alert-close" uk-close aria-label="Close" (click)="closeError()"></button>
     {{errorMessage()}}
   </pre>
 }
 
-@if (successMessage()) {
-  <div id="successAlert" class="uk-alert uk-alert-success" uk-alert="duration: 500">
-    <p>{{successMessage()}}</p>
-  </div>
-}
+<!-- The status region stays in the page, so screen readers announce the message that appears in it. -->
+<div role="status">
+  @if (successMessage()) {
+    <div id="successAlert" class="uk-alert uk-alert-success" uk-alert="duration: 500">
+      <p>{{successMessage()}}</p>
+    </div>
+  }
+</div>
 
 @if (ready && model) {
   <div>

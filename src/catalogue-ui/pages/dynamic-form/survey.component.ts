@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, ChangeDetectionStrategy, inject, input, output, linkedSignal, signal } from '@angular/core';
+import { Component, OnChanges, OnInit, ChangeDetectionStrategy, ElementRef, afterRenderEffect, inject, input, output, linkedSignal, signal, viewChild } from '@angular/core';
 import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -65,11 +65,18 @@ export class SurveyComponent implements OnInit, OnChanges {
   validate = false;
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
+  private readonly errorAlert = viewChild<ElementRef<HTMLElement>>('errorAlert');
 
   form: UntypedFormGroup;
 
   constructor() {
     this.form = this.fb.group({});
+    // A new error takes the focus, so keyboard and screen reader users get it where it shows, at the top of the form.
+    afterRenderEffect(() => {
+      if (this.errorMessage()) {
+        this.errorAlert()?.nativeElement.focus();
+      }
+    });
   }
 
   ngOnInit() {

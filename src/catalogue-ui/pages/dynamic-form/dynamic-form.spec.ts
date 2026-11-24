@@ -151,6 +151,24 @@ describe('dynamic form', () => {
 
     expect(tags()).toBe(2);
   });
+
+  describe('when validation finds missing fields', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('moves the focus to the error, which closes from a named button', async () => {
+      vi.stubGlobal('UIkit', {modal: () => ({hide: vi.fn()})});
+      const {fixture, root, survey} = await open(null);
+
+      survey.validateForm();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const error = root.querySelector<HTMLElement>('#errorAlert')!;
+      expect(error.textContent).toContain('There are missing fields at chapters');
+      expect(document.activeElement).toBe(error);
+      expect(error.querySelector('button.uk-alert-close')!.getAttribute('aria-label')).toBe('Close');
+    });
+  });
 });
 
 describe('controlTreeEvents', () => {
