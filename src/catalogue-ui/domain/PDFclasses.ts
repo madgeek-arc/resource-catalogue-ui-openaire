@@ -3,7 +3,7 @@ export class DocDefinition {
   content: any[];
   styles: object;
   images: object;
-  info: PdfMetadata;
+  info?: PdfMetadata;
   defaultStyle: object;
   // pageMargins: [ 40, 60, 40, 60 ];
   // pageSize: 'A4';
@@ -87,7 +87,7 @@ export class DocDefinition {
 export class Content {
   text: string;
   style: string[];
-  width: number;
+  width?: number;
 
   constructor(text: string, style: string[], width?: number) {
     this.text = text;
@@ -99,7 +99,7 @@ export class Content {
 
 export class Columns {
   columns: any[];
-  style: string[];
+  style?: string[];
 
   constructor(style?: string[]) {
     this.columns = [];
@@ -141,7 +141,7 @@ export class PdfTable {
 export class TableDefinition {
   body: any[][];
   widths: string[];
-  heights: number[];
+  heights?: number[];
 
   constructor(body: any[][], widths: string[], heights?: number[]) {
     this.body = body;
@@ -153,9 +153,9 @@ export class TableDefinition {
 
 export class PdfUnorderedList {
   ul: string[];
-  type: string;
-  markerColor: string;
-  color: string;
+  type?: string;
+  markerColor?: string;
+  color?: string;
 
   constructor(ul: string[], type?: string) {
     this.ul = ul;
@@ -166,11 +166,11 @@ export class PdfUnorderedList {
 
 export class PdfMetadata {
   title: string;
-  author: string;
-  subject: string;
-  keywords: string;
-  creator: string;
-  producer: string;
+  author?: string;
+  subject?: string;
+  keywords?: string;
+  creator?: string;
+  producer?: string;
   creationDate: any;
   modDate: any;
   trapped: any;

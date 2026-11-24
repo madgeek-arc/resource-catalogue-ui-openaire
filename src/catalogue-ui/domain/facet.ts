@@ -1,4 +1,4 @@
-export class Facet {
+export interface Facet {
     field: string;
     label: string;
     values: FacetValue[];

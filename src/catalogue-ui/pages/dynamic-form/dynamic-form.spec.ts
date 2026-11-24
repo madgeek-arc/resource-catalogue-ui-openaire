@@ -27,7 +27,7 @@ const field = (id: string, name: string, type: string, options: FieldOptions = {
   result.typeInfo.multiplicity = !!options.multiplicity;
   result.typeInfo.values = options.values ?? [];
   result.form.mandatory = !!options.mandatory;
-  result.form.dependsOn = options.dependsOn ? Object.assign(new Dependent(), options.dependsOn) : null;
+  result.form.dependsOn = options.dependsOn ? {...options.dependsOn} as Dependent : null;
   result.subFields = options.subFields ?? null;
   return result;
 };
@@ -36,7 +36,7 @@ const group = (id: string, name: string, order: number, fields: Field[]): Sectio
   Object.assign(new Section(), {id, name, order, fields, subSections: null});
 
 // A service form like the real one: one section named after the resource, its tabs as sub-sections.
-const model = (): Model => Object.assign(new Model(), {
+const model = (): Model => Object.assign({} as Model, {
   name: 'Service form',
   resourceType: 'service',
   sections: [Object.assign(new Section(), {

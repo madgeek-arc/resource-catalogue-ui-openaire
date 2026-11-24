@@ -41,10 +41,7 @@ export class DynamicFormFieldsComponent {
 
   updateBitSetOfComposite(fieldData: Field, position: number) {
     if (fieldData.form.mandatory) {
-      const tmp = new HandleBitSet();
-      tmp.field = fieldData;
-      tmp.position = position;
-      this.handleBitSetsOfComposite.emit(tmp);
+      this.handleBitSetsOfComposite.emit({field: fieldData, position});
     }
   }
 

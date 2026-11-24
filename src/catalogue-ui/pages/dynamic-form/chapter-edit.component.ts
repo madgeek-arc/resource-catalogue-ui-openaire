@@ -2,7 +2,8 @@ import { Component, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, i
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import {Section, Field, HandleBitSet, Tab, Tabs, VocabularyLookup} from '../../domain/dynamic-form-model';
+import {Section, Field, HandleBitSet, VocabularyLookup} from '../../domain/dynamic-form-model';
+import {Tab, Tabs} from '../../domain/tabs';
 import BitSet from 'bitset';
 
 import UIkit from 'uikit';
@@ -94,7 +95,6 @@ export class ChapterEditComponent implements OnChanges{
       tab.requiredOnTab = tab.remainingOnTab = group.required.topLevel;
       tab.valid = false;
       tab.order = group.order;
-      tab.bitSet = new BitSet();
       // obj[group.group.id] = tab;
       obj.set(group.id, tab);
       if (group.required.topLevel > 0) {

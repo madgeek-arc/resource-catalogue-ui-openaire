@@ -3,11 +3,10 @@ import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup}
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
-import {Section, Field, Model, Tabs, VocabularyLookup} from '../../domain/dynamic-form-model';
+import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Columns, Content, DocDefinition, PdfImage, PdfMetadata, PdfTable, TableDefinition} from '../../domain/PDFclasses';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import BitSet from 'bitset';
 
 import seedRandom from 'seedrandom';
 
@@ -59,7 +58,6 @@ export class SurveyComponent implements OnInit, OnChanges {
   chapterForSubmission: Section | null = null;
   sortedSurveyAnswers: Record<string, unknown> = {};
   editMode = false;
-  bitset: Tabs = new Tabs();
 
   ready = false;
   readonly = false;
