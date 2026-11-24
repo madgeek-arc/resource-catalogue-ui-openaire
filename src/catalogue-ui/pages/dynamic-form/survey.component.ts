@@ -6,7 +6,7 @@ import {FormControlService} from '../../services/form-control.service';
 import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Columns, Content, DocDefinition, PdfImage, PdfMetadata, PdfTable, TableDefinition} from '../../domain/PDFclasses';
 import pdfMake from 'pdfmake/build/pdfmake';
-import type {Content as PdfContent, ContentText} from 'pdfmake/interfaces';
+import type {Content as PdfContent, ContentText, TableCell} from 'pdfmake/interfaces';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import seedRandom from 'seedrandom';
@@ -432,7 +432,8 @@ export class SurveyComponent implements OnInit, OnChanges {
         }
       } else if (field.typeInfo.type !== 'composite') {
         if (answerValues?.[0]) {
-          docDefinition.content.push(new PdfTable(new TableDefinition([[answerValues[0]]], ['*']), ['mt_1']));
+          // The answer as the form holds it, passed to pdfmake unchanged; text and numbers render as they are.
+          docDefinition.content.push(new PdfTable(new TableDefinition([[answerValues[0] as TableCell]], ['*']), ['mt_1']));
         } else if (field.form.placeholder) {
           docDefinition.content.push(new PdfTable(new TableDefinition([[{text: field.form.placeholder, color: 'gray'}]],['*']), ['mt_1']));
         } else {

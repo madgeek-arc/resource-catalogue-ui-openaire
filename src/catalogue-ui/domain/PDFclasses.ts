@@ -1,4 +1,4 @@
-import type {Content as PdfContent, ContentColumns, Style, StyleDictionary} from 'pdfmake/interfaces';
+import type {Column, Content as PdfContent, ContentColumns, Style, StyleDictionary, TableCell, TDocumentInformation} from 'pdfmake/interfaces';
 
 export class DocDefinition {
   content: PdfContent[];
@@ -98,7 +98,7 @@ export class Content {
 }
 
 export class Columns {
-  columns: any[];
+  columns: Column[];
   style?: string[];
 
   constructor(style?: string[]) {
@@ -139,11 +139,11 @@ export class PdfTable {
 }
 
 export class TableDefinition {
-  body: any[][];
+  body: TableCell[][];
   widths: string[];
   heights?: number[];
 
-  constructor(body: any[][], widths: string[], heights?: number[]) {
+  constructor(body: TableCell[][], widths: string[], heights?: number[]) {
     this.body = body;
     this.widths = widths;
     if (heights)
@@ -171,9 +171,9 @@ export class PdfMetadata {
   keywords?: string;
   creator?: string;
   producer?: string;
-  creationDate: any;
-  modDate: any;
-  trapped: any;
+  creationDate?: TDocumentInformation['creationDate'];
+  modDate?: TDocumentInformation['modDate'];
+  trapped?: TDocumentInformation['trapped'];
 
   constructor(title: string) {
     this.title = title;
