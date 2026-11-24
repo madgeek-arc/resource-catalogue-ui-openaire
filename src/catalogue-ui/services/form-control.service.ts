@@ -1,5 +1,5 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import {UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {Field, Model, Required, Section} from '../domain/dynamic-form-model';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
@@ -34,7 +34,7 @@ export class FormControlService implements OnInit{
     return this.http.get<Paging<Model>>(this.base + `/forms/models?name=${name}`);
   }
 
-  postItem(surveyId: string, item: any, edit: boolean) {
+  postItem(surveyId: string, item: Record<string, unknown>, edit: boolean) {
     return this.http[edit ? 'put' : 'post'](this.base + `/answers/${surveyId}/answer`, item, this.options);
   }
 
@@ -50,7 +50,7 @@ export class FormControlService implements OnInit{
   }
 
   toFormGroup(form: Section[], checkImmutable: boolean) {
-    const group: any = {};
+    const group: Record<string, AbstractControl> = {};
     form.forEach(groups => {
       groups.fields.sort((a, b) => a.form.display?.order - b.form.display?.order);
       groups.required = new Required();
@@ -66,9 +66,10 @@ export class FormControlService implements OnInit{
                 new UntypedFormArray([new UntypedFormControl(null, Validators.compose([Validators.required, Validators.pattern(this.urlRegEx)]))])
                 : new UntypedFormArray([new UntypedFormControl(null, Validators.pattern(this.urlRegEx))]);
             } else if (formField.typeInfo.type === 'composite' || formField.typeInfo.type === 'chooseOne') {
-              group[formField.name] = formField.form.mandatory ? new UntypedFormArray([], Validators.required)
+              const list = formField.form.mandatory ? new UntypedFormArray([], Validators.required)
                 : new UntypedFormArray([]);
-              group[formField.name].push(this.createCompositeField(formField));
+              list.push(this.createCompositeField(formField));
+              group[formField.name] = list;
             } else {
               group[formField.name] = formField.form.mandatory ?
                 new UntypedFormArray([new UntypedFormControl(null, Validators.required)])
@@ -115,15 +116,16 @@ export class FormControlService implements OnInit{
   }
 
   createCompositeField(formField: Field) {
-    const subGroup: any = {};
+    const subGroup: Record<string, AbstractControl> = {};
     // console.log(formField);
     formField.subFields?.sort((a, b) => a.form.display?.order - b.form.display?.order);
     formField.subFields?.forEach(subField => {
       if (subField.typeInfo.type === 'composite' || subField.typeInfo.type === 'radioGrid') {
         if (subField.typeInfo.multiplicity) {
-          subGroup[subField.name] = subField.form.mandatory ? new UntypedFormArray([], Validators.required)
+          const list = subField.form.mandatory ? new UntypedFormArray([], Validators.required)
             : new UntypedFormArray([]);
-          subGroup[subField.name].push(this.createCompositeField(subField));
+          list.push(this.createCompositeField(subField));
+          subGroup[subField.name] = list;
         } else {
           subGroup[subField.name] = this.createCompositeField(subField);
         }
@@ -216,21 +218,25 @@ export class FormControlService implements OnInit{
    * A list is walked from its end, so removing an entry doesn't shift the ones still to visit,
    * and its entries are spliced out rather than deleted, which would leave holes sent as null.
    */
-  static removeNulls(obj: any) {
+  static removeNulls(obj: object) {
+    // Walked as JSON, by key: a list's keys are its indexes.
+    const entries = obj as Record<string, unknown>;
     const isArray = obj instanceof Array;
     const keys = isArray ? Object.keys(obj).reverse() : Object.keys(obj);
-    const remove = (k: string) => isArray ? obj.splice(Number(k), 1) : delete obj[k];
+    const remove = (k: string) => isArray ? obj.splice(Number(k), 1) : delete entries[k];
     for (const k of keys) {
-      if (obj[k] === null || obj[k] === '') {
+      const value = entries[k];
+      if (value === null || value === '') {
         remove(k);
-      } else if (typeof obj[k] === 'object') {
-        if (typeof obj[k].value !== 'undefined' && typeof obj[k].lang !== 'undefined') {
-          if (obj[k].value === '' && obj[k].lang === 'en') {
-            obj[k].lang = '';
+      } else if (typeof value === 'object') {
+        const text = value as {value?: unknown; lang?: unknown};
+        if (typeof text.value !== 'undefined' && typeof text.lang !== 'undefined') {
+          if (text.value === '' && text.lang === 'en') {
+            text.lang = '';
           }
         }
-        FormControlService.removeNulls(obj[k]);
-        if (obj[k] instanceof Array && obj[k].length === 0) {
+        FormControlService.removeNulls(value);
+        if (value instanceof Array && value.length === 0) {
           remove(k);
         }
       }
