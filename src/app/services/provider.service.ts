@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
-import {forkJoin, Observable, of} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import {Paging} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 
@@ -65,15 +65,19 @@ export class ProviderService {
     return this.http.get<Paging<ProviderBundle>>(this.oa + '/providers/bundles', {params: searchQuery, withCredentials: true});
   }
 
-  getServicesOfProvider(providerId: string, urlParameters?: URLParameter[]): Observable<Paging<Bundle<Service | Datasource>>> {
-    // New API returns a plain array of every service of the provider; wrap it as Paging so callers keep working.
-    // Old filters/paging params (orderField, from, quantity...) are not supported by this endpoint.
-    // byProvider returns plain services, while the dashboard needs bundles (status, active), so fetch each bundle.
-    return this.http.get<Service[]>(this.oa + `/services/byProvider/${providerId}`, this.options).pipe(
-      switchMap(services => services.length === 0 ? of([]) : forkJoin(services.map(service =>
-        this.http.get<Bundle<Service>>(this.oa + `/services/bundles/${service.id}`, this.options)))),
-      map(results => ({total: results.length, from: 0, to: results.length, results, facets: []} as Paging<Bundle<Service | Datasource>>))
-    );
+  /**
+   * One page of the provider's service bundles. The endpoint takes from and quantity (10 by default), status, active,
+   * and sort with order (sort=modifiedAt&order=desc); it reads any other key as a filter, so an unknown one such as
+   * orderField matches nothing.
+   */
+  getServicesOfProvider(providerId: string, urlParameters: URLParameter[] = []): Observable<Paging<Bundle<Service | Datasource>>> {
+    let params = new HttpParams().set('resourceProviders', providerId);
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        params = params.append(urlParameter.key, value);
+      }
+    }
+    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.oa + '/services/bundles', {...this.options, params});
   }
 
   // TODO: no terms endpoint in new API

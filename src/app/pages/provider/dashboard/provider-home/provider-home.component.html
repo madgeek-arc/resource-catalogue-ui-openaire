@@ -25,150 +25,157 @@
             </div>
             <ul id="top-navigation-tabs" class="uk-switcher" style="touch-action: pan-y pinch-zoom;">
               <ul class="uk-list uk-list-divider">
-                @if (resourceBundles?.length==0) {
-No services
-}
+                @if (resourceBundles?.length == 0) {
+                  No services
+                }
                 @for (resource of resourceBundles; track resource; let i = $index) {
 
                   @if (i < 5) {
-<div class="resource-list">
-                    <div class="resource-info name-overflow">{{getPayload(resource).name}}</div>
-                    <div class="resource-info" style="padding-left: 20px">{{resource.latestUpdateInfo.date | date: 'dd MMM yyyy'}}</div>
-                    <div class="resource-info status-column">
-                      @if (resource?.active === false) {
-<div class="inactive">
-                        <div class="uk-label uk-margin-small-right">Inactive</div>
+                    <div class="resource-list">
+                      <div class="resource-info name-overflow">{{ getPayload(resource).name }}</div>
+                      <div class="resource-info" style="padding-left: 20px">
+                        {{ resource.latestUpdateInfo.date | date: 'dd MMM yyyy' }}
                       </div>
-}
-                      @if (resource?.status==='approved') {
-<div class="approved">
-                        <div class="uk-label">Approved</div>
+                      <div class="resource-info status-column">
+                        @if (resource?.active === false) {
+                          <div class="inactive">
+                            <div class="uk-label uk-margin-small-right">Inactive</div>
+                          </div>
+                        }
+                        @if (resource?.status === 'approved') {
+                          <div class="approved">
+                            <div class="uk-label">Approved</div>
+                          </div>
+                        }
+                        @if (resource?.status === 'pending') {
+                          <div class="pending">
+                            <div class="uk-label">Pending</div>
+                          </div>
+                        }
+                        @if (resource?.status === 'rejected') {
+                          <div class="rejected">
+                            <div class="uk-label">Rejected</div>
+                          </div>
+                        }
                       </div>
-}
-                      @if (resource?.status==='pending') {
-<div class="pending">
-                        <div class="uk-label">Pending</div>
-                      </div>
-}
-                      @if (resource?.status==='rejected') {
-<div class="rejected">
-                        <div class="uk-label">Rejected</div>
-                      </div>
-}
                     </div>
-                  </div>
-}
-                
-}
+                  }
+
+                }
               </ul>
               <ul class="uk-list uk-list-divider">
-                @if (approvedResourceBundles?.length==0) {
-No approved services
-}
+                @if (approvedResourceBundles?.length == 0) {
+                  No approved services
+                }
                 @for (resource of approvedResourceBundles; track resource; let i = $index) {
 
                   @if (i < 5) {
-<div class="resource-list">
-                    <div class="resource-info name-overflow">{{getPayload(resource).name}}</div>
-                    <div class="resource-info" style="padding-left: 20px">{{resource.latestUpdateInfo.date | date: 'dd MMM yyyy'}}</div>
-                    <div class="resource-info status-column">
-                      @if (resource?.active === false) {
-<div class="inactive">
-                        <div class="uk-label uk-margin-small-right">Inactive</div>
+                    <div class="resource-list">
+                      <div class="resource-info name-overflow">{{ getPayload(resource).name }}</div>
+                      <div class="resource-info" style="padding-left: 20px">
+                        {{ resource.latestUpdateInfo.date | date: 'dd MMM yyyy' }}
                       </div>
-}
-                      <div class="approved">
-                        <div class="uk-label">Approved</div>
+                      <div class="resource-info status-column">
+                        @if (resource?.active === false) {
+                          <div class="inactive">
+                            <div class="uk-label uk-margin-small-right">Inactive</div>
+                          </div>
+                        }
+                        <div class="approved">
+                          <div class="uk-label">Approved</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-}
-                
-}
+                  }
+
+                }
               </ul>
               <ul class="uk-list uk-list-divider">
-                @if (pendingResourceBundles?.length==0) {
-No pending services
-}
+                @if (pendingResourceBundles?.length == 0) {
+                  No pending services
+                }
                 @for (resource of pendingResourceBundles; track resource; let i = $index) {
 
                   @if (i < 5) {
-<div class="resource-list">
-                    <div class="resource-info name-overflow">{{getPayload(resource).name}}</div>
-                    <div class="resource-info" style="padding-left: 20px">{{resource.latestUpdateInfo.date | date: 'dd MMM yyyy'}}</div>
-                    <div class="resource-info status-column">
-                      @if (resource?.active === false) {
-<div class="inactive">
-                        <div class="uk-label uk-margin-small-right">Inactive</div>
+                    <div class="resource-list">
+                      <div class="resource-info name-overflow">{{ getPayload(resource).name }}</div>
+                      <div class="resource-info" style="padding-left: 20px">
+                        {{ resource.latestUpdateInfo.date | date: 'dd MMM yyyy' }}
                       </div>
-}
-                      <div class="pending">
-                        <div class="uk-label">Pending</div>
+                      <div class="resource-info status-column">
+                        @if (resource?.active === false) {
+                          <div class="inactive">
+                            <div class="uk-label uk-margin-small-right">Inactive</div>
+                          </div>
+                        }
+                        <div class="pending">
+                          <div class="uk-label">Pending</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-}
-                
-}
+                  }
+
+                }
               </ul>
               <ul class="uk-list uk-list-divider">
-                @if (rejectedResourceBundles?.length==0) {
-No rejected services
-}
+                @if (rejectedResourceBundles?.length == 0) {
+                  No rejected services
+                }
                 @for (resource of rejectedResourceBundles; track resource; let i = $index) {
 
                   @if (i < 5) {
-<div class="resource-list">
-                    <div class="resource-info name-overflow">{{getPayload(resource).name}}</div>
-                    <div class="resource-info" style="padding-left: 20px">{{resource.latestUpdateInfo.date | date: 'dd MMM yyyy'}}</div>
-                    <div class="resource-info status-column">
-                      @if (resource?.active === false) {
-<div class="inactive">
-                        <div class="uk-label uk-margin-small-right">Inactive</div>
+                    <div class="resource-list">
+                      <div class="resource-info name-overflow">{{ getPayload(resource).name }}</div>
+                      <div class="resource-info" style="padding-left: 20px">
+                        {{ resource.latestUpdateInfo.date | date: 'dd MMM yyyy' }}
                       </div>
-}
-                      <div class="rejected">
-                        <div class="uk-label">Rejected</div>
+                      <div class="resource-info status-column">
+                        @if (resource?.active === false) {
+                          <div class="inactive">
+                            <div class="uk-label uk-margin-small-right">Inactive</div>
+                          </div>
+                        }
+                        <div class="rejected">
+                          <div class="uk-label">Rejected</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-}
-                
-}
+                  }
+
+                }
               </ul>
             </ul>
             <div class="uk-margin-medium-top">
               @if (resourceBundles?.length) {
-<a
-                 [routerLink]="['/provider/' + provider.id + '/dashboard/services']"
-                 class="uk-link">Show more...</a>
-}
+                <a [routerLink]="['/provider/' + provider.id + '/dashboard/services']" class="uk-link">Show more...</a>
+              }
             </div>
           </div>
 
-          @if (loggingInfo?.length>0) {
-<div class="uk-margin-large-top">
-            <div class="uk-card uk-card-default uk-card-body">
-              <h6 class="uk-margin-medium-bottom">Recent history of updates</h6>
-              <ul class="uk-list uk-list-divider">
-                @for (log of loggingInfo; track log; let i = $index) {
+          @if (loggingInfo?.length > 0) {
+            <div class="uk-margin-large-top">
+              <div class="uk-card uk-card-default uk-card-body">
+                <h6 class="uk-margin-medium-bottom">Recent history of updates</h6>
+                <ul class="uk-list uk-list-divider">
+                  @for (log of loggingInfo; track log; let i = $index) {
 
-                  <li>
-                    {{log.type | titlecase}} - {{log.actionType | titlecase}}<span class="uk-align-right">Update: {{log.date | date: 'dd MMM yyyy'}}</span>
-                  </li>
-                
-}
-              </ul>
-              <div class="uk-margin-medium-top">
-                @if (loggingInfo?.length>0) {
-<a
-                   [routerLink]="['/provider/' + provider.id + '/dashboard/history']"
-                   class="uk-link">Show more...</a>
-}
+                    <li>
+                      {{ log.type | titlecase }} - {{ log.actionType | titlecase }}<span
+                      class="uk-align-right">Update: {{ log.date | date: 'dd MMM yyyy' }}</span>
+                    </li>
+
+                  }
+                </ul>
+                <div class="uk-margin-medium-top">
+                  @if (loggingInfo?.length > 0) {
+                    <a
+                      [routerLink]="['/provider/' + provider.id + '/dashboard/history']"
+                      class="uk-link">Show more...</a>
+                  }
+                </div>
               </div>
             </div>
-          </div>
-}
+          }
         </div>
 
         <div class="uk-width-1-3">
@@ -177,17 +184,21 @@ No rejected services
               <h6 class="uk-margin-medium-bottom">Provider basic info</h6>
               <div>
                 <div class="statusLabel uk-text-italic">NAME</div>
-                <div class="uk-text-bold">{{provider.name}}</div>
+                <div class="uk-text-bold">{{ provider.name }}</div>
                 <div class="statusLabel uk-text-italic uk-margin-small-top">ABBREVIATION</div>
-                <div class="uk-text-bold">{{provider.abbreviation}}</div>
+                <div class="uk-text-bold">{{ provider.abbreviation }}</div>
                 <div class="statusLabel uk-text-italic uk-margin-small-top">WEBSITE</div>
-                <div class="uk-text-truncate uk-display-block"><a [href]="provider.website" target="_blank">{{provider.website}}</a></div>
+                <div class="uk-text-truncate uk-display-block">
+                  <a [href]="provider.website" target="_blank">{{ provider.website }}</a>
+                </div>
                 <div class="statusLabel uk-text-italic uk-margin-small-top">LEGAL ENTITY</div>
-                <div class="uk-text-bold">{{provider.legalEntity}}</div>
+                <div class="uk-text-bold">{{ provider.legalEntity }}</div>
                 <div class="statusLabel uk-text-italic uk-margin-small-top">LEGAL STATUS</div>
-                <div class="uk-text-bold">{{provider.legalStatus && vocabularies ? getVocabularyName('Provider legal status', provider.legalStatus) : '-'}}</div>
+                <div
+                  class="uk-text-bold">{{ provider.legalStatus && vocabularies ? getVocabularyName('Provider legal status', provider.legalStatus) : '-' }}
+                </div>
                 <div class="statusLabel uk-text-italic uk-margin-small-top">HOSTING LEGAL ENTITY</div>
-                <div class="uk-text-bold">{{provider.hostingLegalEntity ? provider.hostingLegalEntity : '-'}}</div>
+                <div class="uk-text-bold">{{ provider.hostingLegalEntity ? provider.hostingLegalEntity : '-' }}</div>
               </div>
             </div>
           </div>
