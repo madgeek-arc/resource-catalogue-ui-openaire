@@ -525,13 +525,6 @@ export class SurveyComponent implements OnInit, OnChanges {
   /** <-- Generate PDF **/
 
   /** other stuff --> **/
-  closeError() {
-    UIkit.alert('#errorAlert').close();
-    setTimeout(() => {
-      this.errorMessage.set('');
-    }, 550);
-  }
-
   closeSuccessAlert() {
     setTimeout(() => {
       UIkit.alert('#successAlert').close();

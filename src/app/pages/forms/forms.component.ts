@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, ElementRef, afterRenderEffect, inject, signal, viewChild } from '@angular/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -39,7 +40,17 @@ export class FormsComponent implements OnInit{
   readonly payloadAnswer = signal<object | null>(null); // Find a way to do this better
   readonly ready = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  private readonly errorAlert = viewChild<ElementRef<HTMLElement>>('errorAlert');
   editMode = false;
+
+  constructor() {
+    // A failed save takes the focus to its error, which also scrolls it into view: the Submit button can be far below.
+    afterRenderEffect(() => {
+      if (this.errorMessage()) {
+        this.errorAlert()?.nativeElement.focus();
+      }
+    });
+  }
 
   ngOnInit() {
     this.ready.set(false);
@@ -120,22 +131,14 @@ export class FormsComponent implements OnInit{
           next => {
             this.router.navigate([`/service/${next.id}/overview`]);
           },
-          error => {
-            console.error(error);
-            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId);
-            this.ready.set(true);
-          }
+          (error: HttpErrorResponse) => this.showSaveError(error)
         );
       } else {
         this.resourceService.postService(service).subscribe(
           next => {
             this.router.navigate([`/service/${next.id}/overview`]);
           },
-          error => {
-            console.error(error);
-            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId);
-            this.ready.set(true);
-          }
+          (error: HttpErrorResponse) => this.showSaveError(error)
         );
       }
     }
@@ -151,25 +154,23 @@ export class FormsComponent implements OnInit{
           next => {
             this.router.navigate([`/service/${next.id}/overview`]); //todo change page
           },
-          error => {
-            console.error(error);
-            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId);
-            this.ready.set(true);
-          }
+          (error: HttpErrorResponse) => this.showSaveError(error)
         );
       } else {
         this.resourceService.postDatasource(datasource).subscribe(
           next => {
             this.router.navigate([`/service/${next.id}/overview`]); //todo change page
           },
-          error => {
-            console.error(error);
-            this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId);
-            this.ready.set(true);
-          }
+          (error: HttpErrorResponse) => this.showSaveError(error)
         );
       }
     }
+  }
+
+  private showSaveError(error: HttpErrorResponse) {
+    console.error(error);
+    this.errorMessage.set(saveErrorMessage(error));
+    this.ready.set(true);
   }
 
   /** Sorts the vocabularies in place, adds RegionOrCountry, and returns the sub-vocabularies grouped by parent. */
@@ -217,4 +218,18 @@ export class FormsComponent implements OnInit{
     });
   }
 
+}
+
+/** What a failed save tells the user: the server's message, and its error code when it sent one. */
+function saveErrorMessage(error: HttpErrorResponse): string {
+  if (error.status === 0) {
+    return 'The server could not be reached. Please check your connection and try again.';
+  }
+  // The API answers with {message, transactionId}; a proxy or gateway may answer with text, or nothing.
+  const body: unknown = error.error;
+  const details = body && typeof body === 'object' ? body as {message?: string; transactionId?: string} : null;
+  const message = details?.message || (typeof body === 'string' && body.trim()) || `Saving failed: the server answered ${error.status} ${error.statusText}.`;
+  return details?.transactionId
+    ? `${message}\nFor more information please provide the error code to the system administrators.\nError Code: ${details.transactionId}`
+    : message;
 }

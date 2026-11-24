@@ -182,6 +182,12 @@ describe('dynamic form', () => {
       expect(error.textContent).toContain('There are missing fields at chapters');
       expect(document.activeElement).toBe(error);
       expect(error.querySelector('button.uk-alert-close')!.getAttribute('aria-label')).toBe('Close');
+
+      // UIkit fades the alert out from its close button, then fires hidden: the message goes with it.
+      error.dispatchEvent(new CustomEvent('hidden'));
+      fixture.detectChanges();
+      expect(survey.errorMessage()).toBe('');
+      expect(root.querySelector('#errorAlert')).toBeNull();
     });
   });
 });
