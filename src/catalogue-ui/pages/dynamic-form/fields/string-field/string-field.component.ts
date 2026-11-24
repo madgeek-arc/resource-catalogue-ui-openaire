@@ -85,7 +85,7 @@ export class StringFieldComponent implements OnInit {
         newOrder.push(Number(id));
     });
     for (let i = 0; i < newOrder.length; i++) {
-      if (newOrder[i] != i && (newOrder[i] > i+1 || newOrder[i] < i)) {
+      if (newOrder[i] !== i && (newOrder[i] > i+1 || newOrder[i] < i)) {
         this.move(i, newOrder[i]);
         break;
       }
@@ -136,8 +136,9 @@ export class StringFieldComponent implements OnInit {
   }
 
   /** value is the form value of the field this one depends on. */
-  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string) {
-    if (value?.toString() == enableValue) {
+  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string | null) {
+    // Compares as == did: the text when both are set, and an empty field matches a null enableValue.
+    if ((value?.toString() ?? null) === (enableValue ?? null)) {
       this.formControl.enable();
       this.hideField.set(false);
     } else {

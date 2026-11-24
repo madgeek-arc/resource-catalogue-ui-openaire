@@ -6,7 +6,6 @@ import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
-import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
 import {forkJoin, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 

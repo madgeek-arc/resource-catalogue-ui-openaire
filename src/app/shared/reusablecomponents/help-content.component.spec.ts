@@ -8,7 +8,7 @@ import {PageContent} from '../../entities/page-content';
 import {HelpContentService} from '../../services/help-content.service';
 import {AsideHelpContentComponent, HelpContentComponent} from './help-content.component';
 
-// The host is Eager like the search pages that use these components, so a host check refreshes the
+// The host is Eager, so every fixture check reaches the children; a host check refreshes the
 // children only when they marked themselves for check (OnPush) or read a changed signal.
 @Component({
   imports: [HelpContentComponent, AsideHelpContentComponent],
@@ -17,6 +17,7 @@ import {AsideHelpContentComponent, HelpContentComponent} from './help-content.co
     <app-aside-help-content #right position="right" />
     <p class="top-present">{{ top.isPresent() }}</p>
   `,
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
   changeDetection: ChangeDetectionStrategy.Eager
 })
 class HostComponent {

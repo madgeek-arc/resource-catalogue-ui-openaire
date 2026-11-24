@@ -103,8 +103,9 @@ export class RichTextFieldComponent implements OnInit {
   }
 
   /** value is the form value of the field this one depends on. */
-  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string) {
-    if (value?.toString() == enableValue) {
+  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string | null) {
+    // Compares as == did: the text when both are set, and an empty field matches a null enableValue.
+    if ((value?.toString() ?? null) === (enableValue ?? null)) {
       this.formControl.enable();
       this.hideField.set(false);
     } else {

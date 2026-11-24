@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output, signal } from '@angular/core';
+import { Component, OnChanges, ChangeDetectionStrategy, inject, input, output, signal } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -6,7 +6,6 @@ import {Section, Field, HandleBitSet, VocabularyLookup} from '../../domain/dynam
 import {Tab, Tabs} from '../../domain/tabs';
 import BitSet from 'bitset';
 
-import UIkit from 'uikit';
 import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.component';
 
 @Component({
@@ -73,7 +72,7 @@ export class ChapterEditComponent implements OnChanges{
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.fields()) {
       this.initializations();
       this.ready = true;

@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output, linkedSignal, signal } from '@angular/core';
+import { Component, OnChanges, OnInit, ChangeDetectionStrategy, inject, input, output, linkedSignal, signal } from '@angular/core';
 import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -83,7 +83,7 @@ export class SurveyComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     this.ready = false;
     if (this.answers())
       this.editMode = true;

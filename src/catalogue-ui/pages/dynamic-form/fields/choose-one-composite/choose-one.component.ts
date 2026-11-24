@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, input, output, signal } from '@angular/core';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
-import {Field, HandleBitSet, UiVocabulary, VocabularyLookup} from '../../../../domain/dynamic-form-model';
+import {Field, HandleBitSet, VocabularyLookup} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';

@@ -75,7 +75,7 @@ export class ReadMoreTextComponent extends ReadMoreComponent implements OnChange
     this.ngAfterContentInit();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.ngAfterContentInit();
   }
 }

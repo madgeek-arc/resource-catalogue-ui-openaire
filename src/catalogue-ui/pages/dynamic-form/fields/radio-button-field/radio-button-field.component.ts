@@ -74,7 +74,7 @@ export class RadioButtonFieldComponent implements OnInit {
   }
 
   /** other stuff--> **/
-  enableDisableField(value: unknown, enableValue: string) {
+  enableDisableField(value: unknown, enableValue: string | null) {
 
     if (value === enableValue) {
       this.formControl.enable();

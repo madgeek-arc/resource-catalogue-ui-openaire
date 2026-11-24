@@ -1,4 +1,3 @@
-import {Identifiable, Service} from './eic-model';
 
 export interface DatasourceDetails {
   id: string;

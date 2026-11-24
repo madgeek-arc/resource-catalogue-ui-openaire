@@ -1,4 +1,4 @@
-import {AbstractControl, PatternValidator, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {Observable, timer} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {FormControlService} from '../../services/form-control.service';
@@ -18,7 +18,7 @@ export function URLValidator(): ValidatorFn { //TODO Please validate me
 export const urlAsyncValidator = (formControlService: FormControlService, time = 0) => {
   return (control: AbstractControl): Observable<ValidationErrors> => {
     if (control.value === '' || control.value === null) {
-      return timer(time).pipe(map(res => {
+      return timer(time).pipe(map(() => {
         return new Observable<ValidationErrors>();
         })
       );

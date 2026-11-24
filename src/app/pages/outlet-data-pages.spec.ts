@@ -15,11 +15,13 @@ import {ProviderJoinComponent} from './provider/join/provider-join.component';
 import {ServiceFullHistoryComponent} from './service-dashboard/service-full-history.component';
 import {ServiceHistoryComponent} from './service-dashboard/service-history.component';
 
-// Stands in for the Eager parent pages (provider and service dashboards, service landing page): they pass their
+// Stands in for the parent pages (provider and service dashboards, service landing page): they pass their
 // data through [routerOutletData] and get it from the server after the child page is already shown.
+// Eager, so every fixture check passes the host's data down; the child page must pick it up by itself.
 @Component({
   imports: [RouterOutlet],
   template: '<router-outlet [routerOutletData]="data" />',
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
   changeDetection: ChangeDetectionStrategy.Eager
 })
 class ParentComponent {

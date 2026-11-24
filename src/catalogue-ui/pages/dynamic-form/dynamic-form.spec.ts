@@ -180,9 +180,11 @@ describe('controlTreeEvents', () => {
 describe('ReadMoreTextComponent', () => {
   afterEach(() => vi.useRealTimers());
 
+  // Eager, so every fixture check reaches the child, which (OnPush) refreshes only on its own triggers.
   @Component({
     imports: [ReadMoreTextComponent],
     template: '<read-more-text [maxHeight]="46" text="A long description" />',
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
     changeDetection: ChangeDetectionStrategy.Eager
   })
   class HostComponent {}

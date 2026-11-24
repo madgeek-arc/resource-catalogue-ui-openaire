@@ -15,7 +15,8 @@ export class Required {
 export interface Dependent {
   id: number;
   name: string;
-  value: string;
+  /** The value that enables this field; null in models where any value does (the service model's dependsOn). */
+  value: string | null;
 }
 
 export class TypeInfo {

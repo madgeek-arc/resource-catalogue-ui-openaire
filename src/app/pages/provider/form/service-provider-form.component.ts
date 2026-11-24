@@ -705,7 +705,7 @@ export class ServiceProviderFormComponent implements OnInit {
     if (this._hasUserConsent && this.edit) {
       // In edit mode the provider id comes from the :providerId route parameter.
       this.providerService.adminAcceptedTerms(this.providerId!, this.pendingProvider).subscribe(
-        res => {},
+        () => {},
         error => { console.log(error); },
         () => {}
       );
