@@ -3,8 +3,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import {EmailService} from '../../services/email.service';
 
-declare let UIkit: any;
-
 @Component({
     selector: 'app-email-modal',
     templateUrl: './email-modal.component.html',

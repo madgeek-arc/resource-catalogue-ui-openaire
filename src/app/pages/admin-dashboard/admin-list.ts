@@ -9,8 +9,6 @@ import {URLParameter} from '../../entities/url-parameter';
 import {ResourceService} from '../../services/resource.service';
 import {paging, SearchParameters} from '../search/search-state';
 
-declare let UIkit: any;
-
 /**
  * What the admin lists of providers, services and datasources share: the filters and paging in the query string,
  * the page of bundles they select, and the activate, verify and delete actions.

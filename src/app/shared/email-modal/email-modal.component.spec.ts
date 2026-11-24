@@ -29,7 +29,7 @@ describe('EmailModalComponent', () => {
     sendMail = vi.fn((_serviceIds: string[], _message: unknown) => response);
     hide = vi.fn();
     modal = vi.fn(() => ({hide}));
-    (globalThis as any).UIkit = {modal};
+    vi.stubGlobal('UIkit', {modal});
     TestBed.configureTestingModule({providers: [provideRouter([])]});
     // EmailService is provided by the component itself, so the mock replaces it there. The overridden
     // provider outlives a test, so it forwards to the current test's spy instead of holding one.
@@ -39,7 +39,7 @@ describe('EmailModalComponent', () => {
   });
 
   afterEach(() => {
-    delete (globalThis as any).UIkit;
+    vi.unstubAllGlobals();
   });
 
   const setUp = () => {

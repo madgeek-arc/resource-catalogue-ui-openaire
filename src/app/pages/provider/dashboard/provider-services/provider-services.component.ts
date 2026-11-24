@@ -11,8 +11,6 @@ import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {paging, SearchParameters} from '../../../search/search-state';
 
-declare let UIkit: any;
-
 @Component({
   selector: 'app-provider-services',
   templateUrl: 'provider-services.component.html',

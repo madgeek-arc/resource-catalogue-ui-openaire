@@ -9,8 +9,6 @@ import { LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
-declare let UIkit: any;
-
 @Component({
     selector: 'app-update-service-provider',
     templateUrl: './service-provider-form.component.html',
