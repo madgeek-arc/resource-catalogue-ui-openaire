@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {Facet, FacetValue} from '../../entities/facet';
-import {UiVocabulary} from '../../entities/dynamic-form-model';
+import {UiVocabulary} from '../../../catalogue-ui/domain/dynamic-form-model';
 
 @Pipe({ name: 'premiumSort' })
 export class PremiumSortPipe implements PipeTransform {

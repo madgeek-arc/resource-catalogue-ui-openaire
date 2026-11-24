@@ -1,7 +1,7 @@
 /**
  * Created by stefania on 7/17/17.
  */
-export class PageContent {
+export interface PageContent {
     content: PositionContents;
     route: string;
     _id: string;

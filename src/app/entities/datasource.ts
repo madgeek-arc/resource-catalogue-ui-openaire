@@ -1,6 +1,6 @@
 import {Identifiable, Service} from './eic-model';
 
-export class DatasourceDetails {
+export interface DatasourceDetails {
   id: string;
   openaireId: string;
   officialname: string;
@@ -31,13 +31,13 @@ export class DatasourceDetails {
   lastConsentTermsOfUseDate: Date;
   consentTermsOfUse: boolean;
   fullTextDownload: boolean;
-  organizations: OrganizationDetails[] = new Array<OrganizationDetails>();
+  organizations: OrganizationDetails[];
   identities: IdentitiesDetails[];
   status: string;
   typology: string;
 }
 
-export class OrganizationDetails {
+export interface OrganizationDetails {
   legalshortname: string;
   legalname: string;
   websiteurl: string;
@@ -45,12 +45,12 @@ export class OrganizationDetails {
   country: string;
 }
 
-export class IdentitiesDetails {
+export interface IdentitiesDetails {
   pid: string;
   issuertype: string;
 }
 
-export class DatasourceTypes {
+export interface DatasourceTypes {
   id: string;
   name: string;
   description: string;
@@ -58,7 +58,7 @@ export class DatasourceTypes {
   terms: Term[];
 }
 
-export class Term {
+export interface Term {
   englishName: string;
   nativeName: string;
   encoding: string;

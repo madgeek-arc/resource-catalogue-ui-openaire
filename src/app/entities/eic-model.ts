@@ -2,7 +2,7 @@
 /* eslint-disable */
 // Generated using typescript-generator version 2.16.538 on 2020-06-10 11:50:49.
 
-export class Bundle<T> implements Identifiable {
+export interface Bundle<T> extends Identifiable {
   id: string;
   metadata: Metadata;
   active: boolean;
@@ -19,7 +19,7 @@ export class Bundle<T> implements Identifiable {
   datasource: Datasource;
 }
 
-export class LoggingInfo {
+export interface LoggingInfo {
   date: string;
   userEmail: string;
   userFullName: string;
@@ -29,7 +29,7 @@ export class LoggingInfo {
   actionType: string;
 }
 
-export class EmailMessage {
+export interface EmailMessage {
   recipientEmail: string;
   senderEmail: string;
   senderName: string;
@@ -37,7 +37,7 @@ export class EmailMessage {
   message: string;
 }
 
-export class Event implements Identifiable {
+export interface Event extends Identifiable {
   id: string;
   instant: number;
   type: string;
@@ -46,17 +46,17 @@ export class Event implements Identifiable {
   value: string;
 }
 
-export class ExtrasMapType {
+export interface ExtrasMapType {
   entry: ExtrasType[];
 }
 
-export class XmlAdapter<ValueType, BoundType> {
+export interface XmlAdapter<ValueType, BoundType> {
 }
 
-export class ExtrasMapTypeAdapter extends XmlAdapter<ExtrasMapType, { [index: string]: string }> {
+export interface ExtrasMapTypeAdapter extends XmlAdapter<ExtrasMapType, { [index: string]: string }> {
 }
 
-export class ExtrasType {
+export interface ExtrasType {
   key: string;
   value: string;
 }
@@ -65,7 +65,7 @@ export interface Identifiable {
   id: string;
 }
 
-export class Indicator implements Identifiable {
+export interface Indicator extends Identifiable {
   id: string;
   name: string;
   description: string;
@@ -74,12 +74,12 @@ export class Indicator implements Identifiable {
   unitName: string;
 }
 
-export class ServiceBundle extends Bundle<any> {
-  override service: Service;
-  override datasource: Datasource;
+export interface ServiceBundle extends Bundle<any> {
+  service: Service;
+  datasource: Datasource;
 }
 
-export class Measurement implements Identifiable {
+export interface Measurement extends Identifiable {
   id: string;
   indicatorId: string;
   serviceId: string;
@@ -90,7 +90,7 @@ export class Measurement implements Identifiable {
   rangeValue: RangeValue;
 }
 
-export class Metadata {
+export interface Metadata {
   registeredBy: string;
   registeredAt: string;
   modifiedBy: string;
@@ -98,12 +98,12 @@ export class Metadata {
   source: string;
   originalId: string;
 }
-export class ProviderBundle extends Bundle<Provider> {
+export interface ProviderBundle extends Bundle<Provider> {
   templateStatus: string;
   provider: Provider;
 }
 
-export class Provider implements Identifiable {
+export interface Provider extends Identifiable {
   id: string;
   abbreviation: string;
   name: string;
@@ -135,7 +135,7 @@ export class Provider implements Identifiable {
   users: User[];
 }
 
-export class ProviderLocation {
+export interface ProviderLocation {
   streetNameAndNumber: string;
   postalCode: string;
   city: string;
@@ -143,7 +143,7 @@ export class ProviderLocation {
   country: string;
 }
 
-export class ProviderMainContact {
+export interface ProviderMainContact {
   firstName: string;
   lastName: string;
   email: string;
@@ -151,7 +151,7 @@ export class ProviderMainContact {
   position: string;
 }
 
-export class ProviderPublicContact {
+export interface ProviderPublicContact {
   firstName: string;
   lastName: string;
   email: string;
@@ -159,7 +159,7 @@ export class ProviderPublicContact {
   position: string;
 }
 
-export class ProviderRequest implements Identifiable {
+export interface ProviderRequest extends Identifiable {
   id: string;
   message: EmailMessage;
   date: string;
@@ -167,22 +167,22 @@ export class ProviderRequest implements Identifiable {
   read: boolean;
 }
 
-export class RangeValue {
+export interface RangeValue {
   fromValue: string;
   toValue: string;
 }
 
-export class ServiceProviderDomain {
+export interface ServiceProviderDomain {
   scientificDomain: string;
   scientificSubdomain: string;
 }
 
-export class ProviderMerilDomain {
+export interface ProviderMerilDomain {
   merilScientificDomain: string;
   merilScientificSubdomain: string;
 }
 
-export class ServiceCategory {
+export interface ServiceCategory {
   category: string;
   subcategory: string;
 }
@@ -213,7 +213,7 @@ export interface ServiceExtras {
   [key: string]: any;
 }
 
-export class Service implements Identifiable {
+export interface Service extends Identifiable {
   id: string;
   abbreviation: string;
   name: string;
@@ -273,10 +273,10 @@ export class Service implements Identifiable {
   extras: ServiceExtras;
 }
 
-export class Datasource extends Service implements Identifiable {
-  override id: string;
+export interface Datasource extends Service, Identifiable {
+  id: string;
   serviceId: string;
-  override catalogueId: string;
+  catalogueId: string;
   submissionPolicyURL: URL;
   preservationPolicyURL: URL;
   versionControl: boolean;
@@ -292,38 +292,38 @@ export class Datasource extends Service implements Identifiable {
   researchProductMetadataAccessPolicies: string[];
 }
 
-export class MultimediaPair {
+export interface MultimediaPair {
   multimediaURL: URL;
   multimediaName: string;
 }
 
-export class UseCasesPair {
+export interface UseCasesPair {
   useCaseURL: URL;
   useCaseName: string;
 }
 
-export class PersistentIdentitySystem {
+export interface PersistentIdentitySystem {
   persistentIdentityEntityType: string;
   persistentIdentityEntityTypeSchemes: string[];
 }
 
-export class ResearchProductLicensing {
+export interface ResearchProductLicensing {
   researchProductLicenseName: string;
   researchProductLicenseURL: URL;
 }
 
-export class ResearchProductMetadataLicensing {
+export interface ResearchProductMetadataLicensing {
   researchProductMetadataLicenseName: string;
   researchProductMetadataLicenseURL: URL;
 }
 
-export class ServiceHistory extends Metadata {
+export interface ServiceHistory extends Metadata {
   version: string;
   versionChange: boolean;
   coreVersionId: string;
 }
 
-export class ServiceMainContact {
+export interface ServiceMainContact {
   firstName: string;
   lastName: string;
   email: string;
@@ -332,7 +332,7 @@ export class ServiceMainContact {
   organisation: string;
 }
 
-export class ServicePublicContact {
+export interface ServicePublicContact {
   firstName: string;
   lastName: string;
   email: string;
@@ -341,14 +341,14 @@ export class ServicePublicContact {
   organisation: string;
 }
 
-export class User implements Identifiable {
+export interface User extends Identifiable {
   id: string;
   email: string;
   name: string;
   surname: string;
 }
 
-export class Vocabulary implements Identifiable {
+export interface Vocabulary extends Identifiable {
   id: string;
   name: string;
   description: string;
@@ -357,7 +357,7 @@ export class Vocabulary implements Identifiable {
   extras: { [index: string]: string };
 }
 
-export class VocabularyEntryRequest {
+export interface VocabularyEntryRequest {
   // id: string;
   userId: string;
   resourceId: string;
@@ -366,7 +366,7 @@ export class VocabularyEntryRequest {
   resourceType: string;
 }
 
-export class VocabularyCuration implements Identifiable {
+export interface VocabularyCuration extends Identifiable {
   vocabularyEntryRequests: VocabularyEntryRequest[];
   id: string;
   entryValueName: string;
@@ -378,48 +378,48 @@ export class VocabularyCuration implements Identifiable {
   resolutionUser: string;
 }
 
-export class Category {
+export interface Category {
   superCategory: Vocabulary;
   category: Vocabulary;
   subCategory: Vocabulary;
 }
 
-export class MapValues {
+export interface MapValues {
   key: string;
   values: Value[];
 }
 
-export class PlaceCount {
+export interface PlaceCount {
   place: string;
   count: number;
 }
 
-export class ProviderInfo {
+export interface ProviderInfo {
   providerId: string;
   providerName: string;
   providerAbbreviation: string;
   resourceOrganisation: boolean;
 }
 
-export class ScientificDomain {
+export interface ScientificDomain {
   domain: Vocabulary;
   subdomain: Vocabulary;
 }
 
-export class Value {
+export interface Value {
   id: string;
   name: string;
 }
 
-export class VocabularyTree {
+export interface VocabularyTree {
   vocabulary: Vocabulary;
   children: VocabularyTree[];
 }
 
-export class XMLGregorianCalendar implements Cloneable {
+export interface XMLGregorianCalendar extends Cloneable {
 }
 
-export class URL implements Serializable {
+export interface URL extends Serializable {
 }
 
 export interface Cloneable {

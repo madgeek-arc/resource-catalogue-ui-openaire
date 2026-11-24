@@ -1,3 +1,3 @@
-export class SearchQuery {
+export interface SearchQuery {
   query: string;
 }

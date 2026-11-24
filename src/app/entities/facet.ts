@@ -1,7 +1,7 @@
 /**
  * Created by stefania on 9/10/16.
  */
-export class Facet {
+export interface Facet {
     field: string;
     label: string;
     values: FacetValue[];
