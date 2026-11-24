@@ -22,7 +22,7 @@ export class PortfolioItemComponent {
   ).pipe(
     map(([portfolioVoc, response]) => ({portfolioVoc, response})),
     catchError(error => {
-      console.log(error);
+      console.error(error);
       return EMPTY;
     })
   ), {initialValue: null});

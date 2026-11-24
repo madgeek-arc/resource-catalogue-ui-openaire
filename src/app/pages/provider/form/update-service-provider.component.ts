@@ -72,7 +72,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
       .subscribe(
       provider => this.provider = provider,
       err => {
-        console.log(err);
+        console.error(err);
         this.errorMessage.set('Something went wrong.');
       },
       () => {

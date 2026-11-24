@@ -96,9 +96,7 @@ export class AdminDashboardComponent {
     textArea.focus();
     textArea.select();
     try {
-      if (document.execCommand('copy')) {
-        console.log('copied');
-      }
+      document.execCommand('copy');
     } catch (error) {
       console.error('Fallback: Oops, unable to copy', error);
     }

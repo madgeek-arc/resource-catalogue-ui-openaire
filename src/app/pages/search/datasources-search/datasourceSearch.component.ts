@@ -40,7 +40,7 @@ export class DatasourceSearchComponent {
 
   readonly datasourceTypes = toSignal(this.datasourceService.getDatasourceTypes().pipe(
     catchError(error => {
-      console.log(error);
+      console.error(error);
       return EMPTY;
     })
   ), {initialValue: null});

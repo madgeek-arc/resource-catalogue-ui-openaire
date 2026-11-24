@@ -78,7 +78,7 @@ describe('Datasource', () => {
   });
 
   it('logs a failed search and keeps the page usable for the next one', async () => {
-    const quiet = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const {root, answer, go, text} = await open('/datasource/zenodo');
 
     answers['zenodo'].error({status: 500});

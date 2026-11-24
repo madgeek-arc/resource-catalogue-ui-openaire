@@ -112,7 +112,7 @@ describe('ServiceLandingPageComponent', () => {
 
   it('shows the service without related services when they fail to load', async () => {
     related.mockReturnValue(throwError(() => 'server down'));
-    vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const {root, answer, text} = await setUp('/service/argos/overview');
 
     answer('argos', makeService('argos', 'Plan your data', ['zenodo']));
@@ -120,7 +120,7 @@ describe('ServiceLandingPageComponent', () => {
     expect(root.querySelector('.loader-big')).toBeNull();
     expect(text()).toContain('Plan your data');
     expect(text()).not.toContain('Zenodo');
-    vi.mocked(console.log).mockRestore();
+    vi.mocked(console.error).mockRestore();
   });
 
   it('highlights the tab the user moves to', async () => {

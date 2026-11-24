@@ -68,7 +68,7 @@ export class FormsComponent implements OnInit{
               this.model.set(model);
               this.payloadAnswer.set({answer: {[this.sectionName]: next[0]}});
             },
-            error => {console.log(error);},
+            error => {console.error(error);},
             () => this.ready.set(true)
           );
         } else { // add new
@@ -83,13 +83,13 @@ export class FormsComponent implements OnInit{
               this.subVocabulariesMap.set(subVocabularies);
               this.model.set(next[0].results[0]);
             },
-            error => {console.log(error);},
+            error => {console.error(error);},
             () => this.ready.set(true)
           );
         }
 
       },
-      error => {console.log(error);}
+      error => {console.error(error);}
     );
   }
 
@@ -121,7 +121,7 @@ export class FormsComponent implements OnInit{
             this.router.navigate([`/service/${next.id}/overview`]);
           },
           error => {
-            console.log(error);
+            console.error(error);
             this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId);
             this.ready.set(true);
           }
@@ -132,7 +132,7 @@ export class FormsComponent implements OnInit{
             this.router.navigate([`/service/${next.id}/overview`]);
           },
           error => {
-            console.log(error);
+            console.error(error);
             this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. \nError Code: '+ error.error.transactionId);
             this.ready.set(true);
           }
@@ -152,7 +152,7 @@ export class FormsComponent implements OnInit{
             this.router.navigate([`/service/${next.id}/overview`]); //todo change page
           },
           error => {
-            console.log(error);
+            console.error(error);
             this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId);
             this.ready.set(true);
           }
@@ -163,7 +163,7 @@ export class FormsComponent implements OnInit{
             this.router.navigate([`/service/${next.id}/overview`]); //todo change page
           },
           error => {
-            console.log(error);
+            console.error(error);
             this.errorMessage.set(error.error.message + '\nFor more information please provide the error code to the system administrators. Error Code: '+ error.error.transactionId);
             this.ready.set(true);
           }

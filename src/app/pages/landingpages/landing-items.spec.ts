@@ -24,7 +24,7 @@ describe('landing pages for a portfolio, a user type and home', () => {
   let resources: Record<string, ReturnType<typeof vi.fn>>;
 
   beforeEach(() => {
-    vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
     resources = {
       getVocabularyById: vi.fn((id: string) => of(vocabulary(id, id === 'researchers' ? 'Researchers' : 'Data'))),
       getServicesByVocabularyTypeAndId: vi.fn(() => of(page(service('argos', 'Argos')))),
@@ -47,7 +47,7 @@ describe('landing pages for a portfolio, a user type and home', () => {
     });
   });
 
-  afterEach(() => vi.mocked(console.log).mockRestore());
+  afterEach(() => vi.mocked(console.error).mockRestore());
 
   const open = async (url: string) => {
     const fixture = TestBed.createComponent(AppHostComponent);

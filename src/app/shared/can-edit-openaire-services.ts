@@ -17,7 +17,7 @@ export function canEditOpenAireServices(): Signal<boolean> {
       ? resourceService.getMyServiceProviders().pipe(
         map(providers => providers.some(provider => provider.id === 'openaire')),
         catchError(error => {
-          console.log(error);
+          console.error(error);
           return of(false);
         }))
       : of(false))

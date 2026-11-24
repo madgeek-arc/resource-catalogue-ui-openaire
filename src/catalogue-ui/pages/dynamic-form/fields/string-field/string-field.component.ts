@@ -52,7 +52,7 @@ export class StringFieldComponent implements OnInit {
         value => {
             this.enableDisableField(value, dependsOn.value);
           },
-        error => {console.log(error);}
+        error => {console.error(error);}
       );
     }
 

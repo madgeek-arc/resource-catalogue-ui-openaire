@@ -21,7 +21,7 @@ export class Datasource {
   readonly datasource = toSignal(this.route.params.pipe(
     switchMap(params => this.datasourceService.getDatasourceById(params['datasourceId']).pipe(
       catchError(error => {
-        console.log(error);
+        console.error(error);
         return EMPTY;
       })
     )),

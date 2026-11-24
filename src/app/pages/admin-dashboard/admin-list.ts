@@ -137,7 +137,7 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
   protected verify(request: Observable<unknown>) {
     request.subscribe({
       next: () => this.reload.next(),
-      error: error => console.log(error)
+      error: error => console.error(error)
     });
   }
 

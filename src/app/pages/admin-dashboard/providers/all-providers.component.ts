@@ -35,7 +35,7 @@ export class AllProvidersDashboardComponent extends AdminListComponent<ProviderB
       },
       error: error => {
         UIkit.modal('#deletionModal').hide();
-        console.log(error);
+        console.error(error);
       }
     });
   }

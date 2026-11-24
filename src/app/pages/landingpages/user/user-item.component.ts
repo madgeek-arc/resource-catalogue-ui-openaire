@@ -34,7 +34,7 @@ export class UserItemComponent {
       map(portfoliosMap => ({userVoc, portfolios, portfoliosMap}))
     )),
     catchError(error => {
-      console.log(error);
+      console.error(error);
       return EMPTY;
     })
   ), {initialValue: null});
@@ -45,7 +45,7 @@ export class UserItemComponent {
     return this.resourceService.getServicesSnippetByUserContentAndPortfolioType(userType, portfolio === 'all' ? undefined : portfolio).pipe(
       map(paging => [portfolio, paging.results] as [string, Service[]]),
       catchError(error => {
-        console.log(error);
+        console.error(error);
         return of(null);
       })
     );

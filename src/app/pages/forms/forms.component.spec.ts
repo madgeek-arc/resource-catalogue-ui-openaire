@@ -109,7 +109,7 @@ describe('FormsComponent', () => {
   });
 
   it('shows what the server said and hides the loader when saving fails', async () => {
-    const quiet = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
     const {root, settle, loader} = await open('/service/edit/argos');
     services.next({id: 'argos', name: 'Argos'});

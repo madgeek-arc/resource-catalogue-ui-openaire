@@ -146,7 +146,7 @@ describe('provider forms', () => {
     });
 
     it('says so when the provider fails to load', async () => {
-      const quiet = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+      const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       const {fixture, text} = await open('/provider/openaire/update');
       vocabularies.next(noVocabularies());
       providers.error({status: 500});

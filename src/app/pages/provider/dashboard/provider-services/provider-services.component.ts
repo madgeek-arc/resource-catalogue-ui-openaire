@@ -70,7 +70,7 @@ export class ProviderServicesComponent {
   ).pipe(
     map(([users, portfolios, resourceState]) => ({names: users.concat(portfolios), resourceState})),
     catchError(error => {
-      console.log(error);
+      console.error(error);
       return EMPTY;
     })
   ), {initialValue: null});

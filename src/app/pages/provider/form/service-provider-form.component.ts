@@ -453,7 +453,7 @@ export class ServiceProviderFormComponent implements OnInit {
         this.premiumSort.transform(res['Country'], ['Europe', 'Worldwide']);
         this.vocabularies.set(res);
       },
-      error => console.log(JSON.stringify(error.error))
+      error => console.error(JSON.stringify(error.error))
     );
   }
 
@@ -706,7 +706,7 @@ export class ServiceProviderFormComponent implements OnInit {
       // In edit mode the provider id comes from the :providerId route parameter.
       this.providerService.adminAcceptedTerms(this.providerId!, this.pendingProvider).subscribe(
         () => {},
-        error => { console.log(error); },
+        error => { console.error(error); },
         () => {}
       );
     }

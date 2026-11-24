@@ -65,7 +65,7 @@ export class HomeAireComponent {
 /** A failed load leaves its section hidden, as before. */
 function orNull<T>(source: Observable<T>): Observable<T | null> {
   return source.pipe(catchError(error => {
-    console.log(error);
+    console.error(error);
     return of(null);
   }));
 }
