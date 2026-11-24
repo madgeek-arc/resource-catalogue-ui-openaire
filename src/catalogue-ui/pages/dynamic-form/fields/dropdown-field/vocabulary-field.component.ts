@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, DestroyRef, signal } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
-import {Field, HandleBitSet, vocabularyName} from '../../../../domain/dynamic-form-model';
+import {Field, HandleBitSet, vocabularyName, VocabularyLookup} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import {URLValidator} from '../../../../shared/validators/generic.validator';
@@ -25,8 +25,8 @@ export class VocabularyFieldComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]> | null>(null);
-  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly vocabularies = input<VocabularyLookup | null>(null);
+  readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly editMode = input<any>(undefined);
   readonly position = input<number | null>(null);
 
@@ -126,7 +126,8 @@ export class VocabularyFieldComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  enableDisableField(value) {
+  /** value is the form value of the field this one depends on: a vocabulary id, or empty. */
+  enableDisableField(value: string | null) {
     this.dynamicVoc.set([]);
     // Only called for a field that depends on another.
     const dependsOn = this.fieldData().form.dependsOn!;

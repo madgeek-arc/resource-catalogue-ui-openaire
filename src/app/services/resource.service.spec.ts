@@ -133,6 +133,29 @@ describe('ResourceService', () => {
       expect(obj).toEqual({keep: 'x', zero: 0, nested: {kept: 1, list: ['a']}});
     });
 
+    it('drops every empty entry of a list, also two in a row, without leaving holes', () => {
+      const obj: Record<string, unknown> = {list: ['', '', 'a', null, null, 'b', '']};
+      ResourceService.removeNulls(obj);
+
+      expect(obj).toEqual({list: ['a', 'b']});
+      // A hole would be sent to the API as null.
+      expect(JSON.stringify(obj)).toBe('{"list":["a","b"]}');
+    });
+
+    it('drops an emptied list inside a list without leaving a hole', () => {
+      const obj: Record<string, unknown> = {lists: [[null, ''], ['a']]};
+      ResourceService.removeNulls(obj);
+
+      expect(JSON.stringify(obj)).toBe('{"lists":[["a"]]}');
+    });
+
+    it('cleans every object of a list, also when an empty entry comes before it', () => {
+      const obj: Record<string, unknown> = {contacts: ['', {name: 'Ann', phone: ''}, {name: '', email: 'b@x'}]};
+      ResourceService.removeNulls(obj);
+
+      expect(JSON.stringify(obj)).toBe('{"contacts":[{"name":"Ann"},{"email":"b@x"}]}');
+    });
+
     it('clears the default "en" language of an empty multilingual value', () => {
       const obj: Record<string, unknown> = {title: {value: '', lang: 'en'}};
       ResourceService.removeNulls(obj);

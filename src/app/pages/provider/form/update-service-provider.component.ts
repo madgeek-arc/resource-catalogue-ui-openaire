@@ -19,7 +19,8 @@ declare let UIkit: any;
     imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
 export class UpdateServiceProviderComponent extends ServiceProviderFormComponent implements OnInit {
-  provider: Provider;
+  /** Set by getProvider() before the form is filled from it. */
+  provider!: Provider;
 
   override ngOnInit() {
     this.edit = true;

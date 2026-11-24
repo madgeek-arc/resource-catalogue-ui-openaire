@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
-import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
+import {Field, HandleBitSet, UiVocabulary, VocabularyLookup} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, FormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
@@ -31,8 +31,8 @@ export class CompositeFieldComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]> | null>(null);
-  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly vocabularies = input<VocabularyLookup | null>(null);
+  readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly editMode = input<any>(undefined);
   readonly readonly = input<boolean | null>(null);
   readonly position = input<number | null>(null);
@@ -41,7 +41,8 @@ export class CompositeFieldComponent implements OnInit {
   readonly handleBitSets = output<Field>();
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  form: UntypedFormGroup;
+  /** The field's group in the parent form, looked up in ngOnInit. */
+  form!: UntypedFormGroup;
   readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
@@ -84,10 +85,12 @@ export class CompositeFieldComponent implements OnInit {
     this.fieldAsFormArray().push(this.formService.createCompositeField(compositeField));
   }
 
-  movedElement(e, ) {
+  /** UIkit's sortable fires moved on the list; its children carry their old position as id. */
+  movedElement(e: Event) {
     const newOrder: number[] = [];
-    e.target.childNodes.forEach(child => {
-      newOrder.push(child.id);
+    (e.target as HTMLElement).childNodes.forEach(child => {
+      // Number() compares and moves exactly as the id string did before (a child without an id compares as NaN).
+      newOrder.push(Number((child as Element).id));
     });
     // console.log(newOrder);
     for (let i = 0; i < newOrder.length-1; i++) {
@@ -143,10 +146,7 @@ export class CompositeFieldComponent implements OnInit {
 
   updateBitSetOfComposite(fieldData: Field, position: number) {
     if (fieldData.form.mandatory) {
-      const tmp = new HandleBitSet();
-      tmp.field = fieldData;
-      tmp.position = position;
-      this.handleBitSetsOfComposite.emit(tmp);
+      this.handleBitSetsOfComposite.emit({field: fieldData, position});
     }
   }
 
@@ -167,7 +167,7 @@ export class CompositeFieldComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  enableDisableField(value) {
+  enableDisableField(value: unknown) {
     // console.log(value);
     if (value === 'Applicable' || value === 'Yes') {
       this.form.enable();

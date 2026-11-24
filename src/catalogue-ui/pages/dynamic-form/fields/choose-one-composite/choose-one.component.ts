@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, input, output, signal } from '@angular/core';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
-import {Field, HandleBitSet, UiVocabulary} from '../../../../domain/dynamic-form-model';
+import {Field, HandleBitSet, UiVocabulary, VocabularyLookup} from '../../../../domain/dynamic-form-model';
 import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
@@ -21,8 +21,8 @@ export class ChooseOneComponent implements OnInit {
   private formService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly vocabularies = input<Map<string, object[]> | null>(null);
-  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly vocabularies = input<VocabularyLookup | null>(null);
+  readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly editMode = input<any>(undefined);
   readonly position = input<number | null>(null);
 
@@ -30,7 +30,8 @@ export class ChooseOneComponent implements OnInit {
   readonly handleBitSets = output<Field>();
   readonly handleBitSetsOfComposite = output<HandleBitSet>();
 
-  form: UntypedFormGroup;
+  /** The field's group in the parent form, looked up in ngOnInit. */
+  form!: UntypedFormGroup;
   readonly hideField = signal<boolean | null>(null);
 
   ngOnInit() {
@@ -100,10 +101,7 @@ export class ChooseOneComponent implements OnInit {
 
   updateBitSetOfComposite(fieldData: Field, position: number) {
     if (fieldData.form.mandatory) {
-      const tmp = new HandleBitSet();
-      tmp.field = fieldData;
-      tmp.position = position;
-      this.handleBitSetsOfComposite.emit(tmp);
+      this.handleBitSetsOfComposite.emit({field: fieldData, position});
     }
   }
 
@@ -124,7 +122,7 @@ export class ChooseOneComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  enableDisableField(value) {
+  enableDisableField(value: unknown) {
     // console.log(value);
     if (value === 'Applicable') {
       this.form.enable();

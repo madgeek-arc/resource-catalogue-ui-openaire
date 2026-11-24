@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
-import {Field, HandleBitSet} from '../../../domain/dynamic-form-model';
+import {Field, HandleBitSet, VocabularyLookup} from '../../../domain/dynamic-form-model';
 import { CompositeFieldComponent } from './composite-field/composite-field.component';
 import { ChooseOneComponent } from './choose-one-composite/choose-one.component';
 import { StringFieldComponent } from './string-field/string-field.component';
@@ -20,8 +20,8 @@ import { DateFieldComponent } from './date-field/date-field.component';
 export class DynamicFormFieldsComponent {
   readonly fieldData = input.required<Field>();
   readonly form = input.required<UntypedFormGroup>();
-  readonly vocabularies = input<Map<string, object[]> | null>(null);
-  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly vocabularies = input<VocabularyLookup | null>(null);
+  readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly editMode = input<any>(undefined);
   readonly readonly = input<boolean | null>(null);
 
@@ -41,10 +41,7 @@ export class DynamicFormFieldsComponent {
 
   updateBitSetOfComposite(fieldData: Field, position: number) {
     if (fieldData.form.mandatory) {
-      const tmp = new HandleBitSet();
-      tmp.field = fieldData;
-      tmp.position = position;
-      this.handleBitSetsOfComposite.emit(tmp);
+      this.handleBitSetsOfComposite.emit({field: fieldData, position});
     }
   }
 

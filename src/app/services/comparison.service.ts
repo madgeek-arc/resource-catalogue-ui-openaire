@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import {NavigationService} from './navigation.service';
 import {Service} from '../entities/eic-model';
-
-declare let UIkit;
+import UIkit from 'uikit';
 
 @Injectable({providedIn: 'root'})
 export class ComparisonService {

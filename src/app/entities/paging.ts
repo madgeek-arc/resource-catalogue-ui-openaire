@@ -1,6 +1,6 @@
 import { Facet } from './facet';
 
-export class Paging<T> {
+export interface Paging<T> {
 
     from: number;
     to: number;
@@ -10,16 +10,12 @@ export class Paging<T> {
     facets: Facet[];
 }
 
-export class SpringPaging<T> { // Spring paging with facets
+export interface SpringPaging<T> { // Spring paging with facets
   page: Page<T>;
   facets: Facet[];
-
-  constructor() {
-    this.page = new Page<T>();
-  }
 }
 
-export class Page<T> {
+export interface Page<T> {
   content: T[];
   pageable: Pageable;
   last: boolean;
@@ -33,13 +29,13 @@ export class Page<T> {
   empty: boolean;
 }
 
-export class Sort {
+export interface Sort {
   empty: boolean;
   sorted: boolean;
   unsorted: boolean;
 }
 
-export class Pageable {
+export interface Pageable {
   sort: Sort;
   offset: number;
   pageNumber: number;

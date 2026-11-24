@@ -1,4 +1,4 @@
-export class Description {
+export interface Description {
   desc: string;
   label: string;
   mandatory?: boolean;

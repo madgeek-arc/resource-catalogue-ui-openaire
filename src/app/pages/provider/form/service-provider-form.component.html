@@ -83,48 +83,48 @@
                     <div class="uk-width-1-4">
                       <div class="tabsTitle uk-margin-bottom">Provider Profile Information Blocks</div>
                       <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs" uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
-                        <li [class.uk-active]="0 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[0]" (click)="selectTab(0)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[0]" href="#">
                             <span>1. Basic *</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="1 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[1]" (click)="selectTab(1)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[1]" href="#">
                             <span>2. Marketing *</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="2 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[2]" (click)="selectTab(2)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[2]" href="#">
                             <span>3. Classification</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="3 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[3]" (click)="selectTab(3)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[3]" href="#">
                             <span>4. Location *</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="4 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[4]" (click)="selectTab(4)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[4]" href="#">
                             <span>5. Contact *</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="5 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[5]" (click)="selectTab(5)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[5]" href="#">
                             <span>6. Maturity</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="6 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[6]" (click)="selectTab(6)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[6]" href="#">
                             <span>7. Dependencies</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="7 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[7]" (click)="selectTab(7)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[7]" href="#">
                             <span>8. Other</span>
                           </a>
                         </li>
-                        <li [class.uk-active]="8 === selectedTab" [class.form-error]="tabsError">
-                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[8]" (click)="selectTab(8)" href="#">
+                        <li [class.form-error]="tabsError">
+                          <a class="remove-text-decoration uk-flex uk-flex-between" [class.form-error]="tabsError[8]" href="#">
                             <span>9. Admins *</span>
                           </a>
                         </li>
@@ -537,7 +537,7 @@
                             <!--                                  </select>-->
                             <ng-select class="uk-width-9-10" id="country"
                               [class.uk-form-danger]="checkFormValidity('location.country', this.edit)"
-                              [items]="placesVocabulary()"
+                              [items]="placesVocabulary() ?? []"
                               (change)="unsavedChangesPrompt()"
                               bindLabel="name"
                               bindValue="id"
@@ -795,7 +795,7 @@
                           <div class="uk-flex uk-flex-left">
                             <ng-select class="uk-width-9-10" id="participatingCountries"
                               [class.uk-form-danger]="checkFormArrayValidity('participatingCountries', i, this.edit)"
-                              [items]="placesVocabulary()"
+                              [items]="placesVocabulary() ?? []"
                               (change)="unsavedChangesPrompt()"
                               bindLabel="name"
                               bindValue="id"

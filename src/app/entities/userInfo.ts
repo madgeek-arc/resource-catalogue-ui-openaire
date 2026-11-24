@@ -1,7 +1,7 @@
 /**
  * Created by stefania on 8/30/16.
  */
-export class UserInfo {
+export interface UserInfo {
   sub: string;
   name: string;
   surname: string;

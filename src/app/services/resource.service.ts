@@ -1,8 +1,9 @@
+import {FormControlService} from '../../catalogue-ui/services/form-control.service';
 import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {skipNotFoundRedirect} from './authentication-interceptor';
 import {environment} from '../../environments/environment';
-import {Provider, Service, ServiceHistory, Vocabulary, Type, Datasource, Bundle} from '../entities/eic-model';
+import {Provider, Service, ServiceHistory, Vocabulary, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
@@ -19,30 +20,9 @@ export class ResourceService {
   private oa = this.base + '/oa';
   private options = {withCredentials: true};
 
-  static removeNulls(obj) {
-    const isArray = obj instanceof Array;
-    for (const k in obj) {
-      if (obj[k] === null || obj[k] === '') {
-        isArray ? obj.splice(Number(k), 1) : delete obj[k];
-      } else if (typeof obj[k] === 'object') {
-        if (typeof obj[k].value !== 'undefined' && typeof obj[k].lang !== 'undefined') {
-          if (obj[k].value === '' && obj[k].lang === 'en') {
-            obj[k].lang = '';
-          }
-        }
-        ResourceService.removeNulls(obj[k]);
-      }
-      if (obj[k] instanceof Array && obj[k].length === 0) {
-        delete obj[k];
-      } else if (obj[k] instanceof Array) {
-        for (const l in obj[k]) {
-          if (obj[k][l] === null || obj[k][l] === '') {
-            delete obj[k][l];
-          }
-        }
-      }
-    }
-  }
+  /** The same walk as FormControlService.removeNulls, which this used to copy. */
+  static removeNulls = FormControlService.removeNulls;
+
 
   getServiceOrDatasource(resourceId: string): Observable<Service | Datasource> { //todo: get rid of this
     return this.http.get<Service>(this.oa + `/services/${resourceId}`, {...this.options, context: skipNotFoundRedirect()}).pipe(
@@ -104,16 +84,18 @@ export class ResourceService {
     return this.http.get<Vocabulary>(this.base + `/vocabularies/${id}`);
   }
 
+  /** Vocabularies by type: a JSON object, not a Map. */
   getAllVocabulariesByType() {
-    return this.http.get<Map<Type, Vocabulary[]>>(this.base + `/vocabularies/byType`);
+    return this.http.get<Record<string, Vocabulary[]>>(this.base + `/vocabularies/byType`);
   }
 
   getNewVocabulariesByType(type: string) {
     return this.http.get<Vocabulary[]>(this.base + `/vocabularies/byType/${type}`);
   }
 
+  /** Vocabularies by type: a JSON object, not a Map. */
   getUiVocabularies() {
-    return this.http.get<Map<string, object[]>>(this.base + `/vocabularies/mappings`);
+    return this.http.get<Record<string, Vocabulary[]>>(this.base + `/vocabularies/mappings`);
   }
 
   getServicesByVocabularyTypeAndId(type: string, id?: string) {

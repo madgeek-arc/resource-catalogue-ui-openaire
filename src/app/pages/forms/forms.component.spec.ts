@@ -27,7 +27,7 @@ const field = (id: string, name: string, type: string, subFields: Field[] | null
 };
 
 // The service form model, cut down to a name and the two lists the page tidies before saving.
-const model = (): Model => Object.assign(new Model(), {
+const model = (): Model => Object.assign({} as Model, {
   name: 'Service form', resourceType: 'service',
   sections: [Object.assign(new Section(), {
     id: 'service', name: 'service', order: 1, fields: null, subSections: [

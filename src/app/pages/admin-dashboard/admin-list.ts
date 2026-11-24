@@ -91,7 +91,7 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
   /** Called by the template too; null removes the parameter, and ng-select option objects give their value. */
   updateURLParameters(key: string, value: unknown) {
     if (value instanceof Object) {
-      value = value['$ngOptionValue'];
+      value = (value as Record<string, unknown>)['$ngOptionValue'];
     }
     if (value === null) {
       this.parameters.remove(key);

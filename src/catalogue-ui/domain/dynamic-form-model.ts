@@ -1,4 +1,5 @@
-import BitSet from 'bitset';
+/** Vocabularies by type (or sub-vocabularies by parent id): a JSON object from the API, indexed by name, not a Map. */
+export type VocabularyLookup = Record<string, object[]>;
 
 export class Required {
   topLevel: number;
@@ -11,7 +12,7 @@ export class Required {
   }
 }
 
-export class Dependent {
+export interface Dependent {
   id: number;
   name: string;
   value: string;
@@ -130,6 +131,7 @@ export class Field {
     this.parent = '';
     this.label = new StyledText();
     this.accessPath = '';
+    this.kind = '';
     this.typeInfo = new TypeInfo();
     this.includedInSnippet = false;
     this.form = new Form();
@@ -152,8 +154,11 @@ export class Section {
     this.id = null;
     this.name = '';
     this.description = null;
-    this.subSections = [];
+    this.subType = '';
     this.order = 0;
+    this.subSections = [];
+    this.fields = [];
+    this.required = new Required();
   }
 }
 
@@ -176,7 +181,7 @@ export class GroupedFields {
   }
 }
 
-export class Model {
+export interface Model {
   id: string;
   name: string;
   description: string;
@@ -191,36 +196,12 @@ export class Model {
   locked: boolean;
 }
 
-export class UiVocabulary {
+export interface UiVocabulary {
   id: string;
   name: string;
 }
 
-export class Tab {
-  valid: boolean;
-  order: number;
-  requiredOnTab: number;
-  remainingOnTab: number;
-  bitSet: BitSet;
-
-  constructor() {
-    this.valid = false;
-    this.order = 0;
-    this.requiredOnTab = 0;
-    this.remainingOnTab = 0;
-  }
-
-}
-
-export class Tabs {
-  tabs: Map<string, Tab>;
-  requiredTabs: number;
-  completedTabs: number;
-  completedTabsBitSet: BitSet;
-  requiredTotal: number;
-}
-
-export class HandleBitSet {
+export interface HandleBitSet {
   field: Field;
   position: number;
 }

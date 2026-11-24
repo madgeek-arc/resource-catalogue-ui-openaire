@@ -1,12 +1,12 @@
 import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output, linkedSignal, signal } from '@angular/core';
 import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
+import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
-import {Section, Field, Model, Tabs} from '../../domain/dynamic-form-model';
+import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Columns, Content, DocDefinition, PdfImage, PdfMetadata, PdfTable, TableDefinition} from '../../domain/PDFclasses';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import BitSet from 'bitset';
 
 import seedRandom from 'seedrandom';
 
@@ -32,8 +32,8 @@ export class SurveyComponent implements OnInit, OnChanges {
   readonly model = input<Model | null>(null);
   readonly subType = input<string | null>(null);
   readonly activeUsers = input<any[] | null>(null);
-  readonly vocabulariesMap = input<Map<string, object[]> | null>(null);
-  readonly subVocabularies = input<Map<string, object[]> | null>(null);
+  readonly vocabulariesMap = input<VocabularyLookup | null>(null);
+  readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly tabsHeader = input<string | null>(null);
   readonly mandatoryFieldsText = input<string | null>(null);
 
@@ -56,9 +56,8 @@ export class SurveyComponent implements OnInit, OnChanges {
   readonly chapterChangeMap = signal(new Map<string, boolean>());
   currentChapter: Section | null = null;
   chapterForSubmission: Section | null = null;
-  sortedSurveyAnswers: object = {};
+  sortedSurveyAnswers: Record<string, unknown> = {};
   editMode = false;
-  bitset: Tabs = new Tabs();
 
   ready = false;
   readonly = false;
@@ -200,23 +199,17 @@ export class SurveyComponent implements OnInit, OnChanges {
     window.scrollTo(0, 0);
     // this.showLoader = true;
     // this.formControlService.postItem(this.surveyAnswers.id, this.form.get(this.chapterForSubmission.name).value, this.editMode).subscribe(
-    let postMethod = '';
-    let firstParam = '';
-    if (this.answers()?.id) {
-      postMethod = 'postItem';
-      firstParam = this.answers().id;
-    } else {
-      postMethod = 'postGenericItem';
-      firstParam = this.loadedModel().resourceType;
-    }
-    this.formControlService[postMethod](firstParam, this.form.value, this.editMode).subscribe(
+    const request = this.answers()?.id
+      ? this.formControlService.postItem(this.answers().id, this.form.value, this.editMode)
+      : this.formControlService.postGenericItem(this.loadedModel().resourceType, this.form.value, this.editMode);
+    request.subscribe(
       res => {
         this.successMessage.set('Updated successfully!');
         this.chapterChangeMap.update(changes => new Map([...changes.keys()].map(key => [key, false])));
         UIkit.modal('#unsaved-changes-modal').hide();
         this.answers.set(res);
       },
-      error => {
+      (error: HttpErrorResponse) => {
         this.errorMessage.set('Something went bad, server responded: ' + JSON.stringify(error?.error?.message));
         UIkit.modal('#unsaved-changes-modal').hide();
         // this.showLoader = false;
@@ -305,7 +298,7 @@ export class SurveyComponent implements OnInit, OnChanges {
     return field;
   }
 
-  searchSubFields(fields: Field[], name): Field | null {
+  searchSubFields(fields: Field[], name: string): Field | null {
     let field: Field | null = null;
     for (let j = 0; j < fields.length; j++) {
       if(fields[j].name === name) {
@@ -323,7 +316,8 @@ export class SurveyComponent implements OnInit, OnChanges {
     // Callers ask for array fields; the control found under that name is returned as an array, as before.
     let abstractControl: AbstractControl | null = null;
     for (const key in group.controls) {
-      abstractControl = group.controls[key];
+      // A form array's controls are indexed by position; for...in gives those positions as strings.
+      abstractControl = (group.controls as Record<string, AbstractControl>)[key];
       if (abstractControl instanceof UntypedFormGroup || abstractControl instanceof UntypedFormArray) {
         if (key === name) {
           return abstractControl as UntypedFormArray;
@@ -430,7 +424,7 @@ export class SurveyComponent implements OnInit, OnChanges {
         docDefinition.content.push(content);
       } else if (field.typeInfo.type === 'largeText' || field.typeInfo.type === 'richText') {
         if (answerValues?.[0]) {
-          docDefinition.content.push(new PdfTable(new TableDefinition([[this.strip(answerValues[0])]], ['*']), ['mt_1']));
+          docDefinition.content.push(new PdfTable(new TableDefinition([[this.strip(answerValues[0] as string)]], ['*']), ['mt_1']));
         } else {
           docDefinition.content.push(new PdfTable(new TableDefinition([['']],['*'], [48]), ['mt_1']));
         }
@@ -495,15 +489,16 @@ export class SurveyComponent implements OnInit, OnChanges {
 
   }
 
-  findVal(obj, key) {
+  /** Every value of key at the shallowest depth where it appears in obj, breadth first; null if none. */
+  findVal(obj: unknown, key: string): unknown[] | null {
     if (!obj)
       return null;
-    const seen = new Set(); let active = [obj];
+    const seen = new Set(); let active: object[] = [obj as object];
     while (active.length) {
       const new_active: object[] = []; const found: unknown[] = [];
       for (let i=0; i<active.length; i++) {
         Object.keys(active[i]).forEach(function(k){
-          const x = active[i][k];
+          const x = (active[i] as Record<string, unknown>)[k];
           if (k === key) {
             found.push(x);
           } else if (x && typeof x === 'object' &&
@@ -519,7 +514,7 @@ export class SurveyComponent implements OnInit, OnChanges {
     return null;
   }
 
-  strip(html){
+  strip(html: string): string {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || '';
   }

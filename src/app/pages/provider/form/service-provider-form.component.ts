@@ -1,3 +1,4 @@
+import {HttpErrorResponse} from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import * as sd from '../../../entities/services.description';
@@ -44,10 +45,11 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly providerName = signal('');
   readonly errorMessage = signal('');
   userInfo = {family_name: '', given_name: '', email: ''};
-  newProviderForm: UntypedFormGroup;
+  /** Built in ngOnInit from formDefinition. */
+  newProviderForm!: UntypedFormGroup;
   logoUrl = '';
   /** All vocabularies by type; null until they have loaded, which the template waits for. */
-  readonly vocabularies = signal<Map<string, Vocabulary[]> | null>(null);
+  readonly vocabularies = signal<Record<string, Vocabulary[]> | null>(null);
   premiumSort = new PremiumSortPipe();
   edit = false;
   hasChanges = false;
@@ -55,14 +57,12 @@ export class ServiceProviderFormComponent implements OnInit {
   disable = false;
   readonly showLoader = signal(false);
   tabsError: boolean[] = [false, false, false, false, false, false, false, false];
-  selectedTab = 0;
-  selectTab(index: number): void {this.selectedTab = index;}
   isPortalAdmin = false;
 
   codeOfConduct = false;
   privacyPolicy = false;
   authorizedRepresentative = false;
-  agreedToTerms: boolean;
+  agreedToTerms = false;
 
   readonly fullNameDesc: sd.Description = sd.providerDescMap.get('fullNameDesc');
   readonly abbreviationDesc: sd.Description = sd.providerDescMap.get('abbreviationDesc');
@@ -272,7 +272,7 @@ export class ServiceProviderFormComponent implements OnInit {
     this.errorMessage.set('');
     // this.trimFormWhiteSpaces();
     const path = this.route.snapshot.routeConfig!.path!;
-    let method;
+    let method: 'updateAndPublishPendingProvider' | 'updateServiceProvider' | 'createNewServiceProvider';
     if (path === 'add/:providerId') {
       method = 'updateAndPublishPendingProvider';
     } else {
@@ -340,8 +340,8 @@ export class ServiceProviderFormComponent implements OnInit {
         );
       } else {
         this.providerService[method](this.newProviderForm.value, this.providerId).subscribe(
-          res => {},
-          err => {
+          () => {},
+          (err: HttpErrorResponse) => {
             this.showLoader.set(false);
             window.scrollTo(0, 0);
             this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
@@ -607,7 +607,7 @@ export class ServiceProviderFormComponent implements OnInit {
     this.usersArray.push(this.user());
   }
 
-  deleteUser(index) {
+  deleteUser(index: number) {
     if (this.usersArray.length === 1) {
       this.errorMessage.set('There must be at least one provider!');
       window.scrollTo(0, 0);
@@ -630,11 +630,18 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** <-- User Array**/
 
-  getSortedChildrenCategories(childrenCategory: Vocabulary[], parentId: string) {
-    return this.sortVocabulariesByName(childrenCategory.filter(entry => entry.parentId === parentId));
+  /**
+   * The template checks each vocabulary before using it, but only a type missing from the API's answer is null,
+   * and the call inside the check doesn't narrow it; that case gives no options.
+   */
+  getSortedChildrenCategories(childrenCategory: Vocabulary[] | null, parentId: string) {
+    return this.sortVocabulariesByName(childrenCategory?.filter(entry => entry.parentId === parentId) ?? null);
   }
 
-  sortVocabulariesByName(vocabularies: Vocabulary[]): Vocabulary[] {
+  sortVocabulariesByName(vocabularies: Vocabulary[] | null): Vocabulary[] {
+    if (!vocabularies) {
+      return [];
+    }
     return vocabularies.sort((vocabulary1, vocabulary2) => {
       if (vocabulary1.name > vocabulary2.name) {
         return 1;
@@ -678,12 +685,12 @@ export class ServiceProviderFormComponent implements OnInit {
     this.hasChanges = true;
   }
 
-  timeOut(ms) {
+  timeOut(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /** Terms Modal--> **/
-  toggleTerm(term) {
+  toggleTerm(term: 'privacyPolicy' | 'authorizedRepresentative') {
     if (term === 'privacyPolicy') {
       this.privacyPolicy = !this.privacyPolicy;
     } else if (term === 'authorizedRepresentative') {

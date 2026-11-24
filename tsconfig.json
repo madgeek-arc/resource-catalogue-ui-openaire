@@ -3,8 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    // TypeScript 6 turns strict on by default; the strict flags are switched on one by one later instead.
-    "strict": false,
+    "strict": true,
     "declaration": false,
     "module": "es2020",
     "moduleResolution": "bundler",
@@ -15,18 +14,12 @@
       "node_modules/@types"
     ],
     "useDefineForClassFields": false,
-    // The strict flags that are on so far; noImplicitAny follows once its errors are fixed.
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "noImplicitThis": true,
-    "useUnknownInCatchVariables": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
+    // Checks that strict does not include.
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true
   },
-  // Shared by the app and spec builds. Template type errors are fixed and this is switched on later.
+  // Shared by the app and spec builds.
   "angularCompilerOptions": {
     "strictTemplates": true
   }

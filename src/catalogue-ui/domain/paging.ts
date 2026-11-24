@@ -1,6 +1,6 @@
 import { Facet } from './facet';
 
-export class Paging<T> {
+export interface Paging<T> {
 
     from: number;
     to: number;
