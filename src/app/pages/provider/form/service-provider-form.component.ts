@@ -57,8 +57,6 @@ export class ServiceProviderFormComponent implements OnInit {
   disable = false;
   readonly showLoader = signal(false);
   tabsError: boolean[] = [false, false, false, false, false, false, false, false];
-  selectedTab = 0;
-  selectTab(index: number): void {this.selectedTab = index;}
   isPortalAdmin = false;
 
   codeOfConduct = false;

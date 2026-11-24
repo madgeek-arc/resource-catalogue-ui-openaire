@@ -95,6 +95,25 @@ describe('provider forms', () => {
       expect(name()).not.toBeNull();
     });
 
+    // uk-tab switches the panel only when the clicked tab is not marked active yet, so the template must not mark it.
+    it('leaves the active tab to UIkit', async () => {
+      const {fixture, root, answer} = await open('/provider/add');
+      answer(vocabularies, noVocabularies());
+      const list = root.querySelector('ul.form-tabs')!;
+      const tabs = [...list.children];
+      // In the app zone.js checks the view after each listener: after Angular's on the link, before UIkit's on the list.
+      tabs.forEach(tab => tab.addEventListener('click', () => fixture.detectChanges()));
+      let activeWhenUIkitRuns: boolean | undefined;
+      list.addEventListener('click', event => {
+        event.preventDefault();
+        activeWhenUIkitRuns = tabs[2].classList.contains('uk-active');
+      });
+
+      tabs[2].querySelector('a')!.click();
+
+      expect(activeWhenUIkitRuns).toBe(false);
+    });
+
     it('marks the missing fields and their tab when submitted empty', async () => {
       const {fixture, root, answer, text, name} = await open('/provider/add');
       answer(vocabularies, noVocabularies());
