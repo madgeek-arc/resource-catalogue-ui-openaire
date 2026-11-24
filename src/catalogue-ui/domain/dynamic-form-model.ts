@@ -23,8 +23,11 @@ export class TypeInfo {
   values: string[];
   vocabulary: string | null;
   multiplicity: boolean;
-  /** Newer form models give a vocabulary field a URL instead of a vocabulary name. */
-  properties?: {url?: string; idField?: string; labelField?: string; urlParams?: any};
+  /**
+   * Newer form models give a vocabulary field a URL instead of a vocabulary name. urlParams (null when unused) fill a
+   * placeholder in that URL from another field's value, e.g. {placeholder: 'parentId', valueFromField: 'scientificDomain'}.
+   */
+  properties?: {url?: string; idField?: string; labelField?: string; urlParams?: {placeholder: string; valueFromField: string}[] | null};
 
 
   constructor() {
