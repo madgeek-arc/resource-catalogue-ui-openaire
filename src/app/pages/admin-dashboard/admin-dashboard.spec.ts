@@ -152,6 +152,50 @@ describe('admin dashboard', () => {
       expect(root.querySelector<HTMLInputElement>('input#email')!.value).toBe('');
     });
 
+    it('says whether copying the invitation link worked, trying the old copy command when the clipboard refuses', async () => {
+      const {fixture, root, settle} = await open('/admin/providers');
+      userInfo.next({roles: ['ADMIN']});
+      await settle();
+      const email = root.querySelector<HTMLInputElement>('input#email')!;
+      email.value = 'ada@example.org';
+      email.dispatchEvent(new Event('input'));
+      await settle();
+      [...root.querySelectorAll('button')].find(button => button.textContent!.includes('Create invitation token'))!.click();
+      await settle();
+      const copy = root.querySelector<HTMLButtonElement>('#invite-modal button[aria-label="Copy invitation link"]')!;
+      const status = () => root.querySelector('#invite-modal [role="status"]')!.textContent;
+      expect(status()).toBe('');
+      // The copy awaits the clipboard's promise, which settles after the zone has gone stable; settle() would also
+      // wait out the timer that clears the message, so this renders once instead.
+      const copied = async () => {
+        await new Promise(resolve => setTimeout(resolve));
+        fixture.detectChanges();
+      };
+
+      const writeText = vi.fn(() => Promise.resolve());
+      const execCommand = vi.fn(() => false);
+      Object.defineProperty(navigator, 'clipboard', {value: {writeText}, configurable: true});
+      Object.defineProperty(document, 'execCommand', {value: execCommand, configurable: true});
+      try {
+        copy.click();
+        await copied();
+        expect(writeText).toHaveBeenCalledWith(location.origin + '/join/t0ken');
+        expect(status()).toBe('Copied');
+        expect(copy.textContent!.trim()).toBe('check');
+
+        writeText.mockRejectedValueOnce(new DOMException('Denied', 'NotAllowedError'));
+        copy.click();
+        await copied();
+        expect(execCommand).toHaveBeenCalledWith('copy');
+        expect(status()).toBe('Copy failed');
+        expect(copy.textContent!.trim()).toBe('content_copy');
+        expect(document.activeElement).not.toBeInstanceOf(HTMLTextAreaElement);
+      } finally {
+        Reflect.deleteProperty(navigator, 'clipboard');
+        Reflect.deleteProperty(document, 'execCommand');
+      }
+    });
+
     it('does not offer invitations to other users', async () => {
       const {settle, inviteButton} = await open('/admin/providers');
       userInfo.next({roles: ['USER']});
