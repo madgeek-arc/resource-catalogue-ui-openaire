@@ -15,9 +15,12 @@
       <!--To add multiplicity if needed-->
     </div>
   } @else {
+    <!-- The picker closes its calendar on Enter. Unlike the other fields, this one has no inner form of its own, so
+      the key's default would submit the chapter form and save the whole resource: cancel only that default. -->
     <dp-date-picker [formControlName]="fieldData().name" [id]="fieldData().name" class="uk-width-9-10"
       [placeholder]="fieldData().form.placeholder ? fieldData().form.placeholder : ''"
       (input)="updateBitSet(fieldData()); unsavedChangesPrompt()" [config]="{format: 'YYYY-MM-DD'}"
+      (keydown.enter)="$event.preventDefault()"
     [class.uk-form-danger]="checkFormValidity()" />
     @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">

@@ -49,7 +49,8 @@ const model = (): Model => Object.assign({} as Model, {
         field('7', 'summary', 'largeText', {values: ['100']})
       ]),
       group('contact', 'Contact', 2, [
-        field('5', 'contact', 'composite', {subFields: [field('6', 'email', 'email', {mandatory: true})]})
+        field('5', 'contact', 'composite', {subFields: [field('6', 'email', 'email', {mandatory: true})]}),
+        field('8', 'lastUpdate', 'date')
       ])
     ]
   })]
@@ -165,6 +166,20 @@ describe('dynamic form', () => {
 
     expect(submitted).toEqual([[survey.form, false]]);
     expect(bubbled).not.toHaveBeenCalled();
+  });
+
+  it('keeps Enter in the date field from submitting the chapter, which the field has no inner form to stop', async () => {
+    const {root, survey} = await open(null);
+    const submitted = vi.fn();
+    survey.submit.subscribe(submitted);
+    const date = root.querySelector<HTMLInputElement>('dp-date-picker[id="lastUpdate"] input')!;
+    expect(date.form!.id).toBe('chapter-form-service');
+
+    const enter = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true});
+    date.dispatchEvent(enter);
+
+    expect(enter.defaultPrevented).toBe(true);
+    expect(submitted).not.toHaveBeenCalled();
   });
 
   describe('when validation finds missing fields', () => {
