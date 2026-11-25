@@ -35,7 +35,7 @@ export class HomeAireComponent {
 
   readonly portfolioList = toSignal(orNull(this.resourceService.getNewVocabulariesByType('Portfolios')), {initialValue: null});
   readonly userList = toSignal(orNull(this.resourceService.getNewVocabulariesByType('Users')), {initialValue: null});
-  readonly resourceMap = toSignal(orNull(this.resourceService.getResourcesGroupedByField('portfolios', true)), {initialValue: null});
+  readonly resourceMap = toSignal(orNull(this.resourceService.getResourcesGroupedByField('portfolios')), {initialValue: null});
 
   /** The user type each slideshow shows, for its dot navigation. */
   readonly slide = signal(0);

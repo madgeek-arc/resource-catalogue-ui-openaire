@@ -65,7 +65,7 @@ export class AireTopMenuComponent {
     this.dataSharingService.refreshRequired.pipe(
       filter(refresh => refresh),
       // A failed load is caught here so that the next refresh still loads; refreshRequired stays true, as before.
-      switchMap(() => this.resourceService.getResourcesGroupedByField('portfolios', true).pipe(
+      switchMap(() => this.resourceService.getResourcesGroupedByField('portfolios').pipe(
         catchError(error => {
           console.error(error);
           return EMPTY;
