@@ -25,8 +25,11 @@
               "src/catalogue-ui/assets",
               "src/manifest.webmanifest"
             ],
+            "inlineStyleLanguage": "less",
             "styles": [
-              "src/styles.scss",
+              "src/catalogue-ui/styles/service-catalogue-theme.less",
+              "src/assets/css/theme.css",
+              "src/styles.less",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
             "scripts": [
@@ -146,7 +149,8 @@
       "setParserOptionsProject": true
     },
     "@schematics/angular:component": {
-      "type": "component"
+      "type": "component",
+      "style": "less"
     },
     "@schematics/angular:directive": {
       "type": "directive"

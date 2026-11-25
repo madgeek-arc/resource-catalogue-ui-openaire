@@ -1,0 +1,18 @@
+/*
+ * Project-wide styles. angular.json loads the global styles in cascade order:
+ * 1. catalogue-ui/styles/service-catalogue-theme.less (the dynamic form's theme)
+ * 2. assets/css/theme.css, a precompiled YOOtheme 2.5.8 theme with UIkit 3.7's CSS. It stays a vendored .css file,
+ *    loaded on its own: LESS would read its unquoted remote font import as a LESS file. The UIkit upgrade replaces it
+ *    with a build from UIkit's LESS sources.
+ * 3. this file
+ * 4. Font Awesome
+ */
+
+@import 'styles/theme.update.less';
+@import 'styles/openaire-custom.less';
+@import 'styles/sidebar.less';
+@import 'styles/history-timeline.less';
+@import 'styles/dashboard.less';
+
+/* ng-select theme */
+@import (inline) '@ng-select/ng-select/themes/default.theme.css';

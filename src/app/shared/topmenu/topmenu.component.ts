@@ -14,7 +14,7 @@ import { KeyValuePipe } from '@angular/common';
 @Component({
     selector: 'app-top-menu-aire',
     templateUrl: './topmenu.component.html',
-    styleUrls: ['./topmenu.component.css'],
+    styleUrls: ['./topmenu.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [RouterLink, KeyValuePipe]
 })

@@ -9,7 +9,7 @@ import {ResourceService} from '../../services/resource.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.aire.component.html',
-  styleUrls: ['./home.aire.component.css'],
+  styleUrls: ['./home.aire.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, SlicePipe]
 })

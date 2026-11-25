@@ -33,7 +33,7 @@ export type CookieLawTarget = '_blank' | '_self';
             transition('* => *', animate('1000ms ease-out')),
         ])
     ],
-    styleUrls: ['./cookie-law.css'],
+    styleUrls: ['./cookie-law.less'],
     templateUrl: './cookie-law.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {'[attr.seen]': 'seen() || null'}

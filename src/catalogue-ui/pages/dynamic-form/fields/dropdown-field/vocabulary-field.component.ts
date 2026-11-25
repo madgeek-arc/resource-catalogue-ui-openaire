@@ -11,7 +11,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 @Component({
     selector: 'app-vocabulary-field',
     templateUrl: './vocabulary-field.component.html',
-    styleUrls: ['./vocabulary-field.component.scss'],
+    styleUrls: ['./vocabulary-field.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ReactiveFormsModule, NgSelectComponent]
 })
