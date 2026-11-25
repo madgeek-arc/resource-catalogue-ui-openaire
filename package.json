@@ -41,7 +41,7 @@
     "rxjs": "^7.8.2",
     "seedrandom": "^3.0.5",
     "tslib": "^2.0.0",
-    "uikit": "3.7.6"
+    "uikit": "3.25.31"
   },
   "devDependencies": {
     "@angular-eslint/builder": "22.7.0",

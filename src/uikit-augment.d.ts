@@ -1,4 +1,4 @@
-// @types/uikit (3.14, the nearest to UIkit 3.7) leaves out UIkit.getComponent and a slideshow's current index,
+// UIkit ships no types, and @types/uikit (3.14, the latest) leaves out UIkit.getComponent and a slideshow's current index,
 // which the slideshow dot navigation on the home and service overview pages reads.
 import 'uikit';
 

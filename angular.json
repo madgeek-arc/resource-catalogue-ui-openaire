@@ -28,7 +28,7 @@
             "inlineStyleLanguage": "less",
             "styles": [
               "src/catalogue-ui/styles/service-catalogue-theme.less",
-              "src/assets/css/theme.css",
+              "src/styles/uikit/uikit.less",
               "src/styles.less",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],

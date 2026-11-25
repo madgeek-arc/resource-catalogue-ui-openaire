@@ -5,7 +5,7 @@ apply: always
 # Project: resource-catalogue-ui-openaire – Angular
 ## Stack
 - Frontend: Angular 22, TypeScript 6, RxJS 7.8, Node 24 (`.nvmrc`); tests with Vitest (`npm test`)
-- Target: TypeScript strict, Signals, LESS. Today `strict` and `strictTemplates` are on, and the styles are LESS except `src/assets/css/theme.css`, the precompiled UIkit 3.7 theme that the UIkit upgrade replaces
+- Target: TypeScript strict, Signals, LESS. Today `strict` and `strictTemplates` are on, and all styles are LESS; UIkit 3.25 is built from its LESS sources in `src/styles/uikit/`
 
 ## Web platform guidance
 - This project's Baseline target is Baseline 2025.

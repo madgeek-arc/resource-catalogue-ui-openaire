@@ -1,0 +1,135 @@
+//
+// Rules the YOOtheme Pro 2.5.8 theme (the old src/assets/css/theme.css) applied outside UIkit's components and that
+// the templates still rely on. Each block can go once no template needs it.
+//
+
+// UIkit override attempted: UIkit's base sets no overflow on html or body. The old theme kept a vertical scrollbar
+// and clipped horizontal overflow of the body, so pages neither jump nor scroll sideways.
+html { overflow-y: scroll; }
+body { overflow: hidden; }
+
+// UIkit override attempted: UIkit leaves plain form elements to the browser. The old theme normalised them, and
+// templates still use plain <button>, <input>, <select>, <textarea>, <label> and <table> outside UIkit classes.
+button,
+input,
+select,
+textarea {
+    margin: 0;
+    font-size: 100%;
+    vertical-align: middle;
+}
+button,
+input { line-height: normal; }
+button {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+select,
+input[type="checkbox"],
+label { cursor: pointer; }
+table {
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+hr:not([class*="uk-divider"]) { box-shadow: 0 1px 0 @theme-border-highlight; }
+.uk-table tbody tr { transition: background-color 0.1s linear; }
+
+// UIkit override attempted: .uk-input and .uk-checkbox style these controls, but several templates (the search
+// filters, the dynamic form) render plain text inputs and checkboxes. These rules give them the UIkit look until the
+// templates carry the UIkit classes; the values are UIkit's form variables.
+input:not([class*="uk-"]) { margin-left: 0; }
+input[disabled]:not([class*="uk-"]) {
+    cursor: not-allowed;
+    background-color: @global-muted-background;
+}
+input[type="text"]:not([class*="uk-"]) {
+    box-sizing: border-box;
+    display: inline-block;
+    max-width: 100%;
+    width: 100%;
+    height: @form-height;
+    margin: 0;
+    padding: 0 @form-padding-horizontal;
+    border: 0 none;
+    border-radius: @theme-pill-radius;
+    overflow: visible;
+    font: inherit;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    background: @form-background;
+    color: @form-color;
+    transition: 0.2s ease-in-out;
+    transition-property: color, background-color, border-color, box-shadow;
+    box-shadow: inset 3px 3px 6px rgba(57,65,124,0.1), inset -3px -3px 6px #fff;
+
+    &:focus {
+        outline: 0;
+        background-color: @form-focus-background;
+        color: @form-focus-color;
+        box-shadow: inset 1px 1px 2px rgba(80,110,140,0.2), inset -1px -1px 2px #fff;
+    }
+    &:disabled {
+        background-color: @form-disabled-background;
+        color: @form-disabled-color;
+        box-shadow: inset 1px 1px 1px rgba(80,110,140,0.25), inset -1px -1px 4px rgba(255,255,255,0.6);
+    }
+    &::placeholder { color: @form-placeholder-color; }
+}
+input[type="checkbox"]:not([class*="uk-"]) {
+    box-sizing: border-box;
+    display: inline-block;
+    height: @form-radio-size;
+    width: @form-radio-size;
+    margin: 0;
+    margin-top: @form-radio-margin-top;
+    border-radius: 0;
+    overflow: hidden;
+    font: inherit;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: @form-radio-background;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    transition: 0.2s ease-in-out;
+    transition-property: background-color, border-color, box-shadow;
+    box-shadow: inset 1px 1px 2px rgba(80,110,140,0.2), inset -1px -1px 2px rgba(255,255,255,0.9);
+
+    &:not(:disabled) { cursor: pointer; }
+    &:focus {
+        outline: 0;
+        background-color: @form-radio-focus-background;
+        box-shadow: inset 1px 1px 1px rgba(80,110,140,0.2), inset -1px -1px 1px rgba(255,255,255,0.7);
+    }
+    &:checked,
+    &:indeterminate { background-color: @form-radio-checked-background; }
+    &:checked { .svg-fill(@internal-form-checkbox-image, "#000", @form-radio-checked-icon-color); }
+    &:indeterminate { .svg-fill(@internal-form-checkbox-indeterminate-image, "#000", @form-radio-checked-icon-color); }
+    &:checked:focus,
+    &:indeterminate:focus { background-color: @form-radio-checked-focus-background; }
+}
+
+// UIkit override attempted: the classes below come from the old theme's Joomla/Bootstrap layer, not UIkit; templates
+// still use them (.text-info, .text-center, .badge-success, .uk-font-primary).
+.text-info { color: @global-primary-background; }
+.text-center { text-align: center; }
+.badge-success {
+    background-color: @global-success-background;
+    color: #fff;
+}
+.uk-font-primary {
+    font-family: inherit;
+    font-weight: 600;
+}
+
+// UIkit override attempted: the tm-* layout classes belong to the YOOtheme template, which UIkit doesn't ship; the
+// header and sidebar markup in the top menu and search pages still use them.
+.tm-header,
+.tm-header-mobile { position: relative; }
+.tm-header-mobile-slide { z-index: 1020; }
+.tm-grid-expand > * { flex-grow: 1; }
+@media (min-width: @breakpoint-small) {
+    .tm-sidebar { min-width: 200px; }
+}
