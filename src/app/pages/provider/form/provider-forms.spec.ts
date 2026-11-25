@@ -3,7 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {TestBed} from '@angular/core/testing';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
-import {of, Subject} from 'rxjs';
+import {of, Subject, throwError} from 'rxjs';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {HelpContentService} from '../../../services/help-content.service';
 import {ProviderService} from '../../../services/provider.service';
@@ -48,11 +48,13 @@ describe('provider forms', () => {
   let vocabularies: Subject<unknown>;
   let providers: Subject<unknown>;
   let create: ReturnType<typeof vi.fn>;
+  let update: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     vocabularies = new Subject();
     providers = new Subject();
     create = vi.fn(() => new Subject());
+    update = vi.fn(() => throwError(() => ({status: 400, error: {message: 'Name taken', transactionId: 't1'}})));
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -60,7 +62,7 @@ describe('provider forms', () => {
           {path: 'provider/:providerId/update', component: UpdateServiceProviderComponent}
         ]),
         {provide: ResourceService, useValue: {getAllVocabulariesByType: () => vocabularies}},
-        {provide: ProviderService, useValue: {getProviderById: () => providers, createNewServiceProvider: create}},
+        {provide: ProviderService, useValue: {getProviderById: () => providers, createNewServiceProvider: create, updateServiceProvider: update}},
         {provide: UserSessionService, useValue: {isSignedIn: () => true, login: vi.fn()}},
         {provide: HelpContentService, useValue: {getActivePageContent: () => of({content: {}})}}
       ]
@@ -160,6 +162,21 @@ describe('provider forms', () => {
 
       expect(text()).toContain('Something went wrong.');
       quiet.mockRestore();
+    });
+
+    it("shows the server's message and error code when the update fails", async () => {
+      const {fixture, root, answer, text} = await open('/provider/openaire/update');
+      answer(vocabularies, noVocabularies());
+      answer(providers, {...provider(), publicContacts: [{email: 'info@example.org'}]});
+      vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+
+      [...root.querySelectorAll('button')].find(button => button.textContent!.trim() === 'Submit')!.click();
+      fixture.detectChanges();
+
+      expect(update).toHaveBeenCalled();
+      expect(text()).toContain('Name taken');
+      expect(text()).toContain('Error Code: t1');
+      expect(text()).not.toContain('undefined');
     });
   });
 });
