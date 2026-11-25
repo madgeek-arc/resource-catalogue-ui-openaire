@@ -6,7 +6,6 @@ import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Datasource, Bundle} from '../entities/eic-model';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
-import {PortfolioMap, ServiceSnippet} from '../entities/portfolioMap';
 import {forkJoin, Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
@@ -119,10 +118,10 @@ export class ResourceService {
 
   /**
    * Active services grouped by the label of a facet value, e.g. 'portfolios' -> {'Assess': [...], ...}.
-   * Values with no services are left out. `active` is kept for callers; the endpoint only returns active records.
+   * Values with no services are left out; the endpoint only returns active records.
+   * A JSON object from each value of the field to its services (datasources are services too), not a Map.
    */
-  /** A JSON object from each value of the field to its services (datasources are services too), not a Map. */
-  getResourcesGroupedByField(field: string, active?: boolean): Observable<Record<string, Service[]>> {
+  getResourcesGroupedByField(field: string): Observable<Record<string, Service[]>> {
     return this.http.get<Record<string, Service[]>>(this.oa + `/services/by/${field}`);
   }
 

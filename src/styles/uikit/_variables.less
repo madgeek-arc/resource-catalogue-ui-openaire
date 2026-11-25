@@ -1,0 +1,282 @@
+//
+// UIkit variables for the catalogue's look (Manrope, purple primary, soft "neumorphic" shadows).
+// The values reproduce the YOOtheme Pro 2.5.8 style that src/assets/css/theme.css used to ship precompiled.
+//
+
+// Global
+// ========================================================================
+
+@global-font-family:                            Manrope;
+@global-font-size:                              16px;
+@global-line-height:                            1.5;
+
+@global-2xlarge-font-size:                      44px;
+@global-xlarge-font-size:                       34px;
+@global-large-font-size:                        24px;
+@global-medium-font-size:                       20px;
+@global-small-font-size:                        14px;
+
+@global-color:                                  #555371;
+@global-emphasis-color:                         #0d0a46;
+@global-muted-color:                            #747a96;
+
+@global-link-color:                             #6f40f1;
+@global-link-hover-color:                       #828fff;
+
+@global-background:                             #f7f8fc;
+@global-muted-background:                       #eceef6;
+@global-primary-background:                     #6f40f1;
+@global-secondary-background:                   #222;
+
+@global-success-background:                     #32d296;
+@global-warning-background:                     #ffa255;
+@global-danger-background:                      #ff4151;
+
+@global-border:                                 #e5e9ed;
+
+@global-control-height:                         48px;
+@global-control-small-height:                   40px;
+@global-control-large-height:                   56px;
+
+// Raised and pressed surfaces
+@theme-raised-shadow:                           -5px -5px 15px rgba(255,255,255,0.9), 4px 4px 12px rgba(57,65,124,0.2);
+@theme-raised-hover-shadow:                     -2px -2px 5px rgba(255,255,255,0.9), 2px 2px 4px rgba(57,65,124,0.2);
+@theme-raised-active-shadow:                    -1px -1px 1px rgba(255,255,255,0.9), 1px 1px 1px rgba(57,65,124,0.1);
+@theme-primary-gradient:                        linear-gradient(51deg, #7141f1 50%, #4d6bd8 75%, #3183e2 100%);
+@theme-primary-active-gradient:                 linear-gradient(51deg, #7335ed 50%, #3f64d3 75%, #007bde 100%);
+@theme-surface-gradient:                        linear-gradient(40deg, #7141f1 0, #4d6bd8 70%, #3183e2 100%);
+@theme-border-highlight:                        rgba(255,255,255,0.6);
+@theme-radius:                                  12px;
+@theme-pill-radius:                             500px;
+
+@global-large-box-shadow:                       @theme-raised-shadow;
+@global-xlarge-box-shadow:                      -10px -10px 30px rgba(255,255,255,0.9), 10px 10px 30px rgba(57,65,124,0.1);
+
+// Base
+// ========================================================================
+
+@base-body-font-weight:                         400;
+@base-link-hover-text-decoration:               none;
+@base-heading-font-family:                      inherit;
+@base-heading-font-weight:                      600;
+@base-heading-text-transform:                   inherit;
+@base-h5-font-size:                             17px;
+@base-h6-font-size:                             16px;
+
+// Form
+// ========================================================================
+
+@form-padding-horizontal:                       15px;
+@form-multi-line-padding-vertical:              9px;
+@form-background:                               #f3f5fb;
+@form-focus-background:                         #eceef8;
+@form-focus-color:                              @global-color;
+@form-disabled-background:                      #eceef8;
+@form-select-icon-color:                        @global-color;
+@form-select-option-color:                      #444;
+@form-radio-background:                         @global-background;
+@form-radio-focus-background:                   #e4e8f5;
+@form-radio-checked-icon-color:                 @global-background;
+@form-radio-checked-focus-background:           #4c11ed;
+@form-radio-disabled-background:                #dbdfee;
+
+// Table
+// ========================================================================
+
+@table-header-cell-font-size:                   13px;
+@table-header-cell-font-weight:                 400;
+@table-header-cell-color:                       @global-muted-color;
+@table-striped-row-background:                  rgba(236,238,246,0.98);
+@table-row-active-background:                   rgba(236,238,246,0.98);
+
+// Icon
+// ========================================================================
+
+@icon-button-size:                              48px;
+@icon-button-background:                        @global-background;
+@icon-button-color:                             @global-emphasis-color;
+@icon-button-hover-background:                  @global-background;
+@icon-button-hover-color:                       @global-primary-background;
+@icon-button-active-background:                 @global-background;
+@icon-button-active-color:                      @global-color;
+
+// Button
+// ========================================================================
+
+@button-line-height:                            (@global-control-height - 4px);
+@button-small-line-height:                      (@global-control-small-height - 4px);
+@button-large-line-height:                      (@global-control-large-height - 4px);
+@button-font-size:                              15px;
+@button-large-font-size:                        16px;
+@button-small-padding-horizontal:               20px;
+
+@button-default-background:                     @global-background;
+@button-default-color:                          @global-emphasis-color;
+@button-default-hover-background:               @global-background;
+@button-default-hover-color:                    @global-primary-background;
+@button-default-active-background:              @global-background;
+@button-default-active-color:                   @global-primary-background;
+
+@button-primary-hover-background:               #5d28ef;
+@button-primary-active-background:              #4c11ed;
+
+@button-secondary-background:                   transparent;
+@button-secondary-color:                        @global-primary-background;
+@button-secondary-hover-background:             @global-primary-background;
+@button-secondary-active-background:            transparent;
+
+@button-danger-hover-background:                #ff273a;
+
+@button-disabled-background:                    #eceef8;
+
+@button-text-color:                             @global-primary-background;
+@button-text-hover-color:                       @global-primary-background;
+@button-link-hover-color:                       @global-primary-background;
+
+// Container, section, tile
+// ========================================================================
+
+@container-small-max-width:                     960px;
+
+// The old theme padded .uk-padding-large by 30px below the large breakpoint; UIkit 3.25 uses 40px.
+@padding-large-padding:                         @global-gutter;
+
+// Card
+// ========================================================================
+
+@card-title-font-size:                          24px;
+@card-default-background:                       @global-background;
+@card-default-hover-background:                 @global-background;
+
+// Close, totop
+// ========================================================================
+
+@close-color:                                   @global-emphasis-color;
+@close-hover-color:                             @global-primary-background;
+
+@totop-padding:                                 16px;
+@totop-color:                                   @global-emphasis-color;
+@totop-hover-color:                             @global-primary-background;
+@totop-active-color:                            #4c11ed;
+
+// Alert
+// ========================================================================
+
+@alert-background:                              #fff;
+@alert-primary-background:                      @global-primary-background;
+@alert-primary-color:                           #fff;
+@alert-success-background:                      @global-success-background;
+@alert-success-color:                           #fff;
+@alert-warning-background:                      @global-warning-background;
+@alert-warning-color:                           #fff;
+@alert-danger-background:                       @global-danger-background;
+@alert-danger-color:                            #fff;
+
+// Badge, label
+// ========================================================================
+
+@badge-size:                                    20px;
+@badge-font-size:                               12px;
+
+@label-line-height:                             1.8;
+@label-font-size:                               13px;
+
+// Overlay
+// ========================================================================
+
+@overlay-default-background:                    fade(@global-background, 80%);
+
+// Dropdown, navbar
+// ========================================================================
+
+@dropdown-background:                           @global-background;
+@dropdown-nav-item-color:                       @global-emphasis-color;
+@dropdown-nav-item-hover-color:                 @global-primary-background;
+@dropdown-nav-header-color:                     @global-color;
+
+@navbar-background:                             fade(@global-background, 90%);
+@navbar-nav-item-height:                        90px;
+@navbar-nav-item-padding-horizontal:            24px;
+@navbar-nav-item-color:                         @global-emphasis-color;
+@navbar-nav-item-font-size:                     15px;
+@navbar-nav-item-font-family:                   inherit;
+@navbar-nav-item-hover-color:                   @global-primary-background;
+@navbar-nav-item-onclick-color:                 #4c11ed;
+@navbar-nav-item-active-color:                  @global-primary-background;
+@navbar-item-padding-horizontal:                24px;
+@navbar-toggle-color:                           @global-emphasis-color;
+@navbar-toggle-hover-color:                     @global-primary-background;
+@navbar-dropdown-width:                         260px;
+// UIkit 3.7 kept navbar dropdowns inside the viewport with no margin; the full-width "Browse Services" panel relies on it.
+@navbar-dropdown-viewport-margin:               0;
+@navbar-dropdown-padding:                       20px;
+@navbar-dropdown-background:                    @global-background;
+@navbar-dropdown-nav-item-color:                @global-emphasis-color;
+@navbar-dropdown-nav-item-hover-color:          @global-primary-background;
+@navbar-dropdown-nav-item-active-color:         @global-primary-background;
+
+// Nav
+// ========================================================================
+
+@nav-default-item-color:                        @global-emphasis-color;
+@nav-default-item-hover-color:                  @global-primary-background;
+@nav-default-item-active-color:                 @global-primary-background;
+
+// Modal, offcanvas, notification, tooltip
+// ========================================================================
+
+// The old theme padded modals by 30px at every width; UIkit 3.25 uses 20px below the small breakpoint.
+@modal-body-padding-horizontal:                 @global-gutter;
+@modal-body-padding-vertical:                   @global-gutter;
+@modal-header-padding-horizontal:               @global-gutter;
+@modal-footer-padding-horizontal:               @global-gutter;
+@modal-header-background:                       @global-background;
+@modal-footer-background:                       @global-background;
+@modal-title-font-size:                         34px;
+
+@offcanvas-bar-background:                      @global-background;
+@offcanvas-bar-color-mode:                      none;
+
+@notification-message-padding:                  30px;
+@notification-message-background:               @global-background;
+@notification-message-font-size:                16px;
+@notification-message-line-height:              1.5;
+
+@tooltip-background:                            @global-primary-background;
+
+// Pagination, tab, dotnav
+// ========================================================================
+
+@pagination-margin-horizontal:                  15px;
+@pagination-item-padding-vertical:              10px;
+@pagination-item-padding-horizontal:            16px;
+@pagination-item-color:                         @global-emphasis-color;
+@pagination-item-active-color:                  @global-primary-background;
+
+@tab-item-padding-vertical:                     15px;
+@tab-item-hover-color:                          @global-emphasis-color;
+@tab-item-active-color:                         @global-emphasis-color;
+
+@dotnav-item-width:                             12px;
+@dotnav-item-background:                        #c9cfe6;
+@dotnav-item-active-background:                 @global-primary-background;
+
+// Text, utility
+// ========================================================================
+
+@text-lead-font-size:                           20px;
+@text-meta-font-size:                           14px;
+
+@border-rounded-border-radius:                  @theme-radius;
+
+@logo-font-size:                                24px;
+@logo-font-family:                              inherit;
+@logo-hover-color:                              @global-color;
+
+// Inverse (light text on primary sections and cards)
+// ========================================================================
+
+@inverse-global-muted-color:                    fade(@global-inverse-color, 60%);
+@inverse-button-primary-color:                  @global-emphasis-color;
+@inverse-button-primary-hover-color:            @global-emphasis-color;
+@inverse-button-primary-active-color:           @global-emphasis-color;

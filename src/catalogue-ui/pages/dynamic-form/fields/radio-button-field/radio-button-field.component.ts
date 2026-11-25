@@ -19,7 +19,7 @@ export class RadioButtonFieldComponent implements OnInit {
 
 
   readonly fieldData = input.required<Field>();
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly readonly = input<boolean | null>(null);
   readonly position = input<number | null>(null);
 
@@ -53,7 +53,7 @@ export class RadioButtonFieldComponent implements OnInit {
       // console.log(this.fieldData().name);
       this.form.get(dependsOn.name)!.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
         this.enableDisableField(value, dependsOn.value);
-      }, error => {console.log(error);});
+      }, error => {console.error(error);});
     }
   }
 
@@ -74,7 +74,7 @@ export class RadioButtonFieldComponent implements OnInit {
   }
 
   /** other stuff--> **/
-  enableDisableField(value: unknown, enableValue: string) {
+  enableDisableField(value: unknown, enableValue: string | null) {
 
     if (value === enableValue) {
       this.formControl.enable();

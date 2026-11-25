@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, signal, DestroyRef } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
-import {Field, HandleBitSet, UiVocabulary, VocabularyLookup} from '../../../../domain/dynamic-form-model';
-import { UntypedFormArray, FormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import {Field, HandleBitSet, VocabularyLookup} from '../../../../domain/dynamic-form-model';
+import { UntypedFormArray, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 import { ReadMoreTextComponent } from '../../../../shared/reusable-components/read-more.component';
 import { ChooseOneComponent } from '../choose-one-composite/choose-one.component';
@@ -33,7 +33,7 @@ export class CompositeFieldComponent implements OnInit {
   readonly fieldData = input.required<Field>();
   readonly vocabularies = input<VocabularyLookup | null>(null);
   readonly subVocabularies = input<VocabularyLookup | null>(null);
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly readonly = input<boolean | null>(null);
   readonly position = input<number | null>(null);
 
@@ -94,7 +94,7 @@ export class CompositeFieldComponent implements OnInit {
     });
     // console.log(newOrder);
     for (let i = 0; i < newOrder.length-1; i++) {
-      if (newOrder[i] != i) {
+      if (newOrder[i] !== i) {
         if (newOrder[i] > i+1) {
           this.move(newOrder[i], i);
           break;

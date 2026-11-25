@@ -4,13 +4,12 @@ import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {RouterLink} from '@angular/router';
 import {SlicePipe} from '@angular/common';
-import uikit from 'uikit';
 import {ResourceService} from '../../services/resource.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.aire.component.html',
-  styleUrls: ['./home.aire.component.css'],
+  styleUrls: ['./home.aire.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, SlicePipe]
 })
@@ -36,7 +35,7 @@ export class HomeAireComponent {
 
   readonly portfolioList = toSignal(orNull(this.resourceService.getNewVocabulariesByType('Portfolios')), {initialValue: null});
   readonly userList = toSignal(orNull(this.resourceService.getNewVocabulariesByType('Users')), {initialValue: null});
-  readonly resourceMap = toSignal(orNull(this.resourceService.getResourcesGroupedByField('portfolios', true)), {initialValue: null});
+  readonly resourceMap = toSignal(orNull(this.resourceService.getResourcesGroupedByField('portfolios')), {initialValue: null});
 
   /** The user type each slideshow shows, for its dot navigation. */
   readonly slide = signal(0);
@@ -48,7 +47,7 @@ export class HomeAireComponent {
   }
 
   showSlide(index: number) {
-    uikit.slideshow('#slideShow').show(index);
+    UIkit.slideshow('#slideShow').show(index);
     this.slide.set(index);
   }
 
@@ -57,7 +56,7 @@ export class HomeAireComponent {
   }
 
   showSlideMobile(index: number) {
-    uikit.slideshow('#slideShowMobile').show(index);
+    UIkit.slideshow('#slideShowMobile').show(index);
     this.slideMobile.set(index);
   }
 }
@@ -65,13 +64,13 @@ export class HomeAireComponent {
 /** A failed load leaves its section hidden, as before. */
 function orNull<T>(source: Observable<T>): Observable<T | null> {
   return source.pipe(catchError(error => {
-    console.log(error);
+    console.error(error);
     return of(null);
   }));
 }
 
 function currentSlide(): number {
-  return uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  return UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
 }
 
 interface Category {

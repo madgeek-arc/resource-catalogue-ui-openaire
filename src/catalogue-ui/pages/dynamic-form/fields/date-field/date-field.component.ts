@@ -20,7 +20,7 @@ export class DateFieldComponent implements OnInit {
 
 
   readonly fieldData = input.required<Field>();
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
@@ -50,7 +50,7 @@ export class DateFieldComponent implements OnInit {
         value => {
           this.enableDisableField(value, dependsOn.value);
         },
-        error => {console.log(error);}
+        error => {console.error(error);}
       );
     }
 
@@ -71,7 +71,7 @@ export class DateFieldComponent implements OnInit {
     return this.formControl as unknown as UntypedFormArray;
   }
 
-  push(field: string, required: boolean, type?: string) {
+  push(field: string, required: boolean) {
     this.fieldAsFormArray().push(required ? new UntypedFormControl('', Validators.required) : new UntypedFormControl(''));
   }
 
@@ -102,8 +102,9 @@ export class DateFieldComponent implements OnInit {
   }
 
   /** value is the form value of the field this one depends on. */
-  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string) {
-    if (value?.toString() == enableValue) {
+  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string | null) {
+    // Compares as == did: the text when both are set, and an empty field matches a null enableValue.
+    if ((value?.toString() ?? null) === (enableValue ?? null)) {
       this.formControl.enable();
       this.hideField.set(false);
     } else {

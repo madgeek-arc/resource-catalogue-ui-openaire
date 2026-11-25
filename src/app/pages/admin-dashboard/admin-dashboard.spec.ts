@@ -152,12 +152,80 @@ describe('admin dashboard', () => {
       expect(root.querySelector<HTMLInputElement>('input#email')!.value).toBe('');
     });
 
+    it('says whether copying the invitation link worked, trying the old copy command when the clipboard refuses', async () => {
+      const {fixture, root, settle} = await open('/admin/providers');
+      userInfo.next({roles: ['ADMIN']});
+      await settle();
+      const email = root.querySelector<HTMLInputElement>('input#email')!;
+      email.value = 'ada@example.org';
+      email.dispatchEvent(new Event('input'));
+      await settle();
+      [...root.querySelectorAll('button')].find(button => button.textContent!.includes('Create invitation token'))!.click();
+      await settle();
+      const copy = root.querySelector<HTMLButtonElement>('#invite-modal button[aria-label="Copy invitation link"]')!;
+      const status = () => root.querySelector('#invite-modal [role="status"]')!.textContent;
+      expect(status()).toBe('');
+      // The copy awaits the clipboard's promise, which settles after the zone has gone stable; settle() would also
+      // wait out the timer that clears the message, so this renders once instead.
+      const copied = async () => {
+        await new Promise(resolve => setTimeout(resolve));
+        fixture.detectChanges();
+      };
+
+      const writeText = vi.fn(() => Promise.resolve());
+      const execCommand = vi.fn(() => false);
+      Object.defineProperty(navigator, 'clipboard', {value: {writeText}, configurable: true});
+      Object.defineProperty(document, 'execCommand', {value: execCommand, configurable: true});
+      try {
+        copy.click();
+        await copied();
+        expect(writeText).toHaveBeenCalledWith(location.origin + '/join/t0ken');
+        expect(status()).toBe('Copied');
+        expect(copy.textContent!.trim()).toBe('check');
+
+        writeText.mockRejectedValueOnce(new DOMException('Denied', 'NotAllowedError'));
+        copy.click();
+        await copied();
+        expect(execCommand).toHaveBeenCalledWith('copy');
+        expect(status()).toBe('Copy failed');
+        expect(copy.textContent!.trim()).toBe('content_copy');
+        expect(document.activeElement).not.toBeInstanceOf(HTMLTextAreaElement);
+      } finally {
+        Reflect.deleteProperty(navigator, 'clipboard');
+        Reflect.deleteProperty(document, 'execCommand');
+      }
+    });
+
     it('does not offer invitations to other users', async () => {
       const {settle, inviteButton} = await open('/admin/providers');
       userInfo.next({roles: ['USER']});
       await settle();
       expect(inviteButton()).toBeNull();
     });
+  });
+
+  describe('the order select of each list', () => {
+    const lists = [
+      ['providers', AllProvidersDashboardComponent],
+      ['services', AllServicesDashboardComponent],
+      ['datasources', AllDatasourcesDashboardComponent],
+    ] as const;
+    for (const [path, type] of lists) {
+      it(`sorts the ${path} with sort=modifiedAt, the name the API sorts by, and clears it with the order`, async () => {
+        const {router, list, root, fixture} = await open(`/admin/${path}`);
+        const select = root.querySelector('#order')!;
+
+        list<{order: {set(value: string | null): void}}>(type).order.set('desc');
+        select.dispatchEvent(new Event('change'));
+        await fixture.whenStable();
+        expect(router.url).toBe(`/admin/${path}?quantity=9&sort=modifiedAt&order=desc&from=0`);
+
+        list<{order: {set(value: string | null): void}}>(type).order.set(null);
+        select.dispatchEvent(new Event('change'));
+        await fixture.whenStable();
+        expect(router.url).toBe(`/admin/${path}?quantity=9&from=0`);
+      });
+    }
   });
 
   describe('AllProvidersDashboardComponent', () => {

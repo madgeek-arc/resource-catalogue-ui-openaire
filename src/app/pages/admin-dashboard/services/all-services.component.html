@@ -35,7 +35,7 @@
       <div class="uk-margin-small-right uk-text-muted">Sort by: </div>
       <div class="uk-margin-small-right">
         <ng-select id="order" [(ngModel)]="order" clearAllText="Clear" placeholder="Modification Order"
-                   (change)="this.updateURLParameters('orderField', 'modifiedAt'); filterSelection('order', order())">
+                   (change)="this.updateURLParameters('sort', 'modifiedAt'); filterSelection('order', order())">
           <ng-option [value]="'desc'">Most recently modified</ng-option>
           <ng-option [value]="'asc'">Least recently modified</ng-option>
         </ng-select>
@@ -123,7 +123,7 @@
                 </div>
 
                 <div class="uk-margin-top">
-                  <img src="{{resourceInfo.service.logo}}" width="140px" height="62px">
+                  <img src="{{resourceInfo.service.logo}}" width="140" alt="">
                 </div>
 
                 <div class="uk-margin-top">
@@ -175,7 +175,7 @@
 <div class="uk-flex uk-flex-middle">
                   <button class="uk-button uk-button-link"><span class="material-icons">more_vert</span></button>
                   <div uk-dropdown="mode: click">
-                    <ul class="uk-nav uk-dropdown-nav uk-dropdown-close">
+                    <ul class="uk-nav uk-dropdown-nav uk-drop-close">
                       <li (click)="verifyService(resourceInfo.id, true, 'approved')" class="uk-margin-bottom">
                         <a><i class="fa fa-thumbs-o-up fa-lg uk-margin-small-right"></i>Approve Service</a>
                       </li>

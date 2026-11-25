@@ -6,7 +6,7 @@ import {ReadMoreComponent, ReadMoreTextComponent} from './read-more.component';
 // jsdom does no layout, so offsetHeight is always 0. Each test sets the height the content would have.
 let contentHeight = 0;
 
-// The host is Eager like the pages that use these components, so a host check refreshes the children
+// The host is Eager, so every fixture check reaches the children; a host check refreshes the children
 // only when they marked themselves for check (OnPush) or read a changed signal.
 @Component({
   imports: [ReadMoreComponent, ReadMoreTextComponent],
@@ -14,6 +14,7 @@ let contentHeight = 0;
     <read-more [maxHeight]="100"><p>Projected content</p></read-more>
     <read-more-text [maxHeight]="46" [text]="text()" />
   `,
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
   changeDetection: ChangeDetectionStrategy.Eager
 })
 class HostComponent {

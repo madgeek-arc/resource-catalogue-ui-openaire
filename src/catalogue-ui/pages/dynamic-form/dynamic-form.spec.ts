@@ -49,7 +49,8 @@ const model = (): Model => Object.assign({} as Model, {
         field('7', 'summary', 'largeText', {values: ['100']})
       ]),
       group('contact', 'Contact', 2, [
-        field('5', 'contact', 'composite', {subFields: [field('6', 'email', 'email', {mandatory: true})]})
+        field('5', 'contact', 'composite', {subFields: [field('6', 'email', 'email', {mandatory: true})]}),
+        field('8', 'lastUpdate', 'date')
       ])
     ]
   })]
@@ -151,6 +152,59 @@ describe('dynamic form', () => {
 
     expect(tags()).toBe(2);
   });
+
+  it('submits the chapter once from its Submit button, without the DOM event leaving the chapter', async () => {
+    const {root, survey, input} = await open(null);
+    const submitted: unknown[] = [];
+    survey.submit.subscribe(value => submitted.push(value));
+    const bubbled = vi.fn();
+    root.addEventListener('submit', bubbled);
+
+    const submit = [...root.querySelectorAll<HTMLButtonElement>('button')].find(button => button.textContent!.trim() === 'Submit')!;
+    expect(submit.form!.contains(input('1'))).toBe(true);
+    submit.click();
+
+    expect(submitted).toEqual([[survey.form, false]]);
+    expect(bubbled).not.toHaveBeenCalled();
+  });
+
+  it('keeps Enter in the date field from submitting the chapter, which the field has no inner form to stop', async () => {
+    const {root, survey} = await open(null);
+    const submitted = vi.fn();
+    survey.submit.subscribe(submitted);
+    const date = root.querySelector<HTMLInputElement>('dp-date-picker[id="lastUpdate"] input')!;
+    expect(date.form!.id).toBe('chapter-form-service');
+
+    const enter = new KeyboardEvent('keydown', {key: 'Enter', bubbles: true, cancelable: true});
+    date.dispatchEvent(enter);
+
+    expect(enter.defaultPrevented).toBe(true);
+    expect(submitted).not.toHaveBeenCalled();
+  });
+
+  describe('when validation finds missing fields', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('moves the focus to the error, which closes from a named button', async () => {
+      vi.stubGlobal('UIkit', {modal: () => ({hide: vi.fn()})});
+      const {fixture, root, survey} = await open(null);
+
+      survey.validateForm();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const error = root.querySelector<HTMLElement>('#errorAlert')!;
+      expect(error.textContent).toContain('There are missing fields at chapters');
+      expect(document.activeElement).toBe(error);
+      expect(error.querySelector('button.uk-alert-close')!.getAttribute('aria-label')).toBe('Close');
+
+      // UIkit fades the alert out from its close button, then fires hidden: the message goes with it.
+      error.dispatchEvent(new CustomEvent('hidden'));
+      fixture.detectChanges();
+      expect(survey.errorMessage()).toBe('');
+      expect(root.querySelector('#errorAlert')).toBeNull();
+    });
+  });
 });
 
 describe('controlTreeEvents', () => {
@@ -180,9 +234,11 @@ describe('controlTreeEvents', () => {
 describe('ReadMoreTextComponent', () => {
   afterEach(() => vi.useRealTimers());
 
+  // Eager, so every fixture check reaches the child, which (OnPush) refreshes only on its own triggers.
   @Component({
     imports: [ReadMoreTextComponent],
     template: '<read-more-text [maxHeight]="46" text="A long description" />',
+    // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
     changeDetection: ChangeDetectionStrategy.Eager
   })
   class HostComponent {}

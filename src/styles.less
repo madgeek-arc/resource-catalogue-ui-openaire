@@ -1,0 +1,15 @@
+/*
+ * Project-wide styles. angular.json loads the global styles in cascade order:
+ * 1. catalogue-ui/styles/service-catalogue-theme.less (the dynamic form's theme)
+ * 2. styles/uikit/uikit.less, UIkit built from its LESS sources with the catalogue's theme
+ * 3. this file
+ * 4. Font Awesome
+ */
+
+@import 'styles/openaire-custom.less';
+@import 'styles/sidebar.less';
+@import 'styles/history-timeline.less';
+@import 'styles/dashboard.less';
+
+/* ng-select theme */
+@import (inline) '@ng-select/ng-select/themes/default.theme.css';

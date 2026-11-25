@@ -9,12 +9,10 @@ import { LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
-declare let UIkit: any;
-
 @Component({
     selector: 'app-update-service-provider',
     templateUrl: './service-provider-form.component.html',
-    styleUrls: ['./service-provider-form.component.css'],
+    styleUrls: ['./service-provider-form.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
@@ -62,19 +60,14 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     }
   }
 
-  override registerProvider(tempSave: boolean) {
-    super.registerProvider(tempSave);
-  }
-
   getProvider() {
     this.errorMessage.set('');
-    const path = this.route.snapshot.routeConfig!.path!;
     // ngOnInit sets providerId from the :providerId route parameter.
-    this.providerService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getProviderById')](this.providerId!)
+    this.providerService.getProviderById(this.providerId!)
       .subscribe(
       provider => this.provider = provider,
       err => {
-        console.log(err);
+        console.error(err);
         this.errorMessage.set('Something went wrong.');
       },
       () => {
@@ -103,8 +96,6 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
           for (let i = 0; i < this.provider.users.length - 1; i++) {
             this.addUser();
           }
-        } else if (path === 'add/:providerId') {
-          this.addDefaultUser();
         }
         if (this.provider.multimedia && this.provider.multimedia.length > 1) {
           for (let i = 0; i < this.provider.multimedia.length - 1; i++) {

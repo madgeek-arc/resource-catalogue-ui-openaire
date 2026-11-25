@@ -3,7 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {TestBed} from '@angular/core/testing';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
-import {of, Subject} from 'rxjs';
+import {of, Subject, throwError} from 'rxjs';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {HelpContentService} from '../../../services/help-content.service';
 import {ProviderService} from '../../../services/provider.service';
@@ -48,11 +48,13 @@ describe('provider forms', () => {
   let vocabularies: Subject<unknown>;
   let providers: Subject<unknown>;
   let create: ReturnType<typeof vi.fn>;
+  let update: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     vocabularies = new Subject();
     providers = new Subject();
     create = vi.fn(() => new Subject());
+    update = vi.fn(() => throwError(() => ({status: 400, error: {message: 'Name taken', transactionId: 't1'}})));
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -60,7 +62,7 @@ describe('provider forms', () => {
           {path: 'provider/:providerId/update', component: UpdateServiceProviderComponent}
         ]),
         {provide: ResourceService, useValue: {getAllVocabulariesByType: () => vocabularies}},
-        {provide: ProviderService, useValue: {getProviderById: () => providers, createNewServiceProvider: create}},
+        {provide: ProviderService, useValue: {getProviderById: () => providers, createNewServiceProvider: create, updateServiceProvider: update}},
         {provide: UserSessionService, useValue: {isSignedIn: () => true, login: vi.fn()}},
         {provide: HelpContentService, useValue: {getActivePageContent: () => of({content: {}})}}
       ]
@@ -102,7 +104,7 @@ describe('provider forms', () => {
       const tabs = [...root.querySelectorAll('ul.form-tabs > li')];
       // In the app zone.js checks the view after each listener: after Angular's on the link, before UIkit's on the list.
       // The tab is read right after that check, on its way up to the list: specs share one window
-      // (isolate is off), so UIkit may be running here too, and on the list it would mark the tab itself.
+      // (isolate is off), so a spec that loads UIkit would leave it running here, and on the list it would mark the tab itself.
       let activeWhenUIkitRuns: boolean | undefined;
       tabs[2].addEventListener('click', event => {
         event.preventDefault();
@@ -119,6 +121,8 @@ describe('provider forms', () => {
       const {fixture, root, answer, text, name} = await open('/provider/add');
       answer(vocabularies, noVocabularies());
       vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+      const marked = () => [...root.querySelectorAll('ul.form-tabs .form-error')];
+      expect(marked()).toEqual([]);
 
       [...root.querySelectorAll('button')].find(button => button.textContent!.trim() === 'Submit')!.click();
       fixture.detectChanges();
@@ -126,7 +130,11 @@ describe('provider forms', () => {
       expect(text()).toContain('Please fill in all required fields');
       expect(name()!.classList).toContain('uk-form-danger');
       expect(root.querySelector('#top-navigation-tabs')).not.toBeNull();
-      expect([...root.querySelectorAll('a.form-error')].map(a => a.textContent!.trim())[0]).toContain('Basic');
+      // Only the links of the tabs with a missing field are marked, never every tab's item.
+      expect(marked().every(element => element.tagName === 'A')).toBe(true);
+      const tabs = marked().map(a => a.textContent!.trim());
+      expect(tabs[0]).toContain('Basic');
+      expect(tabs).not.toContain('3. Classification');
       expect(create).not.toHaveBeenCalled();
     });
   });
@@ -146,7 +154,7 @@ describe('provider forms', () => {
     });
 
     it('says so when the provider fails to load', async () => {
-      const quiet = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+      const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
       const {fixture, text} = await open('/provider/openaire/update');
       vocabularies.next(noVocabularies());
       providers.error({status: 500});
@@ -154,6 +162,21 @@ describe('provider forms', () => {
 
       expect(text()).toContain('Something went wrong.');
       quiet.mockRestore();
+    });
+
+    it("shows the server's message and error code when the update fails", async () => {
+      const {fixture, root, answer, text} = await open('/provider/openaire/update');
+      answer(vocabularies, noVocabularies());
+      answer(providers, {...provider(), publicContacts: [{email: 'info@example.org'}]});
+      vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+
+      [...root.querySelectorAll('button')].find(button => button.textContent!.trim() === 'Submit')!.click();
+      fixture.detectChanges();
+
+      expect(update).toHaveBeenCalled();
+      expect(text()).toContain('Name taken');
+      expect(text()).toContain('Error Code: t1');
+      expect(text()).not.toContain('undefined');
     });
   });
 });

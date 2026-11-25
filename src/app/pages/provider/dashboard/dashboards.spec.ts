@@ -140,7 +140,7 @@ describe('provider and service dashboards', () => {
 
       expect(text()).toContain('Admin - OpenAIRE');
       expect(text()).toContain('Home');
-      expect(servicesOf).toHaveBeenCalledWith('openaire', [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values: ['desc']}]);
+      expect(servicesOf).toHaveBeenCalledWith('openaire', [{key: 'quantity', values: ['1000']}, {key: 'sort', values: ['modifiedAt']}, {key: 'order', values: ['desc']}]);
       for (const name of ['Argos', 'Amnesia', 'Broker']) {
         expect(text()).toContain(name);
       }
@@ -158,7 +158,7 @@ describe('provider and service dashboards', () => {
 
       expect(dashboard()).toBe(before);
       expect(text()).toContain('Admin - CERN');
-      expect(servicesOf).toHaveBeenLastCalledWith('cern', [{key: 'orderField', values: ['modifiedAt']}, {key: 'order', values: ['desc']}]);
+      expect(servicesOf).toHaveBeenLastCalledWith('cern', [{key: 'quantity', values: ['1000']}, {key: 'sort', values: ['modifiedAt']}, {key: 'order', values: ['desc']}]);
     });
 
     it('leaves route reuse on for the rest of the app', async () => {

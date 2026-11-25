@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal, Signal} from '@angular/core';
 import {Router, RouterLink, ROUTER_OUTLET_DATA} from '@angular/router';
 import {URL} from '../../../../entities/eic-model';
-import uikit from 'uikit';
 import {ServiceLandingData} from '../service-landing-data';
 
 @Component({
@@ -36,12 +35,12 @@ export class OverviewComponent {
   }
 
   showSlide(id: string, index: number) {
-    uikit.slideshow('#' + id).show(index);
+    UIkit.slideshow('#' + id).show(index);
     this.slide.set(index);
   }
 
   showSlideMobile(id: string, index: number) {
-    uikit.slideshow('#' + id).show(index);
+    UIkit.slideshow('#' + id).show(index);
     this.slideMobile.set(index);
   }
 
@@ -57,5 +56,5 @@ export class OverviewComponent {
 }
 
 function currentSlide(): number {
-  return uikit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
+  return UIkit.getComponent(document.querySelector('[uk-slideshow]'), 'slideshow').index;
 }

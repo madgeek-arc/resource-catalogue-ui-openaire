@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
 import {environment} from '../../environments/environment';
-import {forkJoin, Observable, of} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import {Paging} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 
@@ -32,8 +32,8 @@ export class ProviderService {
     return url;
   }
 
-  createNewServiceProvider(newProvider: any, providerId?: string | null) {
-    return this.http.post(this.oa + '/providers', newProvider, this.options);
+  createNewServiceProvider(newProvider: Provider) {
+    return this.http.post<Provider>(this.oa + '/providers', newProvider, this.options);
   }
 
   createNewServiceProviderWithToken(newProvider: Provider, token: string) {
@@ -42,14 +42,9 @@ export class ProviderService {
     return this.http.post<Provider>(this.oa + '/providers', newProvider, {params, withCredentials: true});
   }
 
-  updateServiceProvider(updatedFields: any, providerId?: string | null): Observable<Provider> {
+  updateServiceProvider(updatedFields: Provider, providerId?: string | null): Observable<Provider> {
     // console.log(`knocking on: ${this.base}/provider`);
     return this.http.put<Provider>(this.oa + `/providers/${providerId}`, updatedFields, this.options);
-  }
-
-  // TODO: no pendingProvider endpoint in new API
-  updateAndPublishPendingProvider(updatedFields: any, providerId?: string | null): Observable<Provider> {
-    return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 
   getProviderById(id: string) {
@@ -58,11 +53,6 @@ export class ProviderService {
 
   getProviderBundleById(id: string) {
     return this.http.get<ProviderBundle>(this.oa + `/providers/bundles/${id}`, this.options);
-  }
-
-  // TODO: no pendingProvider endpoint in new API
-  getPendingProviderById(id: string) {
-    return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
   }
 
   getProviderBundles(urlParameters: URLParameter[] = []) {
@@ -75,39 +65,28 @@ export class ProviderService {
     return this.http.get<Paging<ProviderBundle>>(this.oa + '/providers/bundles', {params: searchQuery, withCredentials: true});
   }
 
-  getServicesOfProvider(providerId: string, urlParameters?: URLParameter[]): Observable<Paging<Bundle<Service | Datasource>>> {
-    // New API returns a plain array of every service of the provider; wrap it as Paging so callers keep working.
-    // Old filters/paging params (orderField, from, quantity...) are not supported by this endpoint.
-    // byProvider returns plain services, while the dashboard needs bundles (status, active), so fetch each bundle.
-    return this.http.get<Service[]>(this.oa + `/services/byProvider/${providerId}`, this.options).pipe(
-      switchMap(services => services.length === 0 ? of([]) : forkJoin(services.map(service =>
-        this.http.get<Bundle<Service>>(this.oa + `/services/bundles/${service.id}`, this.options)))),
-      map(results => ({total: results.length, from: 0, to: results.length, results, facets: []} as Paging<Bundle<Service | Datasource>>))
-    );
-  }
-
-  // TODO: no pendingProvider (draft) endpoint in new API
-  temporarySaveProvider(provider: Provider, providerExists: boolean) {
-    // console.log('providerExists ', providerExists);
-    if (providerExists) {
-      return this.http.put<Provider>(this.base + '/pendingProvider/provider', provider, this.options);
+  /**
+   * One page of the provider's service bundles. The endpoint takes from and quantity (10 by default), status, active,
+   * and sort with order (sort=modifiedAt&order=desc); it reads any other key as a filter, so an unknown one such as
+   * orderField matches nothing.
+   */
+  getServicesOfProvider(providerId: string, urlParameters: URLParameter[] = []): Observable<Paging<Bundle<Service | Datasource>>> {
+    let params = new HttpParams().set('resourceProviders', providerId);
+    for (const urlParameter of urlParameters) {
+      for (const value of urlParameter.values) {
+        params = params.append(urlParameter.key, value);
+      }
     }
-    return this.http.put<Provider>(this.base + '/pendingProvider/pending', provider, this.options);
+    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.oa + '/services/bundles', {...this.options, params});
   }
 
   // TODO: no terms endpoint in new API
-  hasAdminAcceptedTerms(id: string, pendingProvider: boolean) {
-    if (pendingProvider) {
-      return this.http.get<boolean>(this.base + `/pendingProvider/hasAdminAcceptedTerms?providerId=${id}`);
-    }
+  hasAdminAcceptedTerms(id: string) {
     return this.http.get<boolean>(this.base + `/providers/hasAdminAcceptedTerms?providerId=${id}`);
   }
 
   // TODO: no terms endpoint in new API
-  adminAcceptedTerms(id: string, pendingProvider: boolean) {
-    if (pendingProvider) {
-      return this.http.put(this.base + `/pendingProvider/adminAcceptedTerms?providerId=${id}`, this.options);
-    }
+  adminAcceptedTerms(id: string) {
     return this.http.put(this.base + `/provider/adminAcceptedTerms?providerId=${id}`, this.options);
   }
 

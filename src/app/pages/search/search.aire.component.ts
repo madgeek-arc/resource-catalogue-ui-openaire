@@ -58,7 +58,7 @@ export class SearchAireComponent {
       this.resourceService.getNewVocabulariesByType('Users'),
       this.resourceService.getNewVocabulariesByType('Portfolios')
     ).pipe(catchError(error => {
-      console.log(error);
+      console.error(error);
       return EMPTY;
     }))),
     map(([users, portfolios]) => users.concat(portfolios)),

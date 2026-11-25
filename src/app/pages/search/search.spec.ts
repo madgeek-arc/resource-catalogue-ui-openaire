@@ -5,12 +5,10 @@ import {of, Subject} from 'rxjs';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {URLParameter} from '../../entities/url-parameter';
 import {ComparisonService} from '../../services/comparison.service';
-import {DatasourceService} from '../../services/datasource.service';
 import {EmailService} from '../../services/email.service';
 import {HelpContentService} from '../../services/help-content.service';
 import {ResourceService} from '../../services/resource.service';
 import {UserSessionService} from '../../services/user-session.service';
-import {DatasourceSearchComponent} from './datasources-search/datasourceSearch.component';
 import {SearchAireComponent} from './search.aire.component';
 import {paging, SearchParameters} from './search-state';
 
@@ -181,44 +179,5 @@ describe('SearchAireComponent', () => {
   it('reads an old link with query as keyword', async () => {
     await open('/search?query=graph&users=researchers');
     expect(searched[0]).toEqual([{key: 'keyword', values: ['graph']}, {key: 'users', values: ['researchers']}]);
-  });
-});
-
-describe('DatasourceSearchComponent', () => {
-  let answers: Subject<unknown>;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideRouter([{path: 'datasources/search', component: DatasourceSearchComponent}]),
-        {provide: HelpContentService, useValue: {}}
-      ]
-    });
-    TestBed.overrideComponent(DatasourceSearchComponent, {
-      set: {
-        providers: [{
-          provide: DatasourceService, useValue: {
-            getDatasources: () => answers = new Subject(),
-            getDatasourceTypes: () => of({terms: [{englishName: 'Repository', code: 'repo'}]})
-          }
-        }]
-      }
-    });
-  });
-
-  it('shows the results and takes the sort order and query from the URL', async () => {
-    const fixture = TestBed.createComponent(AppHostComponent);
-    await TestBed.inject(Router).navigateByUrl('/datasources/search?order=asc&query=graph');
-    fixture.detectChanges();
-    const root: HTMLElement = fixture.nativeElement;
-
-    answers.next({...results(40, 0, 'Argos'), results: [{id: 'd1', officialname: 'Argos', eoscDatasourceType: 'Repository'}]});
-    answers.complete();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(root.textContent!.replace(/\s+/g, ' ')).toContain('Page 1 of 2');
-    expect(root.querySelector<HTMLSelectElement>('#sortBy')!.value).toBe('asc');
-    expect(root.querySelector<HTMLInputElement>('input.menuSearch')!.value).toBe('graph');
   });
 });

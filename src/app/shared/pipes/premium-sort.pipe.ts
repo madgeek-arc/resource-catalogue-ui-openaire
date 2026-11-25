@@ -4,7 +4,7 @@ import {UiVocabulary} from '../../../catalogue-ui/domain/dynamic-form-model';
 
 @Pipe({ name: 'premiumSort' })
 export class PremiumSortPipe implements PipeTransform {
-  transform(arr: UiVocabulary[], weights: string[]): any {
+  transform(arr: UiVocabulary[], weights: string[]): UiVocabulary[] {
     const ret = (arr || []).sort((a, b): number => {
       let val = 0;
       const weightA = weights.indexOf(a.name);
@@ -26,7 +26,7 @@ export class PremiumSortPipe implements PipeTransform {
 
 @Pipe({ name: 'premiumSortFacets' })
 export class PremiumSortFacetsPipe implements PipeTransform {
-  transform(arr: Facet[], weights: string[]): any {
+  transform(arr: Facet[], weights: string[]): Facet[] {
     const ret = (arr || []).sort((a, b): number => {
       let val = 0;
       const weightA = weights.indexOf(a.label);
@@ -48,7 +48,7 @@ export class PremiumSortFacetsPipe implements PipeTransform {
 
 @Pipe({ name: 'premiumSortFacetValues' })
 export class PremiumSortFacetValuesPipe implements PipeTransform {
-  transform(arr: FacetValue[], weights: string[]): any {
+  transform(arr: FacetValue[], weights: string[]): FacetValue[] {
     const ret = (arr || []).sort((a, b): number => {
       let val = 0;
       const weightA = weights.indexOf(a.label);

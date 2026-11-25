@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Type} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal, Type} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {ActivatedRoute, provideRouter, Router, RouterOutlet} from '@angular/router';
 import {of} from 'rxjs';
@@ -15,15 +15,18 @@ import {ProviderJoinComponent} from './provider/join/provider-join.component';
 import {ServiceFullHistoryComponent} from './service-dashboard/service-full-history.component';
 import {ServiceHistoryComponent} from './service-dashboard/service-history.component';
 
-// Stands in for the Eager parent pages (provider and service dashboards, service landing page): they pass their
+// Stands in for the parent pages (provider and service dashboards, service landing page): they pass their
 // data through [routerOutletData] and get it from the server after the child page is already shown.
+// A signal, as in those parents: without zone.js a plain field set from the test would not mark the host for check.
+// Eager, so every fixture check passes the host's data down; the child page must pick it up by itself.
 @Component({
   imports: [RouterOutlet],
-  template: '<router-outlet [routerOutletData]="data" />',
+  template: '<router-outlet [routerOutletData]="data()" />',
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
   changeDetection: ChangeDetectionStrategy.Eager
 })
 class ParentComponent {
-  data: unknown = null;
+  readonly data = signal<unknown>(null);
 }
 
 // The history pages show the action ("Approved"), the full-history pages the user ("Ada Lovelace").
@@ -62,7 +65,7 @@ describe('pages that get their data through the router outlet', () => {
     fixture.detectChanges();
     const root: HTMLElement = fixture.nativeElement;
     const show = (data: unknown) => {
-      fixture.componentInstance.data = data;
+      fixture.componentInstance.data.set(data);
       fixture.detectChanges();
     };
     return {root, show, text: () => root.textContent!.replace(/\s+/g, ' ')};

@@ -112,7 +112,7 @@
                 <a [routerLink]="['/search']" class="default-menu-item">
                   Browse Services<i class="fa fa-angle-down uk-margin-small-left"></i>
                 </a>
-                <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="boundary: !nav; boundary-align: true; pos: bottom-justify; offset: 0" style="min-width: 100svw">
+                <div id="ukDrop" class="browse-dropdown-menu uk-navbar-dropdown" uk-drop="target: !.uk-navbar-container; boundary: !.uk-navbar-container; stretch: x; pos: bottom-left; offset: 0">
 
                   <div class="uk-grid-column-medium uk-margin-medium-bottom uk-padding" uk-grid>
                     <div class="uk-width-3-4 services">
@@ -125,15 +125,15 @@
                         </div>
                       </div>
                       <hr>
-                      <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: true">
+                      <div class="uk-child-width-1-4 uk-margin-top" uk-grid="masonry: next">
                         @for (portfolio of resources() | keyvalue; track portfolio.key) {
 <div class="">
                           @if (portfolio.value.length > 0) {
 
                             <h6>{{portfolio.key}}</h6>
-<!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class=" uk-navbar-dropdown-close">-->
+<!--                            <div *ngFor="let service of portfolio.value | slice:0:3;" class="uk-drop-close">-->
                             @for (service of portfolio.value; track service) {
-<div class=" uk-navbar-dropdown-close">
+<div class="uk-drop-close">
                               <a class="" (click)="redirectTo('/service/' + service.id)">{{service.name}}</a>
                             </div>
 }
@@ -162,13 +162,10 @@
               <li>
                 <a [routerLink]="['/join']" class="default-menu-item">Join</a>
               </li>
-<!--                <li>-->
-<!--                  <a [routerLink]="['/datasources/search']" class="default-menu-item">Datasources</a>-->
-<!--                </li>-->
             </ul>
           </div>
           @if (isLoggedIn()) {
-<div class="uk-navbar-right user_actions">
+<div class="uk-navbar-right uk-flex-middle user_actions">
             @if (user(); as user) {
 <a class="uk-icon text-decoration-none" aria-expanded="false">
 <!--              <span class="uk-text-small uk-margin-small-right ">{{user.name}}</span>-->

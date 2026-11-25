@@ -1,12 +1,11 @@
-import { Component, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, output, signal } from '@angular/core';
+import { Component, OnChanges, ChangeDetectionStrategy, computed, inject, input, output, signal } from '@angular/core';
 import {FormControlService} from '../../services/form-control.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Section, Field, HandleBitSet, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Tab, Tabs} from '../../domain/tabs';
 import BitSet from 'bitset';
 
-import UIkit from 'uikit';
 import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.component';
 
 @Component({
@@ -22,7 +21,7 @@ export class ChapterEditComponent implements OnChanges{
   protected router = inject(Router);
 
 
-  readonly form = input<any>(null);
+  readonly form = input.required<UntypedFormGroup>();
   readonly tabsHeader = input<string | null>(null);
   readonly mandatoryFieldsText = input<string | null>(null);
   readonly readonly = input<boolean | null>(null);
@@ -35,6 +34,9 @@ export class ChapterEditComponent implements OnChanges{
   /** The chapter id, and the chapter whose changes were discarded, if any. */
   readonly chapterHasChanges = output<(string | null)[]>();
   readonly submit = output();
+
+  /** The Submit button sits in the title bar, outside the form, and joins it by this id. */
+  readonly formId = computed(() => 'chapter-form-' + this.chapter().id);
 
   editMode = true;
 
@@ -73,14 +75,17 @@ export class ChapterEditComponent implements OnChanges{
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.fields()) {
       this.initializations();
       this.ready = true;
     }
   }
 
-  onSubmit(tempSave: boolean, pendingService?: boolean) {
+  onSubmit(event: Event) {
+    // This component's and the survey's outputs are named submit too, so Angular also binds `(submit)` on their hosts
+    // to the DOM event: left to bubble, it would run those handlers a second time, with the event as their value.
+    event.stopPropagation();
     // if (this.form().valid) {
     window.scrollTo(0, 0);
     this.submit.emit();
@@ -156,16 +161,16 @@ export class ChapterEditComponent implements OnChanges{
         this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
       }
     } else if (subFields[pos].form.mandatory) {
-      if (this.form().get(subFields[pos].accessPath).valid) {
+      if (this.form().get(subFields[pos].accessPath)!.valid) {
         this.loaderBitSet.set(parseInt(subFields[pos].id), 1);
-        if (this.form().get(field.accessPath).valid) {
+        if (this.form().get(field.accessPath)!.valid) {
           this.decreaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         } else {
           this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         }
       } else {
         this.loaderBitSet.set(parseInt(subFields[pos].id), 0);
-        if (this.form().get(field.accessPath).valid) {
+        if (this.form().get(field.accessPath)!.valid) {
           this.decreaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
         } else {
           this.increaseRemainingFieldsPerTab(field.form.group, field.form.display.order);
@@ -175,20 +180,21 @@ export class ChapterEditComponent implements OnChanges{
     this.updateLoaderPercentage();
   }
 
+  // Every field's accessPath names a control: toFormGroup built the form from these same fields.
   handleBitSet(data: Field) {
     // console.log(data.name);
     if (data.typeInfo.multiplicity) {
       this.handleBitSetOfGroup(data);
       return;
     }
-    // console.log(this.form().get(data.accessPath).valid);
-    if (this.form().get(data.accessPath).valid) {
+    // console.log(this.form().get(data.accessPath)!.valid);
+    if (this.form().get(data.accessPath)!.valid) {
       this.decreaseRemainingFieldsPerTab(data.form.group, data.form.display.order);
       this.loaderBitSet.set(parseInt(data.id), 1);
-    } else if (this.form().get(data.accessPath).invalid) {
+    } else if (this.form().get(data.accessPath)!.invalid) {
       this.increaseRemainingFieldsPerTab(data.form.group, data.form.display.order);
       this.loaderBitSet.set(parseInt(data.id), 0);
-    } else if (this.form().get(data.accessPath).pending) {
+    } else if (this.form().get(data.accessPath)!.pending) {
       this.timeOut(300).then(() => this.handleBitSet(data));
       return;
     }

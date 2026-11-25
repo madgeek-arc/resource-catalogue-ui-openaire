@@ -9,7 +9,7 @@ import {CookieLawComponent} from './shared/reusablecomponents/cookie-law/cookie-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieLawComponent],
 })

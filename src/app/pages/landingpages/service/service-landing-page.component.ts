@@ -40,7 +40,7 @@ export class ServiceLandingPageComponent {
         return this.relatedServices(service).pipe(map(relatedServices => ({service, vocabularies, relatedServices})));
       }),
       catchError(error => {
-        console.log(error);
+        console.error(error);
         return EMPTY;
       })
     ))
@@ -67,7 +67,7 @@ export class ServiceLandingPageComponent {
     }
     return this.resourceService.getServicesByIdArray(ids).pipe(
       catchError(error => {
-        console.log(error);
+        console.error(error);
         return of([]);
       })
     );

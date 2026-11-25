@@ -21,8 +21,7 @@
             </div>
             <div class="uk-flex uk-flex-middle">
               @if (!readonly()) {
-                <button class="uk-button uk-button-secondary uk-margin-left"
-                  (click)="onSubmit(false)" type="submit"> Submit
+                <button class="uk-button uk-button-secondary uk-margin-left" type="submit" [attr.form]="formId()"> Submit
                 </button>
               }
             </div>
@@ -118,7 +117,7 @@
                       </div>
                       @if (form() && ready) {
                         <div [class]="fields().length === 1 ? 'uk-width-1-1' : 'uk-width-3-4'">
-                          <form [formGroup]="form()">
+                          <form [formGroup]="form()" [id]="formId()" (ngSubmit)="onSubmit($event)">
                             <div class="formContainer">
                               <ul id="side-tab-{{chapter().id}}" class="uk-switcher">
                                 @for (group of fields(); track group) {

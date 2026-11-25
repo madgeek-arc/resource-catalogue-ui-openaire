@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy, inject, input, output, linkedSignal, signal } from '@angular/core';
+import { Component, OnChanges, OnInit, ChangeDetectionStrategy, ElementRef, afterRenderEffect, inject, input, output, linkedSignal, signal, viewChild } from '@angular/core';
 import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -6,13 +6,13 @@ import {FormControlService} from '../../services/form-control.service';
 import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Columns, Content, DocDefinition, PdfImage, PdfMetadata, PdfTable, TableDefinition} from '../../domain/PDFclasses';
 import pdfMake from 'pdfmake/build/pdfmake';
+import type {Content as PdfContent, ContentText, TableCell} from 'pdfmake/interfaces';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import seedRandom from 'seedrandom';
 
-import UIkit from 'uikit';
 import { ChapterEditComponent } from './chapter-edit.component';
-pdfMake.vfs = pdfFonts.vfs;
+pdfMake.addVirtualFileSystem(pdfFonts);
 
 @Component({
     selector: 'app-survey',
@@ -31,7 +31,7 @@ export class SurveyComponent implements OnInit, OnChanges {
   readonly payload = input<any>(null); // can't import specific project class in lib file
   readonly model = input<Model | null>(null);
   readonly subType = input<string | null>(null);
-  readonly activeUsers = input<any[] | null>(null);
+  readonly activeUsers = input<{fullname: string}[] | null>(null);
   readonly vocabulariesMap = input<VocabularyLookup | null>(null);
   readonly subVocabularies = input<VocabularyLookup | null>(null);
   readonly tabsHeader = input<string | null>(null);
@@ -65,11 +65,18 @@ export class SurveyComponent implements OnInit, OnChanges {
   validate = false;
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
+  private readonly errorAlert = viewChild<ElementRef<HTMLElement>>('errorAlert');
 
   form: UntypedFormGroup;
 
   constructor() {
     this.form = this.fb.group({});
+    // A new error takes the focus, so keyboard and screen reader users get it where it shows, at the top of the form.
+    afterRenderEffect(() => {
+      if (this.errorMessage()) {
+        this.errorAlert()?.nativeElement.focus();
+      }
+    });
   }
 
   ngOnInit() {
@@ -82,7 +89,7 @@ export class SurveyComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     this.ready = false;
     if (this.answers())
       this.editMode = true;
@@ -102,11 +109,11 @@ export class SurveyComponent implements OnInit, OnChanges {
       }
       for (let i = 0; i < model.sections.length; i++) {
         if (model.sections[i].subSections === null) {
-          this.form.addControl(model.name, this.formControlService.toFormGroup(model.sections, true));
+          this.form.addControl(model.name, this.formControlService.toFormGroup(model.sections));
           break;
         }
         if (!model.sections[i].subType || model.sections[i].subType === this.subType()) {
-          this.form.addControl(model.sections[i].name, this.formControlService.toFormGroup(model.sections[i].subSections, true));
+          this.form.addControl(model.sections[i].name, this.formControlService.toFormGroup(model.sections[i].subSections));
         }
       }
       if (this.answers()?.answer) {
@@ -155,17 +162,11 @@ export class SurveyComponent implements OnInit, OnChanges {
       this.valid.emit(this.form.valid);
     } else {
       UIkit.modal('#validation-modal').hide();
-      console.log('Invalid form');
       this.form.markAllAsTouched();
       let str = '';
       for (const key in this.form.value) {
-        // console.log(this.form.get('extras.'+key));
-        console.log(key + ': '+ this.form.get(key)!.valid);
         if (!this.form.get(key)!.valid) {
           str =  str + '\n\t-> ' + key;
-        }
-        for (const keyElement in this.form.get(key)!.value) {
-          console.log(keyElement + ': '+ this.form.get(key+'.'+keyElement)!.valid);
         }
       }
       this.errorMessage.set('There are missing fields at chapters ' + str);
@@ -373,18 +374,19 @@ export class SurveyComponent implements OnInit, OnChanges {
         && !field.form.description.text.includes('For example on curricula for data stewardship')
       ) {
         if (description === 'end') {
-          let questionNumber: string | null = null;
+          // pdfmake renders an empty string as it rendered null or undefined here: nothing.
+          let questionNumber = '';
           if (field.label.text) {
             questionNumber = field.label.text.split('. ')[0];
           }
           // let term = field.form.description.text.split('-')[0]
           const components = this.strip(field.form.description.text).split(' - ');
-          const content = {
+          const content: ContentText = {
             style: ['mt_3'],
             text: [
               questionNumber,
               ' ',
-              {text:  components.shift(), bold: true},
+              {text: components.shift() ?? '', bold: true},
               ' - ',
               components.join('-')
             ]
@@ -430,7 +432,8 @@ export class SurveyComponent implements OnInit, OnChanges {
         }
       } else if (field.typeInfo.type !== 'composite') {
         if (answerValues?.[0]) {
-          docDefinition.content.push(new PdfTable(new TableDefinition([[answerValues[0]]], ['*']), ['mt_1']));
+          // The answer as the form holds it, passed to pdfmake unchanged; text and numbers render as they are.
+          docDefinition.content.push(new PdfTable(new TableDefinition([[answerValues[0] as TableCell]], ['*']), ['mt_1']));
         } else if (field.form.placeholder) {
           docDefinition.content.push(new PdfTable(new TableDefinition([[{text: field.form.placeholder, color: 'gray'}]],['*']), ['mt_1']));
         } else {
@@ -472,7 +475,7 @@ export class SurveyComponent implements OnInit, OnChanges {
       docDefinition.content.push(...descriptionsAtEnd.content);
 
       docDefinition.content.push(new Content('Appendix B', ['title']));
-      const content = [
+      const content: PdfContent[] = [
         {
           style: ['mt_3'],
           text: ['Visit the ',
@@ -522,13 +525,6 @@ export class SurveyComponent implements OnInit, OnChanges {
   /** <-- Generate PDF **/
 
   /** other stuff --> **/
-  closeError() {
-    UIkit.alert('#errorAlert').close();
-    setTimeout(() => {
-      this.errorMessage.set('');
-    }, 550);
-  }
-
   closeSuccessAlert() {
     setTimeout(() => {
       UIkit.alert('#successAlert').close();

@@ -9,8 +9,6 @@ import {URLParameter} from '../../entities/url-parameter';
 import {ResourceService} from '../../services/resource.service';
 import {paging, SearchParameters} from '../search/search-state';
 
-declare let UIkit: any;
-
 /**
  * What the admin lists of providers, services and datasources share: the filters and paging in the query string,
  * the page of bundles they select, and the activate, verify and delete actions.
@@ -125,10 +123,13 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
     }
   }
 
-  /** A cleared select passes null, which removes the parameter. */
+  /**
+   * A cleared select passes null, which removes the parameter. The order select sets sort=modifiedAt beside order, the
+   * names the API sorts by: it reads any other key, such as the orderField of old, as a filter and finds nothing.
+   */
   filterSelection(key: string, value: string | string[] | null) {
     if (key === 'order' && value === null) {
-      this.updateURLParameters('orderField', null);
+      this.updateURLParameters('sort', null);
     }
     this.updateURLParameters(key, value);
     this.updateURLParameters('from', '0');
@@ -139,7 +140,7 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
   protected verify(request: Observable<unknown>) {
     request.subscribe({
       next: () => this.reload.next(),
-      error: error => console.log(error)
+      error: error => console.error(error)
     });
   }
 

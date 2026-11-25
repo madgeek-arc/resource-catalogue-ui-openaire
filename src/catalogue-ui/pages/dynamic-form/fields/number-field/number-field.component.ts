@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, inject, input, output, sign
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {formFieldRefresher} from '../../../../shared/form-refresh';
 import {Field, HandleBitSet} from '../../../../domain/dynamic-form-model';
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import {FormControlService} from '../../../../services/form-control.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class NumberFieldComponent implements OnInit {
   private formControlService = inject(FormControlService);
 
   readonly fieldData = input.required<Field>();
-  readonly editMode = input<any>(undefined);
+  readonly editMode = input(false);
   readonly position = input<number | null>(null);
 
   readonly hasChanges = output<boolean>();
@@ -106,8 +106,9 @@ export class NumberFieldComponent implements OnInit {
   }
 
   /** value is the form value of the field this one depends on. */
-  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string) {
-    if (value?.toString() == enableValue) {
+  enableDisableField(value: {toString(): string} | null | undefined, enableValue: string | null) {
+    // Compares as == did: the text when both are set, and an empty field matches a null enableValue.
+    if ((value?.toString() ?? null) === (enableValue ?? null)) {
       this.formControl.enable();
       this.hideField.set(false);
 

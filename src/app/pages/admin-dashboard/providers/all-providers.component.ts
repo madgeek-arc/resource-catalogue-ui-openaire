@@ -7,8 +7,6 @@ import {ProviderBundle} from '../../../entities/eic-model';
 import {ProviderService} from '../../../services/provider.service';
 import {AdminListComponent} from '../admin-list';
 
-declare let UIkit: any;
-
 @Component({
   selector: 'app-admin-all-providers-dashboard',
   templateUrl: 'all-providers.component.html',
@@ -37,7 +35,7 @@ export class AllProvidersDashboardComponent extends AdminListComponent<ProviderB
       },
       error: error => {
         UIkit.modal('#deletionModal').hide();
-        console.log(error);
+        console.error(error);
       }
     });
   }

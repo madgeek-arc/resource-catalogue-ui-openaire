@@ -27,13 +27,14 @@ export class ProviderHomeComponent {
     catchError(() => EMPTY)
   ), {initialValue: null});
 
-  /** The provider's services, newest change first; null until they have loaded. */
+  /** All of the provider's services, newest change first; null until they have loaded. The page splits them by status
+   *  itself, so it asks for more than the endpoint's default page of 10. */
   readonly allResources = toSignal(toObservable(this.bundle).pipe(
     map(bundle => bundle?.provider.id),
     filter((id): id is string => !!id),
     distinctUntilChanged(),
     switchMap(id => this.providerService.getServicesOfProvider(id, [
-      {key: 'orderField', values: ['modifiedAt']}, {key: 'order', values: ['desc']}
+      {key: 'quantity', values: ['1000']}, {key: 'sort', values: ['modifiedAt']}, {key: 'order', values: ['desc']}
     ]).pipe(
       map(paging => paging.results as ServiceBundle[]),
       catchError(error => {

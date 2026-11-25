@@ -7,11 +7,12 @@ import {EmailMessage} from '../../entities/eic-model';
 import {EmailService} from '../../services/email.service';
 import {EmailModalComponent} from './email-modal.component';
 
-// The host is Eager like the search page, so a host check refreshes the modal only when it marked
-// itself for check (OnPush) or read a changed signal.
+// The host is Eager, so every fixture check reaches the modal, which (OnPush) refreshes only when it
+// marked itself for check or read a changed signal.
 @Component({
   imports: [EmailModalComponent],
   template: '<app-email-modal [serviceIdsArray]="ids" />',
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection -- Eager on purpose, see above
   changeDetection: ChangeDetectionStrategy.Eager
 })
 class HostComponent {
@@ -26,10 +27,10 @@ describe('EmailModalComponent', () => {
 
   beforeEach(() => {
     response = new Subject<EmailMessage>();
-    sendMail = vi.fn((_serviceIds: string[], _message: unknown) => response);
+    sendMail = vi.fn<(serviceIds: string[], message: unknown) => Subject<EmailMessage>>(() => response);
     hide = vi.fn();
     modal = vi.fn(() => ({hide}));
-    (globalThis as any).UIkit = {modal};
+    vi.stubGlobal('UIkit', {modal});
     TestBed.configureTestingModule({providers: [provideRouter([])]});
     // EmailService is provided by the component itself, so the mock replaces it there. The overridden
     // provider outlives a test, so it forwards to the current test's spy instead of holding one.
@@ -39,7 +40,7 @@ describe('EmailModalComponent', () => {
   });
 
   afterEach(() => {
-    delete (globalThis as any).UIkit;
+    vi.unstubAllGlobals();
   });
 
   const setUp = () => {

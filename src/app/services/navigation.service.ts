@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import {Router} from '@angular/router';
+import {Params, Router} from '@angular/router';
 import {Subject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -7,9 +7,9 @@ export class NavigationService {
   router = inject(Router);
 
 
-  public searchParams: Subject<any> = new Subject();
+  public searchParams: Subject<Params> = new Subject();
 
-  private breadcrumbs_: Subject<any> = new Subject<any>();
+  private breadcrumbs_: Subject<unknown> = new Subject<unknown>();
 
   service(id: string) {
     return this.router.navigate(['/service', id]);
@@ -39,12 +39,12 @@ export class NavigationService {
     return this.router.navigate(['/provider/openaire/resource/update', id]);
   }
 
-  search(any: any) {
-    return this.router.navigate(['/search', any]);
+  search(params: Params) {
+    return this.router.navigate(['/search', params]);
   }
 
-  resourcesList(any: any) {
-    return this.router.navigate(['/provider/resource/all', any]);
+  resourcesList(params: Params) {
+    return this.router.navigate(['/provider/resource/all', params]);
   }
 
   /*login() {
@@ -55,8 +55,8 @@ export class NavigationService {
     return this.router.navigate(['/home']);
   }
 
-  compare(any: any) {
-    return this.router.navigate(['/compare', any]);
+  compare(params: Params) {
+    return this.router.navigate(['/compare', params]);
   }
 
   go(url: string) {
@@ -75,7 +75,7 @@ export class NavigationService {
     return this.breadcrumbs_.asObservable();
   }
 
-  public set breadcrumbs(breadcrumb: any) {
+  public set breadcrumbs(breadcrumb: unknown) {
     this.breadcrumbs_.next(breadcrumb);
   }
 }

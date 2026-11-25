@@ -34,7 +34,7 @@ interface TableTool {
   selector: 'app-rich-text-editor',
   imports: [ReactiveFormsModule, TiptapEditorDirective],
   templateUrl: './rich-text-editor.component.html',
-  styleUrl: './rich-text-editor.component.scss',
+  styleUrl: './rich-text-editor.component.less',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => RichTextEditorComponent), multi: true}]

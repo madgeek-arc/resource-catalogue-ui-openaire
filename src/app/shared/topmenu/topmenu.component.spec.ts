@@ -138,7 +138,7 @@ describe('AireTopMenuComponent', () => {
     fixture.detectChanges();
 
     expect([...root.querySelectorAll('#ukDrop h6')].map(h => h.textContent)).toEqual(['Portfolio A']);
-    expect([...root.querySelectorAll('#ukDrop .uk-navbar-dropdown-close a')].map(a => a.textContent)).toEqual(['Argos', 'Zenodo']);
+    expect([...root.querySelectorAll('#ukDrop .uk-drop-close a')].map(a => a.textContent)).toEqual(['Argos', 'Zenodo']);
     expect([...root.querySelectorAll('#module-menu-mobile h6')].map(h => h.textContent)).toEqual(['Portfolio A', 'Portfolio B']);
     expect(TestBed.inject(DataSharingService).refreshRequired.value).toBe(false);
   });

@@ -1,17 +1,6 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
 
-import {authGuard} from './services/auth.guard';
-
-
-
-
-
-
-
-
-
-
-
+import { authGuard } from './services/auth.guard';
 
 export const routes: Routes = [
   {
@@ -31,13 +20,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/search/search.aire.component').then(m => m.SearchAireComponent),
     data: {
       breadcrumb: 'Search'
-    }
-  },
-  {
-    path: 'datasources/search',
-    loadComponent: () => import('./pages/search/datasources-search/datasourceSearch.component').then(m => m.DatasourceSearchComponent),
-    data: {
-      breadcrumb: 'Datasources'
     }
   },
   {
@@ -92,13 +74,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/landingpages/user/user-item.component').then(m => m.UserItemComponent),
     data: {
       breadcrumb: 'Users'
-    }
-  },
-  {
-    path: 'datasource/:datasourceId',
-    loadComponent: () => import('./pages/landingpages/datasource/datasource').then(m => m.Datasource),
-    data: {
-      breadcrumb: 'Datasource'
     }
   },
   {

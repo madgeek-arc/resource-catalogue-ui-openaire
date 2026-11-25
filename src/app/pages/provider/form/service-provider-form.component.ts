@@ -16,12 +16,10 @@ import { LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
 
-declare let UIkit: any;
-
 @Component({
     selector: 'app-new-service-provider',
     templateUrl: './service-provider-form.component.html',
-    styleUrls: ['./service-provider-form.component.css'],
+    styleUrls: ['./service-provider-form.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [AsideHelpContentComponent, HelpContentComponent, ReactiveFormsModule, NgSelectComponent, RichTextEditorComponent, RouterLink, LowerCasePipe]
 })
@@ -53,10 +51,10 @@ export class ServiceProviderFormComponent implements OnInit {
   premiumSort = new PremiumSortPipe();
   edit = false;
   hasChanges = false;
-  pendingProvider = false;
   disable = false;
   readonly showLoader = signal(false);
-  tabsError: boolean[] = [false, false, false, false, false, false, false, false];
+  /** One entry per tab, in tab order: whether the tab holds a field in error. */
+  tabsError: boolean[] = new Array(9).fill(false);
   isPortalAdmin = false;
 
   codeOfConduct = false;
@@ -189,14 +187,6 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    const path = this.route.snapshot.routeConfig!.path!;
-    if (path.includes('add/:providerId')) {
-      this.pendingProvider = true;
-    }
-    // if (path.includes('info/:providerId')) {
-    //   this.pendingProvider = true;
-    // }
     this.setVocabularies();
     this.newProviderForm = this.fb.group(this.formDefinition);
     if (this.edit === false) {
@@ -242,7 +232,7 @@ export class ServiceProviderFormComponent implements OnInit {
     // fixme: hasAdminAcceptedTerms 404
     // if (this._hasUserConsent) {
     //   if (this.edit) {
-    //     this.providerService.hasAdminAcceptedTerms(this.providerId, this.pendingProvider).subscribe(
+    //     this.providerService.hasAdminAcceptedTerms(this.providerId).subscribe(
     //       boolean => { this.agreedToTerms = boolean; },
     //       error => console.log(error),
     //       () => {
@@ -262,7 +252,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   }
 
-  registerProvider(saveDraft: boolean) {
+  registerProvider() {
     // console.log('Submit');
     if (!this.authService.isSignedIn()) {
       sessionStorage.setItem('provider', JSON.stringify(this.newProviderForm.value));
@@ -271,13 +261,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
     this.errorMessage.set('');
     // this.trimFormWhiteSpaces();
-    const path = this.route.snapshot.routeConfig!.path!;
-    let method: 'updateAndPublishPendingProvider' | 'updateServiceProvider' | 'createNewServiceProvider';
-    if (path === 'add/:providerId') {
-      method = 'updateAndPublishPendingProvider';
-    } else {
-      method = this.edit ? 'updateServiceProvider' : 'createNewServiceProvider';
-    }
+    const method = this.edit ? 'updateServiceProvider' : 'createNewServiceProvider';
 
     for (let i = 0; i < this.domainArray.length ; i++) {
       if (this.domainArray.controls[i].get('scientificDomain')!.value === ''
@@ -301,25 +285,7 @@ export class ServiceProviderFormComponent implements OnInit {
       }
     }
 
-    if (saveDraft) { //not used
-      this.showLoader.set(true);
-      window.scrollTo(0, 0);
-      this.providerService.temporarySaveProvider(this.newProviderForm.value, (path !== 'add/:providerId' && this.edit))
-        .subscribe(
-          res => {
-            this.showLoader.set(false);
-            this.router.navigate([`/provider/add/${res.id}`]);
-          },
-          err => {
-            this.showLoader.set(false);
-            window.scrollTo(0, 0);
-            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
-          },
-          () => {
-            this.showLoader.set(false);
-          }
-        );
-    } else if (this.newProviderForm.valid) {
+    if (this.newProviderForm.valid) {
       this.showLoader.set(true);
       window.scrollTo(0, 0);
 
@@ -332,10 +298,10 @@ export class ServiceProviderFormComponent implements OnInit {
               this.router.navigate([`/provider/${res.id}/dashboard/home`]);
             }, 3000);
           },
-          err => {
+          (err: HttpErrorResponse) => {
             this.showLoader.set(false);
             window.scrollTo(0, 0);
-            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
+            this.errorMessage.set(saveErrorMessage(err));
           }
         );
       } else {
@@ -344,7 +310,7 @@ export class ServiceProviderFormComponent implements OnInit {
           (err: HttpErrorResponse) => {
             this.showLoader.set(false);
             window.scrollTo(0, 0);
-            this.errorMessage.set('Something went wrong. ' + JSON.stringify(err.error.error));
+            this.errorMessage.set(saveErrorMessage(err));
           },
           () => {
             this.showLoader.set(false);
@@ -455,7 +421,7 @@ export class ServiceProviderFormComponent implements OnInit {
         this.premiumSort.transform(res['Country'], ['Europe', 'Worldwide']);
         this.vocabularies.set(res);
       },
-      error => console.log(JSON.stringify(error.error))
+      error => console.error(JSON.stringify(error.error))
     );
   }
 
@@ -706,9 +672,9 @@ export class ServiceProviderFormComponent implements OnInit {
   acceptTerms() {
     if (this._hasUserConsent && this.edit) {
       // In edit mode the provider id comes from the :providerId route parameter.
-      this.providerService.adminAcceptedTerms(this.providerId!, this.pendingProvider).subscribe(
-        res => {},
-        error => { console.log(error); },
+      this.providerService.adminAcceptedTerms(this.providerId!).subscribe(
+        () => {},
+        error => { console.error(error); },
         () => {}
       );
     }
@@ -724,4 +690,18 @@ export class ServiceProviderFormComponent implements OnInit {
       .toLowerCase();
   }
 
+}
+
+/** What a failed save tells the user: the server's message, and its error code when it sent one. */
+function saveErrorMessage(error: HttpErrorResponse): string {
+  if (error.status === 0) {
+    return 'The server could not be reached. Please check your connection and try again.';
+  }
+  // The API answers with {message, transactionId}; a proxy or gateway may answer with text, or nothing.
+  const body: unknown = error.error;
+  const details = body && typeof body === 'object' ? body as {message?: string; transactionId?: string} : null;
+  const message = details?.message || (typeof body === 'string' && body.trim()) || `Saving failed: the server answered ${error.status} ${error.statusText}.`;
+  return details?.transactionId
+    ? `${message}\nFor more information please provide the error code to the system administrators.\nError Code: ${details.transactionId}`
+    : message;
 }

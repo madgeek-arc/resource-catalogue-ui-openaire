@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
-import {provideHttpClient} from '@angular/common/http';
+import {HttpErrorResponse, provideHttpClient} from '@angular/common/http';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
 import {of, Subject, throwError} from 'rxjs';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
@@ -109,7 +109,7 @@ describe('FormsComponent', () => {
   });
 
   it('shows what the server said and hides the loader when saving fails', async () => {
-    const quiet = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
     const {root, settle, loader} = await open('/service/edit/argos');
     services.next({id: 'argos', name: 'Argos'});
@@ -124,5 +124,51 @@ describe('FormsComponent', () => {
     expect(root.textContent).toContain('Error Code: t1');
     expect(loader()).toBeNull();
     quiet.mockRestore();
+  });
+
+  describe('when saving fails', () => {
+    const failedSave = async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+      const page = await open('/service/edit/argos');
+      services.next({id: 'argos', name: 'Argos'});
+      services.complete();
+      await page.settle();
+      const submit = async () => {
+        [...page.root.querySelectorAll('button')].find(button => button.textContent!.trim() === 'Submit')!.click();
+        await page.settle();
+      };
+      const error = () => page.root.querySelector<HTMLElement>('#formErrorAlert');
+      return {...page, submit, error};
+    };
+
+    afterEach(() => vi.restoreAllMocks());
+
+    it('moves the focus to the error, and shows the next error once the user closed this one', async () => {
+      const {settle, submit, error} = await failedSave();
+
+      await submit();
+      expect(document.activeElement).toBe(error());
+      expect(error()!.querySelector('button.uk-alert-close')!.getAttribute('aria-label')).toBe('Close');
+
+      // UIkit fades the alert out from its close button, then fires hidden.
+      error()!.dispatchEvent(new CustomEvent('hidden'));
+      await settle();
+      expect(error()).toBeNull();
+
+      resources['editService'].mockReturnValueOnce(throwError(() => new HttpErrorResponse({status: 0, statusText: 'Unknown Error'})));
+      await submit();
+      expect(error()!.textContent).toContain('The server could not be reached.');
+      expect(document.activeElement).toBe(error());
+    });
+
+    it('says what failed when the server sends no message', async () => {
+      const {submit, error} = await failedSave();
+      resources['editService'].mockReturnValueOnce(throwError(() => new HttpErrorResponse({status: 502, statusText: 'Bad Gateway', error: null})));
+
+      await submit();
+
+      expect(error()!.textContent!.trim()).toBe('Saving failed: the server answered 502 Bad Gateway.');
+    });
   });
 });

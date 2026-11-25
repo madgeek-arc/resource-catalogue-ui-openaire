@@ -97,11 +97,14 @@
           </button>
         }
         @if (invitationUrl()) {
-          <button class="uk-button uk-button-primary" type="button" title="copy to clipboard"
+          <button class="uk-button uk-button-primary" type="button" title="Copy invitation link" aria-label="Copy invitation link"
             (click)="copyToClipboard()">
-            <span class="material-icons uk-text-middle">content_copy</span>
+            <span class="material-icons uk-text-middle" aria-hidden="true">{{copyStatus()?.copied ? 'check' : 'content_copy'}}</span>
           </button>
         }
+        <!-- Outside the button and always in the page, so screen readers announce what is written into it. -->
+        <span role="status" class="uk-margin-small-left" [class.uk-text-success]="copyStatus()?.copied"
+          [class.uk-text-danger]="copyStatus()?.copied === false">{{copyStatus()?.message}}</span>
       </div>
     </div>
   </div>

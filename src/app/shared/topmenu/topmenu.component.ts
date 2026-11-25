@@ -6,7 +6,6 @@ import {ResourceService} from '../../services/resource.service';
 import {DataSharingService} from '../../services/data-sharing.service';
 import {Provider, Service} from '../../entities/eic-model';
 import {UserService} from '../../services/user.service';
-import UIkit from 'uikit';
 import {EMPTY, of} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
 import { KeyValuePipe } from '@angular/common';
@@ -15,7 +14,7 @@ import { KeyValuePipe } from '@angular/common';
 @Component({
     selector: 'app-top-menu-aire',
     templateUrl: './topmenu.component.html',
-    styleUrls: ['./topmenu.component.css'],
+    styleUrls: ['./topmenu.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [RouterLink, KeyValuePipe]
 })
@@ -66,7 +65,7 @@ export class AireTopMenuComponent {
     this.dataSharingService.refreshRequired.pipe(
       filter(refresh => refresh),
       // A failed load is caught here so that the next refresh still loads; refreshRequired stays true, as before.
-      switchMap(() => this.resourceService.getResourcesGroupedByField('portfolios', true).pipe(
+      switchMap(() => this.resourceService.getResourcesGroupedByField('portfolios').pipe(
         catchError(error => {
           console.error(error);
           return EMPTY;

@@ -11,8 +11,6 @@ import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {paging, SearchParameters} from '../../../search/search-state';
 
-declare let UIkit: any;
-
 @Component({
   selector: 'app-provider-services',
   templateUrl: 'provider-services.component.html',
@@ -72,7 +70,7 @@ export class ProviderServicesComponent {
   ).pipe(
     map(([users, portfolios, resourceState]) => ({names: users.concat(portfolios), resourceState})),
     catchError(error => {
-      console.log(error);
+      console.error(error);
       return EMPTY;
     })
   ), {initialValue: null});
@@ -132,7 +130,7 @@ export class ProviderServicesComponent {
   /** A cleared select passes null, which removes the parameter. */
   filterSelection(key: string, value: string | string[] | null) {
     if (key === 'order' && value === null) {
-      this.updateURLParameters('orderField', null);
+      this.updateURLParameters('sort', null);
     }
     this.updateURLParameters(key, value);
     this.updateURLParameters('from', '0');
