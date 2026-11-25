@@ -1,6 +1,6 @@
 import {DatePipe} from '@angular/common';
 import {provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
-import {ApplicationConfig, ErrorHandler, inject, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
+import {ApplicationConfig, ErrorHandler, inject, provideAppInitializer, provideZonelessChangeDetection} from '@angular/core';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {provideRouter, Router, withRouterConfig} from '@angular/router';
 import {provideServiceWorker} from '@angular/service-worker';
@@ -12,8 +12,8 @@ import {authenticationInterceptor} from './services/authentication-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // The app still relies on zone.js; Angular 22 would otherwise bootstrap without it.
-    provideZoneChangeDetection(),
+    // No zone.js: views refresh on signals, template and host listeners, markForCheck and the async pipe.
+    provideZonelessChangeDetection(),
     provideRouter(routes, withRouterConfig({onSameUrlNavigation: 'reload'})),
     provideHttpClient(withXhr(), withInterceptors([authenticationInterceptor])),
     // The cookie banner uses @angular/animations.
