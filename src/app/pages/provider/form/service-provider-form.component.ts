@@ -15,6 +15,7 @@ import { AsideHelpContentComponent, HelpContentComponent } from '../../../shared
 import { LowerCasePipe } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import {RichTextEditorComponent} from '../../../../catalogue-ui/shared/rich-text-editor/rich-text-editor.component';
+import {saveErrorMessage} from '../../../shared/api-error-message';
 
 @Component({
     selector: 'app-new-service-provider',
@@ -690,18 +691,4 @@ export class ServiceProviderFormComponent implements OnInit {
       .toLowerCase();
   }
 
-}
-
-/** What a failed save tells the user: the server's message, and its error code when it sent one. */
-function saveErrorMessage(error: HttpErrorResponse): string {
-  if (error.status === 0) {
-    return 'The server could not be reached. Please check your connection and try again.';
-  }
-  // The API answers with {message, transactionId}; a proxy or gateway may answer with text, or nothing.
-  const body: unknown = error.error;
-  const details = body && typeof body === 'object' ? body as {message?: string; transactionId?: string} : null;
-  const message = details?.message || (typeof body === 'string' && body.trim()) || `Saving failed: the server answered ${error.status} ${error.statusText}.`;
-  return details?.transactionId
-    ? `${message}\nFor more information please provide the error code to the system administrators.\nError Code: ${details.transactionId}`
-    : message;
 }

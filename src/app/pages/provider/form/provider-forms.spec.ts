@@ -54,7 +54,8 @@ describe('provider forms', () => {
     vocabularies = new Subject();
     providers = new Subject();
     create = vi.fn(() => new Subject());
-    update = vi.fn(() => throwError(() => ({status: 400, error: {message: 'Name taken', transactionId: 't1'}})));
+    // The API's problem details, as it answers a rejected save.
+    update = vi.fn(() => throwError(() => ({status: 400, statusText: 'Bad Request', error: {title: 'Bad Request', status: 400, detail: 'Name taken', instance: '/api/oa/providers/openaire', method: 'PUT'}})));
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -164,7 +165,7 @@ describe('provider forms', () => {
       quiet.mockRestore();
     });
 
-    it("shows the server's message and error code when the update fails", async () => {
+    it("shows the server's reason when the update fails", async () => {
       const {fixture, root, answer, text} = await open('/provider/openaire/update');
       answer(vocabularies, noVocabularies());
       answer(providers, {...provider(), publicContacts: [{email: 'info@example.org'}]});
@@ -175,7 +176,7 @@ describe('provider forms', () => {
 
       expect(update).toHaveBeenCalled();
       expect(text()).toContain('Name taken');
-      expect(text()).toContain('Error Code: t1');
+      expect(text()).not.toContain('Bad Request');
       expect(text()).not.toContain('undefined');
     });
   });

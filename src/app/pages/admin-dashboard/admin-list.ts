@@ -9,6 +9,8 @@ import {Paging} from '../../entities/paging';
 import {URLParameter} from '../../entities/url-parameter';
 import {ResourceService} from '../../services/resource.service';
 import {paging, SearchParameters} from '../search/search-state';
+import {HttpErrorResponse} from '@angular/common/http';
+import {apiErrorMessage} from '../../shared/api-error-message';
 
 /**
  * What the admin lists of providers, services and datasources share: the filters and paging in the query string,
@@ -159,11 +161,12 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
       window.scrollTo(0, 0);
       return;
     }
+    this.errorMessage.set(null);
     this.showLoader.set(true);
     publish(bundle.id, !bundle.active).subscribe({
-      error: error => {
+      error: (error: HttpErrorResponse) => {
         this.showLoader.set(false);
-        this.errorMessage.set('Something went bad. ' + error.error.error);
+        this.errorMessage.set(apiErrorMessage(error, bundle.active ? 'Deactivating failed' : 'Activating failed'));
       },
       complete: () => {
         this.showLoader.set(false);

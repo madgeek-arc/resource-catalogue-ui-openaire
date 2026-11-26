@@ -11,6 +11,8 @@ import {plainStatuses} from '../../../../entities/bundle-status';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {paging, SearchParameters} from '../../../search/search-state';
+import {HttpErrorResponse} from '@angular/common/http';
+import {apiErrorMessage} from '../../../../shared/api-error-message';
 
 @Component({
   selector: 'app-provider-services',
@@ -144,11 +146,12 @@ export class ProviderServicesComponent {
       window.scrollTo(0, 0);
       return;
     }
+    this.errorMessage.set(null);
     this.showLoader.set(true);
     this.resourceService.publishService(bundle.id, !bundle.active).subscribe({
-      error: error => {
+      error: (error: HttpErrorResponse) => {
         this.showLoader.set(false);
-        this.errorMessage.set('Something went bad. ' + error.error.error);
+        this.errorMessage.set(apiErrorMessage(error, bundle.active ? 'Deactivating failed' : 'Activating failed'));
       },
       complete: () => {
         this.showLoader.set(false);
@@ -165,11 +168,12 @@ export class ProviderServicesComponent {
   }
 
   deleteService(bundle: Bundle<Service | Datasource>) {
+    this.errorMessage.set(null);
     this.showLoader.set(true);
     this.resourceService.deleteService(bundle.id).subscribe({
-      error: error => {
+      error: (error: HttpErrorResponse) => {
         this.showLoader.set(false);
-        this.errorMessage.set('Something went bad. ' + error.error);
+        this.errorMessage.set(apiErrorMessage(error, 'Deleting failed'));
       },
       complete: () => window.location.reload()
     });

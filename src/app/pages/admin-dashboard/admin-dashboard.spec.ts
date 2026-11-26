@@ -1,9 +1,10 @@
 import {ChangeDetectionStrategy, Component, forwardRef, input, Type} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NgOptionComponent, NgSelectComponent} from '@ng-select/ng-select';
+import {HttpErrorResponse} from '@angular/common/http';
 import {TestBed} from '@angular/core/testing';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
-import {of, Subject} from 'rxjs';
+import {of, Subject, throwError} from 'rxjs';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {ProviderService} from '../../services/provider.service';
 import {ResourceService} from '../../services/resource.service';
@@ -282,6 +283,18 @@ describe('admin dashboard', () => {
       expect(providers).toHaveBeenCalledTimes(2);
       expect(text()).toContain('1 Providers');
       expect(text()).toContain('Inactive');
+    });
+
+    it('shows the server\'s reason when deactivating fails', async () => {
+      const {link, settle, text} = await open('/admin/providers');
+      publish.mockReturnValue(throwError(() => new HttpErrorResponse({status: 409, statusText: 'Conflict',
+        error: {title: 'Conflict', status: 409, detail: 'Provider has active services', instance: '/api/oa/providers/bundles/openaire/deactivate'}})));
+
+      link('Deactivate').click();
+      await settle();
+
+      expect(text()).toContain('Provider has active services');
+      expect(text()).not.toContain('undefined');
     });
 
     it('approves a pending provider and shows the page again', async () => {

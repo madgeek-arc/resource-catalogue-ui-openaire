@@ -3,6 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NgOptionComponent, NgSelectComponent} from '@ng-select/ng-select';
 import {TestBed} from '@angular/core/testing';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 import {of, Subject, throwError} from 'rxjs';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {URLParameter} from '../../../entities/url-parameter';
@@ -96,7 +97,9 @@ describe('provider and service dashboards', () => {
             getServiceOrDatasourceBundle: (id: string) => id === 'missing'
               ? throwError(() => ({status: 404}))
               : of({...serviceBundle(id, 'Argos', 'approved'), loggingInfo: log}),
-            getDatasourceByServiceId: () => throwError(() => ({status: 404}))
+            getDatasourceByServiceId: () => throwError(() => ({status: 404})),
+            publishService: () => throwError(() => new HttpErrorResponse({status: 409, statusText: 'Conflict',
+              error: {title: 'Conflict', status: 409, detail: 'The provider is inactive'}}))
           }
         },
         {provide: NavigationService, useValue: {go}}
@@ -231,6 +234,22 @@ describe('provider and service dashboards', () => {
       expect(text()).toContain('Page 2 of 4');
       await fixture.whenStable();
       expect(router.url).toBe('/provider/openaire/dashboard/services?quantity=9&from=9');
+    });
+
+    it('shows why a service cannot be activated, and the server\'s reason when activating fails', async () => {
+      const {answer, fixture, text} = await open('/provider/openaire/dashboard/services');
+      await answer('openaire', providerBundle('openaire', 'OpenAIRE'));
+      const services = fixture.debugElement.query(debug => debug.componentInstance instanceof ProviderServicesComponent)
+        .componentInstance as ProviderServicesComponent;
+
+      services.toggleServiceActive(serviceBundle('amnesia', 'Amnesia', 'pending') as never);
+      fixture.detectChanges();
+      expect(text()).toContain('You cannot activate a pending resource.');
+
+      services.toggleServiceActive({...serviceBundle('argos', 'Argos', 'approved'), active: false} as never);
+      fixture.detectChanges();
+      expect(text()).toContain('The provider is inactive');
+      expect(text()).not.toContain('pending resource');
     });
   });
 

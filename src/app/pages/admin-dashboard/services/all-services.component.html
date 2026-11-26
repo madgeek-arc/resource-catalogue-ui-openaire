@@ -48,6 +48,14 @@
 <div class="uk-section uk-section-xsmall">
   <div class="uk-container uk-container-expand">
 
+    @if (errorMessage()) {
+      <!-- UIkit closes the alert itself; hidden then clears the message, or a later error would fill a removed box. -->
+      <div class="uk-alert-danger" uk-alert role="alert" (hidden)="errorMessage.set(null)">
+        <button type="button" class="uk-alert-close" uk-close aria-label="Close"></button>
+        <pre class="uk-alert-danger">{{ errorMessage() }}</pre>
+      </div>
+    }
+
     @if (showLoader()) {
 <div class="whiteFilm">
       <i class="fa fa-spinner fa-spin fa-5x uk-position-center loader" aria-hidden="true"></i>

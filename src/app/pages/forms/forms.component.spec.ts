@@ -168,7 +168,7 @@ describe('FormsComponent', () => {
 
       await submit();
 
-      expect(error()!.textContent!.trim()).toBe('Saving failed: the server answered 502 Bad Gateway.');
+      expect(error()!.textContent!.trim()).toBe('Saving failed: the server answered with error 502.');
     });
   });
 });
