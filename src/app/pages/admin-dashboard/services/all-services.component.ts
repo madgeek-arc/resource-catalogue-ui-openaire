@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {NgOptionComponent, NgSelectComponent} from '@ng-select/ng-select';
 import {Bundle, Service} from '../../../entities/eic-model';
+import {BundleStatus} from '../../../entities/bundle-status';
 import {ResourceService} from '../../../services/resource.service';
 import {AdminListComponent} from '../admin-list';
 
@@ -16,15 +17,16 @@ import {AdminListComponent} from '../admin-list';
 export class AllServicesDashboardComponent extends AdminListComponent<Bundle<Service>> {
   private resourceService = inject(ResourceService);
 
+  protected readonly kind = 'resource';
   readonly list = this.load(parameters => this.resourceService.getBundleOfServices(parameters));
-  readonly resourceState = this.vocabulary('Resource state');
+  readonly resourceState = this.statuses('Resource state');
 
   /** The providers of the current page's services, to filter by; the selected one is not read back from the URL. */
   readonly providerFacet = computed(() =>
     this.list()?.facets.find(facet => facet.field === 'resource_organisation')?.values ?? []);
   readonly provider = signal<string | null>(null);
 
-  verifyService(id: string, active: boolean, status: string) {
+  verifyService(id: string, active: boolean, status: BundleStatus) {
     this.verify(this.resourceService.verifyService(id, active, status));
   }
 

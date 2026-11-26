@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {NgOptionComponent, NgSelectComponent} from '@ng-select/ng-select';
 import {ProviderBundle} from '../../../entities/eic-model';
+import {BundleStatus} from '../../../entities/bundle-status';
 import {ProviderService} from '../../../services/provider.service';
 import {AdminListComponent} from '../admin-list';
 
@@ -16,10 +17,11 @@ import {AdminListComponent} from '../admin-list';
 export class AllProvidersDashboardComponent extends AdminListComponent<ProviderBundle> {
   private providerService = inject(ProviderService);
 
+  protected readonly kind = 'provider';
   readonly list = this.load(parameters => this.providerService.getProviderBundles(parameters));
-  readonly providerState = this.vocabulary('Provider state');
+  readonly providerState = this.statuses('Provider state');
 
-  verifyProvider(id: string, active: boolean, status: string) {
+  verifyProvider(id: string, active: boolean, status: BundleStatus) {
     this.verify(this.providerService.verifyProvider(id, active, status));
   }
 

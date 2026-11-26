@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {skipNotFoundRedirect} from './authentication-interceptor';
 import {environment} from '../../environments/environment';
 import {Provider, Service, ServiceHistory, Vocabulary, Datasource, Bundle} from '../entities/eic-model';
+import {BundleStatus} from '../entities/bundle-status';
 import {Paging,} from '../entities/paging';
 import {URLParameter} from '../entities/url-parameter';
 import {forkJoin, Observable, of} from 'rxjs';
@@ -164,9 +165,8 @@ export class ResourceService {
     );
   }
 
-  verifyService(id: string, active: boolean, status: string, comment?: string) {
-    // old status values: 'approved resource' | 'rejected resource'
-    const action = status && status.startsWith('rejected') ? 'reject' : 'approve';
+  verifyService(id: string, active: boolean, status: BundleStatus, comment?: string) {
+    const action = status === 'rejected' ? 'reject' : 'approve';
     return this.http.post(this.oa + `/services/bundles/${id}/${action}`, {comment}, this.options);
   }
 
@@ -178,9 +178,8 @@ export class ResourceService {
     return this.http.delete(this.oa + `/services/${id}`, this.options);
   }
 
-  verifyDatasource(id: string, active: boolean, status: string, comment?: string) {
-    // old status values: 'approved resource' | 'rejected resource'
-    const action = status && status.startsWith('rejected') ? 'reject' : 'approve';
+  verifyDatasource(id: string, active: boolean, status: BundleStatus, comment?: string) {
+    const action = status === 'rejected' ? 'reject' : 'approve';
     return this.http.post(this.oa + `/datasources/bundles/${id}/${action}`, {comment}, this.options);
   }
 

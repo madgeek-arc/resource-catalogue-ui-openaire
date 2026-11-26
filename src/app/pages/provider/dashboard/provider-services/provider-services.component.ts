@@ -7,6 +7,7 @@ import {NgSelectComponent, NgOptionComponent} from '@ng-select/ng-select';
 import {BehaviorSubject, combineLatest, EMPTY, zip} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/operators';
 import {Bundle, Datasource, ProviderBundle, Service} from '../../../../entities/eic-model';
+import {plainStatuses} from '../../../../entities/bundle-status';
 import {ProviderService} from '../../../../services/provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 import {paging, SearchParameters} from '../../../search/search-state';
@@ -68,7 +69,7 @@ export class ProviderServicesComponent {
     this.resourceService.getNewVocabulariesByType('Portfolios'),
     this.resourceService.getNewVocabulariesByType('Resource state')
   ).pipe(
-    map(([users, portfolios, resourceState]) => ({names: users.concat(portfolios), resourceState})),
+    map(([users, portfolios, resourceState]) => ({names: users.concat(portfolios), resourceState: plainStatuses(resourceState)})),
     catchError(error => {
       console.error(error);
       return EMPTY;
@@ -139,7 +140,7 @@ export class ProviderServicesComponent {
 
   toggleServiceActive(bundle: Bundle<Service | Datasource>) {
     if (bundle.status === 'pending' || bundle.status === 'rejected') {
-      this.errorMessage.set(`You cannot activate a ${bundle.status}.`);
+      this.errorMessage.set(`You cannot activate a ${bundle.status} resource.`);
       window.scrollTo(0, 0);
       return;
     }

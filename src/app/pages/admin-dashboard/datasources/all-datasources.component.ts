@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {NgOptionComponent, NgSelectComponent} from '@ng-select/ng-select';
 import {Bundle, Datasource} from '../../../entities/eic-model';
+import {BundleStatus} from '../../../entities/bundle-status';
 import {ResourceService} from '../../../services/resource.service';
 import {AdminListComponent} from '../admin-list';
 
@@ -16,10 +17,11 @@ import {AdminListComponent} from '../admin-list';
 export class AllDatasourcesDashboardComponent extends AdminListComponent<Bundle<Datasource>> {
   private resourceService = inject(ResourceService);
 
+  protected readonly kind = 'datasource';
   readonly list = this.load(parameters => this.resourceService.getBundleOfDatasources(parameters));
-  readonly datasourceState = this.vocabulary('Datasource state');
+  readonly datasourceState = this.statuses('Datasource state');
 
-  verifyDatasource(id: string, active: boolean, status: string) {
+  verifyDatasource(id: string, active: boolean, status: BundleStatus) {
     this.verify(this.resourceService.verifyDatasource(id, active, status));
   }
 

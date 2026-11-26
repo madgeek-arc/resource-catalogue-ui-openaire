@@ -3,6 +3,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, EMPTY, Observable} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
+import {plainStatuses} from '../../entities/bundle-status';
 import {Bundle, Vocabulary} from '../../entities/eic-model';
 import {Paging} from '../../entities/paging';
 import {URLParameter} from '../../entities/url-parameter';
@@ -36,6 +37,9 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
   /** Fetches the current page again, after an action changed what it shows. */
   protected readonly reload = new BehaviorSubject<void>(undefined);
 
+  /** What the list holds, as the activation error names it: provider, resource or datasource. */
+  protected abstract readonly kind: string;
+
   /** The bundles for the current filters and page; null until they have loaded. */
   abstract readonly list: Signal<Paging<T> | null>;
 
@@ -61,9 +65,13 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
     ), {initialValue: null});
   }
 
-  /** The vocabulary of a filter select; null until it has loaded, and if it fails. */
-  protected vocabulary(type: string): Signal<Vocabulary[] | null> {
+  /**
+   * The options of the status select: the state vocabulary of `type`, with the plain statuses the API filters by as ids
+   * and its names as labels; null until it has loaded, and if it fails.
+   */
+  protected statuses(type: string): Signal<Vocabulary[] | null> {
     return toSignal(this.vocabularies.getNewVocabulariesByType(type).pipe(
+      map(plainStatuses),
       catchError(error => {
         console.error(error);
         return EMPTY;
@@ -147,7 +155,7 @@ export abstract class AdminListComponent<T extends Bundle<unknown>> {
   /** Activates or deactivates an approved bundle with `publish`, then shows the page again. */
   protected toggleActive(bundle: T, publish: (id: string, active: boolean) => Observable<unknown>) {
     if (bundle.status === 'pending' || bundle.status === 'rejected') {
-      this.errorMessage.set(`You cannot activate a ${bundle.status}.`);
+      this.errorMessage.set(`You cannot activate a ${bundle.status} ${this.kind}.`);
       window.scrollTo(0, 0);
       return;
     }

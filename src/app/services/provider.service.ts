@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Bundle, Datasource, Provider, ProviderBundle, Service} from '../entities/eic-model';
+import {BundleStatus} from '../entities/bundle-status';
 import {environment} from '../../environments/environment';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -96,9 +97,8 @@ export class ProviderService {
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`).pipe(catchError(() => of(true)));
   }
 
-  verifyProvider(id: string, active: boolean, status: string, comment?: string) {
-    // old status values: 'approved provider' | 'rejected provider'
-    const action = status && status.startsWith('rejected') ? 'reject' : 'approve';
+  verifyProvider(id: string, active: boolean, status: BundleStatus, comment?: string) {
+    const action = status === 'rejected' ? 'reject' : 'approve';
     return this.http.post(this.oa + `/providers/bundles/${id}/${action}`, {comment}, this.options);
   }
 

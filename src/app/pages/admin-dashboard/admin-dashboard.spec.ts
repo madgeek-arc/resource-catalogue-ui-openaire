@@ -71,7 +71,8 @@ describe('admin dashboard', () => {
         {provide: ProviderService, useValue: {getProviderBundles: providers, publishProvider: publish, verifyProvider: verify}},
         {
           provide: ResourceService, useValue: {
-            getNewVocabulariesByType: (type: string) => of([{id: type, name: type}]),
+            // A state vocabulary as the API gives it, such as 'Resource state': ids like 'pending resource'.
+            getNewVocabulariesByType: (type: string) => of([{id: `pending ${type.split(' ')[0].toLowerCase()}`, name: `Pending ${type.split(' ')[0]}`}]),
             getBundleOfServices: () => of(page(1, 0, [serviceBundle('argos', 'Argos')],
               [{field: 'resource_organisation', values: [{value: 'openaire', label: 'OpenAIRE'}]}])),
             getBundleOfDatasources: () => of(page(0, 0, []))
@@ -238,6 +239,13 @@ describe('admin dashboard', () => {
       expect(root.querySelector('#resourceState')).not.toBeNull();
     });
 
+    it('filters by the plain status and keeps the state vocabulary\'s label', async () => {
+      const {fixture} = await open('/admin/providers');
+      const statusSelect = fixture.debugElement.query(debug => debug.componentInstance instanceof NgSelectStubComponent)
+        .componentInstance as NgSelectStubComponent;
+      expect(statusSelect.items()).toEqual([{id: 'pending', name: 'Pending Provider'}]);
+    });
+
     it('shows the filters of the URL and keeps them when the user filters again, back on the first page', async () => {
       const {router, list, fixture} = await open('/admin/providers?status=pending&from=9');
       const providerList = list(AllProvidersDashboardComponent);
@@ -305,7 +313,7 @@ describe('admin dashboard', () => {
       const selects = fixture.debugElement.queryAll(debug => debug.componentInstance instanceof NgSelectStubComponent)
         .map(debug => debug.componentInstance as NgSelectStubComponent);
       expect(selects[0].items()).toEqual([{value: 'openaire', label: 'OpenAIRE'}]);
-      expect(selects[1].items()).toEqual([{id: 'Resource state', name: 'Resource state'}]);
+      expect(selects[1].items()).toEqual([{id: 'pending', name: 'Pending Resource'}]);
     });
   });
 

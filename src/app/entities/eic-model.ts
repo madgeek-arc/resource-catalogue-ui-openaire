@@ -2,6 +2,8 @@
 /* eslint-disable */
 // Generated using typescript-generator version 2.16.538 on 2020-06-10 11:50:49.
 
+import {BundleStatus} from './bundle-status';
+
 export interface Bundle<T> extends Identifiable {
   id: string;
   metadata: Metadata;
@@ -14,7 +16,7 @@ export interface Bundle<T> extends Identifiable {
   latestAuditInfo: LoggingInfo;
   latestOnboardingInfo: LoggingInfo;
   latestUpdateInfo: LoggingInfo;
-  status: string;
+  status: BundleStatus;
   service: Service;
   datasource: Datasource;
 }
