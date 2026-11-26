@@ -164,6 +164,21 @@ describe('provider forms', () => {
       quiet.mockRestore();
     });
 
+    // An update replaces the stored provider, so a field the form leaves out is deleted.
+    it('sends back the alternative identifiers of the provider', async () => {
+      const {fixture, root, answer} = await open('/provider/openaire/update');
+      answer(vocabularies, noVocabularies());
+      const alternativeIdentifiers = [{type: 'PID', value: '21.T15999/oa'}, {type: 'ROR', value: 'https://ror.org/0abc'}];
+      answer(providers, {...provider(), publicContacts: [{email: 'info@example.org'}], alternativeIdentifiers});
+      vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+      expect(root.querySelector<HTMLInputElement>('#alternativeIdentifierValue1')!.value).toBe('https://ror.org/0abc');
+
+      [...root.querySelectorAll('button')].find(button => button.textContent!.trim() === 'Submit')!.click();
+      fixture.detectChanges();
+
+      expect(update).toHaveBeenCalledWith(expect.objectContaining({alternativeIdentifiers}), 'openaire');
+    });
+
     it("shows the server's message and error code when the update fails", async () => {
       const {fixture, root, answer, text} = await open('/provider/openaire/update');
       answer(vocabularies, noVocabularies());

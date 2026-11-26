@@ -111,6 +111,7 @@ export interface Provider extends Identifiable {
   legalEntity: boolean;
   legalStatus: string;
   hostingLegalEntity: string;
+  alternativeIdentifiers: AlternativeIdentifier[];
   description: string;
   logo: URL;
   multimedia: MultimediaPair[];
@@ -290,6 +291,11 @@ export interface Datasource extends Service, Identifiable {
   researchProductAccessPolicies: string[];
   researchProductMetadataLicensing: ResearchProductMetadataLicensing;
   researchProductMetadataAccessPolicies: string[];
+}
+
+export interface AlternativeIdentifier {
+  type: string;
+  value: string;
 }
 
 export interface MultimediaPair {

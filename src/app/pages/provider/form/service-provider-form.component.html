@@ -230,6 +230,49 @@
                                 </div>
                                 <i><small>Suggested length is 80 characters</small></i>
                               </div>
+                              <div class="uk-margin-large-bottom">
+                                <label class="uk-form-label uk-text-right">{{alternativeIdentifiersDesc.label}}</label>
+                                <div class="uk-form-description uk-margin-top uk-width-9-10">{{alternativeIdentifiersDesc.desc}}</div>
+                                <div class="uk-form-controls uk-margin-top">
+                                  @for (identifier of alternativeIdentifierArray.controls; track identifier; let i = $index) {
+                                    <div formArrayName="alternativeIdentifiers">
+                                      <div [formGroupName]="i"
+                                        class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
+                                        <div class="uk-margin-bottom">
+                                          <label class="uk-form-label uk-text-right" [for]="'alternativeIdentifierType' + i">Type</label>
+                                          <div class="uk-form-controls uk-margin-small-top">
+                                            <input [id]="'alternativeIdentifierType' + i" class="uk-input uk-width-9-10" type="text"
+                                              formControlName="type"
+                                              (input)="unsavedChangesPrompt()">
+                                          </div>
+                                        </div>
+                                        <div class="uk-margin-bottom">
+                                          <label class="uk-form-label uk-text-right" [for]="'alternativeIdentifierValue' + i">Value</label>
+                                          <div class="uk-form-controls uk-margin-small-top">
+                                            <input [id]="'alternativeIdentifierValue' + i" class="uk-input uk-width-9-10" type="text"
+                                              formControlName="value"
+                                              (input)="unsavedChangesPrompt()">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      @if (alternativeIdentifierArray.length > 1 && !disable) {
+                                        <a
+                                          class="remove-element uk-padding-small uk-display-inline-block"
+                                          (click)="removeAlternativeIdentifier(i); unsavedChangesPrompt()">
+                                          <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                      }
+                                    </div>
+                                  }
+                                </div>
+                                @if (!disable) {
+                                  <div class="uk-width-9-10 uk-text-center uk-margin-top">
+                                    <a class="add-new-element" (click)="pushAlternativeIdentifier()">
+                                      <i class="fa fa-plus" aria-hidden="true"></i> Add alternative identifier
+                                    </a>
+                                  </div>
+                                }
+                              </div>
                             </li>
                             <!--MARKETING-->
                             <li>
@@ -456,7 +499,7 @@
                               }
                               @if (!disable) {
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
-                                  <a class="add-new-element" (click)="push('structureTypes', true)">
+                                  <a class="add-new-element" (click)="push('structureTypes', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
                                   </a>
                                 </div>

@@ -97,6 +97,11 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
             this.addUser();
           }
         }
+        if (this.provider.alternativeIdentifiers && this.provider.alternativeIdentifiers.length > 1) {
+          for (let i = 0; i < this.provider.alternativeIdentifiers.length - 1; i++) {
+            this.pushAlternativeIdentifier();
+          }
+        }
         if (this.provider.multimedia && this.provider.multimedia.length > 1) {
           for (let i = 0; i < this.provider.multimedia.length - 1; i++) {
             this.multimediaArray.push(this.newMultimedia());

@@ -46,13 +46,7 @@ const KNOWN_DIFFERENCES: {path: string; check: Check; reason: string}[] = [
   {path: 'merilScientificDomains.merilScientificSubdomain', check: 'required', reason: 'the form lets a row go without a subdomain'},
   {path: 'mainContact.lastName', check: 'required', reason: 'the form requires it; the model and the API schema do not'},
   {path: 'publicContacts', check: 'required', reason: 'the form keeps one row, which it never removes, instead of a required array'},
-  {path: 'users', check: 'required', reason: 'the form keeps one row, which deleteUser() never removes, instead of a required array'},
-  {path: 'alternativeIdentifiers', check: 'exists', reason: 'bug: an edit drops it'},
-  {path: 'lifeCycleStatus', check: 'vocabulary', reason: 'bug: the form offers the service life cycle statuses'},
-  {path: 'structureTypes', check: 'required', reason: 'bug: rows added with the button are required, the first is not'},
-  {path: 'publicContacts.email', check: 'required', reason: 'bug: added rows lose the validators of the first'},
-  {path: 'publicContacts.email', check: 'email', reason: 'bug: added rows lose the validators of the first'},
-  {path: 'publicContacts.phone', check: 'phone', reason: 'bug: added rows lose the validators of the first'}
+  {path: 'users', check: 'required', reason: 'the form keeps one row, which deleteUser() never removes, instead of a required array'}
 ];
 
 /** The vocabulary each select of the form offers, by model field path. */

@@ -94,6 +94,7 @@ export class ServiceProviderFormComponent implements OnInit {
   readonly lifeCycleStatusDesc: sd.Description = sd.providerDescMap.get('lifeCycleStatusDesc');
   readonly ESFRIDomainDesc: sd.Description = sd.providerDescMap.get('ESFRIDomainDesc');
   readonly hostingLegalEntityDesc: sd.Description = sd.providerDescMap.get('hostingLegalEntityDesc');
+  readonly alternativeIdentifiersDesc: sd.Description = sd.providerDescMap.get('alternativeIdentifiersDesc');
   readonly ESFRITypeDesc: sd.Description = sd.providerDescMap.get('ESFRITypeDesc');
   readonly merilScientificDomainsDesc: sd.Description = sd.providerDescMap.get('merilScientificDomainsDesc');
   readonly merilScientificSubdomainsDesc: sd.Description = sd.providerDescMap.get('merilScientificSubdomainsDesc');
@@ -106,7 +107,7 @@ export class ServiceProviderFormComponent implements OnInit {
 
   readonly placesVocabulary = computed(() => this.vocabularies()?.['Country'] ?? null);
   readonly providerTypeVocabulary = computed(() => this.vocabularies()?.['Provider structure type'] ?? null);
-  readonly providerLCSVocabulary = computed(() => this.vocabularies()?.['Life cycle status'] ?? null);
+  readonly providerLCSVocabulary = computed(() => this.vocabularies()?.['Provider life cycle status'] ?? null);
   readonly domainsVocabulary = computed(() => this.vocabularies()?.['Scientific domain'] ?? null);
   readonly categoriesVocabulary = computed(() => this.vocabularies()?.['Scientific subdomain'] ?? null);
   readonly merilDomainsVocabulary = computed(() => this.vocabularies()?.['Provider meril scientific domain'] ?? null);
@@ -125,6 +126,7 @@ export class ServiceProviderFormComponent implements OnInit {
     website: ['', Validators.compose([Validators.required, URLValidator])],
     legalEntity: [''],
     legalStatus: [''],
+    alternativeIdentifiers: this.fb.array([this.newAlternativeIdentifier()]),
     description: ['', Validators.required],
     logo: ['', Validators.compose([Validators.required, URLValidator])],
     multimedia: this.fb.array([
@@ -152,13 +154,7 @@ export class ServiceProviderFormComponent implements OnInit {
       position: [''],
     }, Validators.required),
     publicContacts: this.fb.array([
-      this.fb.group({
-        firstName: [''],
-        lastName: [''],
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        phone: ['', Validators.pattern('[+]?\\d+$')],
-        position: [''],
-      })
+      this.newContact()
     ]),
     lifeCycleStatus: [''],
     certifications: this.fb.array([this.fb.control('')]),
@@ -212,8 +208,8 @@ export class ServiceProviderFormComponent implements OnInit {
                 this.pushPublicContact();
               } else if (i === 'users') {
                 this.addUser();
-              } else if (i === 'structureTypes') {
-                this.push(i, true);
+              } else if (i === 'alternativeIdentifiers') {
+                this.pushAlternativeIdentifier();
               } else if (i === 'multimedia') {
                 this.pushMultimedia();
               } else {
@@ -275,6 +271,14 @@ export class ServiceProviderFormComponent implements OnInit {
         || this.merilDomainArray.controls[i].get('merilScientificDomain')!.value === null) {
         // console.log(this.merilDomainArray.controls[i]);
         this.removeMerilDomain(i);
+      }
+    }
+
+    // Backwards, so that removing a row doesn't skip the next one.
+    for (let i = this.alternativeIdentifierArray.length - 1; i >= 0; i--) {
+      const {type, value} = this.alternativeIdentifierArray.controls[i].value;
+      if (!type && !value) {
+        this.removeAlternativeIdentifier(i);
       }
     }
 
@@ -369,9 +373,10 @@ export class ServiceProviderFormComponent implements OnInit {
     this.tabsError[0] = (this.checkFormValidity('name', this.edit)
       || this.checkFormValidity('abbreviation', this.edit)
       || this.checkFormValidity('website', this.edit)
-      || this.checkEveryArrayFieldValidity('legalEntity', this.edit)
+      || this.checkFormValidity('legalEntity', this.edit)
       || this.checkFormValidity('legalStatus', this.edit)
-      || this.checkFormValidity('hostingLegalEntity', this.edit));
+      || this.checkFormValidity('hostingLegalEntity', this.edit)
+      || this.checkEveryArrayFieldValidity('alternativeIdentifiers', this.edit));
     this.tabsError[1] = (this.checkFormValidity('description', this.edit)
       || this.checkFormValidity('logo', this.edit)
       || this.checkEveryArrayFieldValidity('multimedia', this.edit, 'multimediaURL')
@@ -508,6 +513,28 @@ export class ServiceProviderFormComponent implements OnInit {
 
   /** <--handle form arrays**/
 
+  /** Alternative Identifiers -->**/
+  newAlternativeIdentifier(): UntypedFormGroup {
+    return this.fb.group({
+      type: [''],
+      value: ['']
+    });
+  }
+
+  get alternativeIdentifierArray() {
+    return this.newProviderForm.get('alternativeIdentifiers') as UntypedFormArray;
+  }
+
+  pushAlternativeIdentifier() {
+    this.alternativeIdentifierArray.push(this.newAlternativeIdentifier());
+  }
+
+  removeAlternativeIdentifier(index: number) {
+    this.alternativeIdentifierArray.removeAt(index);
+  }
+
+  /** <--Alternative Identifiers**/
+
   /** Multimedia -->**/
   newMultimedia(): UntypedFormGroup {
     return this.fb.group({
@@ -535,8 +562,8 @@ export class ServiceProviderFormComponent implements OnInit {
     return this.fb.group({
       firstName: [''],
       lastName: [''],
-      email: [''],
-      phone: [''],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      phone: ['', Validators.pattern('[+]?\\d+$')],
       position: [''],
     });
   }
