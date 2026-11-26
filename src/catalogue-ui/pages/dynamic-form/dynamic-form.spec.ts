@@ -46,10 +46,11 @@ const model = (): Model => Object.assign({} as Model, {
         field('2', 'tags', 'string', {multiplicity: true}),
         field('3', 'paid', 'radio', {values: ['true', 'false']}),
         field('4', 'priceNote', 'largeText', {dependsOn: {name: 'paid', value: 'true'}}),
-        field('7', 'summary', 'largeText', {values: ['100']})
+        field('7', 'summary', 'largeText', {values: ['100']}),
+        field('9', 'listed', 'bool', {mandatory: true})
       ]),
       group('contact', 'Contact', 2, [
-        field('5', 'contact', 'composite', {subFields: [field('6', 'email', 'email', {mandatory: true})]}),
+        field('5', 'contact', 'composite', {subFields: [field('6', 'email', 'email', {mandatory: true}), field('10', 'primary', 'bool')]}),
         field('8', 'lastUpdate', 'date')
       ])
     ]
@@ -116,6 +117,28 @@ describe('dynamic form', () => {
 
     expect(formOf(note).classList).not.toContain('uk-hidden');
     expect(note.disabled).toBe(false);
+  });
+
+  it('shows a yes/no field as a checkbox that starts unticked, which already answers a mandatory one', async () => {
+    const {fixture, survey, input} = await open(null);
+    const listed = survey.form.get('service.listed')!;
+    expect(input('9').type).toBe('checkbox');
+    expect(input('9').checked).toBe(false);
+    expect(listed.value).toBe(false);
+    expect(listed.valid).toBe(true);
+    expect(survey.form.get('service.contact.primary')!.value).toBe(false);
+
+    input('9').click();
+    fixture.detectChanges();
+
+    expect(listed.value).toBe(true);
+  });
+
+  it('shows a saved yes as a ticked checkbox, also inside a composite', async () => {
+    const {input} = await open({answer: {service: {name: 'Argos', listed: true, contact: {email: 'a@example.org', primary: true}}}});
+
+    expect(input('9').checked).toBe(true);
+    expect(input('10').checked).toBe(true);
   });
 
   it('marks the empty required fields when the whole form is marked touched', async () => {

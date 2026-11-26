@@ -104,6 +104,8 @@ export class FormControlService implements OnInit{
               //     new FormControl(null, Validators.required) : new FormControl(null);
               // }
 
+            } else if (formField.typeInfo.type === 'bool') {
+              group[formField.name] = this.createBooleanControl(formField);
             } else {
               group[formField.name] = formField.form.mandatory ? new UntypedFormControl(null, Validators.required)
                 : new UntypedFormControl(null);
@@ -154,6 +156,8 @@ export class FormControlService implements OnInit{
         //   subGroup[subField.name] = subField.form.mandatory ?
         //     new FormControl(null, Validators.required) : new FormControl(null);
         // }
+      } else if (subField.typeInfo.type === 'bool') {
+        subGroup[subField.name] = this.createBooleanControl(subField);
       } else {
         subGroup[subField.name] = subField.form.mandatory ?
           new UntypedFormControl(null, Validators.required)
@@ -188,9 +192,19 @@ export class FormControlService implements OnInit{
       //   return formField.form.mandatory ? new FormControl('', Validators.required) : new FormControl('');
       // }
 
+    } else if (formField.typeInfo.type === 'bool') {
+      return this.createBooleanControl(formField);
     } else {
       return new UntypedFormControl(null, Validators.required);
     }
+  }
+
+  /**
+   * A yes/no field, shown as a checkbox. It starts as false, so that an unticked box is an answer ("no"): a mandatory
+   * one is then always filled in, as Validators.required only rejects empty values.
+   */
+  createBooleanControl(formField: Field): UntypedFormControl {
+    return new UntypedFormControl(false, formField.form.mandatory ? Validators.required : null);
   }
 
   calculateNumberOfDecimals(values: string[]): string {

@@ -76,7 +76,7 @@
                             (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                         </div>
                       }
-                      @if (control.typeInfo.type === 'checkbox') {
+                      @if (control.typeInfo.type === 'checkbox' || control.typeInfo.type === 'bool') {
                         <div class="uk-form-controls">
                           <app-checkbox-field [fieldData]="control" [position]="i" (hasChanges)="unsavedChangesPrompt()"
                             (handleBitSets)="handleBitsetOfChildren($event)"
@@ -187,7 +187,7 @@
                     (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
                 </div>
               }
-              @if (control.typeInfo.type === 'checkbox') {
+              @if (control.typeInfo.type === 'checkbox' || control.typeInfo.type === 'bool') {
                 <div class="uk-form-controls">
                   <app-checkbox-field [fieldData]="control" (hasChanges)="unsavedChangesPrompt()"
                     (handleBitSets)="handleBitsetOfChildren($event)"

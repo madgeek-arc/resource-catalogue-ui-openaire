@@ -43,6 +43,13 @@
                   (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
               </div>
             }
+            @if (fieldData().typeInfo.type === 'bool') {
+              <div>
+                <app-checkbox-field [fieldData]="fieldData()" (hasChanges)="unsavedChangesPrompt()"
+                  (handleBitSets)="handleBitsetOfChildren($event)"
+                  (handleBitSetsOfComposite)="handleCompositeBitsetOfChildren($event)" />
+              </div>
+            }
             @if (fieldData().typeInfo.type === 'largeText') {
               <div>
                 <app-large-text-field [fieldData]="fieldData()" (hasChanges)="unsavedChangesPrompt()"

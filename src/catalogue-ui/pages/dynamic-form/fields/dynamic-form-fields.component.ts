@@ -10,12 +10,13 @@ import { LargeTextFieldComponent } from './large-text-field/large-text-field.com
 import { RadioButtonFieldComponent } from './radio-button-field/radio-button-field.component';
 import { RichTextFieldComponent } from './rich-text-field/rich-text-field.component';
 import { DateFieldComponent } from './date-field/date-field.component';
+import { CheckboxFieldComponent } from './checkbox-field/checkbox-field.component';
 
 @Component({
     selector: 'app-field',
     templateUrl: './dynamic-form-fields.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ReactiveFormsModule, CompositeFieldComponent, ChooseOneComponent, StringFieldComponent, NumberFieldComponent, VocabularyFieldComponent, LargeTextFieldComponent, RadioButtonFieldComponent, RichTextFieldComponent, DateFieldComponent]
+    imports: [ReactiveFormsModule, CompositeFieldComponent, ChooseOneComponent, StringFieldComponent, NumberFieldComponent, VocabularyFieldComponent, LargeTextFieldComponent, RadioButtonFieldComponent, RichTextFieldComponent, DateFieldComponent, CheckboxFieldComponent]
 })
 export class DynamicFormFieldsComponent {
   readonly fieldData = input.required<Field>();

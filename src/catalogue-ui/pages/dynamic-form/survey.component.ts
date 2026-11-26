@@ -414,7 +414,7 @@ export class SurveyComponent implements OnInit, OnChanges {
           content.columns.push(new Content(value,['ms_1', 'mt_1']));
           docDefinition.content.push(content);
         }
-      } else if (field.typeInfo.type === 'checkbox') {
+      } else if (field.typeInfo.type === 'checkbox' || field.typeInfo.type === 'bool') {
         docDefinition.content.pop();
         const content = new Columns(['mx_1']);
         if (answerValues?.[0]) {
