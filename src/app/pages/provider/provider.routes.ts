@@ -13,7 +13,7 @@ import {authGuard} from '../../services/auth.guard';
 export const PROVIDER_ROUTES: Routes = [
   {
     path: 'add',
-    loadComponent: () => import('./form/service-provider-form.component').then(m => m.ServiceProviderFormComponent),
+    loadComponent: () => import('../forms/forms.component').then(m => m.FormsComponent),
     canActivate: [authGuard],
     data: {
       breadcrumb: 'Add new Provider'
@@ -83,7 +83,7 @@ export const PROVIDER_ROUTES: Routes = [
       },
       {
         path: 'update',
-        loadComponent: () => import('./form/update-service-provider.component').then(m => m.UpdateServiceProviderComponent),
+        loadComponent: () => import('../forms/forms.component').then(m => m.FormsComponent),
         canActivate: [authGuard],
         data: {
           breadcrumb: 'Update Provider'

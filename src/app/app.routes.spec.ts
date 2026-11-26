@@ -13,8 +13,6 @@ import {AllProvidersDashboardComponent} from './pages/admin-dashboard/providers/
 import {OverviewComponent} from './pages/landingpages/service/overview/overview.component';
 import {ProviderHomeComponent} from './pages/provider/dashboard/provider-home/provider-home.component';
 import {ProviderServicesComponent} from './pages/provider/dashboard/provider-services/provider-services.component';
-import {ServiceProviderFormComponent} from './pages/provider/form/service-provider-form.component';
-import {UpdateServiceProviderComponent} from './pages/provider/form/update-service-provider.component';
 import {ServiceHistoryComponent} from './pages/service-dashboard/service-history.component';
 import {NotFoundPageComponent} from './shared/not-found-page/not-found-page.component';
 
@@ -47,10 +45,10 @@ describe('app routes', () => {
   const signedIn = {sub: 's', name: 'Ada'} as UserInfo;
 
   it.each([
-    ['/provider/add', '/provider/add', ServiceProviderFormComponent],
+    ['/provider/add', '/provider/add', FormsComponent],
     ['/provider/p1', '/provider/p1/dashboard/home', ProviderHomeComponent],
     ['/provider/p1/dashboard/services', '/provider/p1/dashboard/services', ProviderServicesComponent],
-    ['/provider/p1/update', '/provider/p1/update', UpdateServiceProviderComponent],
+    ['/provider/p1/update', '/provider/p1/update', FormsComponent],
     ['/provider/p1/service/add', '/provider/p1/service/add', FormsComponent],
     ['/service-dashboard/p1/s1', '/service-dashboard/p1/s1/history', ServiceHistoryComponent],
     ['/admin', '/admin/providers', AllProvidersDashboardComponent],
@@ -62,6 +60,15 @@ describe('app routes', () => {
     expect(await router.navigateByUrl(url)).toBe(true);
     expect(router.url).toBe(finalUrl);
     expect(leaf(router).component).toBe(component);
+  });
+
+  // FormsComponent reads the provider to edit from its own route, under the componentless :providerId one.
+  it('gives the provider edit page the id of the provider', async () => {
+    const {router} = setUp(signedIn);
+
+    await router.navigateByUrl('/provider/p1/update');
+
+    expect(leaf(router).paramMap.get('providerId')).toBe('p1');
   });
 
   it.each(['/provider/add', '/provider/p1/dashboard/home', '/admin/services', '/service-dashboard/p1/s1/history'])(

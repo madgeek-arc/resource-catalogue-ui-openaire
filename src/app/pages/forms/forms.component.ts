@@ -7,8 +7,10 @@ import {Model, VocabularyLookup} from '../../../catalogue-ui/domain/dynamic-form
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
-import {zip} from 'rxjs';
-import {Datasource, Service, Vocabulary} from '../../entities/eic-model';
+import {ProviderService} from '../../services/provider.service';
+import {Observable, zip} from 'rxjs';
+import {Datasource, Provider, Service, Vocabulary} from '../../entities/eic-model';
+import {withoutEmptyRows} from './without-empty-rows';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 
 
@@ -23,6 +25,7 @@ import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 export class FormsComponent implements OnInit{
   private formService = inject(FormControlService);
   private resourceService = inject(ResourceService);
+  private providerService = inject(ProviderService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
@@ -63,11 +66,13 @@ export class FormsComponent implements OnInit{
         const url = this.router.url;
         if (url.includes('service/add') || url.includes('service/edit')) this.resourceType = 'service';
         if (url.includes('subprofile/add') || url.includes('subprofile/edit')) this.resourceType = 'datasource';
-        if (url.includes('service/edit') || url.includes('subprofile/edit')) this.editMode = true;
+        if (/^\/provider\/(add|[^/]+\/update)(\?|$)/.test(url)) this.resourceType = 'provider';
+        if (url.includes('service/edit') || url.includes('subprofile/edit') || /^\/provider\/[^/]+\/update/.test(url)) this.editMode = true;
         if (this.editMode) { // edit
-          // The edit routes are service/edit/:resourceId and :resourceType/subprofile/edit/:datasourceId.
+          // The edit routes are service/edit/:resourceId, :resourceType/subprofile/edit/:datasourceId and
+          // provider/:providerId/update.
           zip(
-            this.resourceType === 'service' ? this.resourceService.getService(this.resourceId!) : this.resourceService.getDatasource(this.datasourceId!),
+            this.storedResource(),
             this.formService.getFormModelByResourceType(this.resourceType),
             this.resourceService.getUiVocabularies()).subscribe(
             next => {
@@ -102,6 +107,14 @@ export class FormsComponent implements OnInit{
       },
       error => {console.error(error);}
     );
+  }
+
+  /** The resource being edited, by the id in the route. */
+  private storedResource(): Observable<Service | Datasource | Provider> {
+    if (this.resourceType === 'provider') {
+      return this.providerService.getProviderById(this.providerId!);
+    }
+    return this.resourceType === 'service' ? this.resourceService.getService(this.resourceId!) : this.resourceService.getDatasource(this.datasourceId!);
   }
 
   /**
@@ -142,6 +155,9 @@ export class FormsComponent implements OnInit{
         );
       }
     }
+    if (this.resourceType === 'provider') {
+      this.saveProvider(value[0], value[1]);
+    }
     if (this.resourceType === 'datasource') {
       const datasource: Datasource = {...value[0].get(this.sectionName)!.value};
       // Subprofile routes have a resourceId (add) or a datasourceId (edit).
@@ -167,6 +183,28 @@ export class FormsComponent implements OnInit{
     }
   }
 
+  /**
+   * Saves the provider, then opens its dashboard. An update replaces the stored provider, so the whole form is sent,
+   * disabled fields included, without the rows left empty. A new provider is registered with the invitation that
+   * /join/:token kept, if there is one: other users need one.
+   */
+  private saveProvider(form: UntypedFormGroup, edit: boolean) {
+    const provider = withoutEmptyRows(form.get(this.sectionName)!.getRawValue()) as Provider;
+    const token = sessionStorage.getItem('token');
+    const save = edit ? this.providerService.updateServiceProvider(provider, this.providerId)
+      : token ? this.providerService.createNewServiceProviderWithToken(provider, token)
+      : this.providerService.createNewServiceProvider(provider);
+    save.subscribe(
+      saved => {
+        if (!edit && token) {
+          sessionStorage.removeItem('token');
+        }
+        this.router.navigate([`/provider/${saved.id}/dashboard/home`]);
+      },
+      (error: HttpErrorResponse) => this.showSaveError(error)
+    );
+  }
+
   private showSaveError(error: HttpErrorResponse) {
     console.error(error);
     this.errorMessage.set(saveErrorMessage(error));
@@ -179,7 +217,11 @@ export class FormsComponent implements OnInit{
     this.sortVocabulariesByName(vocabulariesMap['Scientific subdomain']);
     this.sortVocabulariesByName(vocabulariesMap['Category']);
     this.sortVocabulariesByName(vocabulariesMap['Subcategory']);
-    const voc: Vocabulary[] = vocabulariesMap['Subcategory'].concat(vocabulariesMap['Scientific subdomain']);
+    // The provider form's MERIL domains, whose subdomains are listed by their parent like the others.
+    this.sortVocabulariesByName(vocabulariesMap['Provider meril scientific domain'] ?? []);
+    this.sortVocabulariesByName(vocabulariesMap['Provider meril scientific subdomain'] ?? []);
+    const voc: Vocabulary[] = vocabulariesMap['Subcategory'].concat(vocabulariesMap['Scientific subdomain'],
+      vocabulariesMap['Provider meril scientific subdomain'] ?? []);
     const subVocabularies = this.groupByKey(voc, 'parentId');
     this.sortVocabulariesByName(vocabulariesMap['Access type']);
     this.sortVocabulariesByName(vocabulariesMap['Access mode']);
