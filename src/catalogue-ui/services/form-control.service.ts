@@ -1,9 +1,9 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {Field, Model, Required, Section} from '../domain/dynamic-form-model';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {urlRegEx} from '../shared/validators/generic.validator';
+import {apiPatternValidator, emailRegEx, phoneRegEx, urlRegEx} from '../shared/validators/generic.validator';
 import {Paging} from '../domain/paging';
 
 @Injectable()
@@ -19,6 +19,15 @@ export class FormControlService implements OnInit{
   // numberRegEx = `^[0-9]*[\\.]?[0-9]{${this.numbersOfDecimals}}?$`;
 
   ngOnInit() {
+  }
+
+  /**
+   * The validators of an email or phone field, as the API checks it on save: the model's own pattern when it sets one,
+   * else the API's default; required when the model says so.
+   */
+  private patternValidators(field: Field, defaultPattern: RegExp): ValidatorFn[] {
+    const pattern = apiPatternValidator(field.typeInfo.properties?.pattern || defaultPattern);
+    return field.form.mandatory ? [Validators.required, pattern] : [pattern];
   }
 
   getFormModelById(id: string) {
@@ -86,13 +95,9 @@ export class FormControlService implements OnInit{
               } else
                 group[formField.name] = this.createCompositeField(formField);
             } else if (formField.typeInfo.type === 'email') {
-              group[formField.name] = formField.form.mandatory ?
-                new UntypedFormControl(null, Validators.compose([Validators.required, Validators.email]))
-                : new UntypedFormControl(null, Validators.email);
+              group[formField.name] = new UntypedFormControl(null, this.patternValidators(formField, emailRegEx));
             } else if (formField.typeInfo.type === 'phone') {
-              group[formField.name] = formField.form.mandatory ?
-                new UntypedFormControl(null, Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
-                : new UntypedFormControl(null, Validators.pattern('[+]?\\d+$'));
+              group[formField.name] = new UntypedFormControl(null, this.patternValidators(formField, phoneRegEx));
             } else if (formField.typeInfo.type === 'number') {
               // if (formField.typeInfo.values) {
                 this.numberRegEx = this.calculateNumberOfDecimals(formField.typeInfo.values);
@@ -130,13 +135,9 @@ export class FormControlService implements OnInit{
           subGroup[subField.name] = this.createCompositeField(subField);
         }
       } else if (subField.typeInfo.type === 'email') {
-        subGroup[subField.name] = subField.form.mandatory ?
-          new UntypedFormControl(null, Validators.compose([Validators.required, Validators.email]))
-          : new UntypedFormControl(null, Validators.email);
+        subGroup[subField.name] = new UntypedFormControl(null, this.patternValidators(subField, emailRegEx));
       } else if (subField.typeInfo.type === 'phone') {
-        subGroup[subField.name] = subField.form.mandatory ?
-          new UntypedFormControl(null, Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
-          : new UntypedFormControl(null, Validators.pattern('[+]?\\d+$'));
+        subGroup[subField.name] = new UntypedFormControl(null, this.patternValidators(subField, phoneRegEx));
       } else if (subField.typeInfo.multiplicity) { // add array inside composite element
         subGroup[subField.name] = subField.form.mandatory ?
           new UntypedFormArray([new UntypedFormControl(null, Validators.required)])
@@ -171,13 +172,9 @@ export class FormControlService implements OnInit{
     } else if (formField.typeInfo.type === 'composite' || formField.typeInfo.type === 'chooseOne') {
       return this.createCompositeField(formField);
     } else if (formField.typeInfo.type === 'email') {
-      return formField.form.mandatory ?
-        new UntypedFormControl('', Validators.compose([Validators.required, Validators.email]))
-        : new UntypedFormControl('', Validators.email);
+      return new UntypedFormControl('', this.patternValidators(formField, emailRegEx));
     } else if (formField.typeInfo.type === 'phone') {
-      return formField.form.mandatory ?
-        new UntypedFormControl('', Validators.compose([Validators.required, Validators.pattern('[+]?\\d+$')]))
-        : new UntypedFormControl('', Validators.pattern('[+]?\\d+$'));
+      return new UntypedFormControl('', this.patternValidators(formField, phoneRegEx));
     } else if (formField.typeInfo.type === 'number') {
       // if (formField.typeInfo.values) {
         this.numberRegEx = this.calculateNumberOfDecimals(formField.typeInfo.values);

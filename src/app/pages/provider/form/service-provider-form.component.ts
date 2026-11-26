@@ -6,6 +6,7 @@ import {UserSessionService} from '../../../services/user-session.service';
 import {ProviderService} from '../../../services/provider.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {URLValidator} from '../../../shared/validators/generic.validator';
+import {emailValidator, phoneValidator} from '../../../../catalogue-ui/shared/validators/generic.validator';
 import {Vocabulary} from '../../../entities/eic-model';
 import {ResourceService} from '../../../services/resource.service';
 import {environment} from '../../../../environments/environment';
@@ -148,16 +149,16 @@ export class ServiceProviderFormComponent implements OnInit {
     mainContact: this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      phone: ['', Validators.pattern('[+]?\\d+$')],
+      email: ['', Validators.compose([Validators.required, emailValidator])],
+      phone: ['', phoneValidator],
       position: [''],
     }, Validators.required),
     publicContacts: this.fb.array([
       this.fb.group({
         firstName: [''],
         lastName: [''],
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        phone: ['', Validators.pattern('[+]?\\d+$')],
+        email: ['', Validators.compose([Validators.required, emailValidator])],
+        phone: ['', phoneValidator],
         position: [''],
       })
     ]),
@@ -559,7 +560,7 @@ export class ServiceProviderFormComponent implements OnInit {
   /** User Array -->**/
   user(): UntypedFormGroup {
     return this.fb.group({
-      email: ['', Validators.compose([Validators.required, Validators.email])],
+      email: ['', Validators.compose([Validators.required, emailValidator])],
       id: [''],
       name: ['', Validators.required],
       surname: ['', Validators.required]

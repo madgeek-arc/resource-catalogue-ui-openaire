@@ -28,7 +28,8 @@ export class TypeInfo {
    * Newer form models give a vocabulary field a URL instead of a vocabulary name. urlParams (null when unused) fill a
    * placeholder in that URL from another field's value, e.g. {placeholder: 'parentId', valueFromField: 'scientificDomain'}.
    */
-  properties?: {url?: string; idField?: string; labelField?: string; urlParams?: {placeholder: string; valueFromField: string}[] | null};
+  /** pattern: an email or phone field's own regular expression, which the API checks instead of its default. */
+  properties?: {url?: string; idField?: string; labelField?: string; urlParams?: {placeholder: string; valueFromField: string}[] | null; pattern?: string | null};
 
 
   constructor() {
