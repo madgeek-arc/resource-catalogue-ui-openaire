@@ -6,6 +6,7 @@ import {Bundle, Service} from '../../entities/eic-model';
 @Component({
   selector: 'app-service-dashboard',
   templateUrl: './service-full-history.component.html',
+  styleUrl: './service-full-history.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, DatePipe]
 })

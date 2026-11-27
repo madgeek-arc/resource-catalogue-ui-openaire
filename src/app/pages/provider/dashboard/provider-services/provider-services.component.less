@@ -1,0 +1,16 @@
+@import (reference) '../../../../../styles/mixins';
+
+// UIkit override attempted: uk-divider-vertical, which is 100px tall with no size modifiers (see the mixin).
+.filter-divider {
+  .divider-vertical-control();
+}
+
+// UIkit override attempted: uk-display-inline-block in the template; no UIkit text class is plain black at 17px.
+.meta-bullet {
+  .list-meta-bullet();
+}
+
+// UIkit override attempted: uk-text-center and uk-text-bold in the template; UIkit has no 170px padding or this colour.
+.loading-message {
+  .list-loading-message();
+}

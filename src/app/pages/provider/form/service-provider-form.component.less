@@ -1,3 +1,5 @@
+@import (reference) '../../../../styles/mixins';
+
 // UIkit override attempted: uk-text-danger on the tab link. The theme colours every form tab link with
 // `.form-tabs.uk-tab > * > a { color: #212121 !important; opacity: 0.6 }`, which outranks it (and the plain
 // `.form-error` this replaces), so a tab holding a field in error never turned red. This matches the theme's
@@ -9,4 +11,15 @@
 
 .remove-text-decoration {
   text-decoration: none;
+}
+
+// UIkit override attempted: uk-height-small and uk-height-medium are fixed heights, and uk-height-viewport depends on the window (see
+// the mixin).
+.page-section {
+  .page-min-height();
+}
+
+// UIkit override attempted: uk-padding-small in the template pads 15px on every side; the remove link sits 5px from the top.
+.remove-element-link {
+  padding-top: 5px;
 }

@@ -17,6 +17,7 @@ import {apiErrorMessage} from '../../../../shared/api-error-message';
 @Component({
   selector: 'app-provider-services',
   templateUrl: 'provider-services.component.html',
+  styleUrl: './provider-services.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgSelectComponent, FormsModule, NgOptionComponent, RouterLink, DatePipe]
 })

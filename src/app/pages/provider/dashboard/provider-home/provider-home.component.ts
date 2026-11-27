@@ -11,6 +11,7 @@ import {ResourceService} from '../../../../services/resource.service';
 @Component({
   selector: 'app-provider-home',
   templateUrl: 'provider-home.component.html',
+  styleUrl: './provider-home.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, TitleCasePipe, DatePipe]
 })

@@ -5,6 +5,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 @Component({
   selector: 'app-join',
   templateUrl: 'provider-join.component.html',
+  styleUrl: './provider-join.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink]
 })

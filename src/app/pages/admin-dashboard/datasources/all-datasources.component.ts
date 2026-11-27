@@ -11,6 +11,7 @@ import {AdminListComponent} from '../admin-list';
 @Component({
   selector: 'app-admin-all-datasources-dashboard',
   templateUrl: 'all-datasources.component.html',
+  styleUrl: './all-datasources.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgSelectComponent, FormsModule, NgOptionComponent, RouterLink, DatePipe]
 })

@@ -6,6 +6,7 @@ import {ProviderBundle} from '../../../../entities/eic-model';
 @Component({
   selector: 'app-provider-full-history',
   templateUrl: 'provider-full-history.component.html',
+  styleUrl: './provider-full-history.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, DatePipe]
 })

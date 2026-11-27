@@ -9,6 +9,7 @@ import {NavigationService} from '../../services/navigation.service';
 @Component({
   selector: 'app-service-dashboard',
   templateUrl: './service-dashboard.component.html',
+  styleUrl: './service-dashboard.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterOutlet]
 })

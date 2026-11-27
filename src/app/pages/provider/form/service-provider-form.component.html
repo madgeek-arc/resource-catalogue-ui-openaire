@@ -1,4 +1,4 @@
-<div class="uk-section-default uk-section uk-section-xsmall uk-padding-remove-bottom" style="min-height: 325px">
+<div class="uk-section-default uk-section uk-section-xsmall uk-padding-remove-bottom page-section">
   <div class="uk-container uk-container-expand uk-margin-left uk-margin-right">
     <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid="">
       <div class="uk-width-1-1@m uk-first-column">
@@ -446,7 +446,7 @@
                                     }
                                     @if (getFieldAsFormArray('structureTypes').length > 1 && !disable) {
                                       <a
-                                        class="remove-element uk-padding-small" style="padding-top: 5px"
+                                        class="remove-element uk-padding-small remove-element-link"
                                         (click)="remove('structureTypes', i); unsavedChangesPrompt()">
                                         <i class="fa fa-times" aria-hidden="true"></i>
                                       </a>
@@ -802,7 +802,7 @@
                               [formControlName]="i" />
                             @if (getFieldAsFormArray('participatingCountries').length > 1 && !disable) {
                               <a
-                                class="remove-element uk-padding-small" style="padding-top: 5px"
+                                class="remove-element uk-padding-small remove-element-link"
                                 (click)="remove('participatingCountries', i); unsavedChangesPrompt()">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                               </a>
@@ -882,7 +882,7 @@
                           [formControlName]="i" />
                         @if (getFieldAsFormArray('networks').length > 1 && !disable) {
                           <a
-                            class="remove-element uk-padding-small" style="padding-top: 5px"
+                            class="remove-element uk-padding-small remove-element-link"
                             (click)="remove('networks', i); unsavedChangesPrompt()">
                             <i class="fa fa-times" aria-hidden="true"></i>
                           </a>
@@ -924,7 +924,7 @@
                           [formControlName]="i" />
                         @if (getFieldAsFormArray('esfriDomains').length > 1 && !disable) {
                           <a
-                            class="remove-element uk-padding-small" style="padding-top: 5px"
+                            class="remove-element uk-padding-small remove-element-link"
                             (click)="remove('esfriDomains', i); unsavedChangesPrompt()">
                             <i class="fa fa-times" aria-hidden="true"></i>
                           </a>
@@ -1048,7 +1048,7 @@
                         [formControlName]="i" />
                       @if (getFieldAsFormArray('areasOfActivity').length > 1 && !disable) {
                         <a
-                          class="remove-element uk-padding-small" style="padding-top: 5px"
+                          class="remove-element uk-padding-small remove-element-link"
                           (click)="remove('areasOfActivity', i); unsavedChangesPrompt()">
                           <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
@@ -1086,7 +1086,7 @@
                         [formControlName]="i" />
                       @if (getFieldAsFormArray('societalGrandChallenges').length > 1 && !disable) {
                         <a
-                          class="remove-element uk-padding-small" style="padding-top: 5px"
+                          class="remove-element uk-padding-small remove-element-link"
                           (click)="remove('societalGrandChallenges', i); unsavedChangesPrompt()">
                           <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
