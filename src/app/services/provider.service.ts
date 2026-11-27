@@ -68,8 +68,8 @@ export class ProviderService {
 
   /**
    * One page of the provider's service bundles. The endpoint takes from and quantity (10 by default), status, active,
-   * and sort with order (sort=modifiedAt&order=desc); it reads any other key as a filter, so an unknown one such as
-   * orderField matches nothing.
+   * and sort with order (sort=modifiedAt&order=desc); it reads any other key as a filter, so an unknown one
+   * matches nothing.
    */
   getServicesOfProvider(providerId: string, urlParameters: URLParameter[] = []): Observable<Paging<Bundle<Service | Datasource>>> {
     let params = new HttpParams().set('resourceProviders', providerId);
