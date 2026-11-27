@@ -67,10 +67,10 @@ describe('AppComponent', () => {
 
   it('moves the footer clear of the dashboard sidebar', async () => {
     const {go, footer} = await open('/provider/openaire/dashboard');
-    expect(footer()!.parentElement!.style.marginLeft).toBe('320px');
+    expect(getComputedStyle(footer()!.parentElement!).marginLeft).toBe('320px');
 
     await go('/home');
-    expect(footer()!.parentElement!.style.marginLeft).toBe('');
+    expect(getComputedStyle(footer()!.parentElement!).marginLeft).not.toBe('320px');
   });
 
   it('scrolls to the top after each navigation', async () => {

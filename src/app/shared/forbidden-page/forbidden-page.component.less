@@ -1,0 +1,12 @@
+@import (reference) '../../../styles/mixins';
+
+// UIkit override attempted: uk-height-small and uk-height-medium are fixed heights, and uk-height-viewport depends on the window (see
+// the mixin).
+.page-section {
+  .page-min-height();
+}
+
+// UIkit override attempted: uk-heading-3xlarge, UIkit's largest heading, is 8rem at most, and no text class uses this blue (see the mixin).
+.error-code-text {
+  .error-code();
+}

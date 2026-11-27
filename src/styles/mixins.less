@@ -1,0 +1,60 @@
+//
+// Shared mixins for the few styles UIkit has no class or variable for, used by more than one component.
+// A component imports this file by reference, by its relative path, and gives the mixin a class of
+// its own, with the `// UIkit override attempted:` note there. Each mixin says what was tried in UIkit.
+//
+
+@import (reference) 'uikit/src/less/components/variables.less';
+@import (reference) 'uikit/_variables';
+
+// The vertical divider between a list's filter and sort controls, as tall as the small controls beside it.
+// UIkit's .uk-divider-vertical is 100px tall (@divider-vertical-height), with no size modifiers.
+.divider-vertical-control() {
+  height: @global-control-small-height;
+}
+
+// The black bullet between a list item's dates. UIkit's text classes colour text with the theme's colours, and
+// none of them is plain black or 17px.
+.list-meta-bullet() {
+  font-size: 17px;
+  color: #000000;
+}
+
+// The loading message under a list's spinner. uk-text-center and uk-text-bold give its alignment and weight; UIkit
+// has no 170px padding (its largest, uk-padding-large, is 70px) and no class for this slate colour.
+.list-loading-message() {
+  padding-top: 170px;
+  color: rgb(47, 64, 80);
+}
+
+// The minimum height of a page's first section, so a short page still pushes the footer down. UIkit's height
+// classes are fixed heights (uk-height-small 150px, uk-height-medium 300px) and uk-height-viewport depends on the window.
+.page-min-height() {
+  min-height: 325px;
+}
+
+// The box a page's big loader spins in while its data arrives. UIkit's uk-height-large is 450px and
+// uk-height-medium 300px; the box is 400px.
+.loader-box() {
+  height: 400px;
+}
+
+// A provider's or service's logo in a dashboard or landing page title. UIkit has no image size classes; uk-height-*
+// start at 150px and uk-width-* at 150px.
+.title-logo-image() {
+  max-width: 210px;
+  height: 70px;
+}
+
+// The coloured badge naming a change log entry's type. UIkit's uk-width-small is 150px; the badges are 100px.
+.change-badge() {
+  width: 100px;
+}
+
+// The big error number on the 403 and 404 pages. UIkit's largest heading, uk-heading-3xlarge, is 8rem (128px) at
+// most, and no text class uses this blue.
+.error-code() {
+  font-size: 180px;
+  color: #0055b9;
+  line-height: 1.2;
+}

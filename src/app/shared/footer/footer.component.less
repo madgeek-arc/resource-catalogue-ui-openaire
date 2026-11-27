@@ -46,3 +46,25 @@
   text-transform: uppercase;
 }
 
+// UIkit override attempted: uk-width-small (150px) and uk-width-xsmall do not fit; the footer logos keep their own sizes.
+.footer-logo {
+  max-width: 140px;
+}
+
+.eu-logo {
+  width: 100px;
+  height: auto;
+}
+
+// UIkit override attempted: uk-margin-small-top, which is 10px; the label lines up with its icon 7px down.
+.newsletter-label {
+  margin-top: 7px;
+}
+
+// UIkit override attempted: uk-icon with a ratio, which fills icons with currentColor; these line icons are white strokes with no fill.
+.footer-icon-line {
+  fill: none;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

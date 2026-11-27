@@ -63,3 +63,23 @@
   stroke: white;
   fill: white;
 }
+
+// UIkit override attempted: UIkit has no image size classes, and uk-responsive-height sets the width to auto; the logos keep their widths.
+.mobile-logo {
+  width: 200px;
+}
+
+.navbar-logo {
+  width: 250px;
+}
+
+// UIkit override attempted: uk-background-muted, which is the theme's #eceef6; the menu panels are a lighter grey.
+.menu-panel {
+  background: #F9F9F9 0% 0% no-repeat padding-box;
+}
+
+// UIkit override attempted: uk-navbar-transparent leaves the bar see-through and uk-background-default is the theme's #f7f8fc;
+// the bar is white.
+.navbar-white {
+  background-color: rgb(255, 255, 255);
+}
