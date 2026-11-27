@@ -3,7 +3,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {RouterLink} from '@angular/router';
-import {SlicePipe} from '@angular/common';
+import {NgOptimizedImage, SlicePipe} from '@angular/common';
 import {ResourceService} from '../../services/resource.service';
 
 @Component({
@@ -11,7 +11,7 @@ import {ResourceService} from '../../services/resource.service';
   templateUrl: './home.aire.component.html',
   styleUrls: ['./home.aire.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, SlicePipe]
+  imports: [RouterLink, SlicePipe, NgOptimizedImage]
 })
 export class HomeAireComponent {
   private resourceService = inject(ResourceService);

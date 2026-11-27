@@ -16,6 +16,7 @@
           <nav class="uk-navbar" uk-navbar="">
             @if (showLogo()) {
               <div class="" style="padding-top: 20px; padding-bottom: 20px;">
+                <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -- the API supplies this image, so its size is unknown: NgOptimizedImage needs width and height or fill -->
                 <img src="{{resourcePayload['logo']}}" alt="logo" style="max-width: 210px; height: 70px;">
               </div>
             }

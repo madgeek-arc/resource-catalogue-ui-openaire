@@ -37,6 +37,7 @@
                 <div class="slider-image uk-flex uk-flex-right">
                   <div class="uk-margin" uk-grid>
                     <div class="uk-card-media uk-cover-container">
+                      <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -- the API supplies this image, so its size is unknown: NgOptimizedImage needs width and height or fill -->
                       <img class="uk-border-circle" src="{{user.extras.image}}" alt="">
                       <!--                  <canvas width="294" height="325"></canvas>-->
                     </div>
@@ -83,6 +84,7 @@
                 <div class="slider-image uk-flex uk-flex-center">
                   <div class="uk-card uk-card-default uk-margin" uk-grid>
                     <div class="uk-card-media uk-cover-container">
+                      <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -- the API supplies this image, so its size is unknown: NgOptimizedImage needs width and height or fill -->
                       <img class="uk-border-circle" src="{{user.extras.image}}" alt="" uk-cover>
                     </div>
                   </div>
@@ -153,6 +155,7 @@
                           <div class="uk-margin-large-bottom">
                             <div class="el-container uk-box-shadow-large uk-box-shadow-hover-xlarge tm-mask-default uk-inline uk-transition-toggle">
                               <div class="uk-inline-clip">
+                                <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -- the API supplies this image, so its size is unknown: NgOptimizedImage needs width and height or fill -->
                                 <img alt="" class="el-image uk-transition-scale-down uk-transition-opaque" src="{{service['extras']['image']}}">
                                 <div class="uk-position-bottom uk-overlay-default">
                                   <div class="uk-overlay uk-padding-small uk-margin-remove-first-child">
@@ -196,7 +199,7 @@
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
       <div>
-        <img src="../../../assets/images/EOSC%20catalogue%20banner%20with%20text.svg" alt="EOSC">
+        <img ngSrc="../../../assets/images/EOSC%20catalogue%20banner%20with%20text.svg" width="602" height="400" class="uk-width-1-1" alt="EOSC">
       </div>
       <div class="uk-margin-medium-top">
         <!--        <div class="h2-subHeader-blue">A path to the European Open Science Cloud</div>-->

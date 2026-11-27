@@ -8,7 +8,7 @@ import {Provider, Service} from '../../entities/eic-model';
 import {UserService} from '../../services/user.service';
 import {EMPTY, of} from 'rxjs';
 import {catchError, filter, map, switchMap} from 'rxjs/operators';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValuePipe, NgOptimizedImage } from '@angular/common';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { KeyValuePipe } from '@angular/common';
     templateUrl: './topmenu.component.html',
     styleUrls: ['./topmenu.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [RouterLink, KeyValuePipe]
+    imports: [RouterLink, KeyValuePipe, NgOptimizedImage]
 })
 
 export class AireTopMenuComponent {
