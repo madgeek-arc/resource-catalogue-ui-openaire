@@ -5,6 +5,7 @@ import {ServiceLandingData} from '../service-landing-data';
 @Component({
   selector: 'app-service-landing-page-pricing',
   templateUrl: 'pricing.component.html',
+  styleUrl: './pricing.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PricingComponent {

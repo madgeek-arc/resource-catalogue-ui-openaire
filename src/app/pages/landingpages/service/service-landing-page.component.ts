@@ -11,6 +11,7 @@ import {environment} from '../../../../environments/environment';
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: './service-static-landing-page.component.html',
+  styleUrl: './service-static-landing-page.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterOutlet],
   host: {'(window:scroll)': 'checkNavbarSticky()'}

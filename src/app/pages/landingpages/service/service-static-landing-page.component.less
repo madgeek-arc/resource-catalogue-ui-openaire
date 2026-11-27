@@ -1,0 +1,37 @@
+@import (reference) '../../../../styles/mixins';
+
+// UIkit override attempted: uk-height-medium (300px) and uk-height-large (450px); the loader's box is 400px (see the mixin).
+.loader-area {
+  .loader-box();
+}
+
+// UIkit override attempted: uk-padding-small, which is 15px on every side; the logo row has 20px above and below only.
+.logo-row {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+// UIkit override attempted: UIkit has no image size classes (see the mixin).
+.title-logo {
+  .title-logo-image();
+}
+
+// UIkit override attempted: uk-position-fixed in the template places it; UIkit's position classes pin to an edge with no offset,
+// and its z-index classes stop at 1 or the 980+ overlay levels.
+.go-to-service {
+  z-index: 100;
+  bottom: 30px;
+  right: 30px;
+}
+
+// UIkit override attempted: as above, for the edit button on the right edge.
+.edit-service {
+  z-index: 100;
+  top: 300px;
+  right: 5px;
+}
+
+// UIkit override attempted: uk-icon-button, which is a fixed 36px circle; the edit button is padded to fit its icon.
+.edit-service-button {
+  padding: 10px;
+}

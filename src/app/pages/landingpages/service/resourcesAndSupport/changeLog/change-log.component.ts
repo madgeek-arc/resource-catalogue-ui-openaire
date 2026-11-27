@@ -7,6 +7,7 @@ import {ServiceLandingData} from '../../service-landing-data';
 @Component({
   selector: 'app-change-log',
   templateUrl: 'change-log.component.html',
+  styleUrl: './change-log.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, DatePipe]
 })

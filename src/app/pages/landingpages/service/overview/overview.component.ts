@@ -6,6 +6,7 @@ import {ServiceLandingData} from '../service-landing-data';
 @Component({
   selector: 'app-service-landing-page',
   templateUrl: 'overview.component.html',
+  styleUrl: './overview.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink]
 })

@@ -20,9 +20,9 @@
                 }
                 <h3 class="el-title uk-margin-top uk-margin-remove-bottom uk-text-center">
                   @if (paymentCategory['paymentPrice']) {
-                    <p class="uk-margin-remove" style="font-size: 24px">{{paymentCategory['paymentPrice']}} <span>&euro;</span>
+                    <p class="uk-margin-remove price">{{paymentCategory['paymentPrice']}} <span>&euro;</span>
                     @if (paymentCategory['paymentBilling']) {
-                      <span style="font-size: 20px"> / {{paymentCategory['paymentBilling']}} &#42;
+                      <span class="billing-period"> / {{paymentCategory['paymentBilling']}} &#42;
                       </span>
                     }
                   </p>

@@ -1,7 +1,7 @@
 @let resourcePayload = payload();
 <!--SERVICE MENU-->
 @if (!ready()) {
-  <div class="uk-margin-large-top" style="height: 400px">
+  <div class="uk-margin-large-top loader-area">
     <div class="loader-big"></div>
   </div>
 }
@@ -15,9 +15,9 @@
         <div class="uk-container uk-container-large uk-padding-remove-left">
           <nav class="uk-navbar" uk-navbar="">
             @if (showLogo()) {
-              <div class="" style="padding-top: 20px; padding-bottom: 20px;">
+              <div class="logo-row">
                 <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -- the API supplies this image, so its size is unknown: NgOptimizedImage needs width and height or fill -->
-                <img src="{{resourcePayload['logo']}}" alt="logo" style="max-width: 210px; height: 70px;">
+                <img src="{{resourcePayload['logo']}}" alt="logo" class="title-logo">
               </div>
             }
             <div class="uk-navbar-right">
@@ -48,7 +48,7 @@
           </nav>
         </div>
       </div>
-      <div class="uk-sticky-placeholder" style="height: 80px; margin: 0px;" hidden="hidden"></div>
+      <div class="uk-sticky-placeholder" hidden="hidden"></div>
     </div>
   </div>
 }
@@ -82,15 +82,15 @@
 }
 
 @if (!cleanView && resourcePayload) {
-  <div class="uk-hidden@m uk-float-right" style="z-index: 100; bottom: 30px; position: fixed; right: 30px;">
+  <div class="uk-hidden@m uk-float-right uk-position-fixed go-to-service">
     <button (click)="goto(resourcePayload.webpage)" class="uk-button uk-button-blue">Go to service</button>
   </div>
 }
 
 @if ((projectName=='OpenAIRE Catalogue') && canAddOrEditService() && !cleanView) {
   <div
-    class="uk-float-right" style="z-index: 100; top: 300px; position: fixed; right: 5px;">
-    <a [routerLink]="['/service/edit/', id()]" style="padding: 10px;" class="uk-icon-button uk-button-primary">
+    class="uk-float-right uk-position-fixed edit-service">
+    <a [routerLink]="['/service/edit/', id()]" class="uk-icon-button uk-button-primary edit-service-button">
       <i class="fa fa-pencil-square-o"></i>
       <!--<span class="uk-icon" uk-icon="icon: plus; ratio: 1.5">-->
     <!--</span>-->

@@ -8,6 +8,7 @@ import {ResourceService} from '../../../services/resource.service';
 @Component({
   selector: 'app-portfolio-item',
   templateUrl: './portfolio-item.component.html',
+  styleUrl: './portfolio-item.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink]
 })

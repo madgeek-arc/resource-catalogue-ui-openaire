@@ -1,0 +1,13 @@
+@import (reference) '../../../../../styles/mixins';
+
+// UIkit override attempted: uk-text-large has the size, but also sets line-height 1.5, which makes each price 15px
+// shorter than the heading's line it sits in; this takes only UIkit's large font size.
+.price {
+  font-size: @global-large-font-size;
+}
+
+// UIkit override attempted: uk-text-large (24px) and uk-text-default (16px); UIkit has no text class at the medium size, so this
+// uses its variable.
+.billing-period {
+  font-size: @global-medium-font-size;
+}

@@ -8,6 +8,7 @@ import {ServiceLandingData} from '../service-landing-data';
 @Component({
   selector: 'app-service-landing-page-resources-and-support',
   templateUrl: 'resourcesAndSupport.component.html',
+  styleUrl: './resourcesAndSupport.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, SlicePipe, DatePipe, NgOptimizedImage]
 })

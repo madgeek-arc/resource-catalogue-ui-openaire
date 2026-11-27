@@ -9,6 +9,7 @@ import {Service} from '../../../entities/eic-model';
 @Component({
   selector: 'app-user-item',
   templateUrl: './user-item.component.html',
+  styleUrl: './user-item.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink]
 })
