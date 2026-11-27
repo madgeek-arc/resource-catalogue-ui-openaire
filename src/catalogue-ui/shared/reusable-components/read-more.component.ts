@@ -1,7 +1,7 @@
 /**
  * Created by stefania on 4/6/17.
  */
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, input, signal, viewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnChanges, ChangeDetectionStrategy, inject, input, signal, viewChild } from '@angular/core';
 
 @Component({
     selector: 'read-more',

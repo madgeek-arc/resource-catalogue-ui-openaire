@@ -2,7 +2,7 @@ import { Component, OnChanges, OnInit, ChangeDetectionStrategy, ElementRef, afte
 import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
-import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
+import {Section, Field, Model, SurveyPayload, VocabularyLookup} from '../../domain/dynamic-form-model';
 import {Columns, Content, DocDefinition, PdfImage, PdfMetadata, PdfTable, TableDefinition} from '../../domain/PDFclasses';
 import pdfMake from 'pdfmake/build/pdfmake';
 import type {Content as PdfContent, ContentText, TableCell} from 'pdfmake/interfaces';
@@ -28,7 +28,7 @@ export class SurveyComponent implements OnInit, OnChanges {
   private router = inject(Router);
 
 
-  readonly payload = input<any>(null); // can't import specific project class in lib file
+  readonly payload = input<SurveyPayload | null>(null);
   readonly model = input<Model | null>(null);
   readonly subType = input<string | null>(null);
   readonly activeUsers = input<{fullname: string}[] | null>(null);
@@ -96,11 +96,11 @@ export class SurveyComponent implements OnInit, OnChanges {
       this.currentChapter = model.sections[0];
       model.sections = model.sections.sort((a, b) => a.order - b.order);
       for (const section of model.sections) {
-        for (const surveyAnswer in this.answers()?.answer) {
-          if (section.id === this.answers().answer[surveyAnswer]?.chapterId) {
+        for (const saved of Object.values(this.answers()?.answer ?? {})) {
+          if ('chapterId' in saved && section.id === saved.chapterId) {
             // It matched an answer's chapter id, so it is set.
             this.markChapter(section.id!, false);
-            this.sortedSurveyAnswers[section.id!] = this.answers().answer[surveyAnswer].answer;
+            this.sortedSurveyAnswers[section.id!] = 'answer' in saved ? saved.answer : undefined;
             break;
           }
         }
@@ -114,12 +114,13 @@ export class SurveyComponent implements OnInit, OnChanges {
           this.form.addControl(model.sections[i].name, this.formControlService.toFormGroup(model.sections[i].subSections));
         }
       }
-      if (this.answers()?.answer) {
+      const answer = this.answers()?.answer;
+      if (answer) {
         for (let i = 0; i < model.sections.length; i++) {
-          if (this.answers().answer[model.sections[i].name])
-            this.prepareForm(this.answers().answer[model.sections[i].name], model.sections[i].subSections);
+          if (answer[model.sections[i].name])
+            this.prepareForm(answer[model.sections[i].name], model.sections[i].subSections);
         }
-        this.form.patchValue(this.answers().answer);
+        this.form.patchValue(answer);
         this.form.markAllAsTouched();
       }
       if (this.answers()?.validated) {

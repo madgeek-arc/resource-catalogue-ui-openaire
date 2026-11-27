@@ -1,6 +1,12 @@
 /** Vocabularies by type (or sub-vocabularies by parent id): a JSON object from the API, indexed by name, not a Map. */
 export type VocabularyLookup = Record<string, object[]>;
 
+/** The saved answers a survey shows, keyed by section name: the forms page sends {answer: {service: <the service>}}. */
+export interface SurveyPayload {
+  answer: Record<string, object>;
+  validated?: boolean;
+}
+
 export class Required {
   topLevel: number;
   total: number;

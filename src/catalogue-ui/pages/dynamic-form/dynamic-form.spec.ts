@@ -5,7 +5,7 @@ import {HttpTestingController, provideHttpClientTesting} from '@angular/common/h
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
 import {FormArray, FormControl, FormGroup, TouchedChangeEvent} from '@angular/forms';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {Dependent, Field, Model, Section} from '../../domain/dynamic-form-model';
+import {Dependent, Field, Model, Section, SurveyPayload} from '../../domain/dynamic-form-model';
 import {controlTreeEvents} from '../../shared/form-refresh';
 import {ReadMoreTextComponent} from '../../shared/reusable-components/read-more.component';
 import {SurveyComponent} from './survey.component';
@@ -64,7 +64,7 @@ const model = (): Model => Object.assign({} as Model, {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 class FormPageComponent {
-  readonly payload = signal<unknown>(null);
+  readonly payload = signal<SurveyPayload | null>(null);
   readonly model = signal<Model | null>(null);
 }
 
@@ -76,7 +76,7 @@ class FormPageComponent {
 class AppHostComponent {}
 
 describe('dynamic form', () => {
-  const open = async (payload: unknown) => {
+  const open = async (payload: SurveyPayload | null) => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([{path: 'service/edit/:resourceId', component: FormPageComponent}])]
     });

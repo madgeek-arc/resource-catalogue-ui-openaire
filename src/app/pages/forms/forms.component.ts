@@ -3,7 +3,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Model, VocabularyLookup} from '../../../catalogue-ui/domain/dynamic-form-model';
+import {Model, SurveyPayload, VocabularyLookup} from '../../../catalogue-ui/domain/dynamic-form-model';
 import {FormControlService} from '../../../catalogue-ui/services/form-control.service';
 import {SurveyComponent} from '../../../catalogue-ui/pages/dynamic-form/survey.component';
 import {ResourceService} from '../../services/resource.service';
@@ -39,7 +39,7 @@ export class FormsComponent implements OnInit{
   resourceId: string | null = null;
   datasourceId: string | null = null;
   resourceType: string | null = null;
-  readonly payloadAnswer = signal<object | null>(null); // Find a way to do this better
+  readonly payloadAnswer = signal<SurveyPayload | null>(null);
   readonly ready = signal(false);
   readonly errorMessage = signal<string | null>(null);
   private readonly errorAlert = viewChild<ElementRef<HTMLElement>>('errorAlert');
