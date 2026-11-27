@@ -1,0 +1,17 @@
+// UIkit override attempted: uk-alert-danger, whose theme draws a border; the error box has none.
+.error-alert {
+  border-width: 0;
+}
+
+// UIkit override attempted: uk-position-fixed in the template places it; UIkit's position classes pin to an edge with no offset,
+// and its z-index classes stop at 1 or the 980+ overlay levels.
+.to-top {
+  z-index: 100;
+  top: 90vh;
+  right: 0.5vw;
+}
+
+// UIkit override attempted: uk-totop has no size modifiers; the link is padded into a larger target.
+.to-top-link {
+  padding: 25px;
+}

@@ -16,6 +16,7 @@ pdfMake.addVirtualFileSystem(pdfFonts);
 @Component({
     selector: 'app-survey',
     templateUrl: 'survey.component.html',
+    styleUrl: './survey.component.less',
     providers: [FormControlService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ChapterEditComponent]

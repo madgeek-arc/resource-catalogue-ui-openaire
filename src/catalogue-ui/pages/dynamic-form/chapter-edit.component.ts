@@ -11,6 +11,7 @@ import { DynamicFormFieldsComponent } from './fields/dynamic-form-fields.compone
 @Component({
     selector: 'app-chapter-edit',
     templateUrl: './chapter.component.html',
+    styleUrl: './chapter.component.less',
     providers: [FormControlService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ReactiveFormsModule, DynamicFormFieldsComponent]
