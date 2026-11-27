@@ -2,7 +2,7 @@
 @let totalPages = paging().totalPages;
 @let pages = paging().pages;
 @let page = currentPage();
-<div id="tm-main" class="tm-main uk-section uk-section-default" uk-height-viewport="expand: true" style="box-sizing: border-box;">
+<div id="tm-main" class="tm-main uk-section uk-section-default uk-box-sizing-border" uk-height-viewport="expand: true">
   <div class="uk-container uk-container-large">
 
     <!-- TOP HELP CONTENT -->
@@ -205,7 +205,7 @@
 
                           <div class="uk-width-1-4@m uk-padding-remove uk-position-bottom-right uk-overlay uk-overlay-default service-image uk-flex uk-flex-bottom">
                             <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -- the API supplies this image, so its size is unknown: NgOptimizedImage needs width and height or fill -->
-                            <img src="{{resourceInfo.extras.image}}" style="border-radius: 0 6px 6px 0;" alt="resource image">
+                            <img src="{{resourceInfo.extras.image}}" class="result-image" alt="resource image">
                           </div>
 
                         </div>
@@ -295,8 +295,7 @@
 }
 
             @if (serviceIdsArray.length > 0) {
-<div class="uk-float-right uk-animation-scale-up"
-                 style="z-index: 100; bottom: 40px; position: fixed; right: 30px;">
+<div class="uk-float-right uk-animation-scale-up uk-position-fixed ask-for-info">
               <button class="uk-button butn theme" href="#email-modal" uk-toggle>Ask for info
                 <i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>
             </div>
@@ -384,8 +383,8 @@
 
 
 @if ((projectName=='OpenAIRE Catalogue') && canAddOrEditService()) {
-<div class="uk-float-right" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
-  <a href="#modal" uk-toggle class="uk-icon-button uk-button-secondary" style="padding: 30px;" >
+<div class="uk-float-right uk-position-fixed floating-action">
+  <a href="#modal" uk-toggle class="uk-icon-button uk-button-secondary compare-button">
     <i class="fa fa-2x fa-plus"></i>
   </a>
 </div>
@@ -411,8 +410,8 @@
   </div>
 </div>
 
-<div class="uk-float-right uk-hidden@m" style="z-index: 100; bottom: 45px; position: fixed; right: 45px;">
-  <a href="#offcanvas-filters" uk-toggle style="padding: 20px;" class="uk-icon-button uk-button-blue">
+<div class="uk-float-right uk-hidden@m uk-position-fixed floating-action">
+  <a href="#offcanvas-filters" uk-toggle class="uk-icon-button uk-button-blue filters-button">
     <i class="fa fa-2x fa-filter"></i>
   </a>
 </div>

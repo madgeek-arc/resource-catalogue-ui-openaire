@@ -1,0 +1,27 @@
+// UIkit override attempted: uk-border-rounded, which rounds every corner; the result image rounds only its right side.
+.result-image {
+  border-radius: 0 6px 6px 0;
+}
+
+// UIkit override attempted: uk-position-fixed in the template places the floating buttons; UIkit's position classes pin to an edge with
+// no offset, and its z-index classes stop at 1 or the 980+ overlay levels.
+.ask-for-info {
+  z-index: 100;
+  bottom: 40px;
+  right: 30px;
+}
+
+.floating-action {
+  z-index: 100;
+  bottom: 45px;
+  right: 45px;
+}
+
+// UIkit override attempted: uk-icon-button, which is a fixed 36px circle; the floating buttons are padded to fit their large icons.
+.compare-button {
+  padding: 30px;
+}
+
+.filters-button {
+  padding: 20px;
+}

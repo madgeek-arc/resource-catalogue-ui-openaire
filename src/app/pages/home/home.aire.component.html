@@ -1,16 +1,15 @@
 @let users = userList();
 @let portfolios = portfolioList();
 @let resources = resourceMap();
-<div class="uk-section-muted uk-cover-container uk-section uk-padding-remove-vertical uk-flex uk-flex-middle" uk-scrollspy="target: [uk-scrollspy-class]; cls: uk-animation-fade; delay: false;" uk-height-viewport="offset-top: true; offset-bottom: 20;" style="min-height: calc(-100px + 80vh);">
+<div class="uk-section-muted uk-cover-container uk-section uk-padding-remove-vertical uk-flex uk-flex-middle" uk-scrollspy="target: [uk-scrollspy-class]; cls: uk-animation-fade; delay: false;" uk-height-viewport="offset-top: true; offset-bottom: 20;">
 
-  <video src="assets/media/video/OpenAIRECatalogue-video-hd.mp4" loop="" autoplay="" muted="" playsinline="" uk-cover="" style="height: 100%; width: 100%"></video>
+  <video src="assets/media/video/OpenAIRECatalogue-video-hd.mp4" loop="" autoplay="" muted="" playsinline="" uk-cover=""></video>
 
 </div>
 
 <!--HERO SECTION MOBILE-->
 <div class="uk-section-primary uk-preserve-color uk-margin-xlarge-bottom uk-padding-remove uk-hidden@m">
-  <div class="uk-section uk-light uk-background-cover uk-position-relative" style="background: url('../../../assets/images/catalogue-hero-home.png') rgba(0, 0, 0, 0.7);
-       background-blend-mode: multiply; background-size: cover; background-position: center">
+  <div class="uk-section uk-light uk-background-cover uk-background-center-center uk-background-blend-multiply uk-position-relative hero-mobile">
     <div class="uk-padding-large uk-margin-large-top uk-text-center">
       <h1>Services for open science.</h1>
       <p class="big-text uk-margin-medium-top">
@@ -173,7 +172,7 @@
                         }
                         <div class="uk-panel uk-margin-remove-first-child uk-margin-xlarge" id="page#2-2-2-1">
                           <div class="el-content uk-panel uk-h5 uk-margin-medium-top uk-margin-remove-bottom">
-                            <p style="font-weight:bold; color:#19116D;">Interested to see other available services?</p>
+                            <p class="uk-text-bold more-services">Interested to see other available services?</p>
                           </div>
                           <div class="uk-margin-small-top">
                             <a [routerLink]="['/portfolios', portfolio.id]" class="el-link uk-button uk-button-text">View all</a>
@@ -194,7 +193,7 @@
 
 
 <!--EOSC SECTION-->
-<div class="uk-section uk-section-primary uk-section-large" style="background-color: #1d193c">
+<div class="uk-section uk-section-primary uk-section-large eosc-section">
   <div class="uk-container uk-container-large">
 
     <div class="uk-grid uk-child-width-1-1@s uk-child-width-1-2@m uk-child-width-1-2@l">
@@ -204,7 +203,7 @@
       <div class="uk-margin-medium-top">
         <!--        <div class="h2-subHeader-blue">A path to the European Open Science Cloud</div>-->
         <h2 class="uk-margin-top">OpenAIRE services guarantee your compliance and use of EOSC.</h2>
-        <div class="uk-margin-medium-top"><a href="https://open-science-cloud.ec.europa.eu/resources/services?q=openaire" target="_blank" class="uk-button uk-button-text eosc-link" style="color: #eb5d81;">
+        <div class="uk-margin-medium-top"><a href="https://open-science-cloud.ec.europa.eu/resources/services?q=openaire" target="_blank" class="uk-button uk-button-text eosc-link eosc-catalogue-link">
           View in the EOSC Catalogue<i class="fa fa-external-link uk-margin-small-left uk-margin-small-right"></i></a></div>
         </div>
       </div>

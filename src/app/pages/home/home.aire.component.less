@@ -761,7 +761,25 @@ a.serviceLink:hover {
     }
 }
 
+// UIkit override attempted: uk-background-cover, uk-background-center-center and uk-background-blend-multiply in the template; UIkit
+// has no class for a background image or this dark tint under it.
+.hero-mobile {
+  background-image: url('../../../assets/images/catalogue-hero-home.png');
+  background-color: rgba(0, 0, 0, 0.7);
+}
 
+// UIkit override attempted: uk-text-bold in the template; no text colour class is this navy.
+.more-services {
+  color: #19116D;
+}
 
+// UIkit override attempted: uk-section-primary and uk-section-secondary, which use the theme's colours; the EOSC section is the EOSC navy.
+.eosc-section {
+  background-color: #1d193c;
+}
 
-
+// UIkit override attempted: uk-button-text with the text colour classes; the EOSC link is EOSC pink. The section's
+// inverse colours (`.uk-section-primary:not(.uk-preserve-color) a`) would turn it white, so this is scoped to the section.
+.eosc-section a.eosc-catalogue-link {
+  color: #eb5d81;
+}

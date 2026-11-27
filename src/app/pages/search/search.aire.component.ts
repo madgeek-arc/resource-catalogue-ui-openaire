@@ -17,6 +17,7 @@ import {checkSelectedFacets, paging, SearchParameters} from './search-state';
 @Component({
   selector: 'app-search',
   templateUrl: './search.aire.component.html',
+  styleUrl: './search.aire.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [HelpContentComponent, FormsModule, ReadMoreComponent, RouterLink, AsideHelpContentComponent, EmailModalComponent]
 })

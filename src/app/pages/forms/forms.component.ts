@@ -16,6 +16,7 @@ import {saveErrorMessage} from '../../shared/api-error-message';
 @Component({
     selector: 'app-form',
     templateUrl: 'forms.component.html',
+    styleUrl: './forms.component.less',
     providers: [FormControlService],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [SurveyComponent]
