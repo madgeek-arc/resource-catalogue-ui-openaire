@@ -6,7 +6,7 @@
 
         @if (providerBundle?.metadata?.registeredBy && providerBundle?.metadata?.registeredAt) {
           <div class="services-provider-container">
-            <span class="status-label">Registered by: </span>{{ providerBundle?.metadata?.registeredBy }} on {{ $safeNavigationMigration(providerBundle?.metadata?.registeredAt) | date}}
+            <span class="status-label">Registered by: </span>{{ providerBundle?.metadata?.registeredBy }} on {{ providerBundle?.metadata?.registeredAt | date}}
           </div>
         }
 

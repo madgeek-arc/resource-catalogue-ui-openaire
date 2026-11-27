@@ -39,7 +39,7 @@
                 </div>
               }
             </div>
-            <div [formGroupName]="i" class="uk-width-9-10 uk-display-inline-block" [class.uk-margin-bottom]="$safeNavigationMigration(fieldData().form.display?.hasBorder)" [class.formGroupElement]="$safeNavigationMigration(fieldData().form.display?.hasBorder)">
+            <div [formGroupName]="i" class="uk-width-9-10 uk-display-inline-block" [class.uk-margin-bottom]="fieldData().form.display?.hasBorder" [class.formGroupElement]="fieldData().form.display?.hasBorder">
               @for (control of fieldData()?.subFields; track control; let j = $index) {
                 <div>
                   <div class="">
@@ -93,7 +93,7 @@
           </div>
         }
       </div>
-      <div class="uk-width-1-1 uk-display-inline-block" [class.uk-margin-bottom]="$safeNavigationMigration(fieldData().form.display?.hasBorder)" [class.formGroupElement]="$safeNavigationMigration(fieldData().form.display?.hasBorder)">
+      <div class="uk-width-1-1 uk-display-inline-block" [class.uk-margin-bottom]="fieldData().form.display?.hasBorder" [class.formGroupElement]="fieldData().form.display?.hasBorder">
         @for (control of fieldData()?.subFields; track control; let j = $index) {
           <div>
             <div class="">
