@@ -4,14 +4,14 @@ import {Event, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
 import {AireTopMenuComponent} from './shared/topmenu/topmenu.component';
 import {AireFooterComponent} from './shared/footer/footer.component';
-import {CookieLawComponent} from './shared/reusablecomponents/cookie-law/cookie-law.component';
+import {CookieConsentComponent} from './shared/cookies/cookie-consent.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieLawComponent],
+  imports: [RouterOutlet, AireTopMenuComponent, AireFooterComponent, CookieConsentComponent],
 })
 export class AppComponent {
   private router = inject(Router);

@@ -124,14 +124,16 @@
         <div class="uk-margin-top uk-flex uk-flex-center uk-visible@m">
           <a class="footerLink">Οpensource licences</a>
           <a class="footerLink uk-margin-left">Terms and conditions</a>
-          <a class="footerLink uk-margin-left">Cookies policy</a>
+          <a class="footerLink uk-margin-left" [href]="cookiesPolicyUrl" target="_blank" rel="noopener">Cookies policy</a>
+          <a class="footerLink uk-margin-left" href="#" role="button" (click)="openCookieSettings($event)">Cookie settings</a>
         </div>
 
         <!--Mobile-->
         <div class="uk-margin-top uk-flex uk-flex-center uk-flex-column uk-hidden@m">
           <a class="footerLink uk-text-center uk-margin-bottom">Οpensource licences</a>
           <a class="footerLink uk-text-center uk-margin-bottom">Terms and conditions</a>
-          <a class="footerLink uk-text-center uk-margin-bottom">Cookies policy</a>
+          <a class="footerLink uk-text-center uk-margin-bottom" [href]="cookiesPolicyUrl" target="_blank" rel="noopener">Cookies policy</a>
+          <a class="footerLink uk-text-center uk-margin-bottom" href="#" role="button" (click)="openCookieSettings($event)">Cookie settings</a>
         </div>
 
         <div id="footer#22" class="uk-flex uk-flex-stretch uk-text-small uk-margin-medium-top uk-margin-remove-bottom uk-text-center@m uk-text-center uk-text-lead">

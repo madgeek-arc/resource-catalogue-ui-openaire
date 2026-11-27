@@ -1,0 +1,16 @@
+@import (reference) 'uikit/src/less/components/variables.less';
+@import (reference) 'uikit/src/less/components/sticky.less';
+
+// UIkit override attempted: uk-width-large gives the banner its 450px, but its max-width is 100% of the viewport,
+// so with uk-margin-left it would run off a phone's screen; uk-position-z-index (1) leaves it under the sticky
+// navbar, and UIkit has no class above that, so it takes the sticky z-index plus one.
+.cookie-banner {
+  max-width: calc(100vw - 2 * @global-margin);
+  z-index: @sticky-z-index + 1;
+}
+
+// UIkit override attempted: UIkit's base styles leave summary with the text cursor, and no utility class sets the
+// pointer, so the "View cookies" toggle would not look clickable.
+summary {
+  cursor: pointer;
+}

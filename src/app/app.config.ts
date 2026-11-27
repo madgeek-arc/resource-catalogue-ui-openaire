@@ -1,7 +1,6 @@
 import {DatePipe} from '@angular/common';
 import {provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
 import {ApplicationConfig, ErrorHandler, inject, provideAppInitializer, provideZonelessChangeDetection} from '@angular/core';
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {provideRouter, Router, withRouterConfig} from '@angular/router';
 import {provideServiceWorker} from '@angular/service-worker';
 import * as Sentry from '@sentry/angular';
@@ -16,8 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withRouterConfig({onSameUrlNavigation: 'reload'})),
     provideHttpClient(withXhr(), withInterceptors([authenticationInterceptor])),
-    // The cookie banner uses @angular/animations.
-    provideAnimationsAsync(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: environment.production,
       // Register the service worker as soon as the app is stable, or after 30 seconds, whichever comes first.
@@ -32,6 +29,9 @@ export const appConfig: ApplicationConfig = {
             siteId: environment.MATOMO_SITE,
           },
         ],
+        // Matomo counts visits without cookies, and sets its own only once the visitor accepts analytics
+        // (see CookieConsentService).
+        requireConsent: 'cookie',
       },
       withRouter(),
     ),

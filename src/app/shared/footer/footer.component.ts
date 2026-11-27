@@ -1,5 +1,7 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component, ChangeDetectionStrategy, inject} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
+import {CookieConsentService} from '../cookies/cookie-consent.service';
+import {COOKIES_POLICY_URL} from '../cookies/cookie-consent.model';
 
 @Component({
     selector: 'app-footer-aire',
@@ -9,4 +11,11 @@ import {NgOptimizedImage} from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AireFooterComponent {
+  private readonly cookieConsent = inject(CookieConsentService);
+  readonly cookiesPolicyUrl = COOKIES_POLICY_URL;
+
+  openCookieSettings(event: Event): void {
+    event.preventDefault();
+    this.cookieConsent.open();
+  }
 }

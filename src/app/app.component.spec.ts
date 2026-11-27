@@ -11,8 +11,8 @@ class TopMenuStubComponent {}
 @Component({selector: 'app-footer-aire', template: 'footer'})
 class FooterStubComponent {}
 
-@Component({selector: 'cookie-law', template: 'cookies'})
-class CookieLawStubComponent {}
+@Component({selector: 'app-cookie-consent', template: 'cookies'})
+class CookieConsentStubComponent {}
 
 @Component({template: 'page'})
 class PageComponent {}
@@ -30,7 +30,7 @@ describe('AppComponent', () => {
       ])]
     });
     TestBed.overrideComponent(AppComponent, {
-      set: {imports: [RouterOutlet, TopMenuStubComponent, FooterStubComponent, CookieLawStubComponent]}
+      set: {imports: [RouterOutlet, TopMenuStubComponent, FooterStubComponent, CookieConsentStubComponent]}
     });
   });
 
