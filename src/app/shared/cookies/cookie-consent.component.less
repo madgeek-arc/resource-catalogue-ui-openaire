@@ -1,6 +1,9 @@
 @import (reference) 'uikit/src/less/components/variables.less';
 @import (reference) 'uikit/src/less/components/sticky.less';
 
+// Three buttons side by side, unwrapped: the widest (Save settings) is 150px, plus two small gutters and the bar's padding.
+@cookie-panel-width-l: 540px;
+
 // UIkit override attempted: uk-width-large gives the banner its 450px, but its max-width is 100% of the viewport,
 // so with uk-margin-left it would run off a phone's screen; uk-position-z-index (1) leaves it under the sticky
 // navbar, and UIkit has no class above that, so it takes the sticky z-index plus one.
@@ -13,4 +16,18 @@
 // pointer, so the "View cookies" toggle would not look clickable.
 summary {
   cursor: pointer;
+}
+
+// UIkit override attempted: @offcanvas-bar-width-s (350px) is shared with the top menu's offcanvas, and UIkit has no
+// size modifier for the bar; at 350px the three buttons only fit stacked. On large screens this panel alone is wider,
+// with its closed position moved to match; the open rule repeats right: 0, which this selector would otherwise beat.
+@media (min-width: @breakpoint-large) {
+  .cookie-panel > .uk-offcanvas-bar {
+    width: @cookie-panel-width-l;
+    right: -@cookie-panel-width-l;
+  }
+
+  .cookie-panel.uk-open > .uk-offcanvas-bar {
+    right: 0;
+  }
 }
