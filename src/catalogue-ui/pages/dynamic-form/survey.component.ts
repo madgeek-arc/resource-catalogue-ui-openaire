@@ -1,6 +1,5 @@
-import { Component, OnChanges, OnInit, ChangeDetectionStrategy, ElementRef, afterRenderEffect, inject, input, output, linkedSignal, signal, viewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, ChangeDetectionStrategy, ElementRef, afterRenderEffect, inject, input, output, computed, signal, viewChild } from '@angular/core';
 import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
-import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {FormControlService} from '../../services/form-control.service';
 import {Section, Field, Model, VocabularyLookup} from '../../domain/dynamic-form-model';
@@ -48,14 +47,13 @@ export class SurveyComponent implements OnInit, OnChanges {
     boolean
 ]>();
 
-  /** The answers shown: the payload, then what the server returns after the unsaved-changes prompt submits. */
-  private readonly answers = linkedSignal(() => this.payload());
+  /** The answers shown: the payload. */
+  private readonly answers = computed(() => this.payload());
 
   sectionIndex = 0;
   /** Chapters with unsaved changes; the chapter tabs mark them. */
   readonly chapterChangeMap = signal(new Map<string, boolean>());
   currentChapter: Section | null = null;
-  chapterForSubmission: Section | null = null;
   sortedSurveyAnswers: Record<string, unknown> = {};
   editMode = false;
 
@@ -64,7 +62,6 @@ export class SurveyComponent implements OnInit, OnChanges {
   freeView = false;
   validate = false;
   readonly errorMessage = signal('');
-  readonly successMessage = signal('');
   private readonly errorAlert = viewChild<ElementRef<HTMLElement>>('errorAlert');
 
   form: UntypedFormGroup;
@@ -195,40 +192,12 @@ export class SurveyComponent implements OnInit, OnChanges {
     this.submit.emit([this.form, this.editMode]);
   }
 
-  onSubmit() { // FIXME
-    // console.log('onSubmit');
-    window.scrollTo(0, 0);
-    // this.showLoader = true;
-    // this.formControlService.postItem(this.surveyAnswers.id, this.form.get(this.chapterForSubmission.name).value, this.editMode).subscribe(
-    const request = this.answers()?.id
-      ? this.formControlService.postItem(this.answers().id, this.form.value, this.editMode)
-      : this.formControlService.postGenericItem(this.loadedModel().resourceType, this.form.value, this.editMode);
-    request.subscribe(
-      res => {
-        this.successMessage.set('Updated successfully!');
-        this.chapterChangeMap.update(changes => new Map([...changes.keys()].map(key => [key, false])));
-        UIkit.modal('#unsaved-changes-modal').hide();
-        this.answers.set(res);
-      },
-      (error: HttpErrorResponse) => {
-        this.errorMessage.set('Something went bad, server responded: ' + JSON.stringify(error?.error?.message));
-        UIkit.modal('#unsaved-changes-modal').hide();
-        // this.showLoader = false;
-        // console.log(error);
-      },
-      () => {
-        this.closeSuccessAlert();
-        // this.showLoader = false;
-      }
-    );
-  }
-
+  /** Opens the unsaved-changes prompt when leaving a changed chapter; its Submit now saves through parentSubmit. */
   showUnsavedChangesPrompt(chapter: Section) {
     if (this.readonly || this.freeView)
       return;
     // The chapter tabs only show once ngOnChanges has set the current chapter from the model.
     if (this.chapterChangeMap().get(this.currentChapter!.id!)) {
-      this.chapterForSubmission = this.currentChapter;
       UIkit.modal('#unsaved-changes-modal').show();
     }
     this.currentChapter = chapter;
@@ -525,15 +494,6 @@ export class SurveyComponent implements OnInit, OnChanges {
   /** <-- Generate PDF **/
 
   /** other stuff --> **/
-  closeSuccessAlert() {
-    setTimeout(() => {
-      UIkit.alert('#successAlert').close();
-    }, 4000);
-    setTimeout(() => {
-      this.successMessage.set('');
-    }, 4550);
-  }
-
   getInitials(fullName: string) {
     return fullName.split(' ').map((n)=>n[0]).join('');
   }

@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {provideHttpClient} from '@angular/common/http';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideRouter, Router, RouterOutlet} from '@angular/router';
 import {FormArray, FormControl, FormGroup, TouchedChangeEvent} from '@angular/forms';
 import {afterEach, describe, expect, it, vi} from 'vitest';
@@ -77,7 +78,7 @@ class AppHostComponent {}
 describe('dynamic form', () => {
   const open = async (payload: unknown) => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideRouter([{path: 'service/edit/:resourceId', component: FormPageComponent}])]
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([{path: 'service/edit/:resourceId', component: FormPageComponent}])]
     });
     const fixture = TestBed.createComponent(AppHostComponent);
     await TestBed.inject(Router).navigateByUrl('/service/edit/argos');
@@ -166,6 +167,20 @@ describe('dynamic form', () => {
 
     expect(submitted).toEqual([[survey.form, false]]);
     expect(bubbled).not.toHaveBeenCalled();
+  });
+
+  it('saves through the page from the unsaved-changes prompt, as the Submit button does', async () => {
+    const {root, survey} = await open(null);
+    const submitted: unknown[] = [];
+    survey.submit.subscribe(value => submitted.push(value));
+
+    const submitNow = [...root.querySelectorAll<HTMLButtonElement>('#unsaved-changes-modal button')].find(button => button.textContent!.trim() === 'Submit now')!;
+    expect(submitNow.classList).toContain('uk-modal-close');
+    submitNow.click();
+
+    expect(submitted).toEqual([[survey.form, false]]);
+    // The page saves the resource; the survey sends nothing of its own.
+    TestBed.inject(HttpTestingController).verify();
   });
 
   it('keeps Enter in the date field from submitting the chapter, which the field has no inner form to stop', async () => {

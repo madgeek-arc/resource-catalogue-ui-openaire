@@ -43,16 +43,6 @@ export class FormControlService implements OnInit{
     return this.http.get<Paging<Model>>(this.base + `/forms/models?name=${name}`);
   }
 
-  postItem(surveyId: string, item: Record<string, unknown>, edit: boolean) {
-    return this.http[edit ? 'put' : 'post'](this.base + `/answers/${surveyId}/answer`, item, this.options);
-  }
-
-  /** item is the survey's form value: one group, named after the model's section, holding the resource. */
-  postGenericItem(resourceType: string, item: Record<string, unknown>, edit: boolean) {
-    // console.log(item[Object.keys(item)[0]]);
-    return this.http.post(this.base + `/items?resourceType=${resourceType}`, item[Object.keys(item)[0]]);
-  }
-
   validateUrl(url: string) {
     // console.log(`knocking on: ${this.base}/provider/validateUrl?urlForValidation=${url}`);
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
