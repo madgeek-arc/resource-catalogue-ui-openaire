@@ -63,7 +63,8 @@ export default defineConfig([
       '@angular-eslint/template/prefer-control-flow': 'error',
       '@angular-eslint/template/prefer-ngsrc': 'warn',
       '@angular-eslint/template/prefer-class-binding': 'warn',
-      '@angular-eslint/template/no-inline-styles': 'warn',
+      // The dynamic form applies the styles its model defines, so binding to style stays allowed.
+      '@angular-eslint/template/no-inline-styles': ['warn', {allowBindToStyle: true}],
     },
   },
 ]);

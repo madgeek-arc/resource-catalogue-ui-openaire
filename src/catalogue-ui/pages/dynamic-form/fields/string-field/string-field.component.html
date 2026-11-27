@@ -2,13 +2,13 @@
   [class.uk-hidden]="(hideField() || !fieldData().form.display.visible)" [class.clear-style]="(hideField() || !fieldData().form.display.visible)">
   @if (fieldData().label.text) {
     <div class="uk-form-label uk-margin-bottom {{fieldData().label.cssClasses}}"
-      [attr.for]="fieldData().name" [class.uk-subLabel]="fieldData().form.dependsOn !== null" style="{{fieldData().label.style}}"
+      [attr.for]="fieldData().name" [class.uk-subLabel]="fieldData().form.dependsOn !== null" [style]="fieldData().label.style"
       [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
     </div>
   }
   @if (fieldData().form.description.text) {
     <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
-      [innerHTML]="fieldData().form.description.text | safeUrl: 'html'" style="{{fieldData().form.description.style}}">
+      [innerHTML]="fieldData().form.description.text | safeUrl: 'html'" [style]="fieldData().form.description.style">
     </div>
   }
 
@@ -37,7 +37,7 @@
           </div>
         }
       </div>
-      <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+      <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" [style]="fieldData().form.suggestion.style"
         [innerHTML]="fieldData().form.suggestion.text">
       </div>
       @if (form.enabled) {
@@ -56,7 +56,7 @@
     <!--      {{form.controls[fieldData.name].errors | json}}-->
     @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" [style]="fieldData().form.suggestion.style"
           [innerHTML]="fieldData().form.suggestion.text">
         </div>
       </div>

@@ -2,12 +2,12 @@
   <form [formGroup]="form" class="uk-margin-small-bottom {{fieldData().form.display.cssClasses}}" [class.uk-hidden]="hideField()" [class.clear-style]="hideField()">
     @if (fieldData().label.text) {
       <div class="uk-form-label uk-margin-bottom {{fieldData().label.cssClasses}}"
-        [attr.for]="fieldData().name" style="{{fieldData().label.style}}" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
+        [attr.for]="fieldData().name" [style]="fieldData().label.style" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
       </div>
     }
     @if (fieldData().form.description.text) {
       <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
-        [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}">
+        [innerHTML]="fieldData().form.description.text" [style]="fieldData().form.description.style">
       </div>
     }
     @if (fieldData().typeInfo.multiplicity) {
@@ -30,7 +30,7 @@
       <!--    <pre>{{formControl.value | json}}</pre>-->
       @if (fieldData().form.suggestion.text) {
         <div class="uk-margin-top">
-          <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+          <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" [style]="fieldData().form.suggestion.style"
             [innerHTML]="fieldData().form.suggestion.text">
           </div>
         </div>

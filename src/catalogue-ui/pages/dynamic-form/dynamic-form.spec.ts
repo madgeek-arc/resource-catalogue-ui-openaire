@@ -43,7 +43,7 @@ const model = (): Model => Object.assign({} as Model, {
   sections: [Object.assign(new Section(), {
     id: 'service', name: 'service', order: 1, fields: null, subSections: [
       group('basics', 'Basics', 1, [
-        field('1', 'name', 'string', {mandatory: true}),
+        Object.assign(field('1', 'name', 'string', {mandatory: true}), {label: Object.assign(field('1', 'name', 'string').label, {style: 'color: rgb(200, 0, 0)'})}),
         field('2', 'tags', 'string', {multiplicity: true}),
         field('3', 'paid', 'radio', {values: ['true', 'false']}),
         field('4', 'priceNote', 'largeText', {dependsOn: {name: 'paid', value: 'true'}}),
@@ -104,6 +104,11 @@ describe('dynamic form', () => {
     expect([...root.querySelectorAll<HTMLInputElement>('input[id="tags"]')].map(tag => tag.value)).toEqual(['a', 'b']);
     expect(input('6').value).toBe('not an email');
     expect(input('6').classList).toContain('uk-form-danger');
+  });
+
+  it('applies the label style the model gives', async () => {
+    const {root} = await open(null);
+    expect(root.querySelector<HTMLElement>('.uk-form-label[for="name"]')!.style.color).toBe('rgb(200, 0, 0)');
   });
 
   it('shows the field that depends on another once the user picks the value it needs', async () => {

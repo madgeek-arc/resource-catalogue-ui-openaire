@@ -2,7 +2,7 @@
 
   @if (fieldData().form.description.text) {
     <div class="uk-form-description uk-margin-top uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}}"
-      [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}">
+      [innerHTML]="fieldData().form.description.text" [style]="fieldData().form.description.style">
     </div>
   }
 
@@ -35,7 +35,7 @@
     </div>
   } @else {
     @if (fieldData().label.text) {
-      <label class="uk-form-label {{fieldData().label.cssClasses}}" style="{{fieldData().label.style}}">
+      <label class="uk-form-label {{fieldData().label.cssClasses}}" [style]="fieldData().label.style">
         <input [formControlName]="fieldData().name" [id]="fieldData().id" class="uk-checkbox" type="checkbox"
           (input)="updateBitSet(fieldData()); unsavedChangesPrompt()"
           [class.uk-form-danger]="checkFormValidity()">
@@ -44,7 +44,7 @@
     }
     @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}" [innerHTML]="fieldData().form.suggestion.text"></div>
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" [style]="fieldData().form.suggestion.style" [innerHTML]="fieldData().form.suggestion.text"></div>
       </div>
     }
   }

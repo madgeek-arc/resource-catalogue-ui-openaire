@@ -167,22 +167,22 @@
                           <div class="uk-width-3-4@m uk-card-body">
                             <div>
                               <h5 class="uk-margin-remove uk-text-left@m uk-text-center uk-scrollspy-inview uk-animation-fade uk-inline"
-                                uk-scrollspy-class="" style="">
+                                uk-scrollspy-class="">
                                 {{resourceInfo.name || "Not Available"}}
                               </h5>
                             </div>
                             @if (resourceInfo.tagline) {
-<p class="uk-margin-small-top serviceTagLine h5-subheader" style="">
+<p class="uk-margin-small-top serviceTagLine h5-subheader">
                               "{{resourceInfo.tagline}}"
                             </p>
 }
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
-                                 uk-scrollspy-class="" style="">
+                                 uk-scrollspy-class="">
                               <p [innerHTML]="resourceInfo.extras['pitch']"></p>
                             </div>
 
                             @if (resourceInfo.extras?.['users'][0]) {
-<div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+<div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="">
                               <span class="field-label uk-margin-small-right">Users: </span>
                               @for (user of resourceInfo.extras['users']; track user; let i = $index) {
 <span class="field-value">
@@ -196,7 +196,7 @@
 }
                             @if (resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle) {
 <div
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
+                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="">
                               <span class="field-label">Pricing: </span> <span class="field-value uk-margin-small-left">{{resourceInfo.extras['paymentCategories'][0]?.paymentTitle}}</span>
                             </div>
 }
@@ -226,22 +226,22 @@
                           <div class="uk-card-body">
                             <div>
                               <h5 class="uk-margin-remove uk-text-left uk-scrollspy-inview uk-animation-fade uk-inline"
-                                  uk-scrollspy-class="" style="">
+                                  uk-scrollspy-class="">
                                 {{resourceInfo.name || "Not Available"}}
                               </h5>
                             </div>
                             @if (resourceInfo.tagline) {
-<p class="uk-margin-small-top serviceTagLine h5-subheader" style="">
+<p class="uk-margin-small-top serviceTagLine h5-subheader">
                               "{{resourceInfo.tagline}}"
                             </p>
 }
                             <div class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade serviceDescription line-clamp"
-                                 uk-scrollspy-class="" style="">
+                                 uk-scrollspy-class="">
                               <p [innerHTML]="resourceInfo.extras['pitch']"></p>
                             </div>
                             @if (resourceInfo.extras?.['users'] && resourceInfo.extras['users'][0]?.name !== '') {
 <div
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="" style="">
+                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-users" uk-scrollspy-class="">
                               <span class="field-label  uk-margin-small-right">Users: </span>
                               @for (user of resourceInfo.extras['users']; track user; let i = $index) {
 <span class="field-value">
@@ -255,7 +255,7 @@
 }
                             @if (resourceInfo.extras?.['paymentCategories']?.[0]?.paymentTitle) {
 <div
-                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="" style="">
+                                 class="uk-margin-small-top uk-scrollspy-inview uk-animation-fade service-pricing" uk-scrollspy-class="">
                               <span class="field-label">Pricing: </span>
                               <span class="field-value uk-margin-small-left">
                                 {{resourceInfo.extras?.['paymentCategories'][0]?.paymentTitle}}

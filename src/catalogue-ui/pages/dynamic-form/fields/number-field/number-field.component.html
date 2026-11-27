@@ -2,12 +2,12 @@
   @if (fieldData().label.text) {
     <div class="uk-form-label uk-margin-bottom {{fieldData().label.cssClasses}}"
       [attr.for]="fieldData().name" [class.uk-subLabel]="fieldData().form.dependsOn !== null"
-      style="{{fieldData().label.style}}" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
+      [style]="fieldData().label.style" [innerHTML]="fieldData().label.text + (fieldData().form.mandatory ? ' (*)' : '')">
     </div>
   }
   @if (fieldData().form.description.text) {
     <div class="uk-form-description uk-margin-bottom uk-width-9-10 {{fieldData().form.description.cssClasses}} "
-      [innerHTML]="fieldData().form.description.text" style="{{fieldData().form.description.style}}">
+      [innerHTML]="fieldData().form.description.text" [style]="fieldData().form.description.style">
     </div>
   }
 
@@ -26,7 +26,7 @@
     }
     @if (fieldData().form.suggestion.text) {
       <div class="uk-margin-top">
-        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" style="{{fieldData().form.suggestion.style}}"
+        <div class="uk-suggestion uk-width-9-10 {{fieldData().form.suggestion.cssClasses}}" [style]="fieldData().form.suggestion.style"
           [innerHTML]="fieldData().form.suggestion.text">
         </div>
       </div>
