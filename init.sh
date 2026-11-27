@@ -13,7 +13,7 @@ read -r -d '' ADD_PROXY_API_CONF << EOM
          proxy_set_header        Host \$host;
          proxy_set_header        X-Real-IP \$remote_addr;
          proxy_set_header        X-Forwarded-For \$proxy_add_x_forwarded_for;
-         proxy_set_header        X-Forwarded-Proto \$scheme;
+         proxy_set_header        X-Forwarded-Proto \$forwarded_proto;
          proxy_pass              ${PROXY_API_ENDPOINT};
          proxy_read_timeout      300;
          proxy_send_timeout      300;

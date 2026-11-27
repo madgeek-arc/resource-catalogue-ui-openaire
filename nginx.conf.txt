@@ -1,3 +1,9 @@
+# The scheme the client used: TLS ends before this server, so $scheme alone is always http.
+map $http_x_forwarded_proto $forwarded_proto {
+    default $http_x_forwarded_proto;
+    ""      $scheme;
+}
+
 server {
     ${ADD_SERVER_NAME}
     listen 80;
