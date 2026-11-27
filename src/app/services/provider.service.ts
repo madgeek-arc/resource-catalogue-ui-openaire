@@ -67,18 +67,18 @@ export class ProviderService {
   }
 
   /**
-   * One page of the provider's service bundles. The endpoint takes from and quantity (10 by default), status, active,
-   * and sort with order (sort=modifiedAt&order=desc); it reads any other key as a filter, so an unknown one
-   * matches nothing.
+   * One page of the provider's service bundles, from /services/bundles/byOrganisation/{id}: the provider's own users
+   * may read it, while the /services/bundles list is for admins only. The endpoint takes from and quantity
+   * (10 by default), status, active, and sort with order (sort=modifiedAt&order=desc).
    */
   getServicesOfProvider(providerId: string, urlParameters: URLParameter[] = []): Observable<Paging<Bundle<Service | Datasource>>> {
-    let params = new HttpParams().set('resourceProviders', providerId);
+    let params = new HttpParams();
     for (const urlParameter of urlParameters) {
       for (const value of urlParameter.values) {
         params = params.append(urlParameter.key, value);
       }
     }
-    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.oa + '/services/bundles', {...this.options, params});
+    return this.http.get<Paging<Bundle<Service | Datasource>>>(this.oa + `/services/bundles/byOrganisation/${providerId}`, {...this.options, params});
   }
 
   // TODO: no terms endpoint in new API

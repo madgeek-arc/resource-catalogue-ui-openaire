@@ -19,7 +19,7 @@ describe('ProviderService', () => {
   afterEach(() => backend.verify());
 
   describe('getServicesOfProvider', () => {
-    it('asks /api/oa/services/bundles once for the provider, passing the filters and page through', () => {
+    it('asks /api/oa/services/bundles/byOrganisation once for the provider, passing the filters and page through', () => {
       let total: number | undefined;
       service.getServicesOfProvider('openaire', [
         {key: 'quantity', values: ['9']},
@@ -30,7 +30,7 @@ describe('ProviderService', () => {
       ]).subscribe(page => (total = page.total));
 
       const req = backend.expectOne(
-        '/api/oa/services/bundles?resourceProviders=openaire&quantity=9&from=9&status=pending&sort=modifiedAt&order=desc');
+        '/api/oa/services/bundles/byOrganisation/openaire?quantity=9&from=9&status=pending&sort=modifiedAt&order=desc');
       expect(req.request.method).toBe('GET');
       expect(req.request.withCredentials).toBe(true);
       req.flush({total: 15, from: 9, to: 10, results: [{id: 'b1', status: 'pending', active: false, service: {id: 'openaire.x'}}]});
@@ -38,9 +38,9 @@ describe('ProviderService', () => {
       expect(total).toBe(15);
     });
 
-    it('sends only the provider when there are no parameters', () => {
+    it('sends no parameters when there are none', () => {
       service.getServicesOfProvider('cern').subscribe();
-      backend.expectOne('/api/oa/services/bundles?resourceProviders=cern').flush({total: 0, from: 0, to: 0, results: []});
+      backend.expectOne('/api/oa/services/bundles/byOrganisation/cern').flush({total: 0, from: 0, to: 0, results: []});
     });
   });
 });
